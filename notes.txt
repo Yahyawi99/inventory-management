@@ -1,0 +1,8 @@
+tables : 
+  order
+  user
+  product
+  company
+  stock 
+
+relationships
