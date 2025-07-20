@@ -1,22 +1,18 @@
 import Header from "@/layouts/main/header";
 import { Sidebar } from "./sidebar";
-import { Box, Flex } from "@radix-ui/themes";
 
-export default function SideBarLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="w-[100vw]">
-      <Flex>
-        <Sidebar className="fixed hidden flex-col justify-between dark:bg-gray-50" />
+    <main className="w-[100vw] bg-red-600">
+      <div>
+        <Sidebar className="fixed hidden flex-col justify-between" />
+      </div>
 
-        <Flex className="flex flex-col">
-          <Header />
-          <Box>{children}</Box>
-        </Flex>
-      </Flex>
+      <div>
+        <Header />
+
+        <div>{children}</div>
+      </div>
     </main>
   );
 }

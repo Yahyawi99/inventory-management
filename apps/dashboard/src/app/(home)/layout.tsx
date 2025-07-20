@@ -1,4 +1,3 @@
-import { Theme } from "@radix-ui/themes";
 import MainLayout from "@/layouts/main/layout";
 
 export default function DefaultLayout({

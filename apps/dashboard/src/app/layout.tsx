@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Theme } from "@radix-ui/themes";
-import MainLayout from "@/layouts/main/layout";
 import "@/config/fontawesome";
 import "./globals.css";
-import "@radix-ui/themes/styles.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
