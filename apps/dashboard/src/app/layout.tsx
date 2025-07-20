@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Theme } from "@radix-ui/themes";
 import { Geist, Geist_Mono } from "next/font/google";
+import "@/lib/fontawesome";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 
