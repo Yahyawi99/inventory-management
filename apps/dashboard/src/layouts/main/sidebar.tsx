@@ -14,9 +14,5 @@ import SidebarMenu from "./sidebar-menu";
 // });
 
 export function Sidebar({ className }: { className?: string }) {
-  return (
-    <aside>
-      <SidebarMenu />
-    </aside>
-  );
+  return <SidebarMenu />;
 }
