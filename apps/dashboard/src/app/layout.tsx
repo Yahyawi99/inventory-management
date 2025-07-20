@@ -1,19 +1,9 @@
 import type { Metadata } from "next";
 import { Theme } from "@radix-ui/themes";
-import { Geist, Geist_Mono } from "next/font/google";
-import "@/lib/fontawesome";
+import MainLayout from "@/layouts/main/layout";
+import "@/config/fontawesome";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,16 +12,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-screen  overflow-hidden`}
-      >
-        <Theme>{children}</Theme>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
