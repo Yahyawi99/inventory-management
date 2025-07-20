@@ -1,8 +1,13 @@
 tables : 
   order
-  user
+  invoice
+  user (manager,admin,sales,viewer)
   product
   company
   stock 
 
 relationships
+  stock has 0 or many products
+  company has 1 or multiple stocks
+  order has 1 or multiple products
+  user belongs to 1 company

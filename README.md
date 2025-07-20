@@ -4,14 +4,21 @@ A modern, scalable SaaS platform to manage inventory, orders, and users across m
 
 ### 🚀 Tech Stack
 
-Next.js (App Router) – React framework for frontend + backend (API routes)
-Turborepo + PNPM – Monorepo tooling & package management
-TypeScript – Type safety and better developer experience
-Tailwind CSS – Utility-first CSS framework for styling
-Prisma + PostgreSQL – Database ORM and storage
-n8n (optional) – Workflow automation for background jobs and notifications
-WebSockets (Socket.IO) – Real-time updates for stock and orders
-Auth.js / Clerk / Supabase Auth – Authentication & authorization
+Next.js (App Router) – React framework for frontend + backend (API routes).
+
+Turborepo + PNPM – Monorepo tooling & package management.
+
+TypeScript – Type safety and better developer experience.
+
+Tailwind CSS – Utility-first CSS framework for styling.
+
+Prisma + PostgreSQL – Database ORM and storage.
+
+n8n (optional) – Workflow automation for background jobs and notifications.
+
+WebSockets (Socket.IO) – Real-time updates for stock and orders.
+
+Auth.js / Clerk / Supabase Auth – Authentication & authorization.
 
 ### 📁 Project Structure
 
@@ -54,95 +61,87 @@ Auth.js / Clerk / Supabase Auth – Authentication & authorization
 
     * Multi-tenant architecture: isolate tenant data and access
 
-User roles: Admin, Staff with Role-Based Access Control (RBAC)
-Product & Inventory management: CRUD, categories, barcodes, stock levels
+    User roles: Admin, Staff with Role-Based Access Control (RBAC)
+    Product & Inventory management: CRUD, categories, barcodes, stock levels
 
-Order processing: purchase, sale orders, invoicing, PDF export
+    Order processing: purchase, sale orders, invoicing, PDF export
 
-Real-time stock & order updates: via WebSockets (Socket.IO)
+    Real-time stock & order updates: via WebSockets (Socket.IO)
 
-Workflow automation: n8n workflows for alerts, emails, stock replenishment
+    Workflow automation: n8n workflows for alerts, emails, stock replenishment
 
-Authentication & Authorization: using Auth.js/Clerk/Supabase
+    Authentication & Authorization: using Auth.js/Clerk/Supabase
 
-Responsive UI: built with Tailwind CSS & Headless UI components
+    Responsive UI: built with Tailwind CSS & Headless UI components
 
 ### 🔄 Real-time Updates
 
-Implement real-time stock and order updates with WebSockets (e.g., Socket.IO):
+    Implement real-time stock and order updates with WebSockets (e.g., Socket.IO):
 
-Use a WebSocket server to push stock/order changes instantly to all connected clients.
+    Use a WebSocket server to push stock/order changes instantly to all connected clients.
 
-Fallback to polling if WebSockets aren’t supported.
+    Fallback to polling if WebSockets aren’t supported.
 
-Example workflow: when stock is updated, emit an event to update the UI across all sessions.
+    Example workflow: when stock is updated, emit an event to update the UI across all sessions.
 
 ### 🧪 Seeding and Fake Data
 
-Use faker.js or @faker-js/faker in your seed scripts to generate realistic data.
+    Use faker.js or @faker-js/faker in your seed scripts to generate realistic data.
 
-Seed users, products, orders, and logs for testing and demos.
+    Seed users, products, orders, and logs for testing and demos.
 
-Consider running background jobs or scripts that randomly update data regularly to simulate live changes.
+    Consider running background jobs or scripts that randomly update data regularly to simulate live changes.
 
 ### 🔁 Simulating Live Data Changes
 
-If you want your data to keep changing like a real app:
+    If you want your data to keep changing like a real app:
 
-Write background scripts or cron jobs to update stock quantities, order statuses, or create new orders periodically.
+    Write background scripts or cron jobs to update stock quantities, order statuses, or create new orders periodically.
 
-Use n8n workflows to automate updates or trigger alerts based on DB state or events.
+    Use n8n workflows to automate updates or trigger alerts based on DB state or events.
 
-Combine with WebSockets to broadcast changes to connected clients for live UI updates.
+    Combine with WebSockets to broadcast changes to connected clients for live UI updates.
 
 ### ⚙️ n8n Integration (Optional)
 
-Deploy n8n via Docker or use a managed instance. Create workflows triggered by:
+    Deploy n8n via Docker or use a managed instance. Create workflows triggered by:
 
-Webhook events from your app (e.g., new order created).
+    Webhook events from your app (e.g., new order created).
 
-Polling your PostgreSQL DB to detect low stock and send notifications.
+    Polling your PostgreSQL DB to detect low stock and send notifications.
 
-Automate emails, Slack alerts, report generation, and CRM sync.
+    Automate emails, Slack alerts, report generation, and CRM sync.
 
 ### 🧩 Recommended UI Libraries
 
-Headless UI — unstyled accessible components for full Tailwind customization.
+    Headless UI — unstyled accessible components for full Tailwind customization.
 
-Radix UI — accessible primitives with flexible styling.
+    Radix UI — accessible primitives with flexible styling.
 
-DaisyUI — Tailwind-based ready-made styled components.
+    DaisyUI — Tailwind-based ready-made styled components.
 
-Using a component UI library speeds up development, ensures accessibility, and provides a polished look without building all UI elements from scratch.
+    Using a component UI library speeds up development, ensures accessibility, and provides a polished look without building all UI elements from scratch.
 
 ### 🚀 Deployment Suggestions
 
-Frontend: Vercel (best Next.js support)
+    Frontend: Vercel (best Next.js support)
 
-Backend & DB: Render, Supabase, Railway, or your favorite cloud provider
+    Backend & DB: Render, Supabase, Railway, or your favorite cloud provider
 
-n8n: Docker on a VPS or managed cloud
+    n8n: Docker on a VPS or managed cloud
 
 ### 📚 References & Resources
 
-Turborepo docs
+    Turborepo docs
 
-Next.js App Router docs
+    Next.js App Router docs
 
-Tailwind CSS docs
+    Tailwind CSS docs
 
-Prisma docs
+    Prisma docs
 
-n8n docs
+    n8n docs
 
-Socket.IO docs
+    Socket.IO docs
 
-faker.js docs
-
-🤝 Contribution & Contact
-Feel free to open issues or PRs.
-Contact: your.email@example.com | GitHub
-
-Let's build something awesome! 🚀
-
-If you want, I can help you build starter seed scripts, WebSocket setup examples, or example UI components to get you started quickly!eadme…]()
+    faker.js docs
