@@ -5,12 +5,12 @@ import Sidebar from "./sidebar";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <main className="flex">
+      <main className="flex w-full">
         <div>
           <Sidebar />
         </div>
 
-        <div>
+        <div className="w-full">
           <Header />
 
           <div>{children}</div>
