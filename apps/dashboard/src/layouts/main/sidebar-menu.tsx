@@ -24,13 +24,13 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
   return (
     <SidebarMenu>
       {subMenuItems.length ? (
-        <Collapsible className="group mb-3 text-(--ring)" defaultOpen={false}>
+        <Collapsible className="group mb-3 text-(--border)" defaultOpen={false}>
           <SidebarMenuItem key={id}>
             <CollapsibleTrigger
-              className="data-[state=open]:hover:text-(--border) hover:text-(--border) data-[state=open]:active:text-(--border) data-[state=closed]:active:text-(--border)"
+              className="data-[state=open]:hover:text-(--ring) hover:text-(--ring) data-[state=open]:active:text-(--ring) data-[state=closed]:active:text-(--ring)"
               asChild
             >
-              <SidebarMenuButton className="flex justify-between hover:!bg-transparent focus:!bg-transparent active:!bg-transparent hover:text-(--border)">
+              <SidebarMenuButton className="flex justify-between hover:!bg-transparent focus:!bg-transparent active:!bg-transparent hover:text-(--ring)">
                 <div>
                   <FontAwesomeIcon icon={icon} className="text-inherit mr-2" />
                   <span className="text-[1.25rem] font-bold ">{name}</span>
@@ -50,7 +50,7 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
                   return (
                     <SidebarMenuSubItem key={subId}>
                       <SidebarMenuSubButton
-                        className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent  text-(--ring) decoration-3 hover:underline hover:text-(--ring) "
+                        className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent  text-(--border) decoration-3 hover:underline hover:text-(--border) "
                         asChild
                       >
                         <Link href={href!}>
@@ -67,7 +67,7 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
       ) : (
         <SidebarMenuItem
           key={id}
-          className="mb-3 px-2 text-(--ring) hover:text-(--border)"
+          className="mb-3 px-2 text-(--border) hover:text-(--ring)"
         >
           <FontAwesomeIcon icon={icon} className="mr-2" />
           <Link href={href as string}>
