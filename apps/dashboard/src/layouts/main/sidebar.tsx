@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { MenuItems } from "./sidebar-menu-items";
+import SidebarMenu from "./sidebar-menu";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarTrigger,
   SidebarHeader,
+  SidebarGroup,
+  SidebarGroupContent,
 } from "@/components/ui/sidebar";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MenuItems } from "./sidebar-menu-items";
 import Image from "next/image";
 
 export default function MainSidebar() {
@@ -20,7 +22,7 @@ export default function MainSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex justify-between items-center rounded-(--radius) my-5 ">
+        <div className="flex justify-between items-center  my-5 pb-5 border-b-2">
           <div className="flex">
             <Image
               src={"/logo.png"}
@@ -47,10 +49,13 @@ export default function MainSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {items.map((item) => {
-          const {} = item;
-          return <SidebarGroup>{"dashboard"}</SidebarGroup>;
-        })}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            {items.map((item) => {
+              return <SidebarMenu key={item.id} item={item} />;
+            })}
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
