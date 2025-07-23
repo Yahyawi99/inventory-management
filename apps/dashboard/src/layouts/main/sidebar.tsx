@@ -98,7 +98,7 @@ const Footer = () => {
       </div>
 
       <DropdownMenu>
-        <DropdownMenuTrigger className="cursor-pointer">
+        <DropdownMenuTrigger className="cursor-pointer outline-none">
           <FontAwesomeIcon
             icon={faEllipsisV}
             className="text-(--ring) cursor-pointer px-3"

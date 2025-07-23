@@ -15,7 +15,7 @@ export default function Cards() {
         <h3>All Expenses</h3>
 
         <Select>
-          <SelectTrigger className="w-[180px] bg-(--card) shadow-md shadow-gray-300 data-[state=closed]:shadow-[none]">
+          <SelectTrigger className="w-[180px] bg-(--card) shadow-md shadow-gray-300 data-[state=closed]:shadow-[none] outline-none">
             <SelectValue placeholder="Metrics" />
           </SelectTrigger>
           <SelectContent>
@@ -36,7 +36,7 @@ export default function Cards() {
             <p>Total Expenses</p>
           </div>
 
-          <p className="mt-3 mb-0 font-bold">$21536.00</p>
+          <p className="mt-6 mb-0 font-bold">$21536.00</p>
           <p className="text-xs">15% Increase since last week.</p>
         </div>
 
@@ -49,7 +49,7 @@ export default function Cards() {
             <p>Total Expenses</p>
           </div>
 
-          <p className="mt-3 mb-0 font-bold">$21536.00</p>
+          <p className="mt-6 mb-0 font-bold">$21536.00</p>
           <p className="text-xs">15% Increase since last week.</p>
         </div>
 
@@ -62,7 +62,7 @@ export default function Cards() {
             <p>Total Expenses</p>
           </div>
 
-          <p className="mt-3 mb-0 font-bold">$21536.00</p>
+          <p className="mt-6 mb-0 font-bold">$21536.00</p>
           <p className="text-xs">15% Increase since last week.</p>
         </div>
 
@@ -75,7 +75,7 @@ export default function Cards() {
             <p>Total Expenses</p>
           </div>
 
-          <p className="mt-3 mb-0 font-bold">$21536.00</p>
+          <p className="mt-6 mb-0 font-bold">$21536.00</p>
           <p className="text-xs">15% Increase since last week.</p>
         </div>
       </div>
