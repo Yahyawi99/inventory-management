@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Sidebar />
         </div>
 
-        <div className="w-full">
+        <div className="w-full mx-5">
           <Header />
 
           <div>{children}</div>

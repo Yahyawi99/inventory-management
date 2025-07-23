@@ -1,3 +1,9 @@
+import Cards from "@/shared/Dashboard/Cards";
+
 export default function Dashboard() {
-  return <h1>Dashboard</h1>;
+  return (
+    <section>
+      <Cards />
+    </section>
+  );
 }

@@ -19,7 +19,7 @@ export default function Header() {
   const { open } = useSidebar();
 
   return (
-    <header className="flex items-center justify-between p-5 mx-8 my-5 bg-(--card) shadow-md shadow-gray-300 rounded-(--radius)">
+    <header className="flex items-center justify-between p-5 my-5 bg-(--card) shadow-md shadow-gray-300 rounded-(--radius)">
       <div className="flex items-center gap-2">
         <FontAwesomeIcon icon={faHandPeace} className="text-(--chart-4)" />
         <h1>

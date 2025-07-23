@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
+import MainLayout from "@/layouts/main/layout";
 import "@/config/fontawesome";
 import "./globals.css";
 
@@ -21,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={JosefinSans.className}>
-      <body className="text-[1.1rem] bg-(--accent)">{children}</body>
+      <body className="text-[1.1rem] bg-(--accent)">
+        <MainLayout>{children}</MainLayout>
+      </body>
     </html>
   );
 }
