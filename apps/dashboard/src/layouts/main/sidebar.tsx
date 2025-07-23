@@ -12,6 +12,14 @@ import {
   SidebarGroup,
   SidebarGroupContent,
 } from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { faClose, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -89,10 +97,23 @@ const Footer = () => {
         </div>
       </div>
 
-      <FontAwesomeIcon
-        icon={faEllipsisV}
-        className="text-(--ring) cursor-pointer px-3"
-      />
+      <DropdownMenu>
+        <DropdownMenuTrigger className="cursor-pointer">
+          <FontAwesomeIcon
+            icon={faEllipsisV}
+            className="text-(--ring) cursor-pointer px-3"
+          />
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem>Team</DropdownMenuItem>
+          <DropdownMenuItem>Subscription</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

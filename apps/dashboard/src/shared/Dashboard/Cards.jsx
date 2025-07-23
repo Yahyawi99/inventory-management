@@ -1,12 +1,11 @@
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { faChevronDown, faDollarSign } from "@fortawesome/free-solid-svg-icons";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Cards() {
@@ -15,21 +14,16 @@ export default function Cards() {
       <div className="flex justify-between items-center mb-5">
         <h3>All Expenses</h3>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className="cursor-pointer px-2 py-1 bg-(--card) shadow-md shadow-gray-300 rounded-[5px]">
-            <span>Expenses</span>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className="text-(--ring) w-[15px] ml-2"
-            />
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent className="mr-5">
-            <DropdownMenuItem>Expenses</DropdownMenuItem>
-            <DropdownMenuItem>Inventory Overview</DropdownMenuItem>
-            <DropdownMenuItem>Orders</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Select>
+          <SelectTrigger className="w-[180px] bg-(--card) shadow-md shadow-gray-300 data-[state=closed]:shadow-[none]">
+            <SelectValue placeholder="Metrics" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="light">Expenses</SelectItem>
+            <SelectItem value="dark">Inventory Overview</SelectItem>
+            <SelectItem value="system">Orders</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex justify-around gap-3 ">
