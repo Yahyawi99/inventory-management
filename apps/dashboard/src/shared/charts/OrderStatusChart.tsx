@@ -1,14 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
 import { faker } from "@faker-js/faker";
 import { Label, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -74,7 +72,7 @@ export default function Chart() {
   }, []);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-1 flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Order Status Distribution</CardTitle>
         <CardDescription>
