@@ -26,8 +26,8 @@ export default function Cards() {
         </Select>
       </div>
 
-      <div className="flex justify-around gap-3 ">
-        <div className="bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
+        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
           <div className="flex justify-between items-center">
             <FontAwesomeIcon
               icon={faDollarSign}
@@ -40,7 +40,7 @@ export default function Cards() {
           <p className="text-xs">15% Increase since last week.</p>
         </div>
 
-        <div className="bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
+        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
           <div className="flex justify-between items-center">
             <FontAwesomeIcon
               icon={faDollarSign}
@@ -53,7 +53,7 @@ export default function Cards() {
           <p className="text-xs">15% Increase since last week.</p>
         </div>
 
-        <div className="bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
+        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
           <div className="flex justify-between items-center">
             <FontAwesomeIcon
               icon={faDollarSign}
@@ -66,7 +66,7 @@ export default function Cards() {
           <p className="text-xs">15% Increase since last week.</p>
         </div>
 
-        <div className="bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
+        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
           <div className="flex justify-between items-center">
             <FontAwesomeIcon
               icon={faDollarSign}
