@@ -1,7 +1,6 @@
 "use client";
 
 import { Pie, PieChart } from "recharts";
-import { faker } from "@faker-js/faker";
 import {
   Card,
   CardContent,
@@ -51,9 +50,13 @@ const chartConfig = {
 
 export default function Chart() {
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col flex-1">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Inventory Value Distribution by Category</CardTitle>
+        <CardTitle>Inventory Value Distribution</CardTitle>
+        <CardDescription>
+          Shows how your total inventory value is spread across different
+          product categories.
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">
