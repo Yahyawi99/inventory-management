@@ -7,7 +7,7 @@ import AOVChart from "@/shared/charts/AOVChart";
 export default function Charts() {
   // add a date filter later
   return (
-    <div className="my-10 flex flex-col gap-5">
+    <div className=" flex flex-col gap-5">
       <SalesChart />
 
       <div className="flex gap-5">

@@ -11,8 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Cards() {
   return (
     <div>
-      <div className="flex justify-between items-center mb-5">
-        <h3>All Expenses</h3>
+      <div className="flex justify-between items-center mb-3">
+        <h2>All Expenses</h2>
 
         <Select>
           <SelectTrigger className="w-[180px] bg-(--card) shadow-md shadow-gray-300 data-[state=closed]:shadow-[none] outline-none">
