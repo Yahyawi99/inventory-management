@@ -1,6 +1,7 @@
 import SalesChart from "@/shared/charts/SalesCharts";
 import OrderStatusChart from "@/shared/charts/OrderStatusChart";
 import TopProductChart from "@/shared/charts/ProductsChart";
+import InventoryValueChart from "@/shared/charts/InventoryValueChart";
 
 export default function Charts() {
   return (
@@ -11,6 +12,8 @@ export default function Charts() {
         <OrderStatusChart />
         <TopProductChart />
       </div>
+
+      <InventoryValueChart />
     </div>
   );
 }
