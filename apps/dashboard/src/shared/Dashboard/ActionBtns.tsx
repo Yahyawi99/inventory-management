@@ -37,8 +37,8 @@ export default function Action() {
       <h2 className="mb-2">Quick Actions</h2>
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2">
-        {btnsData.map((btn) => {
-          return <Btn data={btn} />;
+        {btnsData.map((btn, i) => {
+          return <Btn key={i} data={btn} />;
         })}
       </div>
     </div>
