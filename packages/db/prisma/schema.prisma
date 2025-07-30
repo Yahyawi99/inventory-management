@@ -8,48 +8,254 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-// Enums
-enum Categories  {
-  tools
+// ==================================================
+// ==================================================
+enum Role {
+  ADMIN
+  SALESMAN
+  MANAGER
+  VIEWER
 }
 
+enum CustomerType {
+  B2B
+  B2C
+}
 
+enum OrderStatus {
+  Pending
+  Processing
+  Shipped
+  Delivered
+  Cancelled
+}
 
+enum OrderType {
+  SALES
+  PURCHASE
+}
 
-// **********************************************
-// Models
+enum InvoiceStatus {
+  Paid
+  Pending
+  Overdue
+  Void
+}
 
-// User
-// Order
-/* "Company",   "Order", "Stock Location", "Invoice", "Customer" (maybe), "Supplier" (maybe). */
+// ==================================================
+// ==================================================
 
-model User{
-   id           String @id @default(auto()) @map("_id") @db.ObjectId
-   firstName    String
-   lastName     String
-   createdAt    DateTime
-} 
-
+// Client Account
 model Company {
-   id    String @id @default(auto()) @map("_id") @db.ObjectId
-   createdAt DateTime
-   name String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  address   String?
+  phone     String?
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users      User[]
+  products   Product[]
+  stocks     Stock[]
+  categories Category[]
+  customers  Customer[]
+  suppliers  Supplier[]
+  contacts   ContactPerson[]
+  orders     Order[]
+  orderLines OrderLine[]
+  invoices   Invoice[]
 }
 
+// EMPLOYEE/TEAM MEMBER 
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  role         Role
+  firstName    String?
+  lastName     String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  orders Order[]
+}
+
+// Item in the inventory
+model Product {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String?
+  sku             String   @unique
+  price           Float
+  quantityInStock Int
+  barcode         String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  stockId String @db.ObjectId
+  stock   Stock  @relation(fields: [stockId], references: [id])
+
+  categoryId String   @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  orderLines OrderLine[]
+}
+
+// classification or grouping for Product Items
+model Category {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  products Product[]
+}
+
+// physical place where inventory is stored
+model Stock {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+}
+
+// external company or individual
+model Customer {
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  email           String       @unique
+  customerType    CustomerType
+  billingAddress  String       @unique
+  shippingAddress String       @unique
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  contacts ContactPerson[]
+  sales    Order[]
+}
+
+// external company or individual
+model Supplier {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  phone        String   @unique
+  address      String
+  paymentTerms String
+  notes        String?
+  tags         String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  contacts  ContactPerson[]
+  purchases Order[]
+}
+
+// Represents a specific individual within a Customer or Supplier
+model ContactPerson {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  title     String
+  firstName String
+  lastName  String
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customerId String?   @db.ObjectId
+  customer   Customer? @relation(fields: [customerId], references: [id])
+
+  supplierId String?   @db.ObjectId
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+}
+
+// single transaction for the movement of products
+model Order {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderDate   DateTime    @default(now())
+  status      OrderStatus
+  totalAmount Float
+  orderType   OrderType
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  companyId String   @db.ObjectId
+  company   Company? @relation(fields: [companyId], references: [id])
+
+  userId String @db.ObjectId
+  user   User?  @relation(fields: [userId], references: [id])
+
+  customerId String?   @db.ObjectId
+  customer   Customer? @relation(fields: [customerId], references: [id])
+
+  supplierId String?   @db.ObjectId
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+
+  invoiceId String  @db.ObjectId
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+
+  orderLines OrderLine[]
+}
+
+// single product entry within an Order
+model OrderLine {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  quantity  Int
+  unitPrice Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  orderId String @db.ObjectId
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+// billing document generated for a sales order
 model Invoice {
-   id    String @id @default(auto()) @map("_id") @db.ObjectId
-}
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  invoiceNumber String        @unique
+  invoiceDate   DateTime      @default(now())
+  dueDate       DateTime
+  totalAmount   Float
+  status        InvoiceStatus
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-model Order{
-    id    String @id @default(auto()) @map("_id") @db.ObjectId
-} 
+  orders Order[]
 
-model OrderItem{
-    id    String @id @default(auto()) @map("_id") @db.ObjectId
-
-}
-
-model Stock{
-    id    String @id @default(auto()) @map("_id") @db.ObjectId
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
 }

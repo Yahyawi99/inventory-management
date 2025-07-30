@@ -2,7 +2,7 @@ tables :
   order
   invoice
   user (manager,admin,sales,viewer)
-  product
+  Item
   company
   stock 
 
