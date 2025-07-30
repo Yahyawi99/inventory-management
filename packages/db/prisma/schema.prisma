@@ -42,6 +42,12 @@ enum InvoiceStatus {
   Void
 }
 
+type Address {
+  street     String
+  city       String
+  postalCode String
+}
+
 // ==================================================
 // ==================================================
 
@@ -58,19 +64,20 @@ model Company {
   users      User[]
   products   Product[]
   stocks     Stock[]
+  stockItems StockItem[]
   categories Category[]
   customers  Customer[]
   suppliers  Supplier[]
   contacts   ContactPerson[]
   orders     Order[]
-  orderLines OrderLine[]
-  invoices   Invoice[]
+
+  @@index([email])
 }
 
 // EMPLOYEE/TEAM MEMBER 
 model User {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  username     String   @unique
+  username     String
   email        String   @unique
   passwordHash String
   role         Role
@@ -84,6 +91,9 @@ model User {
   company   Company @relation(fields: [companyId], references: [id])
 
   orders Order[]
+
+  @@unique([companyId, username])
+  @@index([companyId])
 }
 
 // Item in the inventory
@@ -91,29 +101,33 @@ model Product {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   description     String?
-  sku             String   @unique
+  sku             String
   price           Float
   quantityInStock Int
-  barcode         String?  @unique
+  barcode         String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   companyId String  @db.ObjectId
   company   Company @relation(fields: [companyId], references: [id])
 
-  stockId String @db.ObjectId
-  stock   Stock  @relation(fields: [stockId], references: [id])
-
   categoryId String   @db.ObjectId
   category   Category @relation(fields: [categoryId], references: [id])
 
   orderLines OrderLine[]
+  stockItems StockItem[]
+
+  @@unique([companyId, sku])
+  @@unique([companyId, barcode])
+  @@index([companyId])
+  @@index([categoryId])
+  @@index([name])
 }
 
 // classification or grouping for Product Items
 model Category {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String   @unique
+  name        String
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -122,6 +136,10 @@ model Category {
   company   Company @relation(fields: [companyId], references: [id])
 
   products Product[]
+
+  @@unique([companyId, name])
+  @@index([companyId])
+  @@index([name])
 }
 
 // physical place where inventory is stored
@@ -132,20 +150,42 @@ model Stock {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  products Product[]
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  stockItems StockItem[]
+
+  @@index([companyId])
+  @@index([name])
+}
+
+// intermediary model for stock and product
+model StockItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  quantity  Int // Quantity of THIS product in THIS stock location
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   companyId String  @db.ObjectId
   company   Company @relation(fields: [companyId], references: [id])
+
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+
+  stockId String @db.ObjectId
+  stock   Stock  @relation(fields: [stockId], references: [id])
+
+  @@unique([companyId, productId, stockId])
 }
 
 // external company or individual
 model Customer {
   id              String       @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  email           String       @unique
+  email           String
   customerType    CustomerType
-  billingAddress  String       @unique
-  shippingAddress String       @unique
+  billingAddress  Address
+  shippingAddress Address
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
@@ -154,14 +194,18 @@ model Customer {
 
   contacts ContactPerson[]
   sales    Order[]
+
+  @@unique([companyId, email])
+  @@index([companyId])
+  @@index([name])
 }
 
 // external company or individual
 model Supplier {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  email        String   @unique
-  phone        String   @unique
+  email        String
+  phone        String
   address      String
   paymentTerms String
   notes        String?
@@ -174,13 +218,18 @@ model Supplier {
 
   contacts  ContactPerson[]
   purchases Order[]
+
+  @@unique([companyId, email])
+  @@unique([companyId, phone])
+  @@index([companyId])
+  @@index([name])
 }
 
 // Represents a specific individual within a Customer or Supplier
 model ContactPerson {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  title     String
+  email     String
+  jobTitle  String
   firstName String
   lastName  String
   notes     String?
@@ -195,6 +244,11 @@ model ContactPerson {
 
   companyId String  @db.ObjectId
   company   Company @relation(fields: [companyId], references: [id])
+
+  @@unique([companyId, email])
+  @@index([companyId])
+  @@index([customerId])
+  @@index([supplierId])
 }
 
 // single transaction for the movement of products
@@ -207,11 +261,11 @@ model Order {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  companyId String   @db.ObjectId
-  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
 
   userId String @db.ObjectId
-  user   User?  @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   customerId String?   @db.ObjectId
   customer   Customer? @relation(fields: [customerId], references: [id])
@@ -219,10 +273,15 @@ model Order {
   supplierId String?   @db.ObjectId
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
 
-  invoiceId String  @db.ObjectId
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoice Invoice?
 
   orderLines OrderLine[]
+
+  @@index([companyId])
+  @@index([userId])
+  @@index([customerId])
+  @@index([supplierId])
+  @@index([orderDate])
 }
 
 // single product entry within an Order
@@ -233,20 +292,20 @@ model OrderLine {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  companyId String  @db.ObjectId
-  company   Company @relation(fields: [companyId], references: [id])
-
   orderId String @db.ObjectId
   order   Order  @relation(fields: [orderId], references: [id])
 
   productId String  @db.ObjectId
   product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 // billing document generated for a sales order
 model Invoice {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  invoiceNumber String        @unique
+  invoiceNumber String
   invoiceDate   DateTime      @default(now())
   dueDate       DateTime
   totalAmount   Float
@@ -254,8 +313,9 @@ model Invoice {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  orders Order[]
+  orderId String @unique @db.ObjectId
+  order   Order  @relation(fields: [orderId], references: [id])
 
-  companyId String  @db.ObjectId
-  company   Company @relation(fields: [companyId], references: [id])
+  @@index([invoiceNumber])
+  @@index([invoiceDate])
 }
