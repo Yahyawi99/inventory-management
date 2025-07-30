@@ -61,15 +61,17 @@ model Company {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users      User[]
-  products   Product[]
-  stocks     Stock[]
-  stockItems StockItem[]
-  categories Category[]
-  customers  Customer[]
-  suppliers  Supplier[]
-  contacts   ContactPerson[]
-  orders     Order[]
+  users         User[]
+  products      Product[]
+  stocks        Stock[]
+  stockItems    StockItem[]
+  categories    Category[]
+  customers     Customer[]
+  suppliers     Supplier[]
+  contacts      ContactPerson[]
+  orders        Order[]
+  invoices      Invoice[]
+  userCompanies UserCompany[]
 
   @@index([email])
 }
@@ -80,7 +82,6 @@ model User {
   username     String
   email        String   @unique
   passwordHash String
-  role         Role
   firstName    String?
   lastName     String?
   isActive     Boolean  @default(true)
@@ -90,23 +91,40 @@ model User {
   companyId String  @db.ObjectId
   company   Company @relation(fields: [companyId], references: [id])
 
-  orders Order[]
+  orders        Order[]
+  userCompanies UserCompany[]
 
-  @@unique([companyId, username])
+  @@index([companyId])
+}
+
+// junction model for company and user
+model UserCompany {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@unique([userId, companyId])
+  @@index([userId])
   @@index([companyId])
 }
 
 // Item in the inventory
 model Product {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  description     String?
-  sku             String
-  price           Float
-  quantityInStock Int
-  barcode         String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  sku         String
+  price       Float
+  barcode     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   companyId String  @db.ObjectId
   company   Company @relation(fields: [companyId], references: [id])
@@ -159,7 +177,7 @@ model Stock {
   @@index([name])
 }
 
-// intermediary model for stock and product
+// junction model for stock and product
 model StockItem {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   quantity  Int // Quantity of THIS product in THIS stock location
@@ -206,7 +224,7 @@ model Supplier {
   name         String
   email        String
   phone        String
-  address      String
+  address      Address
   paymentTerms String
   notes        String?
   tags         String[]
@@ -316,6 +334,10 @@ model Invoice {
   orderId String @unique @db.ObjectId
   order   Order  @relation(fields: [orderId], references: [id])
 
+  companyId String  @db.ObjectId
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@unique([companyId, invoiceNumber])
   @@index([invoiceNumber])
   @@index([invoiceDate])
 }
