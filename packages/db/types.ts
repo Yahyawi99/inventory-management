@@ -1,5 +1,27 @@
 type CustomerType = "B2B" | "B2C";
 
+export type User = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  email: string;
+  username: string;
+  passwordHash: string;
+  firstName: string | null;
+  lastName: string | null;
+  isActive: boolean;
+};
+
+export type Company = {
+  id: string;
+  name: string;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Category = {
   id: string;
   createdAt: Date;
