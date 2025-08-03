@@ -1,8 +1,9 @@
 {
-  "name": "@yy/db",
+  "name": "database",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
     "db:push": "pnpm dlx prisma db push",
     "db:generate": "pnpm dlx prisma generate",
