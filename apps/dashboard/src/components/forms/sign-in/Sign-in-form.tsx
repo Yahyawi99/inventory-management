@@ -114,7 +114,7 @@ export default function SignInForm() {
 
       <CardFooter className="flex flex-col gap-4 px-6 pt-4 pb-6">
         <Button
-          className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-3 cursor-pointer border-transparent hover:border-sidebar outline-none  font-bold py-2 px-4 rounded-md transition-colors duration-200"
+          className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none  font-bold py-2 px-4 rounded-md transition-colors duration-200"
           type="submit"
           // onClick={handleSubmit}
           disabled={isLoading}

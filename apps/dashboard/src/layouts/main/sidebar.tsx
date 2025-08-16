@@ -52,19 +52,16 @@ export default function MainSidebar() {
 
 const Header = () => {
   return (
-    <div className="flex justify-between items-center  my-5 pb-5 border-b-2">
-      <div className="flex">
+    <div className="flex justify-between items-center pt-1 pb-0 mb-5 border-b-2">
+      <div className="flex items-center">
         <Image
           src={"/assets/icons/logo.png"}
-          width={100}
-          height={100}
+          width={75}
+          height={75}
           alt="WareFlow-logo"
-          className="w-[30px] h-[30px]"
         />
 
-        <h1 className="text-3xl text-(--color-secondary) h-[35px] pt-[3px]">
-          WareFlow
-        </h1>
+        <h1 className="text-3xl text-(--color-secondary) h-[35px]">WareFlow</h1>
       </div>
 
       <div>

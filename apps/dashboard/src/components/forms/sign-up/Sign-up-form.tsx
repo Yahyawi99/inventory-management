@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -110,10 +111,8 @@ export default function SignUpForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto rounded-lg shadow-lg">
       <CardHeader className="text-center pb-4">
-        {/* Placeholder for Inventory App Logo */}
-
         <CardTitle className="text-3xl font-bold text-gray-800">
-          Join WareFlow
+          Join WF
         </CardTitle>
         <CardDescription className="text-gray-600">
           Register your organization to start managing your inventory
@@ -329,7 +328,7 @@ export default function SignUpForm() {
 
       <CardFooter className="flex flex-col gap-4 px-6 pt-4 pb-6">
         <Button
-          className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-3 cursor-pointer border-transparent hover:border-sidebar outline-none  font-bold py-2 px-4 rounded-md transition-colors duration-200"
+          className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none  font-bold py-2 px-4 rounded-md transition-colors duration-200"
           type="submit"
           onClick={handleSubmit}
           disabled={isLoading}

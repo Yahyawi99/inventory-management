@@ -1,11 +1,11 @@
-// components/auth/SignUpForm.tsx
-"use client"; // This component uses client-side hooks like useState and event handlers
+"use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // For redirection after signup
-import SignUpForm from "@/components/forms/sign-up/Sign-up";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import SignUpForm from "@/components/forms/sign-up/Sign-up-form";
+import Logo from "@/components/forms/Auth-logo";
 
-// This component is the comprehensive signup form for creating a company and admin user.
 export default function SignUp() {
   // State for Organization Information
   const [orgName, setOrgName] = useState("");
@@ -91,7 +91,9 @@ export default function SignUp() {
   // };
 
   return (
-    <div className="flex justify-center my-5">
+    <div className="flex flex-col items-center my-5">
+      <Logo />
+
       <SignUpForm />
     </div>
   );

@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import SignInForm from "@/components/forms/sign-in/Sign-in";
+import SignInForm from "@/components/forms/sign-in/Sign-in-form";
+import Logo from "@/components/forms/Auth-logo";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -60,7 +61,9 @@ export default function SignIn() {
   // };
 
   return (
-    <div className="h-lvh flex justify-center items-center">
+    <div className="h-lvh flex flex-col items-center justify-center">
+      <Logo />
+
       <SignInForm />
     </div>
   );

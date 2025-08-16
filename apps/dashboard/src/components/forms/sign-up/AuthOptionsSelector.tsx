@@ -1,8 +1,4 @@
-"use client";
-
-import React from "react";
 import { authOptionsType, AuthOptionsSelectorProps } from "@/types/auth";
-import { Button } from "@/components/ui/button";
 import AuthOption from "./AuthOption";
 
 const authOptions: authOptionsType[] = [
