@@ -1,1 +1,5 @@
-export { default } from "./[locale]/page";
+import { redirect } from "next/navigation";
+
+export default function Root() {
+  redirect("/en");
+}

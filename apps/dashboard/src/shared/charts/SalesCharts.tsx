@@ -77,6 +77,7 @@ export default function Chart() {
         <div className="flex">
           {["revenue", "orderCount"].map((key) => {
             const chart = key as keyof typeof chartConfig;
+            console.log(total[key as keyof typeof total]);
             return (
               <button
                 key={chart}
