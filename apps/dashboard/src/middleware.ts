@@ -6,14 +6,13 @@ import { jwtVerify } from "jose";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function middleware(req: NextRequest) {
-  console.log("hello");
   const authHeader = req.headers.get("authorization");
+  const url = req.nextUrl.clone();
+  url.pathname = `${url.locale}/auth/sign-in`;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { message: "Authorization header is missing or malformed." },
-      { status: 401 }
-    );
+    console.error("Authorization header is missing or malformed.");
+    return NextResponse.redirect(url);
   }
 
   const token = authHeader.split(" ")[1];
@@ -29,13 +28,12 @@ export async function middleware(req: NextRequest) {
     return response;
   } catch (error) {
     console.error("JWT verification failed:", error);
-    return NextResponse.json(
-      { message: "Invalid or expired token." },
-      { status: 401 }
-    );
+    return NextResponse.redirect(url);
   }
 }
 
 export const config = {
-  matcher: ["/api/orders/:path*", "/api/inventory/:path*"],
+  matcher: [
+    "/((?!_next|favicon.ico|api/auth/login|api/auth/register|auth/sign-in|auth/sign-up).*)",
+  ],
 };
