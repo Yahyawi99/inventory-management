@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import SignInForm from "@/components/forms/Sign-in";
+import SignInForm from "@/components/forms/sign-in/Sign-in";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");

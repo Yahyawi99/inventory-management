@@ -1,8 +1,7 @@
-// components/auth/SignUpForm.tsx
-"use client"; // This component uses client-side hooks like useState and event handlers
+"use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // For redirection after signup
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import AuthOptionsSelector from "./AuthOptionsSelector";
 
 // This component is the comprehensive signup form for creating a company and admin user.
 export default function SignUpForm() {
@@ -24,6 +24,9 @@ export default function SignUpForm() {
   const [description, setDescription] = useState("");
   const [orgEmail, setOrgEmail] = useState("");
   const [website, setWebsite] = useState("");
+  const [selectedAuthOption, setSelectedAuthOption] = useState<
+    "Email" | "Google" | "Phone" | "Code"
+  >("Email");
 
   // State for Admin Account
   const [yourName, setYourName] = useState("");
@@ -41,24 +44,26 @@ export default function SignUpForm() {
     setIsLoading(true);
     setError(null);
 
-    // Basic client-side validation
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      setIsLoading(false);
-      return;
-    }
-    if (
-      !orgName ||
-      !description ||
-      !orgEmail ||
-      !yourName ||
-      !yourEmail ||
-      !password ||
-      !confirmPassword
-    ) {
-      setError("Please fill in all required fields.");
-      setIsLoading(false);
-      return;
+    // Basic client-side validation for email option
+    if (selectedAuthOption === "Email") {
+      if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        setIsLoading(false);
+        return;
+      }
+      if (
+        !orgName ||
+        !description ||
+        !orgEmail ||
+        !yourName ||
+        !yourEmail ||
+        !password ||
+        !confirmPassword
+      ) {
+        setError("Please fill in all required fields.");
+        setIsLoading(false);
+        return;
+      }
     }
 
     // Prepare data to send to the API
@@ -71,6 +76,7 @@ export default function SignUpForm() {
       adminName: yourName,
       adminEmail: yourEmail,
       password,
+      authOption: selectedAuthOption,
     };
 
     // In a real application, you would make an API call here to your /api/auth/register-organization endpoint.
@@ -117,45 +123,52 @@ export default function SignUpForm() {
 
       <CardContent className="px-6">
         {/* Limited Authentication Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-2 text-gray-800">
-            Authentication Options
-          </h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Choose your preferred method. Email & Password registration is
-            always available.
-          </p>
-          <div className="grid grid-cols-4 gap-4">
-            <Button
-              variant="outline"
-              className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-            >
-              <span className="text-lg">✉️</span>
-              <span className="hidden sm:inline">Email</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-            >
-              <span className="text-lg">G</span>
-              <span className="hidden sm:inline">Google</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-            >
-              <span className="text-lg">📞</span>
-              <span className="hidden sm:inline">Phone</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-            >
-              <span className="text-lg">#️⃣</span>
-              <span className="hidden sm:inline">Code</span>
-            </Button>
+        <AuthOptionsSelector
+          selectedOption={selectedAuthOption}
+          onSelectOption={setSelectedAuthOption}
+        />
+
+        {/* {selectedAuthOption === "Email" && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-2 text-gray-800">
+              Authentication Options
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Choose your preferred method. Email & Password registration is
+              always available.
+            </p>
+            <div className="grid grid-cols-4 gap-4">
+              <Button
+                variant="outline"
+                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
+              >
+                <span className="text-lg">✉️</span>
+                <span className="hidden sm:inline">Email</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
+              >
+                <span className="text-lg">G</span>
+                <span className="hidden sm:inline">Google</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
+              >
+                <span className="text-lg">📞</span>
+                <span className="hidden sm:inline">Phone</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
+              >
+                <span className="text-lg">#️⃣</span>
+                <span className="hidden sm:inline">Code</span>
+              </Button>
+            </div>
           </div>
-        </div>
+        )} */}
 
         {/* Organization Information Section */}
         <div className="mb-8">
@@ -239,73 +252,75 @@ export default function SignUpForm() {
         </div>
 
         {/* Admin Account Section */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
-            Admin Account
-          </h3>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="your-name" className="text-gray-700">
-                  Your Name *
-                </Label>
-                <Input
-                  id="your-name"
-                  placeholder="John Doe"
-                  required
-                  value={yourName}
-                  onChange={(e) => setYourName(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-                />
+        {selectedAuthOption === "Email" && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+              Admin Account
+            </h3>
+            <div className="grid gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="your-name" className="text-gray-700">
+                    Your Name *
+                  </Label>
+                  <Input
+                    id="your-name"
+                    placeholder="John Doe"
+                    required
+                    value={yourName}
+                    onChange={(e) => setYourName(e.target.value)}
+                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="your-email" className="text-gray-700">
+                    Your Email *
+                  </Label>
+                  <Input
+                    id="your-email"
+                    type="email"
+                    placeholder="john.doe@example.com"
+                    required
+                    value={yourEmail}
+                    onChange={(e) => setYourEmail(e.target.value)}
+                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  />
+                </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="your-email" className="text-gray-700">
-                  Your Email *
-                </Label>
-                <Input
-                  id="your-email"
-                  type="email"
-                  placeholder="john.doe@example.com"
-                  required
-                  value={yourEmail}
-                  onChange={(e) => setYourEmail(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="password" className="text-gray-700">
-                  Password *
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Minimum 6 characters"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="confirm-password" className="text-gray-700">
-                  Confirm Password *
-                </Label>
-                <Input
-                  id="confirm-password"
-                  type="password"
-                  placeholder="Repeat your password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="password" className="text-gray-700">
+                    Password *
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Minimum 6 characters"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="confirm-password" className="text-gray-700">
+                    Confirm Password *
+                  </Label>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    placeholder="Repeat your password"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {error && (
           <p className="text-red-500 text-sm text-center mb-4">{error}</p>

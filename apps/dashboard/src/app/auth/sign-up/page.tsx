@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // For redirection after signup
-import SignUpForm from "@/components/forms/Sign-up";
+import SignUpForm from "@/components/forms/sign-up/Sign-up";
 
 // This component is the comprehensive signup form for creating a company and admin user.
 export default function SignUp() {
