@@ -6,7 +6,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="text-[1.1rem] bg-(--accent)">
+    <div>
       <MainLayout>{children}</MainLayout>
     </div>
   );

@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={JosefinSans.className}>
-      <body>{children}</body>
+      <body className="text-[1.1rem] bg-(--accent)">{children}</body>
     </html>
   );
 }

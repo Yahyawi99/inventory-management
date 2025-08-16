@@ -2,18 +2,8 @@
 
 import * as React from "react";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // For redirection after login
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import SignInForm from "@/components/forms/Sign-in";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -70,88 +60,8 @@ export default function SignIn() {
   // };
 
   return (
-    <Card className="w-[400px] mx-auto rounded-lg shadow-lg">
-      <CardHeader className="text-center pb-4">
-        {/* Logo */}
-
-        <CardTitle className="text-2xl font-semibold text-gray-800">
-          Welcome Back
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent className="grid gap-6 px-6 bg-amber-800">
-        <div className="grid gap-2">
-          <Label htmlFor="email" className="text-gray-700">
-            Email
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="password" className="text-gray-700">
-            Password
-          </Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-          />
-        </div>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-      </CardContent>
-      <CardFooter className="flex flex-col gap-4 px-6 pt-4 pb-6">
-        <Button
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition-colors duration-200"
-          type="submit"
-          // onClick={handleSubmit}
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing In..." : "Sign In"}
-        </Button>
-        <div className="text-center text-sm text-gray-700">
-          Don't have an account?{" "}
-          <a
-            href="/en/auth/sign-up" // Link to your sign-up page (adjust locale as needed)
-            className="text-red-600 hover:underline font-semibold"
-          >
-            Register your organization
-          </a>
-        </div>
-        <div className="text-center text-sm text-gray-500 mt-2">
-          <a
-            href="/" // Link back to your home page (adjust as needed)
-            className="hover:underline flex items-center justify-center space-x-1"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-arrow-left"
-            >
-              <path d="m12 19-7-7 7-7" />
-              <path d="M19 12H5" />
-            </svg>
-            <span>Back to home</span>
-          </a>
-        </div>
-      </CardFooter>
-    </Card>
+    <div className="h-lvh flex justify-center items-center">
+      <SignInForm />
+    </div>
   );
 }
