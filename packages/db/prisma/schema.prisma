@@ -163,7 +163,7 @@ model Verification {
 // junction model for organization and user
 model Member {
   id        String   @id @map("_id")
-  role      Role
+  role      String
   createdAt DateTime
 
   organizationId String

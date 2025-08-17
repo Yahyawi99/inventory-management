@@ -3,11 +3,12 @@
 import * as React from "react";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation"; // For redirection after login
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -20,36 +21,120 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    setSuccessMessage(null);
 
     if (!email || !password) {
-      return "Please fill in all required fields.";
+      setError("Please fill in all required fields.");
+      setIsLoading(false);
+      return;
     }
 
     try {
-      const res = await authClient.signIn.email(
+      const { data, error: signInError } = await authClient.signIn.email(
         {
           email,
           password,
         },
         {
-          onError: async (ctx) => {
+          onError: (ctx) => {
             setError(ctx.error.message as string);
-            return;
+          },
+          onSuccess: async (ctx) => {
+            // Check if email is verified
+            if (ctx.data?.user && !ctx.data.user.emailVerified) {
+              setSuccessMessage(
+                "Sign in successful! Redirecting to email verification..."
+              );
+
+              // Send verification OTP
+              try {
+                await authClient.emailOtp.sendVerificationOtp({
+                  email: email,
+                  type: "email-verification",
+                });
+              } catch (otpError) {
+                console.warn("Failed to send OTP:", otpError);
+              } finally {
+                router.push(
+                  `/en/auth/verify-email?email=${encodeURIComponent(email)}`
+                );
+                return;
+              }
+            }
+
+            // If email is verified, redirect to main app
+            setSuccessMessage("Sign in successful! Redirecting...");
+            router.push("/en");
           },
         }
       );
 
-      console.log(res);
+      if (signInError) {
+        // Handle specific error cases
+        if (signInError.message?.includes("User not found")) {
+          setError(
+            "No account found with this email address. Please check your email or sign up."
+          );
+        } else if (signInError.message?.includes("Invalid password")) {
+          setError("Incorrect password. Please try again.");
+        } else if (signInError.message?.includes("email not verified")) {
+          setError("Please verify your email address before signing in.");
+          // Optionally send verification OTP
+          try {
+            await authClient.emailOtp.sendVerificationOtp({
+              email,
+              type: "email-verification",
+            });
+            setSuccessMessage("Verification email sent! Check your inbox.");
+            setTimeout(() => {
+              router.push(
+                `/en/auth/verify-email?email=${encodeURIComponent(email)}`
+              );
+            }, 2000);
+          } catch {
+            // Ignore OTP send error - user can request it on verification page
+          }
+        } else {
+          setError(signInError.message as string);
+        }
+        return;
+      }
     } catch (err: any) {
-      setError(
-        err.message || "An unexpected error occurred during registration."
-      );
+      console.error("Sign in error:", err);
+      setError(err.message || "An unexpected error occurred during sign in.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!email) {
+      setError("Please enter your email address first.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      await authClient.emailOtp.sendVerificationOtp({
+        email,
+        type: "email-verification",
+      });
+      setSuccessMessage("Verification email sent! Please check your inbox.");
+
+      setTimeout(() => {
+        router.push(`/en/auth/verify-email?email=${encodeURIComponent(email)}`);
+      }, 2000);
+    } catch (error: any) {
+      setError("Failed to send verification email. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -61,50 +146,77 @@ export default function SignInForm() {
         <CardTitle className="text-2xl font-semibold text-gray-800">
           Welcome Back
         </CardTitle>
+        <CardDescription className="text-gray-600">
+          Sign in to your WareFlow account
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="grid gap-6 px-6 ">
-        <div className="grid gap-2">
-          <Label htmlFor="email" className="text-gray-700">
-            Email
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-          />
-        </div>
+      <CardContent className="grid gap-6 px-6">
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email" className="text-gray-700">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+            />
+          </div>
 
-        <div className="grid gap-2">
-          <Label htmlFor="password" className="text-gray-700">
-            Password
-          </Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
-          />
-        </div>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <div className="grid gap-2">
+            <Label htmlFor="password" className="text-gray-700">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+            />
+          </div>
+
+          {error && (
+            <div className="text-center">
+              <p className="text-red-500 text-sm mb-2">{error}</p>
+              {error.includes("verify") && (
+                <Button
+                  type="button"
+                  variant="link"
+                  className="text-sidebar hover:underline text-sm p-0"
+                  onClick={handleResendVerification}
+                  disabled={isLoading}
+                >
+                  Resend Verification Email
+                </Button>
+              )}
+            </div>
+          )}
+
+          {successMessage && (
+            <p className="text-green-500 text-sm text-center">
+              {successMessage}
+            </p>
+          )}
+
+          <Button
+            className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none font-bold py-2 px-4 rounded-md transition-colors duration-200"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing In..." : "Sign In"}
+          </Button>
+        </form>
       </CardContent>
 
       <CardFooter className="flex flex-col gap-4 px-6 pt-4 pb-6">
-        <Button
-          className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none  font-bold py-2 px-4 rounded-md transition-colors duration-200"
-          type="submit"
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing In..." : "Sign In"}
-        </Button>
         <div className="text-center text-sm text-gray-700">
           Don't have an account?{" "}
           <a
@@ -112,6 +224,15 @@ export default function SignInForm() {
             className="text-sidebar hover:underline font-semibold"
           >
             Register your organization
+          </a>
+        </div>
+
+        <div className="text-center text-sm text-gray-700">
+          <a
+            href="/auth/forgot-password"
+            className="text-sidebar hover:underline font-medium"
+          >
+            Forgot your password?
           </a>
         </div>
 

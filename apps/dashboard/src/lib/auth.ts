@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { organization, twoFactor } from "better-auth/plugins";
+import { organization, emailOTP } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@database/generated/prisma/client";
 import { emailService } from "./email";
@@ -11,27 +11,23 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    autoSignIn: false,
+    autoSignIn: true,
     requireEmailVerification: false,
   },
 
   plugins: [
     organization(),
-    twoFactor({
-      issuer: "WareFlow",
-      otpOptions: {
-        async sendOTP({ user, otp }) {
-          await emailService.sendOTP(user.email, user.name, otp);
-        },
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        const user = await prisma.user.findUnique({ where: { email } });
+        const userName = user?.name || "";
+
+        await emailService.sendOTP(email, userName, otp);
       },
+      otpLength: 6,
+      expiresIn: 60 * 10,
     }),
   ],
-
-  events: {
-    onUserCreated: async ({ user, context }: any) => {
-      await context.twoFactor.enableOtp({ userId: user.id });
-    },
-  },
 
   database: prismaAdapter(prisma, {
     provider: "mongodb",

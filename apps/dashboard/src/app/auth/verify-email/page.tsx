@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -15,31 +15,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
-export default function Verify2FAPage() {
+export default function VerifyEmailOTPPage() {
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [session, setSession] = useState<any>(null);
+
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
 
-  useEffect(() => {
-    // if (!session?.data?.user) {
-    //   router.push("/sign-in");
-    //   return;
-    // }
-    const getSession = async () => {
-      const res = await authClient.getSession();
-      setSession(res.data);
-      console.log(res);
-    };
-    getSession();
+  // useEffect(() => {
+  //   if (!session?.data?.user) {
+  //     router.push("/sign-in");
+  //     return;
+  //   }
 
-    // if (session?.data.user.emailVerified) {
-    //   router.push("/en");
-    //   return;
-    // }
-  }, []);
+  //   if (session?.data.user.emailVerified) {
+  //     router.push("/en");
+  //     return;
+  //   }
+  // }, []);
 
   const handleVerification = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,20 +50,23 @@ export default function Verify2FAPage() {
     }
 
     try {
-      const { data, error: verifyError } = await authClient.twoFactor.verifyOtp(
+      const { data, error } = await authClient.emailOtp.verifyEmail(
         {
-          code: otp,
-          trustDevice: true,
+          email: email,
+          otp: otp,
+        },
+        {
+          onError: async (ctx) => {
+            setError(ctx?.error.message as string);
+            return;
+          },
         }
       );
 
-      if (verifyError) {
-        setError(verifyError.message as string);
-        return;
-      }
-
-      setSuccessMessage("Verification successful! Redirecting...");
-      router.push("/");
+      setSuccessMessage("Email verification successful! Redirecting...");
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during verification."
@@ -78,18 +77,36 @@ export default function Verify2FAPage() {
   };
 
   const handleResendCode = async () => {
+    if (!email) {
+      setError("Email address is required to resend code.");
+      return;
+    }
+
     try {
+      setIsLoading(true);
+      setError(null);
       setSuccessMessage("Resending code...");
 
-      const { data, error: resendError } = await authClient.twoFactor.sendOtp();
+      const { data, error } = await authClient.emailOtp.sendVerificationOtp(
+        {
+          email,
+          type: "email-verification",
+        },
+        {
+          onError: async (ctx) => {
+            setError(ctx?.error.message as string);
+            setSuccessMessage(null);
+            return;
+          },
+        }
+      );
 
-      if (resendError) {
-        setError(resendError.message as string);
-        return;
-      }
-      setSuccessMessage("New code sent! Please check your email.");
+      setSuccessMessage("New verification code sent! Please check your email.");
     } catch (err: any) {
       setError(err.message || "Failed to resend code. Please try again.");
+      setSuccessMessage(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -110,11 +127,15 @@ export default function Verify2FAPage() {
       <Card className="w-full max-w-md mx-auto rounded-lg shadow-lg">
         <CardHeader className="text-center pb-4">
           <CardTitle className="text-3xl font-bold text-gray-800">
-            Verify Your Account
+            Verify Your Email
           </CardTitle>
           <CardDescription className="text-gray-600">
-            A 6-digit verification code has been sent to your registered email
-            or phone number.
+            A 6-digit verification code has been sent to your email address.
+            {email && (
+              <span className="block mt-2 font-medium text-gray-800">
+                {email}
+              </span>
+            )}
           </CardDescription>
         </CardHeader>
 
@@ -150,7 +171,7 @@ export default function Verify2FAPage() {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? "Verifying..." : "Verify"}
+              {isLoading ? "Verifying..." : "Verify Email"}
             </Button>
           </form>
         </CardContent>
@@ -162,7 +183,7 @@ export default function Verify2FAPage() {
               variant="link"
               className="p-0 h-auto text-sidebar hover:underline font-semibold"
               onClick={handleResendCode}
-              disabled={isLoading}
+              disabled={isLoading || !email}
             >
               Resend Code
             </Button>
@@ -171,7 +192,7 @@ export default function Verify2FAPage() {
             <Button
               variant="link"
               className="hover:underline flex items-center justify-center p-0 h-auto space-x-1"
-              onClick={() => router.push("/en/auth/sign-in")} // Adjust link as needed
+              onClick={() => router.push("/en/auth/sign-in")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

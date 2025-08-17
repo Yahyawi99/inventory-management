@@ -55,6 +55,9 @@ export default function SignUpForm() {
       ) {
         return "Please fill in all required fields.";
       }
+      if (password.length < 6) {
+        return "Password must be at least 6 characters long.";
+      }
     }
 
     // more validation for other auth options
@@ -87,8 +90,9 @@ export default function SignUpForm() {
     };
 
     try {
-      const { data, error: signUpError } = await authClient.signUp
-        .email(
+      // First, create the user account
+      const { data: signUpData, error: signUpError } =
+        await authClient.signUp.email(
           {
             name: formData.adminName,
             email: formData.adminEmail,
@@ -99,36 +103,54 @@ export default function SignUpForm() {
               setError(ctx.error.message);
             },
           }
-        )
-        .finally(() => setIsLoading(false));
+        );
 
-      if (signUpError) {
-        setError(signUpError.message as string);
-        return;
+      // Send email verification OTP
+      try {
+        const { error: otpError } =
+          await authClient.emailOtp.sendVerificationOtp({
+            email: formData.adminEmail,
+            type: "email-verification",
+          });
+
+        if (otpError) {
+          setError(
+            `Account created but failed to send verification email: ${otpError.message}`
+          );
+          // Still redirect to verification page so user can retry
+        }
+      } catch (otpErr: any) {
+        console.warn("Failed to send OTP:", otpErr);
+        // Continue with the flow - user can request resend on verification page
       }
 
-      console.log(data);
-      //   if (data?.twoFactorRedirect && data.twoFactorTicket) {
-      // sessionStorage.setItem(
-      //   "pendingOrg" ,
-      //   JSON.stringify({ orgName, shortName, description, orgEmail, website })
-      // );
+      // Create organization after successful signup
+      try {
+        const metadata = {
+          description: formData.description,
+          companyEmail: formData.companyEmail,
+          website: formData.website,
+        };
 
-      // create organization
-      // try {
-      //   const metadata = { description: formData.description };
-      //   await authClient.organization.create({
-      //     name: formData.companyName,
-      //     slug: formData.shortName,
-      //     metadata,
-      //     keepCurrentActiveOrganization: true,
-      //   });
-      // } catch (orgError: any) {
-      //   setError(
-      //     `Account created but failed to create organization: ${orgError.message}`
-      //   );
-      //   // Consider: redirect to a page where they can retry org creation
-      // }
+        await authClient.organization.create({
+          name: formData.companyName,
+          slug:
+            formData.shortName ||
+            formData.companyName.toLowerCase().replace(/\s+/g, "-"),
+          metadata,
+          keepCurrentActiveOrganization: true,
+        });
+      } catch (orgError: any) {
+        console.error("Organization creation failed:", orgError);
+        setError(
+          `Account created but failed to create organization: ${orgError.message}`
+        );
+      }
+
+      // Redirect to email verification page
+      router.push(
+        `/auth/verify-email?email=${encodeURIComponent(formData.adminEmail)}`
+      );
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during registration."
@@ -146,7 +168,8 @@ export default function SignUpForm() {
         </CardTitle>
         <CardDescription className="text-gray-600">
           Register your organization to start managing your inventory
-          efficiently.
+          efficiently. You'll need to verify your email address after
+          registration.
         </CardDescription>
       </CardHeader>
 
@@ -157,56 +180,12 @@ export default function SignUpForm() {
           onSelectOption={setSelectedAuthOption}
         />
 
-        {/* {selectedAuthOption === "Email" && (
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800">
-              Authentication Options
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Choose your preferred method. Email & Password registration is
-              always available.
-            </p>
-            <div className="grid grid-cols-4 gap-4">
-              <Button
-                variant="outline"
-                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-              >
-                <span className="text-lg">✉️</span>
-                <span className="hidden sm:inline">Email</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-              >
-                <span className="text-lg">G</span>
-                <span className="hidden sm:inline">Google</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-              >
-                <span className="text-lg">📞</span>
-                <span className="hidden sm:inline">Phone</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center justify-center space-x-2 border-gray-300 hover:bg-gray-50"
-              >
-                <span className="text-lg">#️⃣</span>
-                <span className="hidden sm:inline">Code</span>
-              </Button>
-            </div>
-          </div>
-        )} */}
-
         {/* Organization Information Section */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-gray-800">
             Company Information
           </h3>
           <form className="grid gap-4" onSubmit={handleSubmit}>
-            {" "}
-            {/* Attach onSubmit here for entire form */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="org-name" className="text-gray-700">
@@ -227,7 +206,7 @@ export default function SignUpForm() {
                 </Label>
                 <Input
                   id="short-name"
-                  placeholder="e.g. MCI"
+                  placeholder="e.g. MCI (used for organization slug)"
                   value={shortName}
                   onChange={(e) => setShortName(e.target.value)}
                   className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
@@ -276,8 +255,7 @@ export default function SignUpForm() {
                 />
               </div>
             </div>
-          </form>{" "}
-          {/* Form ends here */}
+          </form>
         </div>
 
         {/* Admin Account Section */}
@@ -303,7 +281,7 @@ export default function SignUpForm() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="your-email" className="text-gray-700">
-                    Your Email *
+                    Your Email * (verification required)
                   </Label>
                   <Input
                     id="your-email"
@@ -327,6 +305,7 @@ export default function SignUpForm() {
                     type="password"
                     placeholder="Minimum 6 characters"
                     required
+                    minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
@@ -363,8 +342,17 @@ export default function SignUpForm() {
           onClick={handleSubmit}
           disabled={isLoading}
         >
-          {isLoading ? "Registering..." : "Register Company"}
+          {isLoading
+            ? "Creating Account..."
+            : "Create Account & Send Verification"}
         </Button>
+
+        <div className="text-center text-xs text-gray-500 bg-gray-50 p-3 rounded-md">
+          After registration, you'll receive a verification email with a 6-digit
+          code. Please check your inbox and verify your email to complete the
+          setup.
+        </div>
+
         <div className="text-center text-sm text-gray-700">
           Already have an account?{" "}
           <a
