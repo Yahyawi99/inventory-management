@@ -5,7 +5,7 @@ export const emailConfigs = {
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_APP_PASSWORD, // This should be the 16-digit app password
+      pass: process.env.EMAIL_APP_PASSWORD,
     },
   },
 
@@ -15,7 +15,7 @@ export const emailConfigs = {
     secure: process.env.SMTP_SECURE === "true",
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS, // Fixed: was SMTP_PASSWORD, now matches your env
+      pass: process.env.SMTP_PASS,
     },
   },
 };
@@ -41,7 +41,7 @@ export const generateOTPEmail = (userName: string, otp: string) => ({
           </span>
         </div>
         <p style="color: #666; font-size: 14px; margin-top: 20px;">
-          This code will expire in <strong>5 minutes</strong>
+          This code will expire in <strong>10 minutes</strong>
         </p>
       </div>
       
@@ -78,31 +78,12 @@ export const generateOTPEmail = (userName: string, otp: string) => ({
 export class EmailService {
   private transporter: nodemailer.Transporter;
 
-  constructor() {
-    // Use SMTP config by default, but you can switch to Gmail config if needed
-    const config = emailConfigs.smtp;
-
-    // Validate required environment variables
-    this.validateConfig();
-
+  constructor(config = emailConfigs.smtp) {
     this.transporter = nodemailer.createTransport(config);
-  }
-
-  private validateConfig() {
-    const requiredVars = ["SMTP_HOST", "SMTP_USER", "SMTP_PASS"];
-    const missing = requiredVars.filter((varName) => !process.env[varName]);
-
-    if (missing.length > 0) {
-      throw new Error(
-        `Missing required environment variables: ${missing.join(", ")}\n` +
-          "Please check your .env file configuration."
-      );
-    }
   }
 
   async sendOTP(userEmail: string, userName: string, otp: string) {
     try {
-      // Verify connection first
       await this.transporter.verify();
 
       const emailContent = generateOTPEmail(userName, otp);
@@ -117,12 +98,11 @@ export class EmailService {
         ...emailContent,
       });
 
-      console.log(`OTP email sent to ${userEmail}:`, info.messageId);
       return { success: true, messageId: info.messageId };
     } catch (error) {
       console.error("Failed to send OTP email:", error);
 
-      // Provide more specific error messages
+      // more specific error messages
       if (error instanceof Error) {
         if (error.message.includes("EAUTH")) {
           throw new Error(
@@ -154,11 +134,6 @@ export class EmailService {
       console.error("Email service connection failed:", error);
       return false;
     }
-  }
-
-  // Alternative method using Gmail service directly
-  async createGmailTransporter() {
-    return nodemailer.createTransport(emailConfigs.gmail);
   }
 }
 

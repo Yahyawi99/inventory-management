@@ -22,7 +22,9 @@ export const auth = betterAuth({
         const user = await prisma.user.findUnique({ where: { email } });
         const userName = user?.name || "";
 
-        await emailService.sendOTP(email, userName, otp);
+        if ((type = "email-verification")) {
+          await emailService.sendOTP(email, userName, otp);
+        }
       },
       otpLength: 6,
       expiresIn: 60 * 10,

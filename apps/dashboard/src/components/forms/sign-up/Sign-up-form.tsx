@@ -55,9 +55,6 @@ export default function SignUpForm() {
       ) {
         return "Please fill in all required fields.";
       }
-      if (password.length < 6) {
-        return "Password must be at least 6 characters long.";
-      }
     }
 
     // more validation for other auth options
@@ -90,7 +87,6 @@ export default function SignUpForm() {
     };
 
     try {
-      // First, create the user account
       const { data: signUpData, error: signUpError } =
         await authClient.signUp.email(
           {
@@ -117,11 +113,9 @@ export default function SignUpForm() {
           setError(
             `Account created but failed to send verification email: ${otpError.message}`
           );
-          // Still redirect to verification page so user can retry
         }
       } catch (otpErr: any) {
         console.warn("Failed to send OTP:", otpErr);
-        // Continue with the flow - user can request resend on verification page
       }
 
       // Create organization after successful signup

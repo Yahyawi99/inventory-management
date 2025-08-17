@@ -64,9 +64,7 @@ export default function VerifyEmailOTPPage() {
       );
 
       setSuccessMessage("Email verification successful! Redirecting...");
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
+      router.push("/en");
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during verification."
@@ -76,6 +74,7 @@ export default function VerifyEmailOTPPage() {
     }
   };
 
+  // Resend OTP
   const handleResendCode = async () => {
     if (!email) {
       setError("Email address is required to resend code.");
@@ -109,18 +108,6 @@ export default function VerifyEmailOTPPage() {
       setIsLoading(false);
     }
   };
-
-  // if (!session?.data?.user) {
-  //   return (
-  //     <div className="h-lvh flex justify-center items-center">
-  //       <p>Redirecting to login...</p>
-  //     </div>
-  //   );
-  // }
-
-  // if (session?.data?.user.emailVerified) {
-  //   return <div>Email already verified, redirecting...</div>;
-  // }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">

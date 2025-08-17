@@ -45,15 +45,15 @@ export default function SignInForm() {
         {
           onError: (ctx) => {
             setError(ctx.error.message as string);
+            return;
           },
           onSuccess: async (ctx) => {
-            // Check if email is verified
+            // Send verification OTP if the email is not verified
             if (ctx.data?.user && !ctx.data.user.emailVerified) {
               setSuccessMessage(
                 "Sign in successful! Redirecting to email verification..."
               );
 
-              // Send verification OTP
               try {
                 await authClient.emailOtp.sendVerificationOtp({
                   email: email,
@@ -63,7 +63,7 @@ export default function SignInForm() {
                 console.warn("Failed to send OTP:", otpError);
               } finally {
                 router.push(
-                  `/en/auth/verify-email?email=${encodeURIComponent(email)}`
+                  `/auth/verify-email?email=${encodeURIComponent(email)}`
                 );
                 return;
               }
@@ -75,66 +75,9 @@ export default function SignInForm() {
           },
         }
       );
-
-      if (signInError) {
-        // Handle specific error cases
-        if (signInError.message?.includes("User not found")) {
-          setError(
-            "No account found with this email address. Please check your email or sign up."
-          );
-        } else if (signInError.message?.includes("Invalid password")) {
-          setError("Incorrect password. Please try again.");
-        } else if (signInError.message?.includes("email not verified")) {
-          setError("Please verify your email address before signing in.");
-          // Optionally send verification OTP
-          try {
-            await authClient.emailOtp.sendVerificationOtp({
-              email,
-              type: "email-verification",
-            });
-            setSuccessMessage("Verification email sent! Check your inbox.");
-            setTimeout(() => {
-              router.push(
-                `/en/auth/verify-email?email=${encodeURIComponent(email)}`
-              );
-            }, 2000);
-          } catch {
-            // Ignore OTP send error - user can request it on verification page
-          }
-        } else {
-          setError(signInError.message as string);
-        }
-        return;
-      }
     } catch (err: any) {
       console.error("Sign in error:", err);
       setError(err.message || "An unexpected error occurred during sign in.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleResendVerification = async () => {
-    if (!email) {
-      setError("Please enter your email address first.");
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      await authClient.emailOtp.sendVerificationOtp({
-        email,
-        type: "email-verification",
-      });
-      setSuccessMessage("Verification email sent! Please check your inbox.");
-
-      setTimeout(() => {
-        router.push(`/en/auth/verify-email?email=${encodeURIComponent(email)}`);
-      }, 2000);
-    } catch (error: any) {
-      setError("Failed to send verification email. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -182,23 +125,6 @@ export default function SignInForm() {
               className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
             />
           </div>
-
-          {error && (
-            <div className="text-center">
-              <p className="text-red-500 text-sm mb-2">{error}</p>
-              {error.includes("verify") && (
-                <Button
-                  type="button"
-                  variant="link"
-                  className="text-sidebar hover:underline text-sm p-0"
-                  onClick={handleResendVerification}
-                  disabled={isLoading}
-                >
-                  Resend Verification Email
-                </Button>
-              )}
-            </div>
-          )}
 
           {successMessage && (
             <p className="text-green-500 text-sm text-center">
