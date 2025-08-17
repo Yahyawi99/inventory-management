@@ -82,22 +82,35 @@ model Organization {
 
 // EMPLOYEE/TEAM MEMBER 
 model User {
-  id            String   @id @map("_id")
-  name          String   @unique
-  email         String
-  emailVerified Boolean
-  image         String?
-  password      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id               String   @id @map("_id")
+  name             String   @unique
+  email            String
+  emailVerified    Boolean
+  image            String?
+  password         String?
+  twoFactorEnabled Boolean?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  sessions Session[]
-  accounts Account[]
-  orders   Order[]
-  members  Member[]
+  sessions   Session[]
+  accounts   Account[]
+  orders     Order[]
+  members    Member[]
+  twofactors TwoFactor[]
 
   @@unique([email])
   @@map("user")
+}
+
+model TwoFactor {
+  id          String @id @map("_id")
+  secret      String
+  backupCodes String
+  userId      String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("twoFactor")
 }
 
 model Session {

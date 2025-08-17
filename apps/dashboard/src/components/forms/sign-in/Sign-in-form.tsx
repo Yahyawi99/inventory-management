@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -33,16 +32,20 @@ export default function SignInForm() {
     }
 
     try {
-      const { data: _, error: signInError } = await authClient.signIn.email({
-        email,
-        password,
-        callbackURL: "/",
-      });
+      const res = await authClient.signIn.email(
+        {
+          email,
+          password,
+        },
+        {
+          onError: async (ctx) => {
+            setError(ctx.error.message as string);
+            return;
+          },
+        }
+      );
 
-      if (signInError) {
-        setError(signInError.message as string);
-        return;
-      }
+      console.log(res);
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during registration."

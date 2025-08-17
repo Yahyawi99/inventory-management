@@ -87,37 +87,48 @@ export default function SignUpForm() {
     };
 
     try {
-      // Create user first
-      const { data: userData, error: signUpError } =
-        await authClient.signUp.email({
-          name: formData.adminName,
-          email: formData.adminEmail,
-          password: formData.password,
-          callbackURL: "/",
-        });
+      const { data, error: signUpError } = await authClient.signUp
+        .email(
+          {
+            name: formData.adminName,
+            email: formData.adminEmail,
+            password: formData.password,
+          },
+          {
+            onError(ctx) {
+              setError(ctx.error.message);
+            },
+          }
+        )
+        .finally(() => setIsLoading(false));
 
       if (signUpError) {
         setError(signUpError.message as string);
         return;
       }
 
-      // create organization
-      try {
-        const metadata = { description: formData.description };
-        await authClient.organization.create({
-          name: formData.companyName,
-          slug: formData.shortName,
-          metadata,
-          keepCurrentActiveOrganization: false,
-        });
+      console.log(data);
+      //   if (data?.twoFactorRedirect && data.twoFactorTicket) {
+      // sessionStorage.setItem(
+      //   "pendingOrg" ,
+      //   JSON.stringify({ orgName, shortName, description, orgEmail, website })
+      // );
 
-        // Success - redirect or show success message
-      } catch (orgError: any) {
-        setError(
-          `Account created but failed to create organization: ${orgError.message}`
-        );
-        // Consider: redirect to a page where they can retry org creation
-      }
+      // create organization
+      // try {
+      //   const metadata = { description: formData.description };
+      //   await authClient.organization.create({
+      //     name: formData.companyName,
+      //     slug: formData.shortName,
+      //     metadata,
+      //     keepCurrentActiveOrganization: true,
+      //   });
+      // } catch (orgError: any) {
+      //   setError(
+      //     `Account created but failed to create organization: ${orgError.message}`
+      //   );
+      //   // Consider: redirect to a page where they can retry org creation
+      // }
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during registration."
