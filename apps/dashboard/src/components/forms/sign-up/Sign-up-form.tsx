@@ -38,19 +38,12 @@ export default function SignUpForm() {
   // UI state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter(); // Initialize Next.js router for navigation
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    // Basic client-side validation for email option
+  const validateForm = () => {
     if (selectedAuthOption === "Email") {
       if (password !== confirmPassword) {
-        setError("Passwords do not match.");
-        setIsLoading(false);
-        return;
+        return "Passwords do not match.";
       }
       if (
         !orgName ||
@@ -58,16 +51,29 @@ export default function SignUpForm() {
         !orgEmail ||
         !yourName ||
         !yourEmail ||
-        !password ||
-        !confirmPassword
+        !password
       ) {
-        setError("Please fill in all required fields.");
-        setIsLoading(false);
-        return;
+        return "Please fill in all required fields.";
       }
     }
 
-    // Prepare data to send to the API
+    // more validation for other auth options
+    return null;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    // validation
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      setIsLoading(false);
+      return;
+    }
+
     const formData = {
       companyName: orgName,
       shortName,
@@ -81,6 +87,37 @@ export default function SignUpForm() {
     };
 
     try {
+      // Create user first
+      const { data: userData, error: signUpError } =
+        await authClient.signUp.email({
+          name: formData.adminName,
+          email: formData.adminEmail,
+          password: formData.password,
+          callbackURL: "/",
+        });
+
+      if (signUpError) {
+        setError(signUpError.message as string);
+        return;
+      }
+
+      // create organization
+      try {
+        const metadata = { description: formData.description };
+        await authClient.organization.create({
+          name: formData.companyName,
+          slug: formData.shortName,
+          metadata,
+          keepCurrentActiveOrganization: false,
+        });
+
+        // Success - redirect or show success message
+      } catch (orgError: any) {
+        setError(
+          `Account created but failed to create organization: ${orgError.message}`
+        );
+        // Consider: redirect to a page where they can retry org creation
+      }
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during registration."

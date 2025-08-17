@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation"; // For redirection after login
 import { Button } from "@/components/ui/button";
 import {
@@ -20,60 +21,40 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter(); // Initialize Next.js router for navigation
+  const router = useRouter();
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   setError(null);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
-  //   // In a real application, you would make an API call to your /api/auth/login endpoint.
-  //   // For example:
-  //   try {
-  //     const response = await fetch("/api/auth/login", {
-  //       // Replace with your actual login API endpoint
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email, password }),
-  //     });
+    if (!email || !password) {
+      return "Please fill in all required fields.";
+    }
 
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       throw new Error(
-  //         errorData.message || "Login failed. Please check your credentials."
-  //       );
-  //     }
+    try {
+      const { data: _, error: signInError } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: "/",
+      });
 
-  //     const data = await response.json();
-  //     console.log("Login successful:", data);
-  //   } catch (err: any) {
-  //     setError(err.message || "An unexpected error occurred during login.");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-
-  //   // // Simulate API call delay (REMOVE THIS IN PRODUCTION)
-  //   // await new Promise((resolve) => setTimeout(resolve, 1500));
-  //   // setIsLoading(false);
-  //   //
-  //   // // Placeholder for actual login logic (REMOVE THIS IN PRODUCTION)
-  //   // if (email === "test@example.com" && password === "password") {
-  //   //   console.log("Simulated Login Success:", { email, password });
-  //   //   // Simulate storing a token for demonstration (DO NOT use localStorage for tokens in production)
-  //   //   localStorage.setItem('simulated_jwt_token', 'your_mock_jwt_token_here');
-  //   //   router.push('/en/orders'); // Example redirect
-  //   // } else {
-  //   //   setError("Invalid email or password (simulated).");
-  //   // }
-  // };
+      if (signInError) {
+        setError(signInError.message as string);
+        return;
+      }
+    } catch (err: any) {
+      setError(
+        err.message || "An unexpected error occurred during registration."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Card className="w-[400px] mx-auto rounded-lg shadow-lg">
       <CardHeader className="text-center pb-4">
-        {/* Logo */}
-
         <CardTitle className="text-2xl font-semibold text-gray-800">
           Welcome Back
         </CardTitle>
@@ -116,7 +97,7 @@ export default function SignInForm() {
         <Button
           className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none  font-bold py-2 px-4 rounded-md transition-colors duration-200"
           type="submit"
-          // onClick={handleSubmit}
+          onClick={handleSubmit}
           disabled={isLoading}
         >
           {isLoading ? "Signing In..." : "Sign In"}

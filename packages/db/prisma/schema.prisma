@@ -3,7 +3,7 @@ generator client {
   output   = "../generated/prisma"
 }
 
-datasource db {
+datasource b {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
@@ -53,7 +53,7 @@ type Address {
 
 // Client Account
 model Organization {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @map("_id")
   name      String   @unique
   slug      String?
   logo      String?
@@ -82,12 +82,12 @@ model Organization {
 
 // EMPLOYEE/TEAM MEMBER 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @map("_id")
   name          String   @unique
   email         String
   emailVerified Boolean
   image         String?
-  passwordHash  String
+  password      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -101,14 +101,14 @@ model User {
 }
 
 model Session {
-  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String   @id @map("_id")
   expiresAt            DateTime
   token                String
   createdAt            DateTime
   updatedAt            DateTime
   ipAddress            String?
   userAgent            String?
-  userId               String   @db.ObjectId
+  userId               String
   user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   activeOrganizationId String?
 
@@ -117,7 +117,7 @@ model Session {
 }
 
 model Account {
-  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String    @id @map("_id")
   accountId             String
   providerId            String
   accessToken           String?
@@ -130,14 +130,14 @@ model Account {
   createdAt             DateTime
   updatedAt             DateTime
 
-  userId String @db.ObjectId
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
 
 model Verification {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  id         String    @id @map("_id")
   identifier String
   value      String
   expiresAt  DateTime
@@ -149,14 +149,14 @@ model Verification {
 
 // junction model for organization and user
 model Member {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @map("_id")
   role      Role
   createdAt DateTime
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  userId String @db.ObjectId
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, organizationId])
@@ -167,19 +167,19 @@ model Member {
 
 // Item in the inventory
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  sku         String
-  price       Float
-  barcode     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @map("_id")
+  name       String
+  escription String?
+  sku        String
+  price      Float
+  barcode    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  categoryId String   @db.ObjectId
+  categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
   orderLines OrderLine[]
@@ -194,13 +194,13 @@ model Product {
 
 // classification or grouping for Product Items
 model Category {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @map("_id")
+  name       String
+  escription String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   products Product[]
@@ -212,13 +212,13 @@ model Category {
 
 // physical place where inventory is stored
 model Stock {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @map("_id")
   name      String
   location  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   stockItems StockItem[]
@@ -229,18 +229,18 @@ model Stock {
 
 // junction model for stock and product
 model StockItem {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @map("_id")
   quantity  Int // Quantity of THIS product in THIS stock location
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  productId String  @db.ObjectId
+  productId String
   product   Product @relation(fields: [productId], references: [id])
 
-  stockId String @db.ObjectId
+  stockId String
   stock   Stock  @relation(fields: [stockId], references: [id])
 
   @@unique([organizationId, productId, stockId])
@@ -248,7 +248,7 @@ model StockItem {
 
 // external organization or individual
 model Customer {
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  id              String       @id @map("_id")
   name            String
   email           String
   customerType    CustomerType
@@ -257,7 +257,7 @@ model Customer {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   contacts ContactPerson[]
@@ -270,7 +270,7 @@ model Customer {
 
 // external organization or individual
 model Supplier {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @map("_id")
   name         String
   email        String
   phone        String
@@ -281,7 +281,7 @@ model Supplier {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   contacts  ContactPerson[]
@@ -295,7 +295,7 @@ model Supplier {
 
 // Represents a specific individual within a Customer or Supplier
 model ContactPerson {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @map("_id")
   email     String
   jobTitle  String
   firstName String
@@ -304,13 +304,13 @@ model ContactPerson {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customerId String?   @db.ObjectId
+  customerId String?
   customer   Customer? @relation(fields: [customerId], references: [id])
 
-  supplierId String?   @db.ObjectId
+  supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   @@unique([organizationId, email])
@@ -321,7 +321,7 @@ model ContactPerson {
 
 // single transaction for the movement of products
 model Order {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @map("_id")
   orderDate   DateTime    @default(now())
   status      OrderStatus
   totalAmount Float
@@ -329,16 +329,16 @@ model Order {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  userId String @db.ObjectId
+  userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  customerId String?   @db.ObjectId
+  customerId String?
   customer   Customer? @relation(fields: [customerId], references: [id])
 
-  supplierId String?   @db.ObjectId
+  supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
 
   invoice Invoice?
@@ -354,37 +354,37 @@ model Order {
 
 // single product entry within an Order
 model OrderLine {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @map("_id")
   quantity  Int
   unitPrice Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  orderId String @db.ObjectId
+  orderId String
   order   Order  @relation(fields: [orderId], references: [id])
 
-  productId String  @db.ObjectId
+  productId String
   product   Product @relation(fields: [productId], references: [id])
 
   @@index([orderId])
   @@index([productId])
 }
 
-// billing document generated for a sales order
+// billingocument generated for a sales order
 model Invoice {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @map("_id")
   invoiceNumber String
   invoiceDate   DateTime      @default(now())
-  dueDate       DateTime
+  ueDate        DateTime
   totalAmount   Float
   status        InvoiceStatus
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  orderId String @unique @db.ObjectId
+  orderId String @unique
   order   Order  @relation(fields: [orderId], references: [id])
 
-  organizationId String       @db.ObjectId
+  organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   @@unique([organizationId, invoiceNumber])
