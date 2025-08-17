@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -80,25 +80,7 @@ export default function SignUpForm() {
       authOption: selectedAuthOption,
     };
 
-    // In a real application, you would make an API call here to your /api/auth/register-organization endpoint.
     try {
-      const response = await fetch("/api/auth/register-organization", {
-        // Replace with your actual registration API endpoint
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed.");
-      }
-
-      const data = await response.json();
-      console.log("Registration successful:", data);
-      // Handle success: Redirect to login or a welcome/verification page.
-      // Assuming your sign-in page is at /[locale]/auth/sign-in
-      // router.push(`/${router.locale}/auth/sign-in`);
     } catch (err: any) {
       setError(
         err.message || "An unexpected error occurred during registration."
