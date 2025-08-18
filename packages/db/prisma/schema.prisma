@@ -10,12 +10,6 @@ datasource b {
 
 // ==================================================
 // ==================================================
-enum Role {
-  ADMIN
-  SALESMAN
-  MANAGER
-  VIEWER
-}
 
 enum CustomerType {
   B2B
@@ -180,14 +174,14 @@ model Member {
 
 // Item in the inventory
 model Product {
-  id         String   @id @map("_id")
-  name       String
-  escription String?
-  sku        String
-  price      Float
-  barcode    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @map("_id")
+  name        String
+  description String?
+  sku         String
+  price       Float
+  barcode     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
@@ -207,11 +201,11 @@ model Product {
 
 // classification or grouping for Product Items
 model Category {
-  id         String   @id @map("_id")
-  name       String
-  escription String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @map("_id")
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])

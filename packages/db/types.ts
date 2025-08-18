@@ -5,30 +5,24 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   email: string;
-  username: string;
-  passwordHash: string;
-  firstName: string | null;
-  lastName: string | null;
-  isActive: boolean;
+  name: string;
+  password?: string | null;
+  emailVerified: boolean;
+  image: string | null;
+  twoFactorEnabled: boolean | null;
 };
 
-export type Company = {
+export type Organization = {
   id: string;
   name: string;
+  slug: string | null;
+  logo: string | null;
+  metadata: string | null;
   address: string | null;
   phone: string | null;
   email: string | null;
   createdAt: Date;
   updatedAt: Date;
-};
-
-export type Category = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
-  name: string;
-  description: string | null;
 };
 
 export type Address = {
@@ -37,50 +31,59 @@ export type Address = {
   postalCode: string;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
+};
+
 export type Customer = {
   id: string;
   name: string;
   email: string;
+  customerType: CustomerType;
+  billingAddress: Address;
+  shippingAddress: Address;
   createdAt: Date;
   updatedAt: Date;
-  companyId: string;
-  customerType: CustomerType;
-  billingAddress: { street: string; city: string; postalCode: string };
-  shippingAddress: Address;
+  organizationId: string;
 };
 
 export type Supplier = {
   id: string;
   name: string;
-  phone: string;
   email: string;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
+  phone: string;
+  address: Address;
   paymentTerms: string;
   notes: string | null;
   tags: string[];
-  address: { street: string; city: string; postalCode: string };
+  createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
 };
 
 export type Stock = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
   name: string;
   location: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
 };
 
 export type Product = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
   name: string;
   description: string | null;
   sku: string;
   price: number;
-  barcode: string | null;
+  barcode: string;
+  createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
   categoryId: string;
 };

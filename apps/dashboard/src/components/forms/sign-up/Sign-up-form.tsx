@@ -61,6 +61,7 @@ export default function SignUpForm() {
     return null;
   };
 
+  // submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -132,7 +133,7 @@ export default function SignUpForm() {
             formData.shortName ||
             formData.companyName.toLowerCase().replace(/\s+/g, "-"),
           metadata,
-          keepCurrentActiveOrganization: true,
+          keepCurrentActiveOrganization: false,
         });
       } catch (orgError: any) {
         console.error("Organization creation failed:", orgError);

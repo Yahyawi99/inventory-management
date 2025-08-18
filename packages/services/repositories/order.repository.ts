@@ -12,11 +12,11 @@ type Filters = {
 };
 
 export const OrderRepository = {
-  async findMany(companyId: string, filters?: Filters, search?: string) {
+  async findMany(orgId: string, filters?: Filters, search?: string) {
     try {
       const res = await Prisma.order.findMany({
         where: {
-          companyId,
+          organizationId: orgId,
         },
       });
 
