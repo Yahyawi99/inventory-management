@@ -22,6 +22,7 @@ export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,7 +70,16 @@ export default function SignInForm() {
               }
             }
 
-            // If email is verified, redirect to main app
+            // If email is verified, set activeOrganizationId and redirect to main app
+            const { data: organizations, error: _ } =
+              await authClient.organization.list();
+
+            if (organizations && organizations?.length > 0) {
+              await authClient.organization.setActive({
+                organizationId: organizations[0].id,
+              });
+            }
+
             setSuccessMessage("Sign in successful! Redirecting...");
             router.push("/en");
           },
