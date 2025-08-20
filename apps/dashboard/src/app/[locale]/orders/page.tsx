@@ -7,7 +7,9 @@ import { fetch } from "@services/application/orders";
 import { Order } from "@/types/orders";
 import Orders from "@/shared/orders/Orders";
 import { Card, CardContent } from "@/components/ui/card";
-import OrdersFilters from "@/shared/orders/Filters";
+import OrdersHeader from "@/shared/orders/OrdersHeader";
+import OrdersSummaryCards from "@/shared/orders/OrdersCards";
+import OrdersFilters from "@/shared/orders/OrdersFilters";
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -62,7 +64,6 @@ export default function OrdersPage() {
     }
   }, [isAuthenticated, isAuthLoading, user, router, activeFilter]);
 
-  // Display error if fetching failed after loading
   if (error) {
     return (
       <div className="p-8 text-center text-red-500">
@@ -72,8 +73,10 @@ export default function OrdersPage() {
   }
 
   return (
-    <section>
-      <h2 className="text-2xl font-bold text-gray-800">Orders</h2>
+    <section className="overflow-x-hidden">
+      <OrdersHeader />
+
+      <OrdersSummaryCards />
 
       <OrdersFilters
         activeFilter={activeFilter}

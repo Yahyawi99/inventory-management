@@ -10,57 +10,61 @@ export default function OrdersFilters({
   setActiveFilter,
 }: Props) {
   return (
-    <div className="flex items-center justify-between p-4">
-      <div className="flex space-x-2">
+    <div className="flex items-center justify-between my-4">
+      <div className="flex space-x-2 bg-white p-1 rounded-full">
         <Button
           variant={activeFilter === "All" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 py-2 ${
+          className={`text-sm rounded-full px-4 cursor-pointer ${
             activeFilter === "All"
-              ? "bg-red-600 text-white hover:bg-red-700"
+              ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
           onClick={() => setActiveFilter("All")}
         >
           All
         </Button>
+
         <Button
           variant={activeFilter === "Unfulfilled" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 py-2 ${
+          className={`text-sm rounded-full px-4 cursor-pointer ${
             activeFilter === "Unfulfilled"
-              ? "bg-red-600 text-white hover:bg-red-700"
+              ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
           onClick={() => setActiveFilter("Unfulfilled")}
         >
           Unfulfilled
         </Button>
+
         <Button
           variant={activeFilter === "Unpaid" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 py-2 ${
+          className={`text-sm rounded-full px-4 cursor-pointer ${
             activeFilter === "Unpaid"
-              ? "bg-red-600 text-white hover:bg-red-700"
+              ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
           onClick={() => setActiveFilter("Unpaid")}
         >
           Unpaid
         </Button>
+
         <Button
           variant={activeFilter === "Open" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 py-2 ${
+          className={`text-sm rounded-full px-4 cursor-pointer ${
             activeFilter === "Open"
-              ? "bg-red-600 text-white hover:bg-red-700"
+              ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
           onClick={() => setActiveFilter("Open")}
         >
           Open
         </Button>
+
         <Button
           variant={activeFilter === "Closed" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 py-2 ${
+          className={`text-sm rounded-full px-4 cursor-pointer ${
             activeFilter === "Closed"
-              ? "bg-red-600 text-white hover:bg-red-700"
+              ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
           onClick={() => setActiveFilter("Closed")}
@@ -73,7 +77,7 @@ export default function OrdersFilters({
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 text-gray-600 hover:text-gray-900 border-gray-300"
+          className="h-8 w-8 text-gray-600 hover:text-gray-900 border-gray-300 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +99,7 @@ export default function OrdersFilters({
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 text-gray-600 hover:text-gray-900 border-gray-300"
+          className="h-8 w-8 text-gray-600 hover:text-gray-900 border-gray-300 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +120,7 @@ export default function OrdersFilters({
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 text-gray-600 hover:text-gray-900 border-gray-300"
+          className="h-8 w-8 text-gray-600 hover:text-gray-900 border-gray-300 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +142,7 @@ export default function OrdersFilters({
 
         <Button
           variant="outline"
-          className="flex items-center space-x-1 px-3 py-2 text-gray-700 hover:bg-gray-100 border-gray-300"
+          className="flex items-center space-x-1 px-3 py-2 text-gray-700 hover:bg-gray-100 border-gray-300 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
