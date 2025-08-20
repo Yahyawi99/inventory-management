@@ -5,6 +5,20 @@ import {
   Prisma as P,
 } from "database/generated/prisma/client";
 
+type Order = {
+  id: string;
+  orderDate: Date;
+  status: OrderStatus;
+  totalAmount: number;
+  orderType: OrderType;
+  createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
+  userId: string;
+  customerId: string | null;
+  supplierId: string | null;
+};
+
 type Filters = {
   orderDate?: Date;
   status?: OrderStatus;
@@ -12,18 +26,24 @@ type Filters = {
 };
 
 export const OrderRepository = {
-  async findMany(orgId: string, filters?: Filters, search?: string) {
+  async findMany(
+    orgId: string,
+    userId: string,
+    filters?: Filters,
+    search?: string
+  ): Promise<Order[] | null> {
     try {
       const res = await Prisma.order.findMany({
         where: {
           organizationId: orgId,
+          userId,
         },
       });
 
       return res;
     } catch (e) {
-      console.log("Error while fetching orders");
-      console.log(e);
+      console.log("Error while fetching orders: ", e);
+      return null;
     }
   },
 

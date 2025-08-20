@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { fetch } from "@services/application/orders";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -22,12 +23,14 @@ interface Order {
   orderType: OrderType;
   createdAt: string;
   updatedAt: string;
-  // userId: string;
-  // organizationId: string;
+  userId: string;
+  organizationId: string;
+  customerId: string | null;
+  supplierId: string | null;
 }
 
 export default function OrdersPage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const router = useRouter();
 
   const [orders, setOrders] = useState<Order[]>([]);
@@ -35,7 +38,7 @@ export default function OrdersPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isAuthenticated) {
       router.push("/auth/sign-in");
     }
 
@@ -50,15 +53,13 @@ export default function OrdersPage() {
       try {
         // Use the activeOrganizationId to filter the data from your API
         // This is a crucial step for multi-tenancy.
-        const response = await fetch(
-          `/api/orders?organizationId=${user.activeOrganizationId}`
-        );
+        const response = await fetch("/orders");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch orders.");
+        if (response.status !== 200) {
+          throw new Error("Something went wrong, Please try again later.");
         }
 
-        const data: Order[] = await response.json();
+        const data: Order[] = response.data.orders;
         setOrders(data);
       } catch (err: any) {
         console.error("Error fetching orders:", err);
@@ -71,9 +72,9 @@ export default function OrdersPage() {
     if (isAuthenticated) {
       fetchOrders();
     }
-  }, [isLoading, isAuthenticated, user, router]);
+  }, [isAuthenticated, user, router]);
 
-  if (isLoading || isFetchingOrders) {
+  if (isFetchingOrders) {
     return (
       <div className="flex justify-center items-center text-lg mt-20">
         <p>Loading...</p>
