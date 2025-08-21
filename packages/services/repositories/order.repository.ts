@@ -38,6 +38,11 @@ export const OrderRepository = {
           organizationId: orgId,
           userId,
         },
+        include: {
+          orderLines: true,
+          customer: true,
+          supplier: true,
+        },
       });
 
       return res;

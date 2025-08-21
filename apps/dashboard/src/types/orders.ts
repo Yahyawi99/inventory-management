@@ -1,4 +1,8 @@
-import { OrderStatus, OrderType } from "@database/generated/prisma/client";
+import {
+  OrderStatus,
+  OrderType,
+  OrderLine,
+} from "@database/generated/prisma/client";
 
 export { OrderStatus, OrderType };
 
@@ -13,12 +17,7 @@ export interface Order {
   updatedAt: string;
   userId: string;
   organizationId: string;
-  customerId: string | null;
-  supplierId: string | null;
-  customer?: { name: string } | null;
-  supplier?: { name: string } | null;
-  orderLines?: Array<{
-    id: string;
-    quantity: number;
-  }>;
+  orderLines: OrderLine[];
+  customer?: { name: string; email: string } | null;
+  supplier?: { name: string; email: string } | null;
 }

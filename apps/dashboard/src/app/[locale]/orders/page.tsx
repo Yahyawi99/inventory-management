@@ -72,7 +72,7 @@ export default function OrdersPage() {
 
   return (
     <section className="overflow-x-hidden">
-      <OrdersHeader />
+      <OrdersHeader orders={orders} />
 
       <OrdersSummaryCards />
 

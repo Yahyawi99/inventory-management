@@ -9,7 +9,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Order } from "@/types/orders";
-import { getOrderStatusDisplay } from "@/utils/getOrderStatusDisplay";
+import {
+  getOrderStatusDisplay,
+  generateOrderNumber,
+  getTotalOrderLineQuantity,
+} from "@/utils/orders";
 
 interface Props {
   orders: Order[];
@@ -22,6 +26,7 @@ export default function Orders({
   isAuthLoading,
   isFetchingOrders,
 }: Props) {
+  console.log(orders[0]);
   return (
     <div className="overflow-x-auto ">
       <Table>
@@ -50,7 +55,7 @@ export default function Orders({
               Supplier
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-right text-gray-700 font-medium text-center">
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
               Status
             </TableHead>
 
@@ -97,7 +102,7 @@ export default function Orders({
                   </TableCell>
 
                   <TableCell className="text-center font-medium text-gray-900">
-                    {order.orderNumber || "N/A"}
+                    {generateOrderNumber(order.id)}
                   </TableCell>
 
                   <TableCell className="text-center text-gray-700">
@@ -125,9 +130,7 @@ export default function Orders({
                   </TableCell>
 
                   <TableCell className="text-center text-gray-700">
-                    {order.orderLines?.length === 1
-                      ? "1 item"
-                      : `${order.orderLines?.length || 0} items`}
+                    {getTotalOrderLineQuantity(order.orderLines)}
                   </TableCell>
 
                   <TableCell className="text-center font-medium text-gray-900">

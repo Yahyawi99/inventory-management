@@ -1,4 +1,5 @@
 import { OrderStatus } from "@/types/orders";
+import { OrderLine } from "@database/generated/prisma";
 
 interface StatusDisplay {
   text: string;
@@ -20,4 +21,35 @@ export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
     default:
       return { text: "Unknown", colorClass: "bg-gray-200 text-gray-700" };
   }
+};
+
+export const generateOrderNumber = (
+  uuid: string,
+  prefix: string = "ORD-",
+  length: number = 6
+): string => {
+  if (!uuid || typeof uuid !== "string" || uuid.length < length) {
+    console.warn("Invalid UUID!");
+
+    return "N/A";
+  }
+
+  const uuidSubstring = uuid.slice(-length).toUpperCase();
+
+  return `${prefix}${uuidSubstring}`;
+};
+
+export const getTotalOrderLineQuantity = (
+  orderLines: OrderLine[] | null | undefined
+): number => {
+  if (!orderLines || orderLines.length === 0) {
+    return 0;
+  }
+
+  const totalQuantity = orderLines.reduce(
+    (sum, line) => sum + line.quantity,
+    0
+  );
+
+  return totalQuantity;
 };
