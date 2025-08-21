@@ -17,6 +17,37 @@ import type {
   User,
 } from "../types";
 
+// Helper for date ranges (assuming it's available in utils, or you can add it here directly)
+// If getDateRangesForComparison and isDateWithinRange are in a separate file, ensure they are imported.
+// For self-containment in this seed script, I'll define a simplified version here.
+const getSeedDateRanges = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize to start of today
+
+  // Current Period (Last 7 full days, ending yesterday)
+  const endCurrentPeriod = new Date(today);
+  endCurrentPeriod.setDate(today.getDate() - 1); // End of yesterday
+  endCurrentPeriod.setHours(23, 59, 59, 999);
+
+  const startCurrentPeriod = new Date(endCurrentPeriod);
+  startCurrentPeriod.setDate(endCurrentPeriod.getDate() - 6); // 7 days back from end of yesterday
+  startCurrentPeriod.setHours(0, 0, 0, 0);
+
+  // Previous Period (the 7 days before the current period)
+  const endPreviousPeriod = new Date(startCurrentPeriod);
+  endPreviousPeriod.setDate(startCurrentPeriod.getDate() - 1); // Day before current period starts
+  endPreviousPeriod.setHours(23, 59, 59, 999);
+
+  const startPreviousPeriod = new Date(endPreviousPeriod);
+  startPreviousPeriod.setDate(endPreviousPeriod.getDate() - 6); // 7 days back from that point
+  startPreviousPeriod.setHours(0, 0, 0, 0);
+
+  return {
+    current: { startDate: startCurrentPeriod, endDate: endCurrentPeriod },
+    previous: { startDate: startPreviousPeriod, endDate: endPreviousPeriod },
+  };
+};
+
 // A single instance of PrismaClient for seeding
 const prisma = new PrismaClient();
 
@@ -392,7 +423,7 @@ async function main() {
       data: {
         id: randomUUID().toString(),
         name: faker.commerce.productName(),
-        description: i % 3 === 0 ? null : faker.commerce.productDescription(), // Note: 'escription' not 'description'
+        description: i % 3 === 0 ? null : faker.commerce.productDescription(),
         sku: generateUniqueSKU(mainOrganization.id, existingSKUs),
         price: parseFloat(faker.commerce.price({ min: 10, max: 1000 })),
         barcode: generateUniqueBarcode(mainOrganization.id, existingBarcodes),
@@ -451,10 +482,9 @@ async function main() {
     "✅ Populated Stock Items (including zero quantities and multiple locations)."
   );
 
-  // --- 12. CREATE ORDERS WITH ALL ENUM COMBINATIONS ---
+  // --- 12. CREATE ORDERS WITH ALL ENUM COMBINATIONS AND DATE TRENDS ---
   const existingInvoiceNumbers = new Set<string>();
 
-  // All possible enum values
   const allOrderStatuses = [
     OrderStatus.Pending,
     OrderStatus.Processing,
@@ -473,143 +503,276 @@ async function main() {
   ];
 
   let orderCount = 0;
+  const { current: currentPeriod, previous: previousPeriod } =
+    getSeedDateRanges();
 
-  // Loop through all order types
-  for (const orderType of allOrderTypes) {
-    console.log(`\n📝 Creating ${orderType} orders...`);
+  console.log("\n📝 Creating orders to demonstrate trends on summary cards...");
+  console.log(
+    `   Current Period: ${currentPeriod.startDate.toLocaleDateString()} - ${currentPeriod.endDate.toLocaleDateString()}`
+  );
+  console.log(
+    `   Previous Period: ${previousPeriod.startDate.toLocaleDateString()} - ${previousPeriod.endDate.toLocaleDateString()}`
+  );
 
-    if (orderType === OrderType.SALES) {
-      // Create SALES orders with all status combinations
-      for (const orderStatus of allOrderStatuses) {
-        for (const invoiceStatus of allInvoiceStatuses) {
-          const randomCustomer = faker.helpers.arrayElement(customers);
-          const randomUser = faker.helpers.arrayElement(users);
-          const orderDate = faker.date.recent({ days: 60 });
-          const ueDate = faker.date.future({ years: 1, refDate: orderDate }); // Note: 'ueDate' not 'dueDate'
+  // Scenario 1: Sales Orders - Increase in Current Period, Some Cancelled in Previous
+  const numSalesOrdersCurrent = 15; // e.g., 15 orders this week
+  const numSalesOrdersPrevious = 10; // e.g., 10 orders last week (for a positive change)
+  const numCancelledInPreviousSales = 3; // To demonstrate cancelled orders logic
 
-          // Generate unique invoice number with better format
-          let invoiceNumber: string;
-          let attempts = 0;
-          do {
-            attempts++;
-            invoiceNumber = `INV-${orderStatus
-              .substring(0, 3)
-              .toUpperCase()}-${invoiceStatus
-              .substring(0, 3)
-              .toUpperCase()}-${String(attempts).padStart(3, "0")}`;
-          } while (
-            existingInvoiceNumbers.has(
-              `${mainOrganization.id}-${invoiceNumber}`
-            )
-          );
-          existingInvoiceNumbers.add(`${mainOrganization.id}-${invoiceNumber}`);
+  for (let i = 0; i < numSalesOrdersCurrent; i++) {
+    const randomCustomer = faker.helpers.arrayElement(customers);
+    const randomUser = faker.helpers.arrayElement(users);
+    const orderDate = faker.date.between({
+      from: currentPeriod.startDate,
+      to: currentPeriod.endDate,
+    });
+    const dueDate = faker.date.future({ years: 1, refDate: orderDate });
 
-          // Create order lines data with unique products per order
-          const selectedProducts = faker.helpers.arrayElements(products, {
-            min: 1,
-            max: 3,
-          });
-          const orderLinesData = selectedProducts.map((p, index) => ({
-            quantity: faker.number.int({ min: 1, max: 5 }),
-            unitPrice: p.price + index * 0.01,
-            productId: p.id,
-          }));
+    const selectedProducts = faker.helpers.arrayElements(products, {
+      min: 1,
+      max: 3,
+    });
+    const orderLinesData = selectedProducts.map((p, index) => ({
+      quantity: faker.number.int({ min: 1, max: 5 }),
+      unitPrice: p.price + index * 0.01,
+      productId: p.id,
+    }));
+    const totalAmount = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity * line.unitPrice,
+      0
+    );
 
-          const totalAmount = orderLinesData.reduce(
-            (sum, line) => sum + line.quantity * line.unitPrice,
-            0
-          );
-
-          const salesOrder = await prisma.order.create({
-            data: {
-              id: randomUUID().toString(),
-              orderDate,
-              totalAmount,
-              orderType: OrderType.SALES,
-              status: orderStatus,
-              organizationId: mainOrganization.id,
-              userId: randomUser.id,
-              customerId: randomCustomer.id,
-              supplierId: null,
-              invoice: {
-                create: {
-                  id: randomUUID().toString(),
-                  invoiceNumber,
-                  invoiceDate: orderDate,
-                  ueDate, // Note: 'ueDate' not 'dueDate'
-                  totalAmount,
-                  status: invoiceStatus,
-                  organizationId: mainOrganization.id,
-                },
-              },
-              orderLines: {
-                createMany: {
-                  data: orderLinesData.map((line) => ({
-                    id: randomUUID().toString(),
-                    ...line,
-                  })),
-                },
-              },
-            },
-          });
-          console.log(
-            `   ✅ SALES order ${salesOrder.id} - Status: ${orderStatus}, Invoice: ${invoiceStatus}`
-          );
-          orderCount++;
-        }
-      }
-    } else if (orderType === OrderType.PURCHASE) {
-      // Create PURCHASE orders with all statuses
-      for (const orderStatus of allOrderStatuses) {
-        const randomSupplier = faker.helpers.arrayElement(suppliers);
-        const randomUser = faker.helpers.arrayElement(users);
-        const orderDate = faker.date.recent({ days: 60 });
-
-        // Create order lines data with unique products per order
-        const selectedProducts = faker.helpers.arrayElements(products, {
-          min: 1,
-          max: 3,
-        });
-        const orderLinesData = selectedProducts.map((p, index) => ({
-          quantity: faker.number.int({ min: 1, max: 15 }),
-          unitPrice:
-            p.price * faker.number.float({ min: 0.6, max: 0.9 }) + index * 0.01,
-          productId: p.id,
-        }));
-
-        const totalAmount = orderLinesData.reduce(
-          (sum, line) => sum + line.quantity * line.unitPrice,
-          0
-        );
-
-        const purchaseOrder = await prisma.order.create({
-          data: {
+    await prisma.order.create({
+      data: {
+        id: randomUUID().toString(),
+        orderDate,
+        totalAmount,
+        orderType: OrderType.SALES,
+        status: faker.helpers.arrayElement([
+          OrderStatus.Delivered,
+          OrderStatus.Shipped,
+          OrderStatus.Processing,
+        ]), // Mostly fulfilled/processing for current
+        organizationId: mainOrganization.id,
+        userId: randomUser.id,
+        customerId: randomCustomer.id,
+        supplierId: null,
+        invoice: {
+          create: {
             id: randomUUID().toString(),
-            orderDate,
+            invoiceNumber: `INV-SALES-CUR-${String(i).padStart(3, "0")}`,
+            invoiceDate: orderDate,
+            ueDate: dueDate,
             totalAmount,
-            orderType: OrderType.PURCHASE,
-            status: orderStatus,
+            status: faker.helpers.arrayElement([
+              InvoiceStatus.Paid,
+              InvoiceStatus.Pending,
+            ]),
             organizationId: mainOrganization.id,
-            userId: randomUser.id,
-            supplierId: randomSupplier.id,
-            customerId: null,
-            orderLines: {
-              createMany: {
-                data: orderLinesData.map((line) => ({
-                  id: randomUUID().toString(),
-                  ...line,
-                })),
-              },
-            },
           },
-        });
-        console.log(
-          `   ✅ PURCHASE order ${purchaseOrder.id} - Status: ${orderStatus}, Supplier: ${randomSupplier.name}`
-        );
-        orderCount++;
-      }
-    }
+        },
+        orderLines: {
+          createMany: {
+            data: orderLinesData.map((line) => ({
+              id: randomUUID().toString(),
+              ...line,
+            })),
+          },
+        },
+      },
+    });
+    orderCount++;
   }
+  console.log(
+    `   Created ${numSalesOrdersCurrent} SALES orders for the CURRENT period.`
+  );
+
+  for (let i = 0; i < numSalesOrdersPrevious; i++) {
+    const randomCustomer = faker.helpers.arrayElement(customers);
+    const randomUser = faker.helpers.arrayElement(users);
+    const orderDate = faker.date.between({
+      from: previousPeriod.startDate,
+      to: previousPeriod.endDate,
+    });
+    const dueDate = faker.date.future({ years: 1, refDate: orderDate });
+
+    const selectedProducts = faker.helpers.arrayElements(products, {
+      min: 1,
+      max: 3,
+    });
+    const orderLinesData = selectedProducts.map((p, index) => ({
+      quantity: faker.number.int({ min: 1, max: 5 }),
+      unitPrice: p.price + index * 0.01,
+      productId: p.id,
+    }));
+    const totalAmount = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity * line.unitPrice,
+      0
+    );
+
+    await prisma.order.create({
+      data: {
+        id: randomUUID().toString(),
+        orderDate,
+        totalAmount,
+        orderType: OrderType.SALES,
+        // Distribute statuses: some cancelled, some delivered/shipped
+        status:
+          i < numCancelledInPreviousSales
+            ? OrderStatus.Cancelled
+            : faker.helpers.arrayElement([
+                OrderStatus.Delivered,
+                OrderStatus.Shipped,
+                OrderStatus.Processing,
+              ]),
+        organizationId: mainOrganization.id,
+        userId: randomUser.id,
+        customerId: randomCustomer.id,
+        supplierId: null,
+        invoice: {
+          create: {
+            id: randomUUID().toString(),
+            invoiceNumber: `INV-SALES-PREV-${String(i).padStart(3, "0")}`,
+            invoiceDate: orderDate,
+            ueDate: dueDate,
+            totalAmount,
+            status: faker.helpers.arrayElement([
+              InvoiceStatus.Paid,
+              InvoiceStatus.Pending,
+            ]),
+            organizationId: mainOrganization.id,
+          },
+        },
+        orderLines: {
+          createMany: {
+            data: orderLinesData.map((line) => ({
+              id: randomUUID().toString(),
+              ...line,
+            })),
+          },
+        },
+      },
+    });
+    orderCount++;
+  }
+  console.log(
+    `   Created ${numSalesOrdersPrevious} SALES orders for the PREVIOUS period (${numCancelledInPreviousSales} Cancelled).`
+  );
+
+  // Scenario 2: Purchase Orders - Decrease in Current Period, few fulfilled in Current
+  const numPurchaseOrdersCurrent = 5; // e.g., 5 orders this week
+  const numPurchaseOrdersPrevious = 8; // e.g., 8 orders last week (for a negative change)
+  const numFulfilledInCurrentPurchase = 2; // To show specific fulfilled logic
+
+  for (let i = 0; i < numPurchaseOrdersCurrent; i++) {
+    const randomSupplier = faker.helpers.arrayElement(suppliers);
+    const randomUser = faker.helpers.arrayElement(users);
+    const orderDate = faker.date.between({
+      from: currentPeriod.startDate,
+      to: currentPeriod.endDate,
+    });
+
+    const selectedProducts = faker.helpers.arrayElements(products, {
+      min: 1,
+      max: 2,
+    });
+    const orderLinesData = selectedProducts.map((p, index) => ({
+      quantity: faker.number.int({ min: 1, max: 10 }), // Fewer items per purchase order on average
+      unitPrice:
+        p.price * faker.number.float({ min: 0.6, max: 0.9 }) + index * 0.01,
+      productId: p.id,
+    }));
+    const totalAmount = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity * line.unitPrice,
+      0
+    );
+
+    await prisma.order.create({
+      data: {
+        id: randomUUID().toString(),
+        orderDate,
+        totalAmount,
+        orderType: OrderType.PURCHASE,
+        status:
+          i < numFulfilledInCurrentPurchase
+            ? OrderStatus.Delivered
+            : faker.helpers.arrayElement([
+                OrderStatus.Pending,
+                OrderStatus.Processing,
+              ]),
+        organizationId: mainOrganization.id,
+        userId: randomUser.id,
+        supplierId: randomSupplier.id,
+        customerId: null,
+        orderLines: {
+          createMany: {
+            data: orderLinesData.map((line) => ({
+              id: randomUUID().toString(),
+              ...line,
+            })),
+          },
+        },
+      },
+    });
+    orderCount++;
+  }
+  console.log(
+    `   Created ${numPurchaseOrdersCurrent} PURCHASE orders for the CURRENT period (${numFulfilledInCurrentPurchase} Fulfilled).`
+  );
+
+  for (let i = 0; i < numPurchaseOrdersPrevious; i++) {
+    const randomSupplier = faker.helpers.arrayElement(suppliers);
+    const randomUser = faker.helpers.arrayElement(users);
+    const orderDate = faker.date.between({
+      from: previousPeriod.startDate,
+      to: previousPeriod.endDate,
+    });
+
+    const selectedProducts = faker.helpers.arrayElements(products, {
+      min: 1,
+      max: 3,
+    });
+    const orderLinesData = selectedProducts.map((p, index) => ({
+      quantity: faker.number.int({ min: 1, max: 15 }), // More items per purchase order on average
+      unitPrice:
+        p.price * faker.number.float({ min: 0.6, max: 0.9 }) + index * 0.01,
+      productId: p.id,
+    }));
+    const totalAmount = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity * line.unitPrice,
+      0
+    );
+
+    await prisma.order.create({
+      data: {
+        id: randomUUID().toString(),
+        orderDate,
+        totalAmount,
+        orderType: OrderType.PURCHASE,
+        status: faker.helpers.arrayElement([
+          OrderStatus.Delivered,
+          OrderStatus.Shipped,
+          OrderStatus.Processing,
+        ]),
+        organizationId: mainOrganization.id,
+        userId: randomUser.id,
+        supplierId: randomSupplier.id,
+        customerId: null,
+        orderLines: {
+          createMany: {
+            data: orderLinesData.map((line) => ({
+              id: randomUUID().toString(),
+              ...line,
+            })),
+          },
+        },
+      },
+    });
+    orderCount++;
+  }
+  console.log(
+    `   Created ${numPurchaseOrdersPrevious} PURCHASE orders for the PREVIOUS period.`
+  );
 
   console.log(`\n🎉 COMPREHENSIVE SEEDING COMPLETE!`);
   console.log(`\n📊 SUMMARY OF ALL ENUM VALUES CREATED:`);
@@ -620,13 +783,13 @@ async function main() {
   console.log(`📦 Orders: ${orderCount} total`);
   console.log(`   - OrderTypes: ${allOrderTypes.join(", ")}`);
   console.log(`   - OrderStatuses: ${allOrderStatuses.join(", ")}`);
+  console.log(`   - SALES orders (Current Period): ${numSalesOrdersCurrent}`);
+  console.log(`   - SALES orders (Previous Period): ${numSalesOrdersPrevious}`);
   console.log(
-    `   - SALES orders: ${
-      allOrderStatuses.length * allInvoiceStatuses.length
-    } (with all invoice combinations)`
+    `   - PURCHASE orders (Current Period): ${numPurchaseOrdersCurrent}`
   );
   console.log(
-    `   - PURCHASE orders: ${allOrderStatuses.length} (all statuses)`
+    `   - PURCHASE orders (Previous Period): ${numPurchaseOrdersPrevious}`
   );
   console.log(
     `📄 Invoices: ${allOrderStatuses.length * allInvoiceStatuses.length} total`
