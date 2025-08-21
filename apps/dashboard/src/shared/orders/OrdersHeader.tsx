@@ -1,15 +1,48 @@
-import { Order } from "@/types/orders";
 import { Button } from "@/components/ui/button";
 
-interface Props {
-  orders: Order[];
-}
-
-export default function OrdersHeader({ orders }: Props) {
+export default function OrdersHeader() {
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
       <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
       <div className="flex items-center space-x-3">
+        <Button
+          variant="outline"
+          className="flex items-center space-x-2 border-gray-300 text-gray-700"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-calendar"
+          >
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+            <line x1="16" x2="16" y1="2" y2="6" />
+            <line x1="8" x2="8" y1="2" y2="6" />
+            <line x1="3" x2="21" y1="10" y2="10" />
+          </svg>
+          <span>Jan 1 - Jan 30, 2024</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-chevron-down"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </Button>
+
         <Button
           variant="outline"
           className="flex items-center space-x-1 border-gray-300 text-gray-700 hover:bg-gray-100"

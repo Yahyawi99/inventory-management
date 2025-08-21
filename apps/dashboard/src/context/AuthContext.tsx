@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { data } = await authClient.getSession();
       const userData = data?.user && data?.user;
       const sessionData = data?.session;
-      console.log(data);
 
       if (userData) {
         const newUser: User = {

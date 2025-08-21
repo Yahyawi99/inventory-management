@@ -26,7 +26,6 @@ export default function Orders({
   isAuthLoading,
   isFetchingOrders,
 }: Props) {
-  console.log(orders[0]);
   return (
     <div className="overflow-x-auto ">
       <Table>

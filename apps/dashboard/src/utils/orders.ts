@@ -1,9 +1,32 @@
-import { OrderStatus } from "@/types/orders";
+import { Order, OrderStatus } from "@/types/orders";
 import { OrderLine } from "@database/generated/prisma";
+import {
+  getDateRangesForComparison,
+  isDateWithinRange,
+} from "@/utils/dateHelpers";
 
 interface StatusDisplay {
   text: string;
   colorClass: string;
+}
+
+interface Metrics {
+  totalOrders: number;
+  totalOrderItems: number;
+  totalCancelledOrders: number;
+  totalFulfilledOrders: number;
+}
+
+// Interface for the final summary output
+interface SummaryMetrics {
+  totalOrders: number;
+  totalOrderItems: number;
+  totalCancelledOrders: number;
+  totalFulfilledOrders: number;
+  totalOrdersChange: number;
+  totalOrderItemsChange: number;
+  totalCancelledOrdersChange: number;
+  totalFulfilledOrdersChange: number;
 }
 
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
@@ -52,4 +75,94 @@ export const getTotalOrderLineQuantity = (
   );
 
   return totalQuantity;
+};
+
+const calculatePercentageChange = (
+  currentValue: number,
+  previousValue: number
+): number => {
+  if (previousValue === 0) {
+    return currentValue > 0 ? 100 : 0;
+  }
+  return ((currentValue - previousValue) / previousValue) * 100;
+};
+
+const accumulateMetrics = (metrics: Metrics, order: Order) => {
+  metrics.totalOrders++;
+  metrics.totalOrderItems += getTotalOrderLineQuantity(order.orderLines);
+
+  if (order.status === OrderStatus.Cancelled) {
+    metrics.totalCancelledOrders++;
+  }
+  if (
+    order.status === OrderStatus.Delivered ||
+    order.status === OrderStatus.Shipped
+  ) {
+    metrics.totalFulfilledOrders++;
+  }
+};
+
+export const getOrderSummaryMetrics = (orders: Order[]): SummaryMetrics => {
+  const { current: currentPeriodRange, previous: previousPeriodRange } =
+    getDateRangesForComparison();
+
+  let currentPeriodMetrics: Metrics = {
+    totalOrders: 0,
+    totalOrderItems: 0,
+    totalCancelledOrders: 0,
+    totalFulfilledOrders: 0,
+  };
+
+  let previousPeriodMetrics: Metrics = {
+    totalOrders: 0,
+    totalOrderItems: 0,
+    totalCancelledOrders: 0,
+    totalFulfilledOrders: 0,
+  };
+
+  orders.forEach((order) => {
+    const orderDate = new Date(order.orderDate);
+
+    if (
+      isDateWithinRange(
+        orderDate,
+        currentPeriodRange.startDate,
+        currentPeriodRange.endDate
+      )
+    ) {
+      accumulateMetrics(currentPeriodMetrics, order);
+    } else if (
+      isDateWithinRange(
+        orderDate,
+        previousPeriodRange.startDate,
+        previousPeriodRange.endDate
+      )
+    ) {
+      accumulateMetrics(previousPeriodMetrics, order);
+    }
+  });
+
+  return {
+    totalOrders: currentPeriodMetrics.totalOrders,
+    totalOrderItems: currentPeriodMetrics.totalOrderItems,
+    totalCancelledOrders: currentPeriodMetrics.totalCancelledOrders,
+    totalFulfilledOrders: currentPeriodMetrics.totalFulfilledOrders,
+
+    totalOrdersChange: calculatePercentageChange(
+      currentPeriodMetrics.totalOrders,
+      previousPeriodMetrics.totalOrders
+    ),
+    totalOrderItemsChange: calculatePercentageChange(
+      currentPeriodMetrics.totalOrderItems,
+      previousPeriodMetrics.totalOrderItems
+    ),
+    totalCancelledOrdersChange: calculatePercentageChange(
+      currentPeriodMetrics.totalCancelledOrders,
+      previousPeriodMetrics.totalCancelledOrders
+    ),
+    totalFulfilledOrdersChange: calculatePercentageChange(
+      currentPeriodMetrics.totalFulfilledOrders,
+      previousPeriodMetrics.totalFulfilledOrders
+    ),
+  };
 };

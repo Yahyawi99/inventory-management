@@ -72,9 +72,9 @@ export default function OrdersPage() {
 
   return (
     <section className="overflow-x-hidden">
-      <OrdersHeader orders={orders} />
+      <OrdersHeader />
 
-      <OrdersSummaryCards />
+      <OrdersSummaryCards orders={orders} />
 
       <OrdersFilters
         activeFilter={activeFilter}
