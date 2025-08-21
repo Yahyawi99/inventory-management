@@ -1,5 +1,7 @@
 import { OrderStatus, OrderType } from "@database/generated/prisma/client";
 
+export { OrderStatus, OrderType };
+
 export interface Order {
   id: string;
   orderNumber?: string | null;

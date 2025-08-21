@@ -19,14 +19,11 @@ export default function OrdersPage() {
   const [isFetchingOrders, setIsFetchingOrders] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Filter state for UI buttons
   const [activeFilter, setActiveFilter] = useState<string>("All");
 
   useEffect(() => {
-    // Redirect if not authenticated after auth loading is complete
     if (!isAuthLoading && !isAuthenticated) {
-      router.replace(`/en/auth/sign-in`);
-      return;
+      return router.replace(`/en/auth/sign-in`);
     }
 
     const fetchOrdersData = async () => {
@@ -48,6 +45,7 @@ export default function OrdersPage() {
         }
 
         const data: Order[] = response.data.orders;
+
         setOrders(data);
       } catch (err: any) {
         console.error("Error fetching orders:", err);

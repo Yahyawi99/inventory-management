@@ -52,7 +52,7 @@ export default function OrdersSummaryCards({
 
       <Card className="p-4 flex flex-col justify-between border-gray-200">
         <CardTitle className="text-sm font-medium text-gray-600">
-          Order items over time
+          Order items
         </CardTitle>
         <CardContent className="p-0 flex items-end justify-between">
           <div>
@@ -84,7 +84,7 @@ export default function OrdersSummaryCards({
 
       <Card className="p-4 flex flex-col justify-between border-gray-200">
         <CardTitle className="text-sm font-medium text-gray-600">
-          Returns Orders
+          Cancelled Orders
         </CardTitle>
         <CardContent className="p-0 flex items-end justify-between">
           <div>
@@ -114,10 +114,9 @@ export default function OrdersSummaryCards({
         </CardContent>
       </Card>
 
-      {/* Fulfilled Orders Over Time Card */}
       <Card className="p-4 flex flex-col justify-between border-gray-200">
         <CardTitle className="text-sm font-medium text-gray-600">
-          Fulfilled orders over time
+          Fulfilled orders
         </CardTitle>
         <CardContent className="p-0 flex items-end justify-between">
           <div>

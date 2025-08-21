@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Order } from "@/types/orders";
-import { OrderStatus, OrderType } from "@database/generated/prisma/client";
+import { getOrderStatusDisplay } from "@/utils/getOrderStatusDisplay";
 
 interface Props {
   orders: Order[];
@@ -22,51 +22,6 @@ export default function Orders({
   isAuthLoading,
   isFetchingOrders,
 }: Props) {
-  const getPaymentStatusDisplay = (orderStatus: OrderStatus) => {
-    switch (orderStatus) {
-      case OrderStatus.Pending:
-      case OrderStatus.Processing:
-        return { text: "Pending", colorClass: "bg-yellow-100 text-yellow-800" };
-      case OrderStatus.Shipped:
-      case OrderStatus.Delivered:
-        return { text: "Success", colorClass: "bg-green-100 text-green-800" };
-      case OrderStatus.Cancelled:
-        return { text: "Cancelled", colorClass: "bg-red-100 text-red-800" };
-      default:
-        return { text: "N/A", colorClass: "bg-gray-100 text-gray-800" };
-    }
-  };
-
-  const getDeliveryStatusDisplay = (orderStatus: OrderStatus) => {
-    switch (orderStatus) {
-      case OrderStatus.Shipped:
-        return "Shipped";
-      case OrderStatus.Delivered:
-        return "Delivered";
-      case OrderStatus.Cancelled:
-        return "Cancelled";
-      default:
-        return "N/A";
-    }
-  };
-
-  const getFulfillmentStatusDisplay = (orderStatus: OrderStatus) => {
-    switch (orderStatus) {
-      case OrderStatus.Pending:
-      case OrderStatus.Processing:
-        return { text: "Unfulfilled", colorClass: "bg-red-100 text-red-800" };
-      case OrderStatus.Shipped:
-      case OrderStatus.Delivered:
-        return {
-          text: "Fulfilled",
-          colorClass: "bg-green-100 text-green-800",
-        };
-      case OrderStatus.Cancelled:
-        return { text: "Cancelled", colorClass: "bg-gray-100 text-gray-800" };
-      default:
-        return { text: "N/A", colorClass: "bg-gray-100 text-gray-800" };
-    }
-  };
   return (
     <div className="overflow-x-auto ">
       <Table>
@@ -79,39 +34,35 @@ export default function Orders({
               />
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
               Order
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
               Date
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
               Customer
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
-              Payment
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
+              Supplier
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-right text-gray-700 font-medium">
-              Total
+            <TableHead className="px-4 py-3 text-right text-gray-700 font-medium text-center">
+              Status
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
-              Delivery
-            </TableHead>
-
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
               Items
             </TableHead>
 
-            <TableHead className="px-4 py-3 text-gray-700 font-medium">
-              Fulfillment
+            <TableHead className="px-4 py-3 text-gray-700 font-medium text-center">
+              Total
             </TableHead>
 
-            <TableHead className="w-[100px] px-4 py-3 text-gray-700 font-medium">
+            <TableHead className="w-[100px] px-4 py-3 text-gray-700 font-medium text-center">
               Action
             </TableHead>
           </TableRow>
@@ -122,7 +73,7 @@ export default function Orders({
             <TableRow>
               <TableCell
                 className="px-4 py-3 text-lg text-center pointer-events-none"
-                colSpan={10}
+                colSpan={9} // Updated colSpan to match actual columns
               >
                 Loading...
               </TableCell>
@@ -131,23 +82,25 @@ export default function Orders({
         ) : (
           <TableBody>
             {orders.map((order) => {
+              const statusDisplay = getOrderStatusDisplay(order.status);
+
               return (
                 <TableRow
                   key={order.id}
                   className="border-b border-gray-100 hover:bg-gray-50"
                 >
-                  <TableCell className="px-4 py-3">
+                  <TableCell className="text-center px-4 py-3">
                     <Input
                       type="checkbox"
                       className="h-4 w-4 rounded-sm border-gray-300"
                     />
                   </TableCell>
 
-                  <TableCell className="font-medium text-gray-900">
+                  <TableCell className="text-center font-medium text-gray-900">
                     {order.orderNumber || "N/A"}
                   </TableCell>
 
-                  <TableCell className="text-gray-700">
+                  <TableCell className="text-center text-gray-700">
                     {new Date(order.orderDate).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -155,52 +108,38 @@ export default function Orders({
                     })}
                   </TableCell>
 
-                  <TableCell className="text-gray-700">
-                    {order.orderType === OrderType.SALES
-                      ? order.customer?.name || "N/A"
-                      : order.supplier?.name || "N/A"}
+                  <TableCell className="text-center text-gray-700">
+                    {order.customer?.name || "N/A"}
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell className="text-center text-gray-700">
+                    {order.supplier?.name || "N/A"}
+                  </TableCell>
+
+                  <TableCell className="text-center">
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        getPaymentStatusDisplay(order.status).colorClass
-                      }`}
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
                     >
-                      {getPaymentStatusDisplay(order.status).text}
+                      {statusDisplay.text}
                     </span>
                   </TableCell>
 
-                  <TableCell className="text-right font-medium text-gray-900">
-                    ${order.totalAmount.toFixed(2)}
-                  </TableCell>
-
-                  <TableCell className="text-gray-700">
-                    {getDeliveryStatusDisplay(order.status)}
-                  </TableCell>
-
-                  <TableCell className="text-gray-700">
+                  <TableCell className="text-center text-gray-700">
                     {order.orderLines?.length === 1
                       ? "1 item"
                       : `${order.orderLines?.length || 0} items`}
                   </TableCell>
 
-                  <TableCell>
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        getFulfillmentStatusDisplay(order.status).colorClass
-                      }`}
-                    >
-                      {getFulfillmentStatusDisplay(order.status).text}
-                    </span>
+                  <TableCell className="text-center font-medium text-gray-900">
+                    ${order.totalAmount.toFixed(2)}
                   </TableCell>
 
-                  <TableCell className="px-4 py-3 text-gray-700">
+                  <TableCell className="text-center px-4 py-3 ">
                     <div className="flex items-center space-x-2">
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-gray-500 hover:text-gray-700"
+                        className="h-8 w-8 text-green-500 hover:text-green-700"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -218,10 +157,11 @@ export default function Orders({
                           <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z" />
                         </svg>
                       </Button>
+
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-gray-500 hover:text-gray-700"
+                        className="h-8 w-8 text-red-500 hover:text-red-700"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
