@@ -97,8 +97,7 @@ export default function OrdersSummaryCards({ orders }: Props) {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {/* Total Orders Card */}
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
       <Card className="p-4 flex flex-col justify-between border-gray-200">
         <CardTitle className="text-sm font-medium text-gray-600">
           Total Orders

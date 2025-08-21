@@ -23,7 +23,7 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
-      return router.replace(`/en/auth/sign-in`);
+      return router.replace(`/auth/sign-in`);
     }
 
     const fetchOrdersData = async () => {

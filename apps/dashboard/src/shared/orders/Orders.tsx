@@ -27,7 +27,7 @@ export default function Orders({
   isFetchingOrders,
 }: Props) {
   return (
-    <div className="overflow-x-auto ">
+    <div className="verflow-x-auto">
       <Table>
         <TableHeader className="bg-gray-100">
           <TableRow className="border-b border-gray-200">
@@ -77,14 +77,14 @@ export default function Orders({
             <TableRow>
               <TableCell
                 className="px-4 py-3 text-lg text-center pointer-events-none"
-                colSpan={9} // Updated colSpan to match actual columns
+                colSpan={9}
               >
                 Loading...
               </TableCell>
             </TableRow>
           </TableBody>
         ) : (
-          <TableBody>
+          <TableBody className="w-full">
             {orders.map((order) => {
               const statusDisplay = getOrderStatusDisplay(order.status);
 
@@ -100,7 +100,7 @@ export default function Orders({
                     />
                   </TableCell>
 
-                  <TableCell className="text-center font-medium text-gray-900">
+                  <TableCell className="text-center font-medium text-xs text-gray-900">
                     {generateOrderNumber(order.id)}
                   </TableCell>
 
@@ -112,12 +112,12 @@ export default function Orders({
                     })}
                   </TableCell>
 
-                  <TableCell className="text-center text-gray-700">
+                  <TableCell className="text-center text-xs text-gray-700">
                     {order.customer?.name || "N/A"}
                   </TableCell>
 
-                  <TableCell className="text-center text-gray-700">
-                    {order.supplier?.name || "N/A"}
+                  <TableCell className="w-fit text-center text-gray-700">
+                    <p>{order.supplier?.name || "N/A"}</p>
                   </TableCell>
 
                   <TableCell className="text-center">

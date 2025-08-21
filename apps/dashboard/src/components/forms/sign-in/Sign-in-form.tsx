@@ -142,6 +142,8 @@ export default function SignInForm() {
             </p>
           )}
 
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
           <Button
             className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none font-bold py-2 px-4 rounded-md transition-colors duration-200"
             type="submit"

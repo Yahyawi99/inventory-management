@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Sidebar />
         </div>
 
-        <div className="w-full mx-5">
+        <div className="w-full mx-3 overflow-x-hidden">
           <Header />
 
           <div>{children}</div>

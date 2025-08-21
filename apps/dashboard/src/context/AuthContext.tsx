@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
       }
     } catch (error) {
-      console.log("🚨 Failed to check Better-Auth session: ", error);
       setUser(null);
     } finally {
       setLoading(false);
@@ -50,6 +49,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    fetchSession();
+
     const handleFocus = () => {
       fetchSession();
     };
