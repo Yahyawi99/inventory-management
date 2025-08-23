@@ -19,12 +19,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const customerType = searchParams.get("customerType");
   const orderType = searchParams.get("orderType");
 
-  console.log("searchParams: ===========");
-  console.log("status: ", status);
-  console.log("search: ", search);
-  console.log("customerType: ", customerType);
-  console.log("orderType: ", orderType);
-
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -53,7 +47,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   if (orderType && orderType != "All") {
     filters.orderType = orderType as OrderType;
   }
-  console.log(filters);
+
   try {
     const orders = await OrderRepository.findMany(orgId, userId, filters);
 
