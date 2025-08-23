@@ -13,7 +13,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Filter } from "lucide-react"; // Filter icon
+import { Filter } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -43,7 +43,6 @@ export default function OrdersFilterDrawer({
   onApplyFilters,
   onClearFilters,
 }: Props) {
-  // Handler for individual filter changes (e.g., status, customerType)
   const handleSelectChange = (key: keyof ActiveFilters, value: string) => {
     // onFilterChange({
     //   ...activeFilters,
@@ -52,7 +51,7 @@ export default function OrdersFilterDrawer({
   };
 
   return (
-    <Drawer>
+    <Drawer direction="right">
       <DrawerTrigger asChild>
         <Button
           variant="outline"
@@ -63,7 +62,7 @@ export default function OrdersFilterDrawer({
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="max-h-[90vh] focus:outline-none">
+      <DrawerContent className="focus:outline-none">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle className="text-2xl font-bold text-gray-900">
