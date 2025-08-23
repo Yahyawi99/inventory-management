@@ -1,75 +1,84 @@
+import { ActiveFilters } from "@/types/orders";
 import { Button } from "@/components/ui/button";
 
 interface Props {
-  activeFilter: string;
-  setActiveFilter: (filter: string) => void;
+  activeFilters: ActiveFilters;
+  setActiveFilters: (filter: ActiveFilters) => void;
 }
 
 export default function OrdersFilters({
-  activeFilter,
-  setActiveFilter,
+  activeFilters,
+  setActiveFilters,
 }: Props) {
   return (
     <div className="flex items-center justify-between my-4">
       <div className="flex space-x-2 bg-white p-1 rounded-full">
         <Button
-          variant={activeFilter === "All" ? "default" : "ghost"}
+          variant={activeFilters.status === "All" ? "default" : "ghost"}
           className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilter === "All"
+            activeFilters.status === "All"
               ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
-          onClick={() => setActiveFilter("All")}
+          onClick={() => setActiveFilters({ ...activeFilters, status: "All" })}
         >
           All
         </Button>
 
         <Button
-          variant={activeFilter === "Unfulfilled" ? "default" : "ghost"}
+          variant={activeFilters.status === "Pending" ? "default" : "ghost"}
           className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilter === "Unfulfilled"
+            activeFilters.status === "Pending"
               ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
-          onClick={() => setActiveFilter("Unfulfilled")}
+          onClick={() =>
+            setActiveFilters({ ...activeFilters, status: "Pending" })
+          }
         >
-          Unfulfilled
+          Pending
         </Button>
 
         <Button
-          variant={activeFilter === "Unpaid" ? "default" : "ghost"}
+          variant={activeFilters.status === "Processing" ? "default" : "ghost"}
           className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilter === "Unpaid"
+            activeFilters.status === "Processing"
               ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
-          onClick={() => setActiveFilter("Unpaid")}
+          onClick={() =>
+            setActiveFilters({ ...activeFilters, status: "Processing" })
+          }
         >
-          Unpaid
+          Processing
         </Button>
 
         <Button
-          variant={activeFilter === "Open" ? "default" : "ghost"}
+          variant={activeFilters.status === "Fulfilled" ? "default" : "ghost"}
           className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilter === "Open"
+            activeFilters.status === "Fulfilled"
               ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
-          onClick={() => setActiveFilter("Open")}
+          onClick={() =>
+            setActiveFilters({ ...activeFilters, status: "Fulfilled" })
+          }
         >
-          Open
+          Fulfilled
         </Button>
 
         <Button
-          variant={activeFilter === "Closed" ? "default" : "ghost"}
+          variant={activeFilters.status === "Cancelled" ? "default" : "ghost"}
           className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilter === "Closed"
+            activeFilters.status === "Cancelled"
               ? "bg-sidebar text-white hover:bg-sidebar"
               : "text-gray-700 hover:bg-gray-100"
           }`}
-          onClick={() => setActiveFilter("Closed")}
+          onClick={() =>
+            setActiveFilters({ ...activeFilters, status: "Cancelled" })
+          }
         >
-          Closed
+          Canceled
         </Button>
       </div>
 

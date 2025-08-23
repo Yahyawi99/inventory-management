@@ -6,7 +6,7 @@ export default function OrdersHeader() {
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
       <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
       <div className="flex items-center space-x-3">
-        <Button
+        {/* <Button
           variant="outline"
           className="flex items-center space-x-2 border-gray-300 text-gray-700"
         >
@@ -42,7 +42,7 @@ export default function OrdersHeader() {
           >
             <path d="m6 9 6 6 6-6" />
           </svg>
-        </Button>
+        </Button> */}
 
         <Button
           variant="outline"

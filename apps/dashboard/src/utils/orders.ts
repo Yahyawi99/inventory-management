@@ -1,32 +1,16 @@
-import { Order, OrderStatus } from "@/types/orders";
+import {
+  Order,
+  OrderStatus,
+  ActiveFilters,
+  StatusDisplay,
+  Metrics,
+  SummaryMetrics,
+} from "@/types/orders";
 import { OrderLine } from "@database/generated/prisma";
 import {
   getDateRangesForComparison,
   isDateWithinRange,
 } from "@/utils/dateHelpers";
-
-interface StatusDisplay {
-  text: string;
-  colorClass: string;
-}
-
-interface Metrics {
-  totalOrders: number;
-  totalOrderItems: number;
-  totalCancelledOrders: number;
-  totalFulfilledOrders: number;
-}
-
-interface SummaryMetrics {
-  totalOrders: number;
-  totalOrderItems: number;
-  totalCancelledOrders: number;
-  totalFulfilledOrders: number;
-  totalOrdersChange: number;
-  totalOrderItemsChange: number;
-  totalCancelledOrdersChange: number;
-  totalFulfilledOrdersChange: number;
-}
 
 // status styles for the orders table
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
@@ -206,4 +190,46 @@ export const exportOrdersAsJson = (
 
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+};
+
+// generate api URL for table orders data fetching
+export const buildOrdersApiUrl = (activeFilters: ActiveFilters): string => {
+  const queryParams = new URLSearchParams();
+
+  if (activeFilters.status && activeFilters.status !== "All") {
+    if (activeFilters.status === "Fulfilled") {
+      queryParams.append("status", OrderStatus.Shipped);
+      queryParams.append("status", OrderStatus.Delivered);
+    } else {
+      queryParams.append("status", activeFilters.status);
+    }
+  }
+
+  if (activeFilters.search) {
+    queryParams.append("search", activeFilters.search);
+  }
+
+  if (activeFilters.customerType && activeFilters.customerType !== "All") {
+    queryParams.append("customerType", activeFilters.customerType);
+  }
+
+  if (activeFilters.orderType && activeFilters.orderType !== "All") {
+    queryParams.append("orderType", activeFilters.orderType);
+  }
+
+  if (
+    activeFilters.startDate instanceof Date &&
+    !isNaN(activeFilters.startDate.getTime())
+  ) {
+    queryParams.append("startDate", activeFilters.startDate.toISOString());
+  }
+  if (
+    activeFilters.endDate instanceof Date &&
+    !isNaN(activeFilters.endDate.getTime())
+  ) {
+    queryParams.append("endDate", activeFilters.endDate.toISOString());
+  }
+
+  const queryString = queryParams.toString();
+  return `/orders${queryString ? `?${queryString}` : ""}`;
 };
