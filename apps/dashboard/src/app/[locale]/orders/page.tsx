@@ -29,8 +29,6 @@ export default function OrdersPage() {
     search: "",
     customerType: "All",
     orderType: "All",
-    startDate: null,
-    endDate: null,
   });
 
   useEffect(() => {

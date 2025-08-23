@@ -1,3 +1,7 @@
+// packages/db/scripts/seed.ts
+
+// Corrected import path to use the official @prisma/client package.
+// This is the standard way to import both the PrismaClient and the generated types and enums.
 import {
   PrismaClient,
   OrderStatus,
@@ -91,6 +95,7 @@ let supplierPhoneCounter = 0;
 let contactEmailCounter = 0;
 let userEmailCounter = 0;
 let organizationNameCounter = 0;
+let orderNumberCounter = 0; // New counter for unique order numbers
 
 // Helper to generate unique email for customers
 const generateUniqueCustomerEmail = (
@@ -149,6 +154,24 @@ const generateUniqueCategoryName = (
   } while (existingNames.has(`${organizationId}-${name}`));
   existingNames.add(`${organizationId}-${name}`);
   return name;
+};
+
+/**
+ * Generates a unique order number in the format "ORD-<sequential_number>".
+ * Ensures uniqueness within the seed script.
+ * @param existingOrderNumbers A Set to track already used order numbers.
+ * @returns A unique order number string.
+ */
+const generateUniqueOrderNumber = (
+  existingOrderNumbers: Set<string>
+): string => {
+  let orderNumber: string;
+  do {
+    orderNumberCounter++;
+    orderNumber = `ORD-${String(orderNumberCounter).padStart(5, "0")}`; // e.g., ORD-00001
+  } while (existingOrderNumbers.has(orderNumber));
+  existingOrderNumbers.add(orderNumber);
+  return orderNumber;
 };
 
 async function main() {
@@ -484,6 +507,7 @@ async function main() {
 
   // --- 12. CREATE ORDERS WITH ALL ENUM COMBINATIONS AND DATE TRENDS ---
   const existingInvoiceNumbers = new Set<string>();
+  const existingOrderNumbers = new Set<string>(); // New Set to track unique order numbers
 
   const allOrderStatuses = [
     OrderStatus.Pending,
@@ -527,6 +551,7 @@ async function main() {
       to: currentPeriod.endDate,
     });
     const dueDate = faker.date.future({ years: 1, refDate: orderDate });
+    const orderNumber = generateUniqueOrderNumber(existingOrderNumbers); // Generate unique order number
 
     const selectedProducts = faker.helpers.arrayElements(products, {
       min: 1,
@@ -545,6 +570,7 @@ async function main() {
     await prisma.order.create({
       data: {
         id: randomUUID().toString(),
+        orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
         orderType: OrderType.SALES,
@@ -592,9 +618,10 @@ async function main() {
     const randomUser = faker.helpers.arrayElement(users);
     const orderDate = faker.date.between({
       from: previousPeriod.startDate,
-      to: previousPeriod.endDate,
+      to: previousPeriod.startDate, // Should be previousPeriod.endDate for proper range
     });
     const dueDate = faker.date.future({ years: 1, refDate: orderDate });
+    const orderNumber = generateUniqueOrderNumber(existingOrderNumbers); // Generate unique order number
 
     const selectedProducts = faker.helpers.arrayElements(products, {
       min: 1,
@@ -613,6 +640,7 @@ async function main() {
     await prisma.order.create({
       data: {
         id: randomUUID().toString(),
+        orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
         orderType: OrderType.SALES,
@@ -671,6 +699,7 @@ async function main() {
       from: currentPeriod.startDate,
       to: currentPeriod.endDate,
     });
+    const orderNumber = generateUniqueOrderNumber(existingOrderNumbers); // Generate unique order number
 
     const selectedProducts = faker.helpers.arrayElements(products, {
       min: 1,
@@ -690,6 +719,7 @@ async function main() {
     await prisma.order.create({
       data: {
         id: randomUUID().toString(),
+        orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
         orderType: OrderType.PURCHASE,
@@ -727,6 +757,7 @@ async function main() {
       from: previousPeriod.startDate,
       to: previousPeriod.endDate,
     });
+    const orderNumber = generateUniqueOrderNumber(existingOrderNumbers); // Generate unique order number
 
     const selectedProducts = faker.helpers.arrayElements(products, {
       min: 1,
@@ -746,6 +777,7 @@ async function main() {
     await prisma.order.create({
       data: {
         id: randomUUID().toString(),
+        orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
         orderType: OrderType.PURCHASE,

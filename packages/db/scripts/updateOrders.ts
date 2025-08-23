@@ -8,8 +8,8 @@ async function main() {
   );
 
   // Define the new IDs you want to set
-  const newUserId = "FvJj314y4Gzxb8DOwvd4X65h4Sbkz6Hb";
-  const newOrganizationId = "cexNHYarYdbPro4etPFXdGlvKzz9CaLs";
+  const newUserId = "w33q1SnXWqlcBbWt5f7fYKf3rvdqdwb6";
+  const newOrganizationId = "XABT5P8RGdkAYSk9QGPhdlO0pVYns0rE";
 
   try {
     // 1. Fetch all existing orders

@@ -8,7 +8,7 @@
     "db:push": "pnpm dlx prisma db push",
     "db:generate": "pnpm dlx prisma generate",
     "db:seed": "pnpm dlx ts-node ./scripts/seed.ts",
-    "db:sync": "pnpm run db:push && pnpm run db:generate"
+    "db:sync": "pnpm run db:generate && pnpm run db:push"
   },
   "keywords": [],
   "author": "",

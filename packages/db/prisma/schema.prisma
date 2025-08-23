@@ -330,6 +330,7 @@ model ContactPerson {
 model Order {
   id          String      @id @map("_id")
   orderDate   DateTime    @default(now())
+  orderNumber String
   status      OrderStatus
   totalAmount Float
   orderType   OrderType
@@ -352,6 +353,7 @@ model Order {
 
   orderLines OrderLine[]
 
+  @@unique([organizationId, orderNumber])
   @@index([organizationId])
   @@index([userId])
   @@index([customerId])

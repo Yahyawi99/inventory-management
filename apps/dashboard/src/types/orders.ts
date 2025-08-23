@@ -9,7 +9,7 @@ export { OrderStatus, OrderType, CustomerType };
 
 export interface Order {
   id: string;
-  orderNumber?: string | null;
+  orderNumber: string;
   orderDate: string;
   totalAmount: number;
   status: OrderStatus;
@@ -24,12 +24,10 @@ export interface Order {
 }
 
 export interface ActiveFilters {
-  status: "All" | "Pending" | "Processing" | "Fulfilled" | "Cancelled";
-  search: string;
-  customerType: "All" | CustomerType;
-  orderType: "All" | OrderType;
-  startDate: Date | null;
-  endDate: Date | null;
+  status?: "All" | "Pending" | "Processing" | "Fulfilled" | "Cancelled";
+  search?: string;
+  customerType?: "All" | CustomerType;
+  orderType?: "All" | OrderType;
 }
 
 export interface StatusDisplay {

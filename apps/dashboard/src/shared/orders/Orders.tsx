@@ -101,7 +101,7 @@ export default function Orders({
                   </TableCell>
 
                   <TableCell className="text-center font-medium text-xs text-gray-900">
-                    {generateOrderNumber(order.id)}
+                    {order.orderNumber || "N/A"}
                   </TableCell>
 
                   <TableCell className="text-center text-gray-700">

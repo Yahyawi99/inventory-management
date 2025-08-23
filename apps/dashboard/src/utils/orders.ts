@@ -32,19 +32,28 @@ export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
 
 // generate a unique order number for the table
 export const generateOrderNumber = (
-  uuid: string,
   prefix: string = "ORD-",
-  length: number = 6
+  randomLength: number = 4
 ): string => {
-  if (!uuid || typeof uuid !== "string" || uuid.length < length) {
-    console.warn("Invalid UUID!");
+  const now = new Date();
 
-    return "N/A";
-  }
+  // Format year as YY (last two digits)
+  const year = String(now.getFullYear()).slice(-2);
+  // Format month as MM (01-12)
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  // Format day as DD
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
 
-  const uuidSubstring = uuid.slice(-length).toUpperCase();
+  const timestampPart = `${year}${month}${day}${hours}${minutes}`;
 
-  return `${prefix}${uuidSubstring}`;
+  const randomPart = Math.random()
+    .toString(36)
+    .substring(2, 2 + randomLength)
+    .toUpperCase();
+
+  return `${prefix}${timestampPart}-${randomPart}`;
 };
 
 // get the total items of each order
@@ -215,19 +224,6 @@ export const buildOrdersApiUrl = (activeFilters: ActiveFilters): string => {
 
   if (activeFilters.orderType && activeFilters.orderType !== "All") {
     queryParams.append("orderType", activeFilters.orderType);
-  }
-
-  if (
-    activeFilters.startDate instanceof Date &&
-    !isNaN(activeFilters.startDate.getTime())
-  ) {
-    queryParams.append("startDate", activeFilters.startDate.toISOString());
-  }
-  if (
-    activeFilters.endDate instanceof Date &&
-    !isNaN(activeFilters.endDate.getTime())
-  ) {
-    queryParams.append("endDate", activeFilters.endDate.toISOString());
   }
 
   const queryString = queryParams.toString();
