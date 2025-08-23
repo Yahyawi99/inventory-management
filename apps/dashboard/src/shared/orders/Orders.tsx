@@ -112,7 +112,7 @@ export default function Orders({
                     })}
                   </TableCell>
 
-                  <TableCell className="text-center text-xs text-gray-700">
+                  <TableCell className="text-center text-gray-700">
                     {order.customer?.name || "N/A"}
                   </TableCell>
 

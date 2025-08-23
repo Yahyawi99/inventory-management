@@ -17,7 +17,6 @@ interface Metrics {
   totalFulfilledOrders: number;
 }
 
-// Interface for the final summary output
 interface SummaryMetrics {
   totalOrders: number;
   totalOrderItems: number;
@@ -29,6 +28,7 @@ interface SummaryMetrics {
   totalFulfilledOrdersChange: number;
 }
 
+// status styles for the orders table
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
   switch (status) {
     case OrderStatus.Pending:
@@ -46,6 +46,7 @@ export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
   }
 };
 
+// generate a unique order number for the table
 export const generateOrderNumber = (
   uuid: string,
   prefix: string = "ORD-",
@@ -62,6 +63,7 @@ export const generateOrderNumber = (
   return `${prefix}${uuidSubstring}`;
 };
 
+// get the total items of each order
 export const getTotalOrderLineQuantity = (
   orderLines: OrderLine[] | null | undefined
 ): number => {
@@ -77,6 +79,7 @@ export const getTotalOrderLineQuantity = (
   return totalQuantity;
 };
 
+// calculate the summary cards data
 const calculatePercentageChange = (
   currentValue: number,
   previousValue: number
@@ -165,4 +168,42 @@ export const getOrderSummaryMetrics = (orders: Order[]): SummaryMetrics => {
       previousPeriodMetrics.totalFulfilledOrders
     ),
   };
+};
+
+// generate a json to export
+export const exportOrdersAsJson = (
+  ordersData: Order[],
+  filter: string,
+  summaryData?: SummaryMetrics,
+  filename: string = "orders_export"
+) => {
+  if (!ordersData || ordersData.length === 0 || !summaryData) {
+    console.warn("No order or summary data to export.");
+    return;
+  }
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const finalFilename = `${filename}_${timestamp}.json`;
+
+  const dataToExport: {
+    orders: { filter: string; data: Order[] };
+    summary: { date: Date; data: SummaryMetrics };
+  } = {
+    summary: { date: new Date(), data: summaryData },
+    orders: { filter, data: ordersData },
+  };
+
+  const jsonString = JSON.stringify(dataToExport, null, 2);
+  const blob = new Blob([jsonString], { type: "application/json" });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = finalFilename;
+
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 };
