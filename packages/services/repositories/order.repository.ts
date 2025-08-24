@@ -80,9 +80,6 @@ export const OrderRepository = {
         orderBy.direction;
     }
 
-    console.log("================");
-    console.log(page, pageSize);
-
     try {
       const res = await Prisma.order.findMany({
         skip: (page - 1) * pageSize,

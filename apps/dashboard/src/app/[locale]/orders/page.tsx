@@ -28,8 +28,6 @@ export default function OrdersPage() {
   const router = useRouter();
 
   const [summaryOrders, setSummaryOrders] = useState<Order[]>([]);
-  const [summaryMetricsData, setSummaryMetricsData] =
-    useState<SummaryMetrics>();
   const [isFetchingSummaryOrders, setIsFetchingSummaryOrders] = useState(true);
 
   const [tableOrders, setTableOrders] = useState<Order[]>([]);
@@ -138,18 +136,6 @@ export default function OrdersPage() {
     }
   }, [isAuthLoading, fetchTableOrders]);
 
-  // export data
-  const exportData = () => {
-    exportOrdersAsJson(
-      tableOrders,
-      {
-        filter: activeFilters,
-        orderBy: activeOrderBy,
-      },
-      summaryMetricsData
-    );
-  };
-
   // pagination
   const onPageChange = (page: number) => {
     setPagination({
@@ -162,6 +148,18 @@ export default function OrdersPage() {
   const metricsData = useMemo(() => {
     return getOrderSummaryMetrics(summaryOrders);
   }, [summaryOrders]);
+
+  // export data
+  const exportData = () => {
+    exportOrdersAsJson(
+      tableOrders,
+      {
+        filter: activeFilters,
+        orderBy: activeOrderBy,
+      },
+      metricsData
+    );
+  };
 
   if (error) {
     return (
@@ -182,6 +180,7 @@ export default function OrdersPage() {
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
+        setPagination={setPagination}
       />
 
       <Card className="w-full mx-auto rounded-lg shadow-lg border border-gray-200">

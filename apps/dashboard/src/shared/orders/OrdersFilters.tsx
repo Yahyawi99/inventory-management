@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ActiveFilters, SortConfig } from "@/types/orders";
+import React, { useEffect, useState } from "react";
+import { ActiveFilters, SortConfig, Pagination } from "@/types/orders";
 import { Button } from "@/components/ui/button";
 import OrdersSearchInput from "./OrdersSearchInput";
 import OrdersFilterDrawer from "./OrdersFilterDrawer";
@@ -12,6 +12,7 @@ interface Props {
   activeOrderBy: SortConfig;
   setActiveFilters: (filter: ActiveFilters) => void;
   setActiveOrderBy: (newSort: SortConfig) => void;
+  setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
 }
 
 export default function OrdersFilters({
@@ -19,6 +20,7 @@ export default function OrdersFilters({
   setActiveFilters,
   activeOrderBy,
   setActiveOrderBy,
+  setPagination,
 }: Props) {
   const [drawerFilters, setDrawerFilters] = useState<ActiveFilters>({
     status: "All",
@@ -32,6 +34,7 @@ export default function OrdersFilters({
   };
 
   const onApplyFilters = () => {
+    setPagination((prev) => ({ ...prev, page: 1 }));
     setActiveFilters({ ...activeFilters, ...drawerFilters });
   };
 
@@ -41,6 +44,8 @@ export default function OrdersFilters({
       customerType: "All",
       orderType: "All",
     });
+
+    setPagination((prev) => ({ ...prev, page: 1 }));
 
     setActiveFilters({
       ...activeFilters,
@@ -53,6 +58,8 @@ export default function OrdersFilters({
   // search
   useEffect(() => {
     const handler = setTimeout(() => {
+      setPagination((prev) => ({ ...prev, page: 1 }));
+
       setActiveFilters({
         ...activeFilters,
         search: searchQuery,
@@ -70,6 +77,7 @@ export default function OrdersFilters({
 
   // Order by
   const onSortChange = (field: string, direction: "desc" | "asc") => {
+    setPagination((prev) => ({ ...prev, page: 1 }));
     setActiveOrderBy({ field, direction });
   };
 
