@@ -197,11 +197,13 @@ export default function OrdersPage() {
             />
           )}
 
-          <OrdersPagination
-            currentPage={pagination.page}
-            totalPages={pagination?.totalPages ? pagination.totalPages : 0}
-            onPageChange={onPageChange}
-          />
+          {!isAuthLoading && !isFetchingTableOrders && (
+            <OrdersPagination
+              currentPage={pagination.page}
+              totalPages={pagination?.totalPages ? pagination.totalPages : 0}
+              onPageChange={onPageChange}
+            />
+          )}
         </CardContent>
       </Card>
     </section>

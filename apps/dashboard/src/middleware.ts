@@ -1,9 +1,6 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { authClient } from "./lib/auth-client";
-
-const JWT_SECRET = process.env.JWT_SECRET;
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
   // Security headers to prevent various attacks

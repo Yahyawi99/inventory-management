@@ -14,7 +14,7 @@ import {
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import { SortConfig } from "@/types/orders";
 
-interface OrdersOrderByDropdownProps {
+interface Props {
   currentSort: SortConfig;
   onSortChange: (field: string, direction: "asc" | "desc") => void;
 }
@@ -22,7 +22,7 @@ interface OrdersOrderByDropdownProps {
 export default function OrdersOrderByDropdown({
   currentSort,
   onSortChange,
-}: OrdersOrderByDropdownProps) {
+}: Props) {
   const handleSortItemClick = (field: string) => {
     const newDirection =
       currentSort.field === field && currentSort.direction === "desc"

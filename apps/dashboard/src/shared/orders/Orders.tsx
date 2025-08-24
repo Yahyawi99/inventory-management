@@ -27,7 +27,7 @@ export default function Orders({
   isFetchingOrders,
 }: Props) {
   return (
-    <div className="verflow-x-auto">
+    <div>
       <Table>
         <TableHeader className="bg-gray-100">
           <TableRow className="border-b border-gray-200">

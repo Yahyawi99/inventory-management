@@ -10,8 +10,8 @@ import OrdersOrderByDropdown from "./OrderByDropdown";
 interface Props {
   activeFilters: ActiveFilters;
   activeOrderBy: SortConfig;
-  setActiveFilters: (filter: ActiveFilters) => void;
-  setActiveOrderBy: (newSort: SortConfig) => void;
+  setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
+  setActiveOrderBy: React.Dispatch<React.SetStateAction<SortConfig>>;
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
 }
 

@@ -93,7 +93,9 @@ export const OrderRepository = {
         },
       });
 
-      const totalOrders = await Prisma.order.count();
+      const totalOrders = await Prisma.order.count({
+        where: whereClause,
+      });
       const totalPages = Math.ceil(totalOrders / pageSize);
 
       return { totalPages, orders: res };
