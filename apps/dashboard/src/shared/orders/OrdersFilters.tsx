@@ -5,6 +5,7 @@ import { ActiveFilters } from "@/types/orders";
 import { Button } from "@/components/ui/button";
 import OrdersSearchInput from "./OrdersSearchInput";
 import OrdersFilterDrawer from "./OrdersFilterDrawer";
+import Action from "../Dashboard/ActionBtns";
 
 interface Props {
   activeFilters: ActiveFilters;
@@ -20,10 +21,7 @@ export default function OrdersFilters({
     customerType: "All",
     orderType: "All",
   });
-
-  useEffect(() => {
-    console.log(drawerFilters);
-  }, [drawerFilters]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const onFilterChange = (newFilters: ActiveFilters) => {
     setDrawerFilters(newFilters);
@@ -46,6 +44,24 @@ export default function OrdersFilters({
       customerType: "All",
       orderType: "All",
     });
+  };
+
+  // search
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setActiveFilters({
+        ...activeFilters,
+        search: searchQuery,
+      });
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  const onSearchChange = (input: string) => {
+    setSearchQuery(input);
   };
 
   return (
@@ -121,7 +137,10 @@ export default function OrdersFilters({
       </div>
 
       <div className="flex items-center space-x-2">
-        <OrdersSearchInput />
+        <OrdersSearchInput
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+        />
 
         <OrdersFilterDrawer
           activeFilters={activeFilters}
