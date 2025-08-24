@@ -50,11 +50,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
     filters.orderType = orderType as OrderType;
   }
 
-  // Order By
-  console.log(orderBy);
-
   try {
-    const orders = await OrderRepository.findMany(orgId, userId, filters);
+    const orders = await OrderRepository.findMany(
+      orgId,
+      userId,
+      filters,
+      orderBy
+    );
 
     return NextResponse.json({ message: "success", orders }, { status: 200 });
   } catch (error) {

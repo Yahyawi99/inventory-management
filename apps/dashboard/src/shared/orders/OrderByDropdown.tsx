@@ -84,10 +84,12 @@ export default function OrdersOrderByDropdown({
             ))}
         </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => handleSortItemClick("totalItems")}>
+        <DropdownMenuItem
+          onClick={() => handleSortItemClick("totalItemsQuantity")}
+        >
           {/* New Sort Option */}
           Items Quantity{" "}
-          {currentSort.field === "totalItems" &&
+          {currentSort.field === "totalItemsQuantity" &&
             (currentSort.direction === "asc" ? (
               <ArrowUpWideNarrow className="ml-2 h-4 w-4" />
             ) : (

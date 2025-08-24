@@ -10,6 +10,7 @@ export { OrderStatus, OrderType, CustomerType };
 export interface Order {
   id: string;
   orderNumber: string;
+  totalItemsQuantity: number | null;
   orderDate: string;
   totalAmount: number;
   status: OrderStatus;
