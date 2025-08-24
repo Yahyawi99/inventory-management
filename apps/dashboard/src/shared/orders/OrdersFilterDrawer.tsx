@@ -1,4 +1,3 @@
-// src/shared/orders/OrdersFilterDrawer.tsx
 "use client";
 
 import React from "react";
@@ -31,10 +30,10 @@ import {
 } from "@/types/orders";
 
 interface Props {
-  activeFilters?: ActiveFilters;
-  onFilterChange?: (filters: ActiveFilters) => void;
-  onApplyFilters?: () => void;
-  onClearFilters?: () => void;
+  activeFilters: ActiveFilters;
+  onFilterChange: (filters: ActiveFilters) => void;
+  onApplyFilters: () => void;
+  onClearFilters: () => void;
 }
 
 export default function OrdersFilterDrawer({
@@ -44,10 +43,10 @@ export default function OrdersFilterDrawer({
   onClearFilters,
 }: Props) {
   const handleSelectChange = (key: keyof ActiveFilters, value: string) => {
-    // onFilterChange({
-    //   ...activeFilters,
-    //   [key]: value === "All" ? undefined : value,
-    // });
+    onFilterChange({
+      ...activeFilters,
+      [key]: value,
+    });
   };
 
   return (
@@ -176,13 +175,16 @@ export default function OrdersFilterDrawer({
           </div>
 
           <DrawerFooter className="flex-row justify-between pt-6">
-            <Button
-              variant="outline"
-              onClick={onClearFilters}
-              className="w-1/2 mr-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
-            >
-              Clear Filters
-            </Button>
+            <DrawerClose asChild>
+              <Button
+                variant="outline"
+                onClick={onClearFilters}
+                className="w-1/2 mr-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+              >
+                Clear Filters
+              </Button>
+            </DrawerClose>
+
             <DrawerClose asChild>
               <Button
                 onClick={onApplyFilters}
