@@ -52,3 +52,8 @@ export interface SummaryMetrics {
   totalCancelledOrdersChange: number;
   totalFulfilledOrdersChange: number;
 }
+
+export interface SortConfig {
+  field: string;
+  direction: "desc" | "asc";
+}

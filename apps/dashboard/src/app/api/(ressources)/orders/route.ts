@@ -18,6 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const search = searchParams.get("search");
   const customerType = searchParams.get("customerType");
   const orderType = searchParams.get("orderType");
+  const orderBy = JSON.parse(searchParams.get("orderBy") as string);
 
   const data = await auth.api.getSession({
     headers: await headers(),
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     );
   }
 
+  // Filters
   const filters: Filters = {};
 
   if (status.length && status.indexOf("All") === -1) {
@@ -47,6 +49,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
   if (orderType && orderType != "All") {
     filters.orderType = orderType as OrderType;
   }
+
+  // Order By
+  console.log(orderBy);
 
   try {
     const orders = await OrderRepository.findMany(orgId, userId, filters);

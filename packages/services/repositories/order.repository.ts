@@ -5,6 +5,7 @@ import {
   OrderType,
   Prisma as P,
 } from "database/generated/prisma/client";
+import { SortConfig } from "@/types/orders";
 
 type Order = {
   id: string;
@@ -31,7 +32,8 @@ export const OrderRepository = {
   async findMany(
     orgId: string,
     userId: string,
-    filters: Filters
+    filters: Filters,
+    orderBy: SortConfig = { field: "orderDate", direction: "desc" }
   ): Promise<Order[] | null> {
     const whereClause: P.OrderWhereInput = {
       organizationId: orgId,
@@ -67,10 +69,16 @@ export const OrderRepository = {
     if (filters.status) {
       whereClause.status = { in: filters.status };
     }
+    const orderByClause: P.OrderOrderByWithRelationInput = {};
+    if (orderBy) {
+      orderByClause[orderBy.field as keyof P.OrderOrderByWithRelationInput] =
+        orderBy.direction;
+    }
 
     try {
       const res = await Prisma.order.findMany({
         where: whereClause,
+        orderBy: orderByClause,
         include: {
           orderLines: true,
           customer: true,

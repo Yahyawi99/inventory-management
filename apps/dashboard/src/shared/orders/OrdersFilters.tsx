@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ActiveFilters } from "@/types/orders";
+import { ActiveFilters, SortConfig } from "@/types/orders";
 import { Button } from "@/components/ui/button";
 import OrdersSearchInput from "./OrdersSearchInput";
 import OrdersFilterDrawer from "./OrdersFilterDrawer";
-import Action from "../Dashboard/ActionBtns";
+import OrdersOrderByDropdown from "./OrderByDropdown";
 
 interface Props {
   activeFilters: ActiveFilters;
+  activeOrderBy: SortConfig;
   setActiveFilters: (filter: ActiveFilters) => void;
+  setActiveOrderBy: (newSort: SortConfig) => void;
 }
 
 export default function OrdersFilters({
   activeFilters,
   setActiveFilters,
+  activeOrderBy,
+  setActiveOrderBy,
 }: Props) {
   const [drawerFilters, setDrawerFilters] = useState<ActiveFilters>({
     status: "All",
@@ -62,6 +66,11 @@ export default function OrdersFilters({
 
   const onSearchChange = (input: string) => {
     setSearchQuery(input);
+  };
+
+  // Order by
+  const onSortChange = (field: string, direction: "desc" | "asc") => {
+    setActiveOrderBy({ field, direction });
   };
 
   return (
@@ -147,6 +156,11 @@ export default function OrdersFilters({
           onFilterChange={onFilterChange}
           onApplyFilters={onApplyFilters}
           onClearFilters={onClearFilters}
+        />
+
+        <OrdersOrderByDropdown
+          currentSort={activeOrderBy}
+          onSortChange={onSortChange}
         />
       </div>
     </div>

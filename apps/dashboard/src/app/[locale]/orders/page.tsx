@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
-import { Order, ActiveFilters } from "@/types/orders";
+import { Order, ActiveFilters, SortConfig } from "@/types/orders";
 import Orders from "@/shared/orders/Orders";
 import { buildOrdersApiUrl } from "@/utils/orders";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +29,10 @@ export default function OrdersPage() {
     search: "",
     customerType: "All",
     orderType: "All",
+  });
+  const [activeOrderBy, setActiveOrderBy] = useState<SortConfig>({
+    field: "orderDate",
+    direction: "desc",
   });
 
   useEffect(() => {
@@ -83,7 +87,7 @@ export default function OrdersPage() {
     setIsFetchingTableOrders(true);
     setError(null);
     try {
-      const apiUrl = buildOrdersApiUrl(activeFilters);
+      const apiUrl = buildOrdersApiUrl(activeFilters, activeOrderBy);
 
       const response = await fetch(apiUrl);
 
@@ -103,7 +107,7 @@ export default function OrdersPage() {
     } finally {
       setIsFetchingTableOrders(false);
     }
-  }, [user, isAuthenticated, activeFilters]);
+  }, [user, isAuthenticated, activeFilters, activeOrderBy]);
 
   useEffect(() => {
     if (isAuthenticated && !isAuthLoading) {
@@ -127,7 +131,9 @@ export default function OrdersPage() {
 
       <OrdersFilters
         activeFilters={activeFilters}
+        activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
+        setActiveOrderBy={setActiveOrderBy}
       />
 
       <Card className="w-full mx-auto rounded-lg shadow-lg border border-gray-200">

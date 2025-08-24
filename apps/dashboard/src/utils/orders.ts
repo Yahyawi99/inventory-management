@@ -5,6 +5,7 @@ import {
   StatusDisplay,
   Metrics,
   SummaryMetrics,
+  SortConfig,
 } from "@/types/orders";
 import { OrderLine } from "@database/generated/prisma";
 import {
@@ -202,7 +203,10 @@ export const exportOrdersAsJson = (
 };
 
 // generate api URL for table orders data fetching
-export const buildOrdersApiUrl = (activeFilters: ActiveFilters): string => {
+export const buildOrdersApiUrl = (
+  activeFilters: ActiveFilters,
+  activeOrderBy: SortConfig
+): string => {
   const queryParams = new URLSearchParams();
 
   if (activeFilters.status && activeFilters.status !== "All") {
@@ -224,6 +228,10 @@ export const buildOrdersApiUrl = (activeFilters: ActiveFilters): string => {
 
   if (activeFilters.orderType && activeFilters.orderType !== "All") {
     queryParams.append("orderType", activeFilters.orderType);
+  }
+
+  if (activeOrderBy) {
+    queryParams.append("orderBy", JSON.stringify(activeOrderBy));
   }
 
   const queryString = queryParams.toString();

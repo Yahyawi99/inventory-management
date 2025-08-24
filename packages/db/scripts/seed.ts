@@ -566,6 +566,10 @@ async function main() {
       (sum, line) => sum + line.quantity * line.unitPrice,
       0
     );
+    const totalItemsQuantity = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity,
+      0
+    ); // Calculate total items
 
     await prisma.order.create({
       data: {
@@ -573,6 +577,7 @@ async function main() {
         orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
+        totalItemsQuantity, // Assign the calculated total items quantity
         orderType: OrderType.SALES,
         status: faker.helpers.arrayElement([
           OrderStatus.Delivered,
@@ -618,7 +623,7 @@ async function main() {
     const randomUser = faker.helpers.arrayElement(users);
     const orderDate = faker.date.between({
       from: previousPeriod.startDate,
-      to: previousPeriod.startDate, // Should be previousPeriod.endDate for proper range
+      to: previousPeriod.endDate, // Corrected from previousPeriod.startDate
     });
     const dueDate = faker.date.future({ years: 1, refDate: orderDate });
     const orderNumber = generateUniqueOrderNumber(existingOrderNumbers); // Generate unique order number
@@ -636,6 +641,10 @@ async function main() {
       (sum, line) => sum + line.quantity * line.unitPrice,
       0
     );
+    const totalItemsQuantity = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity,
+      0
+    ); // Calculate total items
 
     await prisma.order.create({
       data: {
@@ -643,6 +652,7 @@ async function main() {
         orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
+        totalItemsQuantity, // Assign the calculated total items quantity
         orderType: OrderType.SALES,
         // Distribute statuses: some cancelled, some delivered/shipped
         status:
@@ -715,6 +725,10 @@ async function main() {
       (sum, line) => sum + line.quantity * line.unitPrice,
       0
     );
+    const totalItemsQuantity = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity,
+      0
+    ); // Calculate total items
 
     await prisma.order.create({
       data: {
@@ -722,6 +736,7 @@ async function main() {
         orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
+        totalItemsQuantity, // Assign the calculated total items quantity
         orderType: OrderType.PURCHASE,
         status:
           i < numFulfilledInCurrentPurchase
@@ -773,6 +788,10 @@ async function main() {
       (sum, line) => sum + line.quantity * line.unitPrice,
       0
     );
+    const totalItemsQuantity = orderLinesData.reduce(
+      (sum, line) => sum + line.quantity,
+      0
+    ); // Calculate total items
 
     await prisma.order.create({
       data: {
@@ -780,6 +799,7 @@ async function main() {
         orderNumber: orderNumber, // Assign the generated order number
         orderDate,
         totalAmount,
+        totalItemsQuantity, // Assign the calculated total items quantity
         orderType: OrderType.PURCHASE,
         status: faker.helpers.arrayElement([
           OrderStatus.Delivered,
