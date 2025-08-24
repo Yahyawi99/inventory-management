@@ -58,3 +58,8 @@ export interface SortConfig {
   field: string;
   direction: "desc" | "asc";
 }
+
+export interface Pagination {
+  page: number;
+  totalPages: number | null;
+}

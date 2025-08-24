@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Order, OrderStatus } from "@/types/orders";
-import { getOrderSummaryMetrics } from "@/utils/orders";
+import { SummaryMetrics } from "@/types/orders";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 interface Props {
-  orders: Order[];
+  metricsData: SummaryMetrics;
 }
 
-export default function OrdersSummaryCards({ orders }: Props) {
+export default function OrdersSummaryCards({ metricsData }: Props) {
   const {
     totalOrders,
     totalOrderItems,
@@ -19,9 +17,7 @@ export default function OrdersSummaryCards({ orders }: Props) {
     totalOrderItemsChange,
     totalCancelledOrdersChange,
     totalFulfilledOrdersChange,
-  } = useMemo(() => {
-    return getOrderSummaryMetrics(orders);
-  }, [orders]);
+  } = metricsData;
 
   const renderChangeDisplay = (change: number) => {
     const isPositive = change > 0;

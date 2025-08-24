@@ -6,6 +6,7 @@ import {
   Metrics,
   SummaryMetrics,
   SortConfig,
+  Pagination,
 } from "@/types/orders";
 import { OrderLine } from "@database/generated/prisma";
 import {
@@ -167,7 +168,10 @@ export const getOrderSummaryMetrics = (orders: Order[]): SummaryMetrics => {
 // generate a json to export
 export const exportOrdersAsJson = (
   ordersData: Order[],
-  filter: string,
+  options: {
+    filter: ActiveFilters;
+    orderBy: SortConfig;
+  },
   summaryData?: SummaryMetrics,
   filename: string = "orders_export"
 ) => {
@@ -180,11 +184,22 @@ export const exportOrdersAsJson = (
   const finalFilename = `${filename}_${timestamp}.json`;
 
   const dataToExport: {
-    orders: { filter: string; data: Order[] };
-    summary: { date: Date; data: SummaryMetrics };
+    orders: {
+      options: {
+        filter: ActiveFilters;
+        orderBy: SortConfig;
+      };
+      data: Order[];
+    };
+    summary: { date: Date; data: SummaryMetrics; description: string };
   } = {
-    summary: { date: new Date(), data: summaryData },
-    orders: { filter, data: ordersData },
+    summary: {
+      date: new Date(),
+      data: summaryData,
+      description:
+        "This summary provides a comparison of key order metrics between the current week (last 7 full days ending yesterday) and the previous 7-day period.",
+    },
+    orders: { options, data: ordersData },
   };
 
   const jsonString = JSON.stringify(dataToExport, null, 2);
@@ -205,7 +220,8 @@ export const exportOrdersAsJson = (
 // generate api URL for table orders data fetching
 export const buildOrdersApiUrl = (
   activeFilters: ActiveFilters,
-  activeOrderBy: SortConfig
+  activeOrderBy: SortConfig,
+  pagination: Pagination
 ): string => {
   const queryParams = new URLSearchParams();
 
@@ -232,6 +248,10 @@ export const buildOrdersApiUrl = (
 
   if (activeOrderBy) {
     queryParams.append("orderBy", JSON.stringify(activeOrderBy));
+  }
+
+  if (pagination) {
+    queryParams.append("page", pagination.page + "");
   }
 
   const queryString = queryParams.toString();

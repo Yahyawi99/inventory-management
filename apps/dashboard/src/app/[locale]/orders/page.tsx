@@ -1,26 +1,44 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
-import { Order, ActiveFilters, SortConfig } from "@/types/orders";
+import {
+  Order,
+  ActiveFilters,
+  SortConfig,
+  SummaryMetrics,
+  Pagination,
+} from "@/types/orders";
 import Orders from "@/shared/orders/Orders";
-import { buildOrdersApiUrl } from "@/utils/orders";
+import {
+  buildOrdersApiUrl,
+  exportOrdersAsJson,
+  getOrderSummaryMetrics,
+} from "@/utils/orders";
 import { Card, CardContent } from "@/components/ui/card";
 import OrdersHeader from "@/shared/orders/OrdersHeader";
 import OrdersSummaryCards from "@/shared/orders/OrdersCards";
 import OrdersFilters from "@/shared/orders/OrdersFilters";
+import OrdersPagination from "@/shared/orders/OrdersPagination";
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
-  const [SummaryOrders, setSummaryOrders] = useState<Order[]>([]);
+  const [summaryOrders, setSummaryOrders] = useState<Order[]>([]);
+  const [summaryMetricsData, setSummaryMetricsData] =
+    useState<SummaryMetrics>();
   const [isFetchingSummaryOrders, setIsFetchingSummaryOrders] = useState(true);
 
   const [tableOrders, setTableOrders] = useState<Order[]>([]);
   const [isFetchingTableOrders, setIsFetchingTableOrders] = useState(true);
+
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 1,
+    totalPages: null,
+  });
 
   const [error, setError] = useState<string | null>(null);
 
@@ -87,7 +105,11 @@ export default function OrdersPage() {
     setIsFetchingTableOrders(true);
     setError(null);
     try {
-      const apiUrl = buildOrdersApiUrl(activeFilters, activeOrderBy);
+      const apiUrl = buildOrdersApiUrl(
+        activeFilters,
+        activeOrderBy,
+        pagination
+      );
 
       const response = await fetch(apiUrl);
 
@@ -98,6 +120,7 @@ export default function OrdersPage() {
       }
 
       setTableOrders(response.data.orders);
+      setPagination({ ...pagination, totalPages: response.data.totalPages });
     } catch (err: any) {
       console.error("Error fetching table orders:", err);
       setError(
@@ -107,13 +130,38 @@ export default function OrdersPage() {
     } finally {
       setIsFetchingTableOrders(false);
     }
-  }, [user, isAuthenticated, activeFilters, activeOrderBy]);
+  }, [user, isAuthenticated, activeFilters, activeOrderBy, pagination.page]);
 
   useEffect(() => {
     if (isAuthenticated && !isAuthLoading) {
       fetchTableOrders();
     }
   }, [isAuthLoading, fetchTableOrders]);
+
+  // export data
+  const exportData = () => {
+    exportOrdersAsJson(
+      tableOrders,
+      {
+        filter: activeFilters,
+        orderBy: activeOrderBy,
+      },
+      summaryMetricsData
+    );
+  };
+
+  // pagination
+  const onPageChange = (page: number) => {
+    setPagination({
+      ...pagination,
+      page,
+    });
+  };
+
+  // MetricsData
+  const metricsData = useMemo(() => {
+    return getOrderSummaryMetrics(summaryOrders);
+  }, [summaryOrders]);
 
   if (error) {
     return (
@@ -125,9 +173,9 @@ export default function OrdersPage() {
 
   return (
     <section className="overflow-x-hidden">
-      <OrdersHeader />
+      <OrdersHeader exportData={exportData} />
 
-      <OrdersSummaryCards orders={SummaryOrders} />
+      <OrdersSummaryCards metricsData={metricsData} />
 
       <OrdersFilters
         activeFilters={activeFilters}
@@ -149,6 +197,12 @@ export default function OrdersPage() {
               isFetchingOrders={isFetchingTableOrders}
             />
           )}
+
+          <OrdersPagination
+            currentPage={pagination.page}
+            totalPages={pagination?.totalPages ? pagination.totalPages : 0}
+            onPageChange={onPageChange}
+          />
         </CardContent>
       </Card>
     </section>

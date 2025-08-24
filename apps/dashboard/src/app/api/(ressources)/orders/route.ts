@@ -19,6 +19,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const customerType = searchParams.get("customerType");
   const orderType = searchParams.get("orderType");
   const orderBy = JSON.parse(searchParams.get("orderBy") as string);
+  const page =
+    Number(searchParams.get("page")) <= 0
+      ? 1
+      : Number(searchParams.get("page"));
+  const pageSize = 10;
 
   const data = await auth.api.getSession({
     headers: await headers(),
@@ -51,14 +56,22 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 
   try {
-    const orders = await OrderRepository.findMany(
+    const response = await OrderRepository.findMany(
       orgId,
       userId,
       filters,
-      orderBy
+      orderBy,
+      { page, pageSize }
     );
 
-    return NextResponse.json({ message: "success", orders }, { status: 200 });
+    return NextResponse.json(
+      {
+        message: "success",
+        orders: response?.orders,
+        totalPages: response?.totalPages,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Error while fetching organization's orders ", error);
     return NextResponse.json(

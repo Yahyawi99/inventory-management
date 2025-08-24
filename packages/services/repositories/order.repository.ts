@@ -34,8 +34,9 @@ export const OrderRepository = {
     orgId: string,
     userId: string,
     filters: Filters,
-    orderBy: SortConfig = { field: "orderDate", direction: "desc" }
-  ): Promise<Order[] | null> {
+    orderBy: SortConfig = { field: "orderDate", direction: "desc" },
+    { page, pageSize }: { page: number; pageSize: number }
+  ): Promise<{ totalPages: number; orders: Order[] } | null> {
     // Where clause
     const whereClause: P.OrderWhereInput = {
       organizationId: orgId,
@@ -79,10 +80,13 @@ export const OrderRepository = {
         orderBy.direction;
     }
 
-    console.log(orderByClause);
+    console.log("================");
+    console.log(page, pageSize);
 
     try {
       const res = await Prisma.order.findMany({
+        skip: (page - 1) * pageSize,
+        take: pageSize,
         where: whereClause,
         orderBy: orderByClause,
         include: {
@@ -92,7 +96,10 @@ export const OrderRepository = {
         },
       });
 
-      return res;
+      const totalOrders = await Prisma.order.count();
+      const totalPages = Math.ceil(totalOrders / pageSize);
+
+      return { totalPages, orders: res };
     } catch (e) {
       console.log("Error while fetching orders: ", e);
       return null;
