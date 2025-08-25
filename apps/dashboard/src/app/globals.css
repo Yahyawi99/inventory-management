@@ -135,6 +135,9 @@
   body {
     @apply bg-background text-foreground;
   }
+}
 
-
+@layer utilities {
+  .bg-card { background-color: var(--color-card); }
+  .text-card-foreground { color: var(--color-card-foreground); }
 }
