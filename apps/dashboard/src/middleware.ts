@@ -10,7 +10,7 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set(
     "Permissions-Policy",
-    "camera=(), microphone=(), geolocation()"
+    "camera=(), microphone=(), geolocation=()"
   );
 
   // Content Security Policy
@@ -30,11 +30,6 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
 }
 
 export async function middleware(request: NextRequest) {
-  // Allow smoke test route without auth
-  if (new URL(request.url).pathname.startsWith("/smoke")) {
-    return addSecurityHeaders(NextResponse.next());
-  }
-
   const sessionToken =
     request.cookies.get("better-auth.session_token")?.value ||
     request.cookies.get("session_token")?.value ||
