@@ -60,6 +60,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.7
         version: 1.2.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@workspace/app-core':
+        specifier: workspace:*
+        version: link:../../packages/app-core
       better-auth:
         specifier: ^1.3.4
         version: 1.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -139,6 +142,21 @@ importers:
       typescript:
         specifier: ^5
         version: 5.8.3
+
+  packages/app-core:
+    dependencies:
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      react:
+        specifier: ^18 || ^19
+        version: 19.1.0
+      react-dom:
+        specifier: ^18 || ^19
+        version: 19.1.0(react@19.1.0)
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.3.1
 
   packages/db:
     dependencies:
