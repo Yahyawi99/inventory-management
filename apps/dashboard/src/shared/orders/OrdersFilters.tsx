@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { ActiveFilters, SortConfig, Pagination } from "@/types/orders";
 import { Button } from "app-core/src/components";
 import OrdersSearchInput from "./OrdersSearchInput";
-import OrdersFilterDrawer from "./OrdersFilterDrawer";
 import { FilterDrawer } from "app-core/src/components";
 import { FilterDrawerData } from "app-core/src/types";
 import OrdersOrderByDropdown from "./OrderByDropdown";
@@ -66,38 +65,11 @@ export default function OrdersFilters({
     orderType: "All",
   });
 
-  const [drawerFiltersData, setDrawerFiltersData] = useState({
-    status: "All",
-    customerType: "All",
-    orderType: "All",
-  });
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const onFilterChange = (newFilters: ActiveFilters) => {
-    setDrawerFilters(newFilters);
-  };
-
-  const onApplyFilters = () => {
+  useEffect(() => {
     setPagination((prev) => ({ ...prev, page: 1 }));
-    setActiveFilters({ ...activeFilters, ...drawerFilters });
-  };
-
-  const onClearFilters = () => {
-    setDrawerFilters({
-      status: "All",
-      customerType: "All",
-      orderType: "All",
-    });
-
-    setPagination((prev) => ({ ...prev, page: 1 }));
-
-    setActiveFilters({
-      ...activeFilters,
-      status: "All",
-      customerType: "All",
-      orderType: "All",
-    });
-  };
+  }, [activeFilters]);
 
   // search
   useEffect(() => {
@@ -205,9 +177,7 @@ export default function OrdersFilters({
 
         <FilterDrawer
           activeFilters={activeFilters}
-          onFilterChange={onFilterChange}
-          onApplyFilters={onApplyFilters}
-          onClearFilters={onClearFilters}
+          setActiveFilters={setActiveFilters}
           data={DrawerData}
         />
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Filter } from "lucide-react";
 import {
   Button,
@@ -23,24 +23,46 @@ import {
 import { FilterDrawerData, ActiveFilters } from "@/types/data-views";
 
 interface FilterDrawerProps {
-  activeFilters: ActiveFilters;
-  onFilterChange: React.Dispatch<React.SetStateAction<ActiveFilters>>;
-  onApplyFilters: () => void;
-  onClearFilters: () => void;
   data: FilterDrawerData;
+  activeFilters: ActiveFilters;
+  setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
 }
 
 export function FilterDrawer({
-  activeFilters,
-  onFilterChange,
-  onApplyFilters,
-  onClearFilters,
   data,
+  activeFilters,
+  setActiveFilters,
 }: FilterDrawerProps) {
+  const [drawerFilters, setDrawerFilters] =
+    useState<ActiveFilters>(activeFilters);
+
   const handleSelectChange = (key: keyof ActiveFilters, value: string) => {
-    onFilterChange({
-      ...activeFilters,
+    setDrawerFilters({
+      ...drawerFilters,
       [key]: value,
+    });
+  };
+
+  const onApplyFilters = () => {
+    setActiveFilters({ ...activeFilters, ...drawerFilters });
+  };
+
+  const onClearFilters = () => {
+    const clearedFilters = Object.entries(data.filterOptions).reduce(
+      (acc, [key, value]) => {
+        acc[key] = value.options[0].value;
+        return acc;
+      },
+      {} as ActiveFilters
+    );
+
+    setDrawerFilters({
+      ...clearedFilters,
+    });
+
+    setActiveFilters({
+      ...activeFilters,
+      ...clearedFilters,
     });
   };
 
@@ -80,7 +102,7 @@ export function FilterDrawer({
                         {filterConfig.name}
                       </Label>
                       <Select
-                        value={activeFilters[filterKey]}
+                        value={drawerFilters[filterKey]}
                         onValueChange={(selectedValue) => {
                           handleSelectChange(filterKey, selectedValue);
                         }}
