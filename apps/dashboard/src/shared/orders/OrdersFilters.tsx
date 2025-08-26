@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { ActiveFilters, SortConfig, Pagination } from "@/types/orders";
-import { Button } from "@/components/ui/button";
+import { Button } from "app-core/src/components";
 import OrdersSearchInput from "./OrdersSearchInput";
 import OrdersFilterDrawer from "./OrdersFilterDrawer";
+import { FilterDrawer } from "app-core/src/components";
+import { FilterDrawerData } from "app-core/src/types";
 import OrdersOrderByDropdown from "./OrderByDropdown";
 
 interface Props {
@@ -15,6 +17,42 @@ interface Props {
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
 }
 
+const DrawerData: FilterDrawerData = {
+  header: {
+    title: "Filter Orders",
+    desc: "Refine your Order list",
+  },
+  filterOptions: {
+    status: {
+      name: "Order Status",
+      options: [
+        { label: "All Status", value: "All" },
+        { label: "Pending", value: "Pending" },
+        { label: "Processing", value: "Processing" },
+        { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
+        { label: "Cancelled", value: "Cancelled" },
+      ],
+    },
+
+    customerType: {
+      name: "Customer Type",
+      options: [
+        { label: "All Customers", value: "All" },
+        { label: "B2B", value: "B2B" },
+        { label: "B2c", value: "B2C" },
+      ],
+    },
+    orderType: {
+      name: "Order Type",
+      options: [
+        { label: "All Types", value: "All" },
+        { label: "Sales", value: "Sales" },
+        { label: "Purchase", value: "Purchase" },
+      ],
+    },
+  },
+};
+
 export default function OrdersFilters({
   activeFilters,
   setActiveFilters,
@@ -23,6 +61,12 @@ export default function OrdersFilters({
   setPagination,
 }: Props) {
   const [drawerFilters, setDrawerFilters] = useState<ActiveFilters>({
+    status: "All",
+    customerType: "All",
+    orderType: "All",
+  });
+
+  const [drawerFiltersData, setDrawerFiltersData] = useState({
     status: "All",
     customerType: "All",
     orderType: "All",
@@ -159,11 +203,12 @@ export default function OrdersFilters({
           onSearchChange={onSearchChange}
         />
 
-        <OrdersFilterDrawer
+        <FilterDrawer
           activeFilters={activeFilters}
           onFilterChange={onFilterChange}
           onApplyFilters={onApplyFilters}
           onClearFilters={onClearFilters}
+          data={DrawerData}
         />
 
         <OrdersOrderByDropdown

@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "app-core/src/components";
+import { Button } from "app-core/src/components";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "app-core/src/components";
 import { Order } from "@/types/orders";
 import {
   getOrderStatusDisplay,

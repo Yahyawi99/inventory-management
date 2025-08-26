@@ -6,8 +6,8 @@ import {
   PaginationNext,
   PaginationPrevious,
   PaginationEllipsis,
-} from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
+} from "app-core/src/components";
+import { Button } from "app-core/src/components";
 
 interface Props {
   currentPage: number;

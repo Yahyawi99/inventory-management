@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "app-core/src/components";
 import { AuthOptionProps } from "@/types/auth";
 
 export default function AuthOption({

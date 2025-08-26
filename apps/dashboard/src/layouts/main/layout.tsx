@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "app-core/src/components";
 import Header from "@/layouts/main/header";
 import Sidebar from "./sidebar";
 

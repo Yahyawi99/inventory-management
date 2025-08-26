@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
+import { Button } from "app-core/src/components";
 import {
   Card,
   CardContent,
@@ -11,10 +11,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from "app-core/src/components";
+import { Input } from "app-core/src/components";
+import { Label } from "app-core/src/components";
+import { Textarea } from "app-core/src/components";
 import AuthOptionsSelector from "./AuthOptionsSelector";
 
 // This component is the comprehensive signup form for creating a company and admin user.

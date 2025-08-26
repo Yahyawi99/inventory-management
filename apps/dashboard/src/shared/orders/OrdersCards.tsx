@@ -1,7 +1,7 @@
 "use client";
 
 import { SummaryMetrics } from "@/types/orders";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "app-core/src/components";
 
 interface Props {
   metricsData: SummaryMetrics;

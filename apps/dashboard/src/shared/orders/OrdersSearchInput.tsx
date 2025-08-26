@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "app-core/src/components";
 import { Search } from "lucide-react";
 
 interface Props {

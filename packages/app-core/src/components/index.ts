@@ -15,3 +15,5 @@ export * from "./ui/skeleton";
 export * from "./ui/table";
 export * from "./ui/textarea";
 export * from "./ui/tooltip";
+
+export * from "./data-views/FilterDrawer";

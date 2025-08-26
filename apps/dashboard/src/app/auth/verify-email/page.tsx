@@ -9,10 +9,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "app-core/src/components";
+import { Label } from "app-core/src/components";
+import { Input } from "app-core/src/components";
+import { Button } from "app-core/src/components";
 import { authClient } from "@/lib/auth-client";
 
 export default function VerifyEmailOTPPage() {

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "app-core/src/components";
 import {
   Card,
   CardContent,
@@ -12,9 +12,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "app-core/src/components";
+import { Input } from "app-core/src/components";
+import { Label } from "app-core/src/components";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");

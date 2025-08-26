@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "app-core/src/components";
 import {
   Drawer,
   DrawerClose,
@@ -11,17 +11,17 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from "app-core/src/components";
 import { Filter } from "lucide-react";
-import { Label } from "@/components/ui/label";
+import { Label } from "app-core/src/components";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from "app-core/src/components";
+import { Separator } from "app-core/src/components";
 import {
   OrderStatus,
   CustomerType,
@@ -73,7 +73,6 @@ export default function OrdersFilterDrawer({
           </DrawerHeader>
 
           <div className="p-4 pb-0 space-y-6">
-            {/* Status Filter */}
             <div>
               <Label
                 htmlFor="status-filter"
@@ -81,6 +80,7 @@ export default function OrdersFilterDrawer({
               >
                 Order Status
               </Label>
+
               <Select
                 value={activeFilters?.status || "All"}
                 onValueChange={(value) => handleSelectChange("status", value)}
@@ -88,6 +88,7 @@ export default function OrdersFilterDrawer({
                 <SelectTrigger id="status-filter" className="w-full">
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="All">All Statuses</SelectItem>
                   <SelectItem value={OrderStatus.Pending}>Pending</SelectItem>
@@ -157,21 +158,6 @@ export default function OrdersFilterDrawer({
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Date Range Filter - Placeholder for now */}
-            {/* You would integrate a date picker component here, e.g., using shadcn/ui's DatePicker */}
-            {/* <div>
-              <Label htmlFor="date-range-filter" className="text-base font-semibold text-gray-700 mb-2 block">
-                Date Range
-              </Label>
-              <Button variant="outline" className="w-full justify-start text-left font-normal">
-                 <CalendarIcon className="mr-2 h-4 w-4" />
-                 {activeFilters.startDate && activeFilters.endDate ?
-                   `${format(activeFilters.startDate, "PPP")} - ${format(activeFilters.endDate, "PPP")}`
-                   : <span>Select a date range</span>
-                 }
-              </Button>
-            </div> */}
           </div>
 
           <DrawerFooter className="flex-row justify-between pt-6">

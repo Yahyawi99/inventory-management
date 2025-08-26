@@ -1,23 +1,18 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { faker } from "@faker-js/faker/locale/af_ZA";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "app-core/src/components";
 
 export const description = "A bar chart";
 

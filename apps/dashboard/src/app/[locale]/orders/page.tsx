@@ -17,7 +17,7 @@ import {
   exportOrdersAsJson,
   getOrderSummaryMetrics,
 } from "@/utils/orders";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "app-core/src/components";
 import OrdersHeader from "@/shared/orders/OrdersHeader";
 import OrdersSummaryCards from "@/shared/orders/OrdersCards";
 import OrdersFilters from "@/shared/orders/OrdersFilters";

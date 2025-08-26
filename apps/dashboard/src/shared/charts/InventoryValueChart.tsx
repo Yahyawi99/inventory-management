@@ -7,13 +7,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
-} from "@/components/ui/chart";
+} from "app-core/src/components";
 
 export const description = "A pie chart with a legend";
 

@@ -7,7 +7,7 @@ import {
   faHandPeace,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSidebar } from "@/components/ui/sidebar";
+import { useSidebar } from "app-core/src/components";
 
 const BebasNeue = Bebas_Neue({
   subsets: ["latin"],

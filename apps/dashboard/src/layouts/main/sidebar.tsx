@@ -11,7 +11,7 @@ import {
   SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
-} from "@/components/ui/sidebar";
+} from "app-core/src/components";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +19,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "app-core/src/components";
 import { faClose, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";

@@ -8,14 +8,12 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "app-core/src/components";
 
 const START_DATE = new Date("2025-06-25T00:00:00.000Z");
 const MONTHS_AGO_DATE = new Date("2024-07-24T00:00:00.000Z");
