@@ -6,7 +6,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -140,7 +139,7 @@
   }
 }
 
-@layer utilities {
+/* @layer utilities {
   .bg-card { background-color: var(--color-card); }
   .text-card-foreground { color: var(--color-card-foreground); }
-}
+} */
