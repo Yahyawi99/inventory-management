@@ -21,6 +21,7 @@ export * from "./data-views/Header";
 export * from "./data-views/Pagination";
 export * from "./data-views/SummaryCards";
 export * from "./data-views/SearchInput";
+export * from "./data-views/OrderBy";
 
 export * from "./skeletons/Cards";
 export * from "./skeletons/Table";

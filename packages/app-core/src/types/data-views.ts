@@ -22,3 +22,14 @@ export interface MetricsData {
   value: number;
   change: number;
 }
+
+export interface SortConfig {
+  field: string;
+  direction: "desc" | "asc";
+}
+
+export interface SortableField {
+  title: string;
+  field: string;
+  direction: "desc" | "asc";
+}

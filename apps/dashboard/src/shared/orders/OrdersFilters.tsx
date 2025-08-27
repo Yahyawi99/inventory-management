@@ -2,8 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { ActiveFilters, SortConfig, Pagination } from "@/types/orders";
-import { Button, FilterDrawer, SearchInput } from "app-core/src/components";
-import { FilterDrawerData } from "app-core/src/types";
+import {
+  Button,
+  FilterDrawer,
+  SearchInput,
+  OrderByDropdown,
+} from "app-core/src/components";
+import { FilterDrawerData, SortableField } from "app-core/src/types";
 import OrdersOrderByDropdown from "./OrderByDropdown";
 
 interface Props {
@@ -50,6 +55,13 @@ const DrawerData: FilterDrawerData = {
   },
 };
 
+const sortableFields: SortableField[] = [
+  { title: "Order Number", field: "orderNumber", direction: "desc" },
+  { title: "Order Date", field: "orderDate", direction: "desc" },
+  { title: "Total Amount", field: "totalAmount", direction: "desc" },
+  { title: "Items Quantity", field: "totalItemsQuantity", direction: "desc" },
+];
+
 export default function OrdersFilters({
   activeFilters,
   setActiveFilters,
@@ -88,73 +100,28 @@ export default function OrdersFilters({
   return (
     <div className="flex items-center justify-between my-4">
       <div className="flex space-x-2 bg-white p-1 rounded-full">
-        <Button
-          variant={activeFilters.status === "All" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilters.status === "All"
-              ? "bg-sidebar text-white hover:bg-sidebar"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-          onClick={() => setActiveFilters({ ...activeFilters, status: "All" })}
-        >
-          All
-        </Button>
-
-        <Button
-          variant={activeFilters.status === "Pending" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilters.status === "Pending"
-              ? "bg-sidebar text-white hover:bg-sidebar"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-          onClick={() =>
-            setActiveFilters({ ...activeFilters, status: "Pending" })
+        {["All", "Pending", "Processing", "Fulfilled", "Cancelled"].map(
+          (value) => {
+            return (
+              <Button
+                variant={activeFilters.status === value ? "default" : "ghost"}
+                className={`text-sm rounded-full px-4 cursor-pointer ${
+                  activeFilters.status === value
+                    ? "bg-sidebar text-white hover:bg-sidebar"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+                onClick={() =>
+                  setActiveFilters({
+                    ...activeFilters,
+                    status: value as typeof activeFilters.status,
+                  })
+                }
+              >
+                {value}
+              </Button>
+            );
           }
-        >
-          Pending
-        </Button>
-
-        <Button
-          variant={activeFilters.status === "Processing" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilters.status === "Processing"
-              ? "bg-sidebar text-white hover:bg-sidebar"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-          onClick={() =>
-            setActiveFilters({ ...activeFilters, status: "Processing" })
-          }
-        >
-          Processing
-        </Button>
-
-        <Button
-          variant={activeFilters.status === "Fulfilled" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilters.status === "Fulfilled"
-              ? "bg-sidebar text-white hover:bg-sidebar"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-          onClick={() =>
-            setActiveFilters({ ...activeFilters, status: "Fulfilled" })
-          }
-        >
-          Fulfilled
-        </Button>
-
-        <Button
-          variant={activeFilters.status === "Cancelled" ? "default" : "ghost"}
-          className={`text-sm rounded-full px-4 cursor-pointer ${
-            activeFilters.status === "Cancelled"
-              ? "bg-sidebar text-white hover:bg-sidebar"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-          onClick={() =>
-            setActiveFilters({ ...activeFilters, status: "Cancelled" })
-          }
-        >
-          Canceled
-        </Button>
+        )}
       </div>
 
       <div className="flex items-center space-x-2">
@@ -169,9 +136,10 @@ export default function OrdersFilters({
           data={DrawerData}
         />
 
-        <OrdersOrderByDropdown
+        <OrderByDropdown
           currentSort={activeOrderBy}
           onSortChange={onSortChange}
+          sortableFields={sortableFields}
         />
       </div>
     </div>
