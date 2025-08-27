@@ -18,3 +18,4 @@ export * from "./ui/tooltip";
 
 export * from "./data-views/FilterDrawer";
 export * from "./data-views/Header";
+export * from "./data-views/Pagination";

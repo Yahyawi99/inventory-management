@@ -1,4 +1,5 @@
 import {
+  Button,
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -6,21 +7,20 @@ import {
   PaginationNext,
   PaginationPrevious,
   PaginationEllipsis,
-} from "app-core/src/components";
-import { Button } from "app-core/src/components";
+} from "..";
+import { Pagination as TPagination } from "../../types";
 
-interface Props {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  setPagination: React.Dispatch<React.SetStateAction<TPagination>>;
 }
 
-export default function OrdersPagination({
+export function PagePagination({
   currentPage,
   totalPages,
-  onPageChange,
-}: Props) {
-  // make sure the current page is greater than 1 and less than totalpages
+  setPagination,
+}: PaginationProps) {
   const safeCurrentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
 
   const getPageNumbers = () => {
@@ -47,6 +47,13 @@ export default function OrdersPagination({
   };
 
   const pageNumbers = getPageNumbers();
+
+  const onPageChange = (page: number) => {
+    setPagination((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
 
   return (
     <Pagination className="mx-0 justify-end mt-2">

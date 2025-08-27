@@ -15,7 +15,7 @@ import { Card, CardContent } from "app-core/src/components";
 import { Header } from "app-core/src/components";
 import OrdersSummaryCards from "@/shared/orders/OrdersCards";
 import OrdersFilters from "@/shared/orders/OrdersFilters";
-import OrdersPagination from "@/shared/orders/OrdersPagination";
+import { PagePagination } from "app-core/src/components";
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -130,14 +130,6 @@ export default function OrdersPage() {
     }
   }, [isAuthLoading, fetchTableOrders]);
 
-  // pagination
-  const onPageChange = (page: number) => {
-    setPagination({
-      ...pagination,
-      page,
-    });
-  };
-
   // MetricsData
   const metricsData = useMemo(() => {
     return getOrderSummaryMetrics(summaryOrders);
@@ -192,10 +184,10 @@ export default function OrdersPage() {
           )}
 
           {!isAuthLoading && !isFetchingTableOrders && (
-            <OrdersPagination
+            <PagePagination
               currentPage={pagination.page}
               totalPages={pagination?.totalPages ? pagination.totalPages : 0}
-              onPageChange={onPageChange}
+              setPagination={setPagination}
             />
           )}
         </CardContent>

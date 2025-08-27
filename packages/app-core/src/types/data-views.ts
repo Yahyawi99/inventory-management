@@ -11,3 +11,8 @@ export interface FilterDrawerData {
   header: { title: string; desc: string };
   filterOptions: { [key: string]: FilterOption };
 }
+
+export interface Pagination {
+  page: number;
+  totalPages: number | null;
+}
