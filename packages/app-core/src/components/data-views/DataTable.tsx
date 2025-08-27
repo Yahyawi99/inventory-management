@@ -1,46 +1,52 @@
-import { Card, CardContent, PagePagination, TableSkeleton } from "..";
-import { Data, Pagination } from "../../types";
+import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "..";
+import { Data, Column } from "../../types";
 
-interface DataTableProps {
-  data: Data[];
-  isFetchingData: boolean;
-  currentPage: number;
-  totalPages: number;
-  setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
-  children: React.ReactNode;
+interface ordersProps<T extends Data> {
+  data: T[];
+  columns: Column<T>[];
 }
 
-export function DataTable({
-  data,
-  isFetchingData,
-  currentPage,
-  totalPages,
-  setPagination,
-  children,
-}: DataTableProps) {
+export function DataTable<T extends Data>({ data, columns }: ordersProps<T>) {
   return (
-    <Card className="w-full mx-auto rounded-lg shadow-lg border border-gray-200">
-      <CardContent className="p-0">
-        {!isFetchingData ? (
-          data.length === 0 ? (
-            <div className="text-center text-gray-500 py-10">
-              <p>No records found for this organization.</p>
-            </div>
-          ) : (
-            <>
-              {children}
+    <Table>
+      <TableHeader className="bg-gray-100">
+        <TableRow className="border-b border-gray-200">
+          {columns.map((column) => {
+            return (
+              <TableHead key={column.key} className={column.headClass}>
+                {column.header}
+              </TableHead>
+            );
+          })}
+        </TableRow>
+      </TableHeader>
 
-              <PagePagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                setPagination={setPagination}
-              />
-            </>
-          )
-        ) : (
-          <TableSkeleton />
-        )}
-      </CardContent>
-    </Card>
+      <TableBody className="w-full">
+        {data.map((row) => {
+          return (
+            <TableRow
+              key={row.id}
+              className="border-b border-gray-100 hover:bg-gray-50"
+            >
+              {columns.map((column) => {
+                return (
+                  <TableCell key={column.key} className={column.cellClass}>
+                    {column.render(row)}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

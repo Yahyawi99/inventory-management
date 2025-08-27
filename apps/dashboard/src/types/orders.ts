@@ -4,6 +4,7 @@ import {
   OrderLine,
   CustomerType,
 } from "@database/generated/prisma/client";
+import { Data } from "app-core/src/types";
 
 export { OrderStatus, OrderType, CustomerType };
 

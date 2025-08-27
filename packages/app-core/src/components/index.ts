@@ -23,6 +23,7 @@ export * from "./data-views/SummaryCards";
 export * from "./data-views/SearchInput";
 export * from "./data-views/OrderBy";
 export * from "./data-views/DataControls";
+export * from "./data-views/TableView";
 export * from "./data-views/DataTable";
 
 export * from "./skeletons/Cards";
