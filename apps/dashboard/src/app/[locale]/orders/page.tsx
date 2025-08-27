@@ -15,8 +15,9 @@ import {
 import { Card, CardContent } from "app-core/src/components";
 import { Header } from "app-core/src/components";
 import { SummaryCards, TableSkeleton } from "app-core/src/components";
-import OrdersFilters from "@/shared/orders/OrdersFilters";
 import { PagePagination } from "app-core/src/components";
+import OrdersFilters from "@/shared/orders/OrdersFilters";
+import OrdersTable from "@/shared/orders/OrdersTable";
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -196,35 +197,13 @@ export default function OrdersPage() {
         setPagination={setPagination}
       />
 
-      <Card className="w-full mx-auto rounded-lg shadow-lg border border-gray-200">
-        <CardContent className="p-0">
-          {!isFetchingTableOrders ? (
-            tableOrders.length === 0 ? (
-              <div className="text-center text-gray-500 py-10">
-                <p>No orders found for this organization.</p>
-              </div>
-            ) : (
-              <>
-                <Orders
-                  orders={tableOrders}
-                  isAuthLoading={isAuthLoading}
-                  isFetchingOrders={isFetchingTableOrders}
-                />
-
-                <PagePagination
-                  currentPage={pagination.page}
-                  totalPages={
-                    pagination?.totalPages ? pagination.totalPages : 0
-                  }
-                  setPagination={setPagination}
-                />
-              </>
-            )
-          ) : (
-            <TableSkeleton />
-          )}
-        </CardContent>
-      </Card>
+      <OrdersTable
+        orders={tableOrders}
+        isFetchingOrders={isFetchingTableOrders}
+        currentPage={pagination.page}
+        totalPages={pagination?.totalPages ? pagination.totalPages : 0}
+        setPagination={setPagination}
+      />
     </section>
   );
 }

@@ -9,7 +9,6 @@ import {
   OrderByDropdown,
 } from "app-core/src/components";
 import { FilterDrawerData, SortableField } from "app-core/src/types";
-import OrdersOrderByDropdown from "./OrderByDropdown";
 
 interface Props {
   activeFilters: ActiveFilters;
@@ -104,6 +103,7 @@ export default function OrdersFilters({
           (value) => {
             return (
               <Button
+                key={value}
                 variant={activeFilters.status === value ? "default" : "ghost"}
                 className={`text-sm rounded-full px-4 cursor-pointer ${
                   activeFilters.status === value

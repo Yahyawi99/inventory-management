@@ -89,7 +89,10 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
         data.map((metric) => {
           const { title, value, change } = metric;
           return (
-            <Card className="p-4 flex flex-col justify-between border-gray-200">
+            <Card
+              key={title}
+              className="p-4 flex flex-col justify-between border-gray-200"
+            >
               <CardTitle className="text-sm font-medium text-gray-600">
                 {title}
               </CardTitle>
