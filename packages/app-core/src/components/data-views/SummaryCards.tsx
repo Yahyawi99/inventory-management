@@ -2,6 +2,7 @@
 
 import { MetricsData } from "@/types";
 import { Card, CardContent, CardTitle } from "..";
+import { CardsSkeleton } from "..";
 
 interface SummaryCardsProps {
   data: MetricsData[];
@@ -82,46 +83,28 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
     );
   };
 
-  const renderSkeletonLoader = () => {
-    return (
-      // An array to map over and create four placeholder cards
-      [...Array(4)].map((_, index) => (
-        <Card
-          key={index}
-          className="p-4 flex flex-col justify-between border-gray-200 animate-pulse"
-        >
-          <CardTitle className="bg-gray-200 h-4 w-3/4 rounded-md"></CardTitle>
-          <CardContent className="p-0 flex items-end justify-between mt-2">
-            <div>
-              <div className="bg-gray-300 h-8 w-24 rounded-md"></div>
-              <div className="bg-gray-200 h-4 w-1/2 rounded-md mt-1"></div>
-            </div>
-          </CardContent>
-        </Card>
-      ))
-    );
-  };
-
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
-      {!isLoading
-        ? data.map((metric) => {
-            const { title, value, change } = metric;
-            return (
-              <Card className="p-4 flex flex-col justify-between border-gray-200">
-                <CardTitle className="text-sm font-medium text-gray-600">
-                  {title}
-                </CardTitle>
-                <CardContent className="p-0 flex items-end justify-between mt-2">
-                  <div>
-                    <p className="text-3xl font-bold text-gray-900">{value}</p>
-                    {renderChangeDisplay(change)}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })
-        : renderSkeletonLoader()}
+      {!isLoading ? (
+        data.map((metric) => {
+          const { title, value, change } = metric;
+          return (
+            <Card className="p-4 flex flex-col justify-between border-gray-200">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                {title}
+              </CardTitle>
+              <CardContent className="p-0 flex items-end justify-between mt-2">
+                <div>
+                  <p className="text-3xl font-bold text-gray-900">{value}</p>
+                  {renderChangeDisplay(change)}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })
+      ) : (
+        <CardsSkeleton />
+      )}
     </div>
   );
 }

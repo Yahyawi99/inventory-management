@@ -2,9 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { ActiveFilters, SortConfig, Pagination } from "@/types/orders";
-import { Button } from "app-core/src/components";
-import OrdersSearchInput from "./OrdersSearchInput";
-import { FilterDrawer } from "app-core/src/components";
+import { Button, FilterDrawer, SearchInput } from "app-core/src/components";
 import { FilterDrawerData } from "app-core/src/types";
 import OrdersOrderByDropdown from "./OrderByDropdown";
 
@@ -80,10 +78,6 @@ export default function OrdersFilters({
       clearTimeout(handler);
     };
   }, [searchQuery]);
-
-  const onSearchChange = (input: string) => {
-    setSearchQuery(input);
-  };
 
   // Order by
   const onSortChange = (field: string, direction: "desc" | "asc") => {
@@ -164,9 +158,9 @@ export default function OrdersFilters({
       </div>
 
       <div className="flex items-center space-x-2">
-        <OrdersSearchInput
+        <SearchInput
           searchQuery={searchQuery}
-          onSearchChange={onSearchChange}
+          onSearchChange={setSearchQuery}
         />
 
         <FilterDrawer
