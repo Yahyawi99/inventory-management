@@ -1,3 +1,10 @@
+export type Data<T = Record<string, any>> = T & {
+  id: string;
+  organizationId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type ActiveFilters<T = Record<string, any>> = T & {
   search?: string;
 };

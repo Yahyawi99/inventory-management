@@ -22,6 +22,8 @@ export * from "./data-views/Pagination";
 export * from "./data-views/SummaryCards";
 export * from "./data-views/SearchInput";
 export * from "./data-views/OrderBy";
+export * from "./data-views/DataControls";
+export * from "./data-views/DataTable";
 
 export * from "./skeletons/Cards";
 export * from "./skeletons/Table";

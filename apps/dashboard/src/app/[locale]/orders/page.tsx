@@ -5,19 +5,74 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
 import { Order, ActiveFilters, SortConfig, Pagination } from "@/types/orders";
-import { MetricsData } from "app-core/src/types";
-import Orders from "@/shared/orders/Orders";
 import {
   buildOrdersApiUrl,
   exportOrdersAsJson,
   getOrderSummaryMetrics,
 } from "@/utils/orders";
-import { Card, CardContent } from "app-core/src/components";
-import { Header } from "app-core/src/components";
-import { SummaryCards, TableSkeleton } from "app-core/src/components";
-import { PagePagination } from "app-core/src/components";
-import OrdersFilters from "@/shared/orders/OrdersFilters";
-import OrdersTable from "@/shared/orders/OrdersTable";
+import {
+  Header,
+  SummaryCards,
+  DataControls,
+  DataTable,
+} from "app-core/src/components";
+import {
+  FilterDrawerData,
+  SortableField,
+  MetricsData,
+} from "app-core/src/types";
+import Orders from "@/shared/orders/Orders";
+
+const OrderFilterDrawerData: FilterDrawerData = {
+  header: {
+    title: "Filter Orders",
+    desc: "Refine your Order list",
+  },
+  filterOptions: {
+    status: {
+      name: "Order Status",
+      options: [
+        { label: "All Status", value: "All" },
+        { label: "Pending", value: "Pending" },
+        { label: "Processing", value: "Processing" },
+        { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
+        { label: "Cancelled", value: "Cancelled" },
+      ],
+    },
+
+    customerType: {
+      name: "Customer Type",
+      options: [
+        { label: "All Customers", value: "All" },
+        { label: "B2B", value: "B2B" },
+        { label: "B2c", value: "B2C" },
+      ],
+    },
+    orderType: {
+      name: "Order Type",
+      options: [
+        { label: "All Types", value: "All" },
+        { label: "Sales", value: "Sales" },
+        { label: "Purchase", value: "Purchase" },
+      ],
+    },
+  },
+};
+
+const OrderSortableFields: SortableField[] = [
+  { title: "Order Number", field: "orderNumber", direction: "desc" },
+  { title: "Order Date", field: "orderDate", direction: "desc" },
+  { title: "Total Amount", field: "totalAmount", direction: "desc" },
+  { title: "Items Quantity", field: "totalItemsQuantity", direction: "desc" },
+];
+
+const orderStatusFilters = [
+  "All",
+  "Pending",
+  "Processing",
+  "Fulfilled",
+  "Cancelled",
+];
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -189,21 +244,26 @@ export default function OrdersPage() {
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />
 
-      <OrdersFilters
+      <DataControls
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
+        DrawerData={OrderFilterDrawerData}
+        sortableFields={OrderSortableFields}
+        filterOptions={orderStatusFilters}
       />
 
-      <OrdersTable
-        orders={tableOrders}
-        isFetchingOrders={isFetchingTableOrders}
+      <DataTable
+        data={tableOrders}
+        isFetchingData={isFetchingTableOrders}
         currentPage={pagination.page}
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
-      />
+      >
+        <Orders orders={tableOrders} />
+      </DataTable>
     </section>
   );
 }

@@ -1,38 +1,34 @@
-import {
-  Card,
-  CardContent,
-  PagePagination,
-  TableSkeleton,
-} from "app-core/src/components";
-import Orders from "./Orders";
-import { Order, Pagination } from "@/types/orders";
+import { Card, CardContent, PagePagination, TableSkeleton } from "..";
+import { Data, Pagination } from "../../types";
 
-interface OrdersTableProps {
-  orders: Order[];
-  isFetchingOrders: boolean;
+interface DataTableProps {
+  data: Data[];
+  isFetchingData: boolean;
   currentPage: number;
   totalPages: number;
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
+  children: React.ReactNode;
 }
 
-export default function OrdersTable({
-  orders,
-  isFetchingOrders,
+export function DataTable({
+  data,
+  isFetchingData,
   currentPage,
   totalPages,
   setPagination,
-}: OrdersTableProps) {
+  children,
+}: DataTableProps) {
   return (
     <Card className="w-full mx-auto rounded-lg shadow-lg border border-gray-200">
       <CardContent className="p-0">
-        {!isFetchingOrders ? (
-          orders.length === 0 ? (
+        {!isFetchingData ? (
+          data.length === 0 ? (
             <div className="text-center text-gray-500 py-10">
-              <p>No orders found for this organization.</p>
+              <p>No records found for this organization.</p>
             </div>
           ) : (
             <>
-              <Orders orders={orders} />
+              {children}
 
               <PagePagination
                 currentPage={currentPage}
