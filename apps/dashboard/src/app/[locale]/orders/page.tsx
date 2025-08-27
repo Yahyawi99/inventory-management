@@ -4,13 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
-import {
-  Order,
-  ActiveFilters,
-  SortConfig,
-  SummaryMetrics,
-  Pagination,
-} from "@/types/orders";
+import { Order, ActiveFilters, SortConfig, Pagination } from "@/types/orders";
 import Orders from "@/shared/orders/Orders";
 import {
   buildOrdersApiUrl,
@@ -18,7 +12,7 @@ import {
   getOrderSummaryMetrics,
 } from "@/utils/orders";
 import { Card, CardContent } from "app-core/src/components";
-import OrdersHeader from "@/shared/orders/OrdersHeader";
+import { Header } from "app-core/src/components";
 import OrdersSummaryCards from "@/shared/orders/OrdersCards";
 import OrdersFilters from "@/shared/orders/OrdersFilters";
 import OrdersPagination from "@/shared/orders/OrdersPagination";
@@ -171,7 +165,7 @@ export default function OrdersPage() {
 
   return (
     <section className="overflow-x-hidden">
-      <OrdersHeader exportData={exportData} />
+      <Header exportData={exportData} />
 
       <OrdersSummaryCards metricsData={metricsData} />
 

@@ -17,3 +17,4 @@ export * from "./ui/textarea";
 export * from "./ui/tooltip";
 
 export * from "./data-views/FilterDrawer";
+export * from "./data-views/Header";

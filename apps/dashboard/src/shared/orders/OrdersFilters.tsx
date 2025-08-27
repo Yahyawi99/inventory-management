@@ -59,12 +59,6 @@ export default function OrdersFilters({
   setActiveOrderBy,
   setPagination,
 }: Props) {
-  const [drawerFilters, setDrawerFilters] = useState<ActiveFilters>({
-    status: "All",
-    customerType: "All",
-    orderType: "All",
-  });
-
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
