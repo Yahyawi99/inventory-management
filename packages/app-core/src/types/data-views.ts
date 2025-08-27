@@ -16,3 +16,9 @@ export interface Pagination {
   page: number;
   totalPages: number | null;
 }
+
+export interface MetricsData {
+  title: string;
+  value: number;
+  change: number;
+}

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
 import { Order, ActiveFilters, SortConfig, Pagination } from "@/types/orders";
+import { MetricsData } from "app-core/src/types";
 import Orders from "@/shared/orders/Orders";
 import {
   buildOrdersApiUrl,
@@ -13,7 +14,7 @@ import {
 } from "@/utils/orders";
 import { Card, CardContent } from "app-core/src/components";
 import { Header } from "app-core/src/components";
-import OrdersSummaryCards from "@/shared/orders/OrdersCards";
+import { SummaryCards } from "app-core/src/components";
 import OrdersFilters from "@/shared/orders/OrdersFilters";
 import { PagePagination } from "app-core/src/components";
 
@@ -23,6 +24,7 @@ export default function OrdersPage() {
 
   const [summaryOrders, setSummaryOrders] = useState<Order[]>([]);
   const [isFetchingSummaryOrders, setIsFetchingSummaryOrders] = useState(true);
+  const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
 
   const [tableOrders, setTableOrders] = useState<Order[]>([]);
   const [isFetchingTableOrders, setIsFetchingTableOrders] = useState(true);
@@ -135,6 +137,31 @@ export default function OrdersPage() {
     return getOrderSummaryMetrics(summaryOrders);
   }, [summaryOrders]);
 
+  useEffect(() => {
+    setCardMetrics([
+      {
+        title: "Total Orders",
+        value: metricsData.totalOrders,
+        change: metricsData.totalOrdersChange,
+      },
+      {
+        title: "Order items over time",
+        value: metricsData.totalOrderItems,
+        change: metricsData.totalOrderItemsChange,
+      },
+      {
+        title: "Cancelled Orders",
+        value: metricsData.totalCancelledOrders,
+        change: metricsData.totalCancelledOrdersChange,
+      },
+      {
+        title: "Fulfilled Orders",
+        value: metricsData.totalFulfilledOrders,
+        change: metricsData.totalFulfilledOrdersChange,
+      },
+    ]);
+  }, [summaryOrders]);
+
   // export data
   const exportData = () => {
     exportOrdersAsJson(
@@ -159,7 +186,7 @@ export default function OrdersPage() {
     <section className="overflow-x-hidden">
       <Header exportData={exportData} />
 
-      <OrdersSummaryCards metricsData={metricsData} />
+      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />
 
       <OrdersFilters
         activeFilters={activeFilters}
