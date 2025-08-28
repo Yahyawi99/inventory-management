@@ -5,14 +5,13 @@ import {
   StatusDisplay,
   Metrics,
   SummaryMetrics,
-  SortConfig,
-  Pagination,
 } from "@/types/orders";
 import { OrderLine } from "@database/generated/prisma";
 import {
   getDateRangesForComparison,
   isDateWithinRange,
 } from "@/utils/dateHelpers";
+import { SortConfig, Pagination } from "app-core/src/types";
 
 // status styles for the orders table
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {

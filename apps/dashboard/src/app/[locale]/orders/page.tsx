@@ -4,12 +4,18 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
-import { Order, ActiveFilters, SortConfig, Pagination } from "@/types/orders";
+import { Order, ActiveFilters } from "@/types/orders";
 import {
   buildOrdersApiUrl,
   exportOrdersAsJson,
   getOrderSummaryMetrics,
 } from "@/utils/orders";
+import {
+  OrderFilterDrawerData,
+  OrderSortableFields,
+  orderStatusFilters,
+  tableColumns,
+} from "@/constants/orders";
 import {
   Header,
   SummaryCards,
@@ -17,13 +23,7 @@ import {
   TableView,
   DataTable,
 } from "app-core/src/components";
-import { MetricsData } from "app-core/src/types";
-import {
-  OrderFilterDrawerData,
-  OrderSortableFields,
-  orderStatusFilters,
-  tableColumns,
-} from "@/constants/orders";
+import { MetricsData, SortConfig, Pagination } from "app-core/src/types";
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();

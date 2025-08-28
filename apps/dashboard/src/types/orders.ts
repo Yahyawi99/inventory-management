@@ -4,7 +4,6 @@ import {
   OrderLine,
   CustomerType,
 } from "@database/generated/prisma/client";
-import { Data } from "app-core/src/types";
 
 export { OrderStatus, OrderType, CustomerType };
 
@@ -53,14 +52,4 @@ export interface SummaryMetrics {
   totalOrderItemsChange: number;
   totalCancelledOrdersChange: number;
   totalFulfilledOrdersChange: number;
-}
-
-export interface SortConfig {
-  field: string;
-  direction: "desc" | "asc";
-}
-
-export interface Pagination {
-  page: number;
-  totalPages: number | null;
 }

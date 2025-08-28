@@ -13,7 +13,7 @@ async function main() {
 
   try {
     // 1. Fetch all existing orders
-    const allOrders = await prisma.order.findMany();
+    const allOrders = await prisma.product.findMany();
 
     if (allOrders.length === 0) {
       console.log("No orders found in the database to update.");
@@ -29,7 +29,7 @@ async function main() {
       prisma.order.update({
         where: { id: order.id },
         data: {
-          userId: newUserId,
+          // userId: newUserId,
           organizationId: newOrganizationId,
         },
       })

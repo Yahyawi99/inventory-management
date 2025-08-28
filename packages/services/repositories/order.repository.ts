@@ -5,7 +5,6 @@ import {
   OrderType,
   Prisma as P,
 } from "database/generated/prisma/client";
-import { SortConfig } from "@/types/orders";
 
 type Order = {
   id: string;
@@ -27,6 +26,11 @@ interface Filters {
   search?: string;
   customerType?: CustomerType;
   orderType?: OrderType;
+}
+
+interface SortConfig {
+  field: string;
+  direction: "desc" | "asc";
 }
 
 export const OrderRepository = {
