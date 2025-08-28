@@ -99,7 +99,7 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
               <CardContent className="p-0 flex items-end justify-between mt-2">
                 <div>
                   <p className="text-3xl font-bold text-gray-900">{value}</p>
-                  {renderChangeDisplay(change)}
+                  {change ? renderChangeDisplay(change) : ""}
                 </div>
               </CardContent>
             </Card>

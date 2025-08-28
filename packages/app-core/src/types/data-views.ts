@@ -1,3 +1,8 @@
+export interface HeaderData {
+  title: string;
+  buttonTxt: string;
+}
+
 export type Data<T = Record<string, any>> = T & {
   id: string;
   organizationId: string;
@@ -35,7 +40,7 @@ export interface Pagination {
 export interface MetricsData {
   title: string;
   value: number;
-  change: number;
+  change?: number;
 }
 
 export interface SortConfig {

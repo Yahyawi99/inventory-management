@@ -1,5 +1,10 @@
 import { Input, Button } from "app-core/src/components";
-import { FilterDrawerData, SortableField, Column } from "app-core/src/types";
+import {
+  FilterDrawerData,
+  SortableField,
+  Column,
+  HeaderData,
+} from "app-core/src/types";
 import { Order } from "@/types/orders";
 import {
   getOrderStatusDisplay,
@@ -201,3 +206,8 @@ export const tableColumns: Column<Order>[] = [
     cellClass: "text-center px-4 py-3",
   },
 ];
+
+export const headerData: HeaderData = {
+  title: "Orders",
+  buttonTxt: "Create Order",
+};

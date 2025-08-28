@@ -1,0 +1,73 @@
+import { NextRequest, NextResponse } from "next/server";
+import { ProductRepository } from "@services/repositories";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+
+export async function GET(req: NextRequest, res: NextResponse) {
+  const { searchParams } = new URL(req.url);
+
+  const status = searchParams.getAll("status");
+  const search = searchParams.get("search");
+  const customerType = searchParams.get("customerType");
+  const orderType = searchParams.get("orderType");
+  const orderBy = JSON.parse(searchParams.get("orderBy") as string);
+  const page =
+    Number(searchParams.get("page")) <= 0
+      ? 1
+      : Number(searchParams.get("page"));
+  const pageSize = 10;
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+  const userId = data?.session?.userId as string;
+
+  if (!userId || !orgId) {
+    return NextResponse.json(
+      { error: "User and Organization id are required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  // Filters
+  // const filters: Filters = {};
+
+  // if (status.length && status.indexOf("All") === -1) {
+  //   filters.status = status as OrderStatus[];
+  // }
+  // if (search) {
+  //   filters.search = search;
+  // }
+  // if (customerType && customerType != "All") {
+  //   filters.customerType = customerType as CustomerType;
+  // }
+  // if (orderType && orderType != "All") {
+  //   filters.orderType = orderType as OrderType;
+  // }
+
+  try {
+    const response = await ProductRepository.findMany(
+      orgId
+      // filters,
+      // orderBy,
+      // { page, pageSize }
+    );
+
+    return NextResponse.json(
+      {
+        message: "success",
+        orders: response?.orders,
+        totalPages: response?.totalPages,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("Error while fetching organization's orders ", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

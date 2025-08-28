@@ -15,6 +15,7 @@ import {
   OrderSortableFields,
   orderStatusFilters,
   tableColumns,
+  headerData,
 } from "@/constants/orders";
 import {
   Header,
@@ -56,7 +57,8 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
-      return router.replace(`/auth/sign-in`);
+      router.replace(`/auth/sign-in`);
+      return;
     }
 
     const fetchSummaryOrders = async () => {
@@ -191,7 +193,7 @@ export default function OrdersPage() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header exportData={exportData} />
+      <Header data={headerData} exportData={exportData} />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />
 

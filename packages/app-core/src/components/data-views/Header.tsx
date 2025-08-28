@@ -1,13 +1,15 @@
 import { Button } from "..";
+import { HeaderData } from "../../types";
 
 interface Props {
   exportData: () => void;
+  data: HeaderData;
 }
 
-export function Header({ exportData }: Props) {
+export function Header({ exportData, data }: Props) {
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
-      <h1 className="text-3xl font-bold text-gray-900">Orders</h1>
+      <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
       <div className="flex items-center space-x-3">
         <Button
           variant="outline"
@@ -49,7 +51,7 @@ export function Header({ exportData }: Props) {
             <path d="M12 5v14" />
             <path d="M5 12h14" />
           </svg>
-          <span>Create order</span>
+          <span>{data.buttonTxt}</span>
         </Button>
       </div>
     </div>
