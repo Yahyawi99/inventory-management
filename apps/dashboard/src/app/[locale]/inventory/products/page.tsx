@@ -1,12 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { fetch } from "@services/application/products";
 import { Product } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
-import { Header, SummaryCards, DataControls } from "app-core/src/components";
+import {
+  Header,
+  SummaryCards,
+  DataControls,
+  DataTable,
+  TableView,
+} from "app-core/src/components";
 import {
   MetricsData,
   ActiveFilters,
@@ -17,7 +23,9 @@ import {
   productFilterDrawerData,
   productSortableFields,
   productCategoryFilters,
+  tableColumns,
 } from "@/constants/products";
+import { buildOrdersApiUrl } from "@/utils/orders";
 
 const headerData = {
   title: "Products",
@@ -27,6 +35,9 @@ const headerData = {
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+
+  const [tableProducts, setTableProducts] = useState<Product[]>([]);
+  const [isFetchingTableProducts, setIsFetchingTableProducts] = useState(true);
 
   const [summaryProducts, setSummaryProducts] = useState<Product[]>([]);
   const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
@@ -48,6 +59,54 @@ export default function Products() {
   });
 
   const [error, setError] = useState<string | null>(null);
+
+  // =======================
+  // Table Data
+  const fetchTableProducts = useCallback(async () => {
+    if (!user || !user.activeOrganizationId) {
+      setIsFetchingTableProducts(false);
+      setError("User or organization ID not available for table.");
+      return;
+    }
+
+    setIsFetchingTableProducts(true);
+    setError(null);
+    try {
+      const apiUrl = buildOrdersApiUrl(
+        "/inventory/products",
+        activeFilters,
+        activeOrderBy,
+        pagination
+      );
+
+      const response = await fetch(apiUrl);
+
+      if (response.status !== 200) {
+        throw new Error(
+          response.data.message || "Failed to fetch table orders from API."
+        );
+      }
+
+      console.log(response);
+
+      setTableProducts(response.data.products);
+      setPagination({ ...pagination, totalPages: response.data.totalPages });
+    } catch (err: any) {
+      console.error("Error fetching table orders:", err);
+      setError(
+        err.message ||
+          "An unexpected error occurred while fetching table orders."
+      );
+    } finally {
+      setIsFetchingTableProducts(false);
+    }
+  }, [user, isAuthenticated, activeFilters, activeOrderBy, pagination.page]);
+
+  useEffect(() => {
+    if (isAuthenticated && !isAuthLoading) {
+      fetchTableProducts();
+    }
+  }, [isAuthLoading, fetchTableProducts]);
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
@@ -73,7 +132,7 @@ export default function Products() {
           );
         }
 
-        const data: Product[] = response.data.orders;
+        const data: Product[] = response.data.products;
         console.log(data);
 
         setSummaryProducts(data);
@@ -139,16 +198,16 @@ export default function Products() {
         sortableFields={productSortableFields}
         filterOptions={productCategoryFilters}
       />
-      {/*
-        <TableView
-          data={tableOrders}
-          isFetchingData={isFetchingTableOrders}
-          currentPage={pagination.page}
-          totalPages={pagination?.totalPages ? pagination.totalPages : 0}
-          setPagination={setPagination}
-        >
-          <DataTable<Order> data={tableOrders} columns={tableColumns} />
-        </TableView> */}
+
+      <TableView
+        data={tableProducts}
+        isFetchingData={isFetchingTableProducts}
+        currentPage={pagination.page}
+        totalPages={pagination?.totalPages ? pagination.totalPages : 0}
+        setPagination={setPagination}
+      >
+        <DataTable<Product> data={tableProducts} columns={tableColumns} />
+      </TableView>
     </section>
   );
 }

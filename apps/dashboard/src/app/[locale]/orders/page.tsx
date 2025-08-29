@@ -109,6 +109,7 @@ export default function OrdersPage() {
     setError(null);
     try {
       const apiUrl = buildOrdersApiUrl(
+        "/orders",
         activeFilters,
         activeOrderBy,
         pagination

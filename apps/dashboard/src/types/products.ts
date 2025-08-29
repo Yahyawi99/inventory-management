@@ -9,8 +9,8 @@ export interface Product {
   updatedAt: Date;
   organizationId: string;
   category: Category[];
-  orderLines: OrderLines[];
-  stockItems: StockItems[];
+  orderLines: OrderLine[];
+  stockItems: StockItem[];
 }
 
 export interface Category {
@@ -22,7 +22,7 @@ export interface Category {
   organizationId: string;
 }
 
-export interface StockItems {
+export interface StockItem {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -32,7 +32,7 @@ export interface StockItems {
   stockId: string;
 }
 
-export interface OrderLines {
+export interface OrderLine {
   id: string;
   createdAt: Date;
   updatedAt: Date;

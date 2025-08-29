@@ -218,6 +218,7 @@ export const exportOrdersAsJson = (
 
 // generate api URL for table orders data fetching
 export const buildOrdersApiUrl = (
+  base: string,
   activeFilters: ActiveFilters,
   activeOrderBy: SortConfig,
   pagination: Pagination
@@ -254,5 +255,5 @@ export const buildOrdersApiUrl = (
   }
 
   const queryString = queryParams.toString();
-  return `/orders${queryString ? `?${queryString}` : ""}`;
+  return `${base}${queryString ? `?${queryString}` : ""}`;
 };

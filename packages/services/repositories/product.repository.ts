@@ -30,7 +30,7 @@ export const ProductRepository = {
     // filters?: Filters,
     // orderBy: SortConfig = { field: "createdAt", direction: "desc" },
     // { page, pageSize }: { page: number; pageSize: number }
-  ): Promise<{ totalPages: number; orders: Product[] } | null> {
+  ): Promise<{ totalPages: number; products: Product[] } | null> {
     // Where clause
     const whereClause: P.ProductWhereInput = {
       organizationId: orgId,
@@ -79,7 +79,7 @@ export const ProductRepository = {
       });
       const totalPages = Math.ceil(totalProducts / 10);
 
-      return { totalPages, orders: res };
+      return { totalPages, products: res };
     } catch (e) {
       console.log("Error while fetching orders: ", e);
       return null;

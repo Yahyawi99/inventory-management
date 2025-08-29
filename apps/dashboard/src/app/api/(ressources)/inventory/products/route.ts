@@ -6,10 +6,7 @@ import { headers } from "next/headers";
 export async function GET(req: NextRequest, res: NextResponse) {
   const { searchParams } = new URL(req.url);
 
-  const status = searchParams.getAll("status");
   const search = searchParams.get("search");
-  const customerType = searchParams.get("customerType");
-  const orderType = searchParams.get("orderType");
   const orderBy = JSON.parse(searchParams.get("orderBy") as string);
   const page =
     Number(searchParams.get("page")) <= 0
@@ -31,23 +28,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     );
   }
 
-  console.log(orgId);
-  // Filters
-  // const filters: Filters = {};
-
-  // if (status.length && status.indexOf("All") === -1) {
-  //   filters.status = status as OrderStatus[];
-  // }
-  // if (search) {
-  //   filters.search = search;
-  // }
-  // if (customerType && customerType != "All") {
-  //   filters.customerType = customerType as CustomerType;
-  // }
-  // if (orderType && orderType != "All") {
-  //   filters.orderType = orderType as OrderType;
-  // }
-
   try {
     const response = await ProductRepository.findMany(
       orgId
@@ -59,7 +39,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return NextResponse.json(
       {
         message: "success",
-        orders: response?.orders,
+        products: response?.products,
         totalPages: response?.totalPages,
       },
       { status: 200 }

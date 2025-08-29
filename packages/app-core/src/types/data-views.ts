@@ -6,8 +6,8 @@ export interface HeaderData {
 export type Data<T = Record<string, any>> = T & {
   id: string;
   organizationId: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 };
 
 export interface Column<T extends Data> {
