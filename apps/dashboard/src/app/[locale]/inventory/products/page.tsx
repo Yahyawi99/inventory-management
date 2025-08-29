@@ -6,8 +6,18 @@ import { useRouter } from "next/navigation";
 import { fetch } from "@services/application/products";
 import { Product } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
-import { Header, SummaryCards } from "app-core/src/components";
-import { MetricsData } from "app-core/src/types";
+import { Header, SummaryCards, DataControls } from "app-core/src/components";
+import {
+  MetricsData,
+  ActiveFilters,
+  SortConfig,
+  Pagination,
+} from "app-core/src/types";
+import {
+  productFilterDrawerData,
+  productSortableFields,
+  productCategoryFilters,
+} from "@/constants/products";
 
 const headerData = {
   title: "Products",
@@ -22,6 +32,20 @@ export default function Products() {
   const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
     useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
+
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
+    category: "All",
+    search: "",
+  });
+  const [activeOrderBy, setActiveOrderBy] = useState<SortConfig>({
+    field: "createdAt",
+    direction: "desc",
+  });
+
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 1,
+    totalPages: null,
+  });
 
   const [error, setError] = useState<string | null>(null);
 
@@ -50,6 +74,7 @@ export default function Products() {
         }
 
         const data: Product[] = response.data.orders;
+        console.log(data);
 
         setSummaryProducts(data);
       } catch (err: any) {
@@ -71,18 +96,6 @@ export default function Products() {
     return getProductSummaryMetrics(summaryProducts);
   }, [summaryProducts]);
 
-  /*
- totalUniqueProducts: totalUniqueProductsCurrent,
- totalUnitsSold: totalUnitsSoldCurrent,
- totalSalesRevenue: totalSalesRevenueCurrent,
- totalUnitsInStock: totalUnitsInStock,
-
-    totalUniqueProductsChange: totalUniqueProductsChange,
-    totalUnitsSoldChange: totalUnitsSoldChange,
-    totalSalesRevenueChange: totalSalesRevenueChange,
-    // add stock changes
-    */
-
   useEffect(() => {
     setCardMetrics([
       {
@@ -97,7 +110,7 @@ export default function Products() {
       },
       {
         title: "Sales Revenue",
-        value: metricsData.totalSalesRevenue,
+        value: "$" + metricsData.totalSalesRevenue.toFixed(2),
         change: metricsData.totalSalesRevenueChange,
       },
       {
@@ -115,18 +128,18 @@ export default function Products() {
       <Header data={headerData} exportData={exportData} />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryProducts} />
+
+      <DataControls
+        activeFilters={activeFilters}
+        activeOrderBy={activeOrderBy}
+        setActiveFilters={setActiveFilters}
+        setActiveOrderBy={setActiveOrderBy}
+        setPagination={setPagination}
+        DrawerData={productFilterDrawerData}
+        sortableFields={productSortableFields}
+        filterOptions={productCategoryFilters}
+      />
       {/*
-        <DataControls
-          activeFilters={activeFilters}
-          activeOrderBy={activeOrderBy}
-          setActiveFilters={setActiveFilters}
-          setActiveOrderBy={setActiveOrderBy}
-          setPagination={setPagination}
-          DrawerData={OrderFilterDrawerData}
-          sortableFields={OrderSortableFields}
-          filterOptions={orderStatusFilters}
-        />
-  
         <TableView
           data={tableOrders}
           isFetchingData={isFetchingTableOrders}

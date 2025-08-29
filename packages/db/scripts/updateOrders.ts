@@ -26,7 +26,7 @@ async function main() {
 
     // 2. Loop through each order and update its IDs
     const updatePromises = allOrders.map((order) =>
-      prisma.order.update({
+      prisma.product.update({
         where: { id: order.id },
         data: {
           // userId: newUserId,

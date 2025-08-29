@@ -18,7 +18,7 @@ interface DataControlsProps {
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
   DrawerData: FilterDrawerData;
   sortableFields: SortableField[];
-  filterOptions: string[];
+  filterOptions: { field: string; values: string[] };
 }
 
 export function DataControls({
@@ -62,20 +62,25 @@ export function DataControls({
   return (
     <div className="flex items-center justify-between my-4">
       <div className="flex space-x-2 bg-white p-1 rounded-full">
-        {filterOptions.map((value) => {
+        {filterOptions.values.map((value) => {
+          console.log(activeFilters.category === value);
           return (
             <Button
               key={value}
-              variant={activeFilters.status === value ? "default" : "ghost"}
+              variant={
+                activeFilters[filterOptions.field] === value
+                  ? "default"
+                  : "ghost"
+              }
               className={`text-sm rounded-full px-4 cursor-pointer ${
-                activeFilters.status === value
+                activeFilters[filterOptions.field] === value
                   ? "bg-sidebar text-white hover:bg-sidebar"
                   : "text-gray-700 hover:bg-gray-100"
               }`}
               onClick={() =>
                 setActiveFilters({
                   ...activeFilters,
-                  status: value as typeof activeFilters.status,
+                  [filterOptions.field]: value,
                 })
               }
             >

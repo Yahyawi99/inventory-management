@@ -39,7 +39,7 @@ export interface Pagination {
 
 export interface MetricsData {
   title: string;
-  value: number;
+  value: number | string;
   change?: number;
 }
 

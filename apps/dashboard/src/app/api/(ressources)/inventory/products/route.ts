@@ -31,6 +31,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     );
   }
 
+  console.log(orgId);
   // Filters
   // const filters: Filters = {};
 

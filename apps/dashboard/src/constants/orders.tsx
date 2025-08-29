@@ -54,13 +54,10 @@ export const OrderSortableFields: SortableField[] = [
   { title: "Items Quantity", field: "totalItemsQuantity", direction: "desc" },
 ];
 
-export const orderStatusFilters = [
-  "All",
-  "Pending",
-  "Processing",
-  "Fulfilled",
-  "Cancelled",
-];
+export const orderStatusFilters = {
+  field: "status",
+  values: ["All", "Pending", "Processing", "Fulfilled", "Cancelled"],
+};
 
 export const tableColumns: Column<Order>[] = [
   {
