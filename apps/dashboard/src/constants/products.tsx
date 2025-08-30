@@ -1,8 +1,11 @@
 import { StockItem, Product } from "@/types/products";
+import {
+  buildCategoriesOptions,
+  getProductStockStatusDisplay,
+  getTotalProductStockQuantity,
+} from "@/utils/products";
 import { Input, Button } from "app-core/src/components";
-import { Column } from "app-core/src/types";
-
-import { SortableField, FilterDrawerData } from "app-core/src/types";
+import { Column, SortableField, FilterDrawerData } from "app-core/src/types";
 
 export const productFilterDrawerData: FilterDrawerData = {
   header: {
@@ -10,15 +13,18 @@ export const productFilterDrawerData: FilterDrawerData = {
     desc: "Refine your Product list",
   },
   filterOptions: {
-    category: {
-      name: "Product Category",
+    stockStatus: {
+      name: "Product's Stock Status",
       options: [
         { label: "All Products", value: "All" },
-        { label: "Pending", value: "Pending" },
-        { label: "Processing", value: "Processing" },
-        { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
-        { label: "Cancelled", value: "Cancelled" },
+        { label: "In Stock Products", value: "In Stock" },
+        { label: "Low Stock Products", value: "Low Stock" },
+        { label: "Out of Stock Products", value: "Out of Stock" },
       ],
+    },
+    category: {
+      name: "Product Category",
+      options: await buildCategoriesOptions(),
     },
   },
 };
@@ -31,28 +37,11 @@ export const productSortableFields: SortableField[] = [
 ];
 
 export const productCategoryFilters = {
-  field: "category",
-  values: ["All", "Pending", "Processing", "Fulfilled", "Cancelled"],
+  field: "stockStatus",
+  values: ["All", "In Stock", "Low Stock", "Out of Stock"],
 };
 
 // /=========================================
-
-const getProductStockStatusDisplay = (stockItems: StockItem[]) => {
-  const totalQuantity = stockItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
-  if (totalQuantity > 50) {
-    return { text: "In Stock", colorClass: "bg-green-100 text-green-800" };
-  } else if (totalQuantity > 0) {
-    return { text: "Low Stock", colorClass: "bg-yellow-100 text-yellow-800" };
-  }
-  return { text: "Out of Stock", colorClass: "bg-red-100 text-red-800" };
-};
-
-const getTotalProductStockQuantity = (stockItems: StockItem[]) => {
-  return stockItems.reduce((sum, item) => sum + item.quantity, 0);
-};
 
 // --- Product-Specific Table Columns ---
 export const tableColumns: Column<Product>[] = [

@@ -45,7 +45,7 @@ export default function Products() {
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
-    category: "All",
+    stockStatus: "All",
     search: "",
   });
   const [activeOrderBy, setActiveOrderBy] = useState<SortConfig>({
@@ -86,8 +86,6 @@ export default function Products() {
           response.data.message || "Failed to fetch table orders from API."
         );
       }
-
-      console.log(response);
 
       setTableProducts(response.data.products);
       setPagination({ ...pagination, totalPages: response.data.totalPages });
@@ -133,7 +131,6 @@ export default function Products() {
         }
 
         const data: Product[] = response.data.products;
-        console.log(data);
 
         setSummaryProducts(data);
       } catch (err: any) {

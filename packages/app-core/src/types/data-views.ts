@@ -24,7 +24,9 @@ export type ActiveFilters<T = Record<string, any>> = T & {
 
 export interface FilterOption {
   name: string;
-  options: { label: string; value: string }[];
+  options:
+    | { label: string; value: string }[]
+    | Promise<{ label: string; value: string }[]>;
 }
 
 export interface FilterDrawerData {

@@ -63,7 +63,6 @@ export function DataControls({
     <div className="flex items-center justify-between my-4">
       <div className="flex space-x-2 bg-white p-1 rounded-full">
         {filterOptions.values.map((value) => {
-          console.log(activeFilters.category === value);
           return (
             <Button
               key={value}

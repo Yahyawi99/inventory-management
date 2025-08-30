@@ -13,7 +13,7 @@ async function main() {
 
   try {
     // 1. Fetch all existing orders
-    const allOrders = await prisma.product.findMany();
+    const allOrders = await prisma.category.findMany();
 
     if (allOrders.length === 0) {
       console.log("No orders found in the database to update.");
@@ -26,7 +26,7 @@ async function main() {
 
     // 2. Loop through each order and update its IDs
     const updatePromises = allOrders.map((order) =>
-      prisma.product.update({
+      prisma.category.update({
         where: { id: order.id },
         data: {
           // userId: newUserId,

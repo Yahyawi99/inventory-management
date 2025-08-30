@@ -1,6 +1,10 @@
 import { ProductsSummaryMetrics, Product } from "@/types/products";
+import { Category } from "@/types/categories";
 import { getSeedDateRanges } from "@/utils/dateHelpers";
+import { StockItem } from "@/types/products";
+import { fetch } from "@services/application/categories";
 
+// Summary cards
 const calculatePercentageChange = (
   current: number,
   previous: number
@@ -91,6 +95,40 @@ export const getProductSummaryMetrics = (
     totalUnitsSoldChange: totalUnitsSoldChange,
     totalSalesRevenueChange: totalSalesRevenueChange,
   };
+};
+
+// stock status table display
+export const getProductStockStatusDisplay = (stockItems: StockItem[]) => {
+  const totalQuantity = stockItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  if (totalQuantity > 50) {
+    return { text: "In Stock", colorClass: "bg-green-100 text-green-800" };
+  } else if (totalQuantity > 0) {
+    return { text: "Low Stock", colorClass: "bg-yellow-100 text-yellow-800" };
+  }
+  return { text: "Out of Stock", colorClass: "bg-red-100 text-red-800" };
+};
+
+export const getTotalProductStockQuantity = (stockItems: StockItem[]) => {
+  return stockItems.reduce((sum, item) => sum + item.quantity, 0);
+};
+
+// Categories options for drawer filter
+export const buildCategoriesOptions = async () => {
+  const {
+    data: { categories },
+  }: { data: { categories: Category[] } } = await fetch(
+    "/inventory/categories"
+  );
+
+  const categoriesOptions = categories?.map((category) => {
+    const { name } = category;
+    return { label: name, value: name };
+  });
+
+  return [{ label: "All Products", value: "All" }, ...categoriesOptions];
 };
 
 // buildOrdersApiUrl;
