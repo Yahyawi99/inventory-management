@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Filter } from "lucide-react";
 import {
   Button,
@@ -36,6 +36,10 @@ export function FilterDrawer({
   const [drawerFilters, setDrawerFilters] =
     useState<ActiveFilters>(activeFilters);
 
+  useEffect(() => {
+    setDrawerFilters(activeFilters);
+  }, [activeFilters]);
+
   const handleSelectChange = (key: keyof ActiveFilters, value: string) => {
     setDrawerFilters({
       ...drawerFilters,
@@ -50,7 +54,8 @@ export function FilterDrawer({
   const onClearFilters = () => {
     const clearedFilters = Object.entries(data.filterOptions).reduce(
       (acc, [key, value]) => {
-        acc[key] = value.options[0].value;
+        console.log(value);
+        acc[key] = Array.isArray(value.options) ? value.options[0].value : "";
         return acc;
       },
       {} as ActiveFilters
@@ -101,6 +106,7 @@ export function FilterDrawer({
                       >
                         {filterConfig.name}
                       </Label>
+
                       <Select
                         value={drawerFilters[filterKey]}
                         onValueChange={(selectedValue) => {
@@ -115,18 +121,19 @@ export function FilterDrawer({
                         </SelectTrigger>
 
                         <SelectContent>
-                          {filterConfig.options.map(
-                            ({ label: optionLabel, value: optionValue }) => {
-                              return (
-                                <SelectItem
-                                  key={optionValue}
-                                  value={optionValue}
-                                >
-                                  {optionLabel}
-                                </SelectItem>
-                              );
-                            }
-                          )}
+                          {Array.isArray(filterConfig.options) &&
+                            filterConfig.options.map(
+                              ({ label: optionLabel, value: optionValue }) => {
+                                return (
+                                  <SelectItem
+                                    key={optionValue}
+                                    value={optionValue}
+                                  >
+                                    {optionLabel}
+                                  </SelectItem>
+                                );
+                              }
+                            )}
                         </SelectContent>
                       </Select>
                     </div>

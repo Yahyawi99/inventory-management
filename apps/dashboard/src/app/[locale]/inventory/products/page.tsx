@@ -25,7 +25,7 @@ import {
   productCategoryFilters,
   tableColumns,
 } from "@/constants/products";
-import { buildOrdersApiUrl } from "@/utils/orders";
+import { buildOrdersApiUrl } from "@/utils/products";
 
 const headerData = {
   title: "Products",
@@ -45,7 +45,8 @@ export default function Products() {
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
-    stockStatus: "All",
+    status: "All",
+    category: "All",
     search: "",
   });
   const [activeOrderBy, setActiveOrderBy] = useState<SortConfig>({
@@ -106,6 +107,8 @@ export default function Products() {
     }
   }, [isAuthLoading, fetchTableProducts]);
 
+  // =======================
+  // Summary cards Data
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
       router.replace(`/auth/sign-in`);

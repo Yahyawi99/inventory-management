@@ -1,5 +1,5 @@
+import { InputJsonValue } from "@database/generated/prisma/runtime/library";
 import Prisma from "database";
-import { Prisma as P } from "database/generated/prisma/client";
 
 interface Product {
   id: string;
@@ -15,8 +15,9 @@ interface Product {
 }
 
 interface Filters {
-  category?: string;
+  status?: "All" | "In Stock" | "Low Stock" | "Out of Stock";
   search?: string;
+  category?: string;
 }
 
 interface SortConfig {
@@ -26,60 +27,137 @@ interface SortConfig {
 
 export const ProductRepository = {
   async findMany(
-    orgId: string
-    // filters?: Filters,
+    orgId: string,
+    filters: Filters,
     // orderBy: SortConfig = { field: "createdAt", direction: "desc" },
-    // { page, pageSize }: { page: number; pageSize: number }
+    { page, pageSize }: { page: number; pageSize: number }
   ): Promise<{ totalPages: number; products: Product[] } | null> {
-    // Where clause
-    const whereClause: P.ProductWhereInput = {
+    // build the pipeline
+    const pipeline: InputJsonValue[] | undefined = [
+      {
+        $match: {},
+      },
+      {
+        $lookup: {
+          from: "Category",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: {
+          path: "$category",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "StockItem",
+          localField: "_id",
+          foreignField: "productId",
+          as: "stockItems",
+        },
+      },
+      {
+        $lookup: {
+          from: "OrderLine",
+          localField: "_id",
+          foreignField: "productId",
+          as: "orderLines",
+        },
+      },
+    ];
+
+    const filterMatch: Record<string, any> = {
       organizationId: orgId,
     };
 
-    // if (filters.search) {
-    //   whereClause.OR = [
-    //     { sku: { contains: filters.search, mode: "insensitive" } },
-    //     { barcode: { contains: filters.search, mode: "insensitive" } },
-    //     { name: { contains: filters.search, mode: "insensitive" } },
-    //     { description: { contains: filters.search, mode: "insensitive" } },
-    //     {
-    //       category: { name: { contains: filters.search, mode: "insensitive" } },
+    // search
+    if (filters.search) {
+      const regex = { $regex: filters.search, $options: "i" };
+
+      filterMatch.$or = [
+        { sku: regex },
+        { barcode: regex },
+        { name: regex },
+        { description: regex },
+        { "category.name": regex },
+      ];
+    }
+
+    // category
+    if (filters.category) {
+      filterMatch["category.name"] = filters.category;
+    }
+
+    if (Object.keys(filterMatch).length > 0) {
+      pipeline.push({ $match: filterMatch });
+    }
+
+    // status
+    pipeline.push({
+      $addFields: {
+        totalStockQuantity: { $sum: "$stockItems.quantity" },
+      },
+    });
+
+    if (filters.status) {
+      switch (filters.status) {
+        case "In Stock":
+          pipeline.push({ $match: { totalStockQuantity: { $gte: 50 } } });
+          break;
+        case "Low Stock":
+          pipeline.push({
+            $match: { totalStockQuantity: { $gt: 0, $lt: 50 } },
+          });
+          break;
+        case "Out of Stock":
+          pipeline.push({
+            $match: { totalStockQuantity: { $lte: 0 } },
+          });
+          break;
+      }
+    }
+
+    // if (orderBy && orderBy.field) {
+    //   const sortStage = {
+    //     $sort: {
+    //       [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
     //     },
-    //   ];
-    // }
-
-    // if (filters.category) {
-    //   whereClause.category = {
-    //     name: filters.category,
     //   };
+    //   pipeline.push(sortStage);
     // }
 
-    // // OrderBy clause
-    // const orderByClause: P.ProductOrderByWithRelationInput = {};
-    // if (orderBy) {
-    //   orderByClause[orderBy.field as keyof P.ProductOrderByWithRelationInput] =
-    //     orderBy.direction;
-    // }
+    pipeline.push({
+      $facet: {
+        paginatedResults: [
+          { $skip: (page - 1) * pageSize },
+          { $limit: pageSize },
+        ],
+        totalCount: [{ $count: "count" }],
+      },
+    });
 
     try {
-      const res = await Prisma.product.findMany({
-        // skip: (page - 1) * pageSize,
-        // take: pageSize,
-        where: whereClause,
-        // orderBy: orderByClause,
-        include: {
-          category: true,
-          stockItems: true,
-          orderLines: true,
-        },
+      const response = await Prisma.product.aggregateRaw({
+        pipeline,
       });
 
-      const totalProducts = await Prisma.product.count({
-        where: whereClause,
-      });
-      const totalPages = Math.ceil(totalProducts / 10);
+      const result = response[0] as
+        | { paginatedResults: Product[]; totalCount: [{ count: number }] }
+        | undefined;
 
-      return { totalPages, products: res };
+      const totalProducts =
+        result && result.totalCount && result.totalCount.length > 0
+          ? result.totalCount[0].count
+          : 0;
+      const totalPages = Math.ceil(totalProducts / pageSize);
+
+      return {
+        totalPages,
+        products: result?.paginatedResults as Product[],
+      };
     } catch (e) {
       console.log("Error while fetching orders: ", e);
       return null;

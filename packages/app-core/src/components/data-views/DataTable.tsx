@@ -33,7 +33,7 @@ export function DataTable<T extends Data>({ data, columns }: ordersProps<T>) {
         {data.map((row) => {
           return (
             <TableRow
-              key={row.id}
+              key={row.id || row._id}
               className="border-b border-gray-100 hover:bg-gray-50"
             >
               {columns.map((column) => {

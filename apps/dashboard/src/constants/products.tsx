@@ -13,7 +13,7 @@ export const productFilterDrawerData: FilterDrawerData = {
     desc: "Refine your Product list",
   },
   filterOptions: {
-    stockStatus: {
+    status: {
       name: "Product's Stock Status",
       options: [
         { label: "All Products", value: "All" },
@@ -37,7 +37,7 @@ export const productSortableFields: SortableField[] = [
 ];
 
 export const productCategoryFilters = {
-  field: "stockStatus",
+  field: "status",
   values: ["All", "In Stock", "Low Stock", "Out of Stock"],
 };
 

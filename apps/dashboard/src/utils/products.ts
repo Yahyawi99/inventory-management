@@ -3,6 +3,7 @@ import { Category } from "@/types/categories";
 import { getSeedDateRanges } from "@/utils/dateHelpers";
 import { StockItem } from "@/types/products";
 import { fetch } from "@services/application/categories";
+import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";
 
 // Summary cards
 const calculatePercentageChange = (
@@ -131,4 +132,35 @@ export const buildCategoriesOptions = async () => {
   return [{ label: "All Products", value: "All" }, ...categoriesOptions];
 };
 
-// buildOrdersApiUrl;
+// generate api URL for table products data fetching
+export const buildOrdersApiUrl = (
+  base: string,
+  activeFilters: ActiveFilters,
+  activeOrderBy: SortConfig,
+  pagination: Pagination
+): string => {
+  const queryParams = new URLSearchParams();
+
+  if (activeFilters.category && activeFilters.category !== "All") {
+    queryParams.append("category", activeFilters.category);
+  }
+
+  if (activeFilters.status && activeFilters.status !== "All") {
+    queryParams.append("status", activeFilters.status);
+  }
+
+  if (activeFilters.search) {
+    queryParams.append("search", activeFilters.search);
+  }
+
+  if (activeOrderBy) {
+    queryParams.append("orderBy", JSON.stringify(activeOrderBy));
+  }
+
+  if (pagination) {
+    queryParams.append("page", pagination.page + "");
+  }
+
+  const queryString = queryParams.toString();
+  return `${base}${queryString ? `?${queryString}` : ""}`;
+};

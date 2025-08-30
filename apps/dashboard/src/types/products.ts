@@ -52,3 +52,5 @@ export interface ProductsSummaryMetrics {
   totalUnitsSoldChange: number;
   totalSalesRevenueChange: number;
 }
+
+export type ProductStatus = "All" | "In Stock" | "Low Stock" | "Out of Stock";
