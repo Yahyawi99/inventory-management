@@ -69,9 +69,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error while fetching organization's orders ", error);
+    console.log("Error while fetching organization's products ", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error :" + error },
       { status: 500 }
     );
   }

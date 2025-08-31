@@ -1,6 +1,9 @@
 import { ProductsSummaryMetrics, Product } from "@/types/products";
 import { Category } from "@/types/categories";
-import { getSeedDateRanges } from "@/utils/dateHelpers";
+import {
+  getDateRangesForComparison,
+  getSeedDateRanges,
+} from "@/utils/dateHelpers";
 import { StockItem } from "@/types/products";
 import { fetch } from "@services/application/categories";
 import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";
@@ -18,19 +21,21 @@ export const getProductSummaryMetrics = (
   allProducts: Product[]
 ): ProductsSummaryMetrics => {
   const productsCopy = [...allProducts];
-  const { current: currentPeriod, previous: previousPeriod } =
-    getSeedDateRanges();
 
-  const currentPeriodProducts = productsCopy.filter(
-    (product) =>
-      new Date(product.createdAt) >= currentPeriod.startDate &&
-      new Date(product.createdAt) <= currentPeriod.endDate
-  );
+  const { current: currentPeriod, previous: previousPeriod } =
+    getDateRangesForComparison();
+
+  const currentPeriodProducts = productsCopy.filter((product) => {
+    return (
+      new Date(product.createdAt.$date) >= new Date(currentPeriod.startDate) &&
+      new Date(product.createdAt.$date) <= new Date(currentPeriod.endDate)
+    );
+  });
 
   const previousPeriodProducts = productsCopy.filter(
     (product) =>
-      new Date(product.createdAt) >= previousPeriod.startDate &&
-      new Date(product.createdAt) <= previousPeriod.endDate
+      new Date(product.createdAt.$date) >= new Date(previousPeriod.startDate) &&
+      new Date(product.createdAt.$date) <= new Date(previousPeriod.endDate)
   );
 
   // --- 1. Total Unique Products ---
@@ -38,8 +43,9 @@ export const getProductSummaryMetrics = (
   const totalUniqueProductsPrevious = previousPeriodProducts.length;
 
   // --- 2. Total Units in Stock (Current Snapshot) ---
+  // This now uses the pre-calculated 'totalStockQuantity' field from the aggregation pipeline.
   const totalUnitsInStock = productsCopy.reduce(
-    (sum, product) => sum + product.stockItems.length,
+    (sum, product) => sum + product.totalStockQuantity,
     0
   );
 
@@ -51,23 +57,22 @@ export const getProductSummaryMetrics = (
 
   productsCopy.forEach((product) => {
     product.orderLines.forEach((orderLine) => {
-      const orderLineDate = new Date(
-        (orderLine as any).createdAt || product.createdAt
-      );
+      // Use the 'createdAt' and 'unitPrice' fields directly from the OrderLine.
+      const orderLineDate = new Date(orderLine.createdAt.$date);
 
       if (
-        orderLineDate >= currentPeriod.startDate &&
-        orderLineDate <= currentPeriod.endDate
+        orderLineDate >= new Date(currentPeriod.startDate) &&
+        orderLineDate <= new Date(currentPeriod.endDate)
       ) {
         totalUnitsSoldCurrent += orderLine.quantity;
-        totalSalesRevenueCurrent += orderLine.quantity * product.price;
+        totalSalesRevenueCurrent += orderLine.quantity * orderLine.unitPrice;
       }
       if (
-        orderLineDate >= previousPeriod.startDate &&
-        orderLineDate <= previousPeriod.endDate
+        orderLineDate >= new Date(previousPeriod.startDate) &&
+        orderLineDate <= new Date(previousPeriod.endDate)
       ) {
         totalUnitsSoldPrevious += orderLine.quantity;
-        totalSalesRevenuePrevious += orderLine.quantity * product.price;
+        totalSalesRevenuePrevious += orderLine.quantity * orderLine.unitPrice;
       }
     });
   });
