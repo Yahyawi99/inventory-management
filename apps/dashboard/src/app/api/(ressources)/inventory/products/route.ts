@@ -53,12 +53,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 
   try {
-    const response = await ProductRepository.findMany(
-      orgId,
-      filters,
-      // orderBy,
-      { page, pageSize }
-    );
+    const response = await ProductRepository.findMany(orgId, filters, orderBy, {
+      page,
+      pageSize,
+    });
 
     return NextResponse.json(
       {

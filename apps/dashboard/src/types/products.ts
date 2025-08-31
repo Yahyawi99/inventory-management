@@ -9,7 +9,7 @@ export interface Product {
   updatedAt: { $date: Date };
   organizationId: string;
   categoryId: string;
-  category: Category;
+  category: Category[];
   stockItems: StockItem[];
   orderLines: OrderLine[];
   totalStockQuantity: number;

@@ -30,10 +30,10 @@ export const productFilterDrawerData: FilterDrawerData = {
 };
 
 export const productSortableFields: SortableField[] = [
-  { title: "Product Category", field: "category", direction: "desc" },
-  { title: "Product Date", field: "createdAt", direction: "desc" },
-  { title: "Product Price", field: "price", direction: "desc" },
-  { title: "Product Sales Revenue", field: "revenue", direction: "desc" },
+  { title: "Name", field: "name", direction: "desc" },
+  { title: "Date", field: "createdAt", direction: "desc" },
+  { title: "Price", field: "price", direction: "desc" },
+  { title: "Total Stock", field: "stock", direction: "desc" },
 ];
 
 export const productCategoryFilters = {
@@ -132,7 +132,7 @@ export const tableColumns: Column<Product>[] = [
           variant="ghost"
           size="icon"
           className="h-8 w-8 text-green-500 hover:text-green-700"
-          onClick={() => console.log("Edit product:", product.id)} // Example action
+          onClick={() => console.log("Edit product:", product._id)} // Example action
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +154,7 @@ export const tableColumns: Column<Product>[] = [
           variant="ghost"
           size="icon"
           className="h-8 w-8 text-red-500 hover:text-red-700"
-          onClick={() => console.log("Delete product:", product.id)} // Example action
+          onClick={() => console.log("Delete product:", product._id)} // Example action
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

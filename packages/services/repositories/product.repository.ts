@@ -1,18 +1,6 @@
 import { InputJsonValue } from "@database/generated/prisma/runtime/library";
 import Prisma from "database";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string | null;
-  sku: string;
-  price: number;
-  barcode: string;
-  createdAt: Date;
-  updatedAt: Date;
-  organizationId: string;
-  categoryId: string;
-}
+import { Product } from "@database/generated/prisma";
 
 interface Filters {
   status?: "All" | "In Stock" | "Low Stock" | "Out of Stock";
@@ -29,7 +17,7 @@ export const ProductRepository = {
   async findMany(
     orgId: string,
     filters: Filters,
-    // orderBy: SortConfig = { field: "createdAt", direction: "desc" },
+    orderBy: SortConfig = { field: "createdAt", direction: "desc" },
     { page, pageSize }: { page: number; pageSize: number }
   ): Promise<{ totalPages: number; products: Product[] } | null> {
     // build the pipeline
@@ -91,10 +79,6 @@ export const ProductRepository = {
       filterMatch["category.name"] = filters.category;
     }
 
-    if (Object.keys(filterMatch).length > 0) {
-      pipeline.push({ $match: filterMatch });
-    }
-
     // status
     pipeline.push({
       $addFields: {
@@ -120,14 +104,25 @@ export const ProductRepository = {
       }
     }
 
-    // if (orderBy && orderBy.field) {
-    //   const sortStage = {
-    //     $sort: {
-    //       [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
-    //     },
-    //   };
-    //   pipeline.push(sortStage);
-    // }
+    if (orderBy && orderBy.field) {
+      if (orderBy.field === "stock") {
+        pipeline.push({
+          $sort: {
+            totalStockQuantity: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      } else {
+        pipeline.push({
+          $sort: {
+            [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      }
+    }
+
+    if (Object.keys(filterMatch).length > 0) {
+      pipeline.push({ $match: filterMatch });
+    }
 
     pipeline.push({
       $facet: {
