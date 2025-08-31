@@ -1,17 +1,10 @@
 import {
-  faBox,
   faChartSimple,
   faBoxesStacked,
-  faTags,
-  faBoxesPacking,
-  faBarcode,
   faFileInvoice,
   faUsers,
-  faUserGear,
   faChartLine,
   faGear,
-  faBuilding,
-  faBell,
   faScroll,
 } from "@fortawesome/free-solid-svg-icons";
 import { routes } from "@config/routes";

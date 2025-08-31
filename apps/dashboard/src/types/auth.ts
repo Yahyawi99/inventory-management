@@ -12,3 +12,9 @@ export interface AuthOptionsSelectorProps {
 export interface AuthOptionProps extends AuthOptionsSelectorProps {
   option: authOptionsType;
 }
+export interface User {
+  id: string | undefined;
+  name: string;
+  email: string;
+  activeOrganizationId?: string | null | undefined;
+}

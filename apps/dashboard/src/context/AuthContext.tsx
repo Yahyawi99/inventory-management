@@ -2,14 +2,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
-import { clearInterval } from "timers";
-
-interface User {
-  id: string | undefined;
-  name: string;
-  email: string;
-  activeOrganizationId?: string | null | undefined;
-}
+import { User } from "@/types/auth";
 
 interface AuthContextType {
   user: User | null;

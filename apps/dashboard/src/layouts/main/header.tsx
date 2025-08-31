@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/context/AuthContext";
 import { Bebas_Neue } from "next/font/google";
 import {
   faBell,
@@ -7,7 +8,7 @@ import {
   faHandPeace,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSidebar } from "app-core/src/components";
+import { User } from "better-auth/*";
 
 const BebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -16,7 +17,7 @@ const BebasNeue = Bebas_Neue({
 });
 
 export default function Header() {
-  const { open } = useSidebar();
+  const { user } = useAuth();
 
   return (
     <header className="flex items-center justify-between p-5 my-5 bg-(--card) shadow-md shadow-gray-300 rounded-(--radius)">
@@ -25,7 +26,7 @@ export default function Header() {
         <h1>
           Hello,{" "}
           <span className={`${BebasNeue.className} underline decoration-2`}>
-            Yassine Yahyawi
+            {user?.name}
           </span>
           !
         </h1>

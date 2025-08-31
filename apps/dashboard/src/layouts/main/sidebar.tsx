@@ -1,6 +1,9 @@
 "use client";
-
-import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import { useAuth } from "@/context/AuthContext";
+import { User } from "@/types/auth";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { MenuItems } from "./sidebar-menu-items";
 import SidebarMenu from "./sidebar-menu";
 import {
@@ -22,10 +25,9 @@ import {
 } from "app-core/src/components";
 import { faClose, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 
 export default function MainSidebar() {
-  const [items, setItems] = useState(MenuItems);
+  const { user } = useAuth();
 
   return (
     <Sidebar>
@@ -36,7 +38,7 @@ export default function MainSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            {items.map((item) => {
+            {MenuItems.map((item) => {
               return <SidebarMenu key={item.id} item={item} />;
             })}
           </SidebarGroupContent>
@@ -44,7 +46,7 @@ export default function MainSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <Footer />
+        <Footer user={user} />
       </SidebarFooter>
     </Sidebar>
   );
@@ -76,7 +78,19 @@ const Header = () => {
   );
 };
 
-const Footer = () => {
+const Footer = ({ user }: { user: User | null }) => {
+  const router = useRouter();
+
+  const onLogOutHandler = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/auth/sign-in");
+        },
+      },
+    });
+  };
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -89,8 +103,8 @@ const Footer = () => {
         />
 
         <div className="text-[.9rem] text-[#1B3B6F] font-bold">
-          <p>Yassine Yahyawi</p>
-          <p>deidarayassine45@gmail.com</p>
+          <p>{user?.name}</p>
+          <p>{user?.email}</p>
         </div>
       </div>
 
@@ -104,11 +118,39 @@ const Footer = () => {
 
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
+
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
+
+          <DropdownMenuItem className="cursor-pointer">
+            Account
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            My Activity
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem className="cursor-pointer">
+            Billing & Subscriptions
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            Users & Permissions
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem className="cursor-pointer">
+            Settings
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={onLogOutHandler}
+          >
+            Log Out
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
