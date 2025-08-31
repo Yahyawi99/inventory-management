@@ -46,6 +46,8 @@ export interface MetricsData {
   change?: number;
 }
 
+export type SummaryCardsRawMetrics<T = Record<string, number>> = T;
+
 export interface SortConfig {
   field: string;
   direction: "desc" | "asc";

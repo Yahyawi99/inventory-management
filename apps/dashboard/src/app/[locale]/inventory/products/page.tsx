@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { fetch } from "@services/application/products";
-import { Product } from "@/types/products";
+import { Product, ProductsSummaryMetrics } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
 import {
   Header,
@@ -26,6 +26,7 @@ import {
   tableColumns,
 } from "@/constants/products";
 import { buildOrdersApiUrl } from "@/utils/products";
+import { exportOrdersAsJson } from "@/utils/shared";
 
 const headerData = {
   title: "Products",
@@ -180,7 +181,16 @@ export default function Products() {
     ]);
   }, [summaryProducts]);
 
-  const exportData = () => {};
+  const exportData = () => {
+    exportOrdersAsJson<ProductsSummaryMetrics>(
+      tableProducts,
+      {
+        filter: activeFilters,
+        orderBy: activeOrderBy,
+      },
+      metricsData
+    );
+  };
 
   return (
     <section className="overflow-x-hidden">

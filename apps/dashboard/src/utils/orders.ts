@@ -4,14 +4,14 @@ import {
   ActiveFilters,
   StatusDisplay,
   Metrics,
-  SummaryMetrics,
+  OrderSummaryMetrics,
 } from "@/types/orders";
 import { OrderLine } from "@database/generated/prisma";
 import {
   getDateRangesForComparison,
   isDateWithinRange,
 } from "@/utils/dateHelpers";
-import { SortConfig, Pagination } from "app-core/src/types";
+import { SortConfig, Pagination, Data } from "app-core/src/types";
 
 // status styles for the orders table
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
@@ -99,7 +99,9 @@ const accumulateMetrics = (metrics: Metrics, order: Order) => {
   }
 };
 
-export const getOrderSummaryMetrics = (orders: Order[]): SummaryMetrics => {
+export const getOrderSummaryMetrics = (
+  orders: Order[]
+): OrderSummaryMetrics => {
   const { current: currentPeriodRange, previous: previousPeriodRange } =
     getDateRangesForComparison();
 
@@ -162,58 +164,6 @@ export const getOrderSummaryMetrics = (orders: Order[]): SummaryMetrics => {
       previousPeriodMetrics.totalFulfilledOrders
     ),
   };
-};
-
-// generate a json to export
-export const exportOrdersAsJson = (
-  ordersData: Order[],
-  options: {
-    filter: ActiveFilters;
-    orderBy: SortConfig;
-  },
-  summaryData?: SummaryMetrics,
-  filename: string = "orders_export"
-) => {
-  if (!ordersData || ordersData.length === 0 || !summaryData) {
-    console.warn("No order or summary data to export.");
-    return;
-  }
-
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const finalFilename = `${filename}_${timestamp}.json`;
-
-  const dataToExport: {
-    orders: {
-      options: {
-        filter: ActiveFilters;
-        orderBy: SortConfig;
-      };
-      data: Order[];
-    };
-    summary: { date: Date; data: SummaryMetrics; description: string };
-  } = {
-    summary: {
-      date: new Date(),
-      data: summaryData,
-      description:
-        "This summary provides a comparison of key order metrics between the current week (last 7 full days ending yesterday) and the previous 7-day period.",
-    },
-    orders: { options, data: ordersData },
-  };
-
-  const jsonString = JSON.stringify(dataToExport, null, 2);
-  const blob = new Blob([jsonString], { type: "application/json" });
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = finalFilename;
-
-  document.body.appendChild(a);
-  a.click();
-
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 };
 
 // generate api URL for table orders data fetching

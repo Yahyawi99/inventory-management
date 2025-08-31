@@ -43,7 +43,7 @@ export interface Metrics {
   totalFulfilledOrders: number;
 }
 
-export interface SummaryMetrics {
+export interface OrderSummaryMetrics {
   totalOrders: number;
   totalOrderItems: number;
   totalCancelledOrders: number;
