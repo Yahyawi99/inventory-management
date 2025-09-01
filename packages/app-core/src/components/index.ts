@@ -15,6 +15,9 @@ export * from "./ui/skeleton";
 export * from "./ui/table";
 export * from "./ui/textarea";
 export * from "./ui/tooltip";
+export * from "./ui/avatar";
+export * from "./ui/alert";
+export * from "./ui/badge";
 
 export * from "./data-views/FilterDrawer";
 export * from "./data-views/Header";

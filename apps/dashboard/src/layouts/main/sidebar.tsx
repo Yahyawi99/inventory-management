@@ -1,8 +1,9 @@
 "use client";
+import Image from "next/image";
+import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useAuth } from "@/context/AuthContext";
 import { User } from "@/types/auth";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MenuItems } from "./sidebar-menu-items";
 import SidebarMenu from "./sidebar-menu";
@@ -122,7 +123,7 @@ const Footer = ({ user }: { user: User | null }) => {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem className="cursor-pointer">
-            Account
+            <Link href={"/en/account"}>Account</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             My Activity
