@@ -14,3 +14,14 @@ export interface User {
   memberRole: string;
   memberSince: string;
 }
+
+export interface UserSettings {
+  name: string;
+  email: string;
+  image: string | null;
+  twoFactorEnabled: boolean;
+  emailVerified: boolean;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}

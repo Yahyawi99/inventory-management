@@ -10,6 +10,11 @@ datasource b {
 
 // ==================================================
 // ==================================================
+enum UserStatus {
+  Active
+  Suspended
+  Terminated
+}
 
 enum CustomerType {
   B2B
@@ -76,15 +81,16 @@ model Organization {
 
 // EMPLOYEE/TEAM MEMBER 
 model User {
-  id               String   @id @map("_id")
-  name             String   @unique
+  id               String     @id @map("_id")
+  name             String     @unique
   email            String
-  emailVerified    Boolean
   image            String?
   password         String?
+  emailVerified    Boolean
   twoFactorEnabled Boolean?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  status           UserStatus @default(Active)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   sessions   Session[]
   accounts   Account[]
