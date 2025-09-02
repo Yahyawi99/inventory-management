@@ -34,30 +34,11 @@ export const isDateWithinRange = (
   return d >= startDate && d <= endDate;
 };
 
-interface DateRange {
-  startDate: Date;
-  endDate: Date;
-}
-
-export interface SeedDateRanges {
-  current: DateRange;
-  previous: DateRange;
-}
-
-export const getSeedDateRanges = (): SeedDateRanges => {
-  const now = new Date();
-  const currentEndDate = now;
-  const currentStartDate = new Date(now.getFullYear(), now.getMonth(), 1); // Start of current month
-
-  const previousEndDate = new Date(currentStartDate.getTime() - 1); // End of previous month
-  const previousStartDate = new Date(
-    previousEndDate.getFullYear(),
-    previousEndDate.getMonth(),
-    1
-  ); // Start of previous month
-
-  return {
-    current: { startDate: currentStartDate, endDate: currentEndDate },
-    previous: { startDate: previousStartDate, endDate: previousEndDate },
-  };
+export const formatDate = (dateString: string) => {
+  if (!dateString) return "Not provided";
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
