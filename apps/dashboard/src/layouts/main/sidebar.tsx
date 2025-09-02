@@ -118,7 +118,9 @@ const Footer = ({ user }: { user: User | null }) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel className="font-black">
+            My Account
+          </DropdownMenuLabel>
 
           <DropdownMenuSeparator />
 
@@ -142,9 +144,11 @@ const Footer = ({ user }: { user: User | null }) => {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem className="cursor-pointer">
-            Settings
-          </DropdownMenuItem>
+          <Link href={"/en/account/settings"}>
+            <DropdownMenuItem className="cursor-pointer">
+              Settings
+            </DropdownMenuItem>
+          </Link>
 
           <DropdownMenuSeparator />
 

@@ -8,6 +8,7 @@ import Cards from "@/shared/Dashboard/Cards";
 import Charts from "@/shared/Dashboard/Charts";
 import RecentActivity from "@/shared/Dashboard/activity";
 import Action from "@/shared/Dashboard/ActionBtns";
+import Header from "@/layouts/main/header";
 
 export default function Dashboard() {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -20,11 +21,15 @@ export default function Dashboard() {
   }, [isAuthenticated, isAuthLoading]);
 
   return (
-    <section className="flex flex-col gap-8">
-      <Cards />
-      <Charts />
-      <RecentActivity />
-      <Action />
-    </section>
+    <>
+      <Header />
+
+      <section className="flex flex-col gap-8">
+        <Cards />
+        <Charts />
+        <RecentActivity />
+        <Action />
+      </section>
+    </>
   );
 }

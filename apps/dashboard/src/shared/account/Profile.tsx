@@ -12,7 +12,7 @@ import { CheckCircle, Mail, MapPin, Phone, Shield, User } from "lucide-react";
 
 export default function Profile({ userData }: { userData: TUser }) {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden pt-0">
       <div className="relative h-24 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800"></div>
       <CardContent className="pt-0">
         <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-6 -mt-12 mb-6">

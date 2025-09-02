@@ -4,41 +4,12 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { User as TUser } from "@/types/users";
-import { formatDate } from "@/utils/dateHelpers";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Shield,
-  Activity,
-  Package,
-  ShoppingCart,
-  Truck,
-  CheckCircle,
-  Clock,
-  Info,
-  BarChart3,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Badge,
-  Button,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Alert,
-  AlertDescription,
-} from "app-core/src/components";
+import { Loader2, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "app-core/src/components";
 import RightColumn from "@/shared/account/Actions";
 import Profile from "@/shared/account/Profile";
 import StatsGrid from "@/shared/account/Stats";
+import RecentActivity from "@/shared/account/Activity";
 
 export default function Page() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -103,7 +74,6 @@ export default function Page() {
           </p>
         </div>
 
-        {/* Loading State */}
         {isFetchingUserData && (
           <div className="flex items-center justify-center py-10 text-gray-500">
             <Loader2 className="w-6 h-6 animate-spin mr-2" />
@@ -111,7 +81,6 @@ export default function Page() {
           </div>
         )}
 
-        {/* Error State */}
         {error && !isFetchingUserData && (
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="w-4 h-4 mr-2" />
@@ -126,7 +95,7 @@ export default function Page() {
 
               <StatsGrid />
 
-              {/* Recent Activity */}
+              <RecentActivity />
             </div>
 
             <RightColumn twoFactorEnabled={!userData?.twoFactorEnabled} />
