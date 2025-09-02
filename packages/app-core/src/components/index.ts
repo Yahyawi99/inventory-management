@@ -18,6 +18,7 @@ export * from "./ui/tooltip";
 export * from "./ui/avatar";
 export * from "./ui/alert";
 export * from "./ui/badge";
+export * from "./ui/switch";
 
 export * from "./data-views/FilterDrawer";
 export * from "./data-views/Header";
