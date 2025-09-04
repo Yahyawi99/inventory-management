@@ -1,14 +1,7 @@
 import { Card, Badge, CardContent } from "app-core/src/components";
-import { MapPin, Package, ShoppingCart, Truck } from "lucide-react";
+import { DollarSign, Package, ShoppingCart, TrendingUp } from "lucide-react";
 
 const stats = [
-  {
-    label: "Products Managed",
-    value: "2,847",
-    icon: Package,
-    color: "bg-blue-50 text-blue-600",
-    change: "+12%",
-  },
   {
     label: "Orders Processed",
     value: "1,532",
@@ -17,16 +10,23 @@ const stats = [
     change: "+8%",
   },
   {
-    label: "Active Suppliers",
-    value: "48",
-    icon: Truck,
+    label: "Total Sales Generated",
+    value: "$145k",
+    icon: DollarSign,
+    color: "bg-blue-50 text-blue-600",
+    change: "+12%",
+  },
+  {
+    label: "Total Purchases Made",
+    value: "$23k",
+    icon: Package,
     color: "bg-purple-50 text-purple-600",
     change: "+3",
   },
   {
-    label: "Stock Locations",
-    value: "12",
-    icon: MapPin,
+    label: "Stock Items Updated",
+    value: "1,204",
+    icon: TrendingUp,
     color: "bg-orange-50 text-orange-600",
     change: "+2",
   },
@@ -34,12 +34,12 @@ const stats = [
 
 export default function StatsGrid() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
           <Card key={index}>
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xl sm:text-2xl font-bold text-gray-900">

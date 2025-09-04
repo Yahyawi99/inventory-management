@@ -49,7 +49,7 @@ export default function SettingsNavigation({
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-start space-x-3 px-3 py-3 text-left rounded-lg transition-colors ${
+                  className={`w-full flex items-start space-x-3 px-3 py-3 text-left rounded-lg transition-colors cursor-pointer ${
                     activeTab === tab.id
                       ? "bg-blue-50 text-blue-700 border border-blue-200"
                       : "text-gray-700 hover:bg-gray-50"
