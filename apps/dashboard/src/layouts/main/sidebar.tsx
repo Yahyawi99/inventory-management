@@ -137,12 +137,16 @@ const Footer = ({ user }: { user: User | null }) => {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem className="cursor-pointer">
-            Billing & Subscriptions
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            Users & Permissions
-          </DropdownMenuItem>
+          <Link href={"/en/account/billing"}>
+            <DropdownMenuItem className="cursor-pointer">
+              Billing & Subscriptions
+            </DropdownMenuItem>
+          </Link>
+          <Link href={"/en/account/premissions"}>
+            <DropdownMenuItem className="cursor-pointer">
+              Users & Permissions
+            </DropdownMenuItem>
+          </Link>
 
           <DropdownMenuSeparator />
 

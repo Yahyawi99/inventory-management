@@ -19,6 +19,7 @@ export * from "./ui/avatar";
 export * from "./ui/alert";
 export * from "./ui/badge";
 export * from "./ui/switch";
+export * from "./ui/dialog";
 
 export * from "./data-views/FilterDrawer";
 export * from "./data-views/Header";

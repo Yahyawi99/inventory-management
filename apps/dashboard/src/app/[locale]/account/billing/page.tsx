@@ -56,26 +56,26 @@ const mockBillingData = {
 
 export default function Page() {
   return (
-    <div className="grid gap-6">
-      <Card className="p-6">
-        <CardHeader className="p-0">
-          <CardTitle className="text-2xl font-bold">
+    <div className="min-h-screen ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8 text-center sm:text-left">
+          <h1 className="flex items-center text-2xl sm:text-3xl font-bold text-gray-900">
             Billing & Subscriptions
-          </CardTitle>
-          <CardDescription className="text-sm text-gray-500 mt-2">
+          </h1>
+          <p className="text-gray-600 mt-2 text-sm sm:text-base">
             Manage your plan, update payment details, and view your invoice
-            history.
-          </CardDescription>
-        </CardHeader>
+            history.{" "}
+          </p>
+        </div>
 
-        <Separator className="my-6" />
+        <Card className="p-6">
+          <BillingDetails data={mockBillingData} />
 
-        <BillingDetails data={mockBillingData} />
+          <Separator className="my-6" />
 
-        <Separator className="my-6" />
-
-        <InvoiceHistory data={mockBillingData} />
-      </Card>
+          <InvoiceHistory data={mockBillingData} />
+        </Card>
+      </div>
     </div>
   );
 }
