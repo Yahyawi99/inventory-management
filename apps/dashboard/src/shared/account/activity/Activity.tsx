@@ -69,14 +69,6 @@ export default function RecentActivity() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center text-lg sm:text-xl">
-          <Activity className="w-5 h-5 mr-2" /> Recent Activity
-        </CardTitle>
-        <CardDescription className="text-sm sm:text-base">
-          Your recent actions in the inventory management system
-        </CardDescription>
-      </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {recentActivity.map((activity, index) => (

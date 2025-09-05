@@ -129,9 +129,11 @@ const Footer = ({ user }: { user: User | null }) => {
               Account
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem className="cursor-pointer">
-            My Activity
-          </DropdownMenuItem>
+          <Link href={"/en/account/activity"}>
+            <DropdownMenuItem className="cursor-pointer">
+              My Activity
+            </DropdownMenuItem>
+          </Link>
 
           <DropdownMenuSeparator />
 

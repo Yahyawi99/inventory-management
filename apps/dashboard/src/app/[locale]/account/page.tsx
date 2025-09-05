@@ -9,7 +9,6 @@ import { Alert, AlertDescription } from "app-core/src/components";
 import RightColumn from "@/shared/account/Actions";
 import Profile from "@/shared/account/Profile";
 import StatsGrid from "@/shared/account/Stats";
-import RecentActivity from "@/shared/account/Activity";
 
 export default function Page() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -94,8 +93,6 @@ export default function Page() {
               <Profile userData={userData} />
 
               <StatsGrid />
-
-              <RecentActivity />
             </div>
 
             <RightColumn twoFactorEnabled={!userData?.twoFactorEnabled} />
