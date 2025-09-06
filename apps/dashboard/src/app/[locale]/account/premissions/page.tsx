@@ -1,25 +1,6 @@
 import Main from "@/shared/account/premissions/Main";
 
 export default function Page() {
-  // Handler to add a new user
-  // const handleAddUser = (e: any) => {
-  //   e.preventDefault();
-  //   if (!newUserName || !newUserEmail) return;
-
-  //   const newUser = {
-  //     id: `user-${Date.now()}`,
-  //     name: newUserName,
-  //     email: newUserEmail,
-  //     role: newUserRole,
-  //     status: "Active",
-  //   };
-  //   setUsers([...users, newUser]);
-  //   setNewUserName("");
-  //   setNewUserEmail("");
-  //   setNewUserRole("Viewer");
-  //   setIsAddModalOpen(false);
-  // };
-
   return (
     <div className="min-h-screen ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">

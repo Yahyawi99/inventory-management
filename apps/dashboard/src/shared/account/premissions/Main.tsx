@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import {
   Card,
   CardContent,
@@ -11,27 +12,61 @@ import { createTableColumns } from "@/constants/users";
 import { Pagination } from "app-core/src/types";
 import UsersHeader from "./Header";
 import DeleteModal from "./DeleteModal";
+import { User } from "@/types/users";
 
 export default function UsersCard() {
-  const [tableUsers, setTableUsers] = useState([
-    {
-      id: "user-1",
-      organizationId: "ft",
-      name: "Alice Smith",
-      email: "alice.s@example.com",
-      role: "Admin",
-      status: "Active",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]);
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+
+  const [tableUsers, setTableUsers] = useState<User[]>([]);
   const [isFetchingTableUsers, setIsFetchingTableUsers] = useState(false);
+
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
     totalPages: null,
   });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState();
+  const [userToDelete, setUserToDelete] = useState<User>();
+  const [error, setError] = useState<string | null>("");
+
+  // Table Users
+  const fetchTableUsers = useCallback(async () => {
+    if (!user || !user.activeOrganizationId) {
+      setIsFetchingTableUsers(false);
+      setError("User or organization ID not available for table.");
+      return;
+    }
+
+    setIsFetchingTableUsers(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/user");
+
+      if (response.status !== 200) {
+        throw new Error(
+          response.statusText || "Failed to fetch table orders from API."
+        );
+      }
+
+      const data = await response.json();
+
+      setTableUsers(data.users);
+      setPagination({ ...pagination, totalPages: data.totalPages });
+    } catch (err: any) {
+      console.error("Error fetching table orders:", err);
+      setError(
+        err.message ||
+          "An unexpected error occurred while fetching table orders."
+      );
+    } finally {
+      setIsFetchingTableUsers(false);
+    }
+  }, [user, isAuthenticated, pagination.page]);
+
+  useEffect(() => {
+    if (isAuthenticated && !isAuthLoading) {
+      fetchTableUsers();
+    }
+  }, [isAuthLoading, fetchTableUsers]);
 
   // Handler to delete a user
   const onTrashClick = (user: any) => {
@@ -62,7 +97,7 @@ export default function UsersCard() {
             totalPages={pagination?.totalPages ? pagination.totalPages : 0}
             setPagination={setPagination}
           >
-            <DataTable<any> data={tableUsers} columns={tableColumns} />
+            <DataTable<User> data={tableUsers} columns={tableColumns} />
           </TableView>
         </CardContent>
       </Card>

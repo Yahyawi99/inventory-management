@@ -1,6 +1,6 @@
-import { InputJsonValue } from "@database/generated/prisma/runtime/library";
+import { InputJsonValue } from "database/generated/prisma/runtime/library";
 import Prisma from "database";
-import { Product } from "@database/generated/prisma";
+import { Product } from "database/generated/prisma/client";
 
 interface Filters {
   status?: "All" | "In Stock" | "Low Stock" | "Out of Stock";

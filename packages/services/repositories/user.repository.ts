@@ -1,5 +1,5 @@
 import Prisma from "database";
-import { User } from "database/generated/prisma/client";
+import { User, Prisma as P } from "database/generated/prisma/client";
 
 // interface Filters {
 //   category?: string;
@@ -11,23 +11,72 @@ import { User } from "database/generated/prisma/client";
 //   direction: "desc" | "asc";
 // }
 
+/*
+name
+email
+role
+status
+
+*/
+
 export const UserRepository = {
-  // async findMany(orgId: string): Promise<Category[] | null> {
-  //   const whereClause: P.CategoryWhereInput = {
-  //     organizationId: orgId,
-  //   };
+  async findMany(
+    orgId: string,
+    { page, pageSize }: { page: number; pageSize: number }
+  ) {
+    const whereClause: P.MemberWhereInput = {
+      organizationId: orgId,
+    };
 
-  //   try {
-  //     const res = await Prisma.category.findMany({
-  //       where: whereClause,
-  //     });
+    try {
+      const res = await Prisma.member.findMany({
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        where: whereClause,
+        include: {
+          user: true,
+          organization: true,
+        },
+      });
 
-  //     return res;
-  //   } catch (e) {
-  //     console.log("Error while fetching categories: ", e);
-  //     return null;
-  //   }
-  // },
+      if (!res || res.length === 0) {
+        return null;
+      }
+
+      const totalUsers = await Prisma.member.count({
+        where: whereClause,
+      });
+      const totalPages = Math.ceil(totalUsers / pageSize);
+
+      const users = res.map((member) => {
+        const { user, organization } = member;
+        return {
+          id: member.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          status: user.status,
+          emailVerified: user.emailVerified,
+          twoFactorEnabled: user.twoFactorEnabled,
+          createdAt: user.createdAt,
+          currentOrganization: organization
+            ? {
+                name: organization.name,
+                phone: organization.phone,
+                address: organization.address,
+              }
+            : null,
+          memberRole: member.role,
+          memberSince: member.createdAt,
+        };
+      });
+
+      return { totalPages, users };
+    } catch (e) {
+      console.log("Error while fetching users: ", e);
+      return null;
+    }
+  },
 
   async findUnique(userId: string, orgId: string) {
     try {

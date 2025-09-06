@@ -16,8 +16,17 @@ import {
   UserIcon,
 } from "lucide-react";
 import { getRoleBadgeColor } from "@/utils/users";
+import { Role } from "@database/generated/prisma";
 
-export const roles = ["Admin", "Editor", "Viewer"];
+export const roles: Role[] = [
+  "Super_Admin",
+  "Admin",
+  "Manager",
+  "Analyst",
+  "Contributor",
+  "Employee",
+  "Intern",
+];
 
 export function createTableColumns({
   handleRoleChange,
@@ -66,7 +75,7 @@ export function createTableColumns({
       ),
       render: (user: any) => (
         <Select
-          value={user.role}
+          value={user.memberRole}
           onValueChange={(value) => handleRoleChange(user.id, value)}
         >
           <SelectTrigger className="w-full  rounded-full">
@@ -94,7 +103,7 @@ export function createTableColumns({
       render: (user: any) => (
         <div
           className={`rounded-full ${getRoleBadgeColor(
-            user.role
+            user.memberRole
           )} flex items-center justify-center space-x-2 py-1`}
         >
           <Badge></Badge>

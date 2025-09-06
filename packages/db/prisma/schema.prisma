@@ -41,6 +41,16 @@ enum InvoiceStatus {
   Void
 }
 
+enum Role {
+  Super_Admin
+  Admin
+  Manager
+  Analyst
+  Contributor
+  Employee
+  Intern
+}
+
 type Address {
   street     String
   city       String
@@ -163,7 +173,7 @@ model Verification {
 // junction model for organization and user
 model Member {
   id        String   @id @map("_id")
-  role      String
+  role      Role
   createdAt DateTime @default(now())
 
   organizationId String
