@@ -15,7 +15,6 @@ import { Plus } from "lucide-react";
 
 export default function Header() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Handler to add a new user
   const handleAddUser = (e: any) => {
