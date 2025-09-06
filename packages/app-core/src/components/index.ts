@@ -20,6 +20,7 @@ export * from "./ui/alert";
 export * from "./ui/badge";
 export * from "./ui/switch";
 export * from "./ui/dialog";
+export * from "./ui/checkbox";
 
 export * from "./data-views/FilterDrawer";
 export * from "./data-views/Header";

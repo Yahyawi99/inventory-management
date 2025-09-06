@@ -74,6 +74,63 @@ export const generateOTPEmail = (userName: string, otp: string) => ({
   `,
 });
 
+export const generateInviteEmail = (
+  inviteLink: string,
+  inviterName?: string
+) => ({
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #333; margin-bottom: 10px;">WareFlow - You're Invited!</h1>
+        <p style="color: #666; font-size: 16px;">${
+          inviterName ? inviterName : "Someone"
+        } has invited you to join WareFlow</p>
+      </div>
+      
+      <div style="background: #f8f9fa; border-radius: 10px; padding: 30px; text-align: center; margin: 30px 0;">
+        <p style="color: #333; font-size: 18px; margin-bottom: 20px;">
+          Hi there,
+        </p>
+        <p style="color: #666; margin-bottom: 30px;">
+          Click the button below to accept the invitation and get started:
+        </p>
+        <a href="${inviteLink}" style="display: inline-block; background: #007bff; color: white; text-decoration: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold;">
+          Accept Invitation
+        </a>
+        <p style="color: #666; font-size: 14px; margin-top: 20px;">
+          This invitation link will expire in <strong>48 hours</strong>.
+        </p>
+      </div>
+      
+      <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px;">
+        <p style="color: #999; font-size: 12px; text-align: center;">
+          If you didn't expect this invitation, you can safely ignore this email.
+        </p>
+        <p style="color: #999; font-size: 12px; text-align: center; margin-top: 10px;">
+          <strong>WareFlow Team</strong>
+        </p>
+      </div>
+    </div>
+  `,
+  text: `
+    WareFlow - You're Invited!
+    
+    Hi there,
+    
+    ${inviterName ? inviterName : "Someone"} has invited you to join WareFlow.
+    
+    Accept the invitation by clicking the link below:
+    ${inviteLink}
+    
+    This invitation link will expire in 48 hours.
+    
+    If you didn't expect this invitation, you can safely ignore this email.
+    
+    Best regards,
+    WareFlow Team
+  `,
+});
+
 // Email service class
 export class EmailService {
   private transporter: nodemailer.Transporter;
@@ -121,6 +178,53 @@ export class EmailService {
 
       throw new Error(
         "Failed to send verification code. Please try again later."
+      );
+    }
+  }
+
+  async sendInvite(
+    userEmail: string,
+    inviteLink: string,
+    inviterName?: string
+  ) {
+    try {
+      await this.transporter.verify();
+
+      const emailContent = generateInviteEmail(inviteLink, inviterName);
+
+      const info = await this.transporter.sendMail({
+        from: {
+          name: "WareFlow",
+          address: process.env.EMAIL_FROM || "noreply@wareflow.com",
+        },
+        to: userEmail,
+        subject: "WareFlow -  Invitation Link",
+        ...emailContent,
+      });
+
+      return { success: true, messageId: info.messageId };
+    } catch (error) {
+      console.error("Failed to send invitation link:", error);
+
+      // more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes("EAUTH")) {
+          throw new Error(
+            "Email authentication failed. Please check your SMTP credentials."
+          );
+        } else if (error.message.includes("ECONNREFUSED")) {
+          throw new Error(
+            "Failed to connect to email server. Please check your SMTP configuration."
+          );
+        } else if (error.message.includes("ETIMEDOUT")) {
+          throw new Error(
+            "Email server connection timed out. Please try again later."
+          );
+        }
+      }
+
+      throw new Error(
+        "Failed to send invitation link. Please try again later."
       );
     }
   }

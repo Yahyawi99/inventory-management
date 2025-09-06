@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { roles } from "@/constants/users";
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogClose,
   DialogContent,
@@ -10,29 +12,56 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "app-core/src/components";
 import { Plus } from "lucide-react";
 
 export default function Header() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    role: "Employee",
+    emailVerified: false,
+    twoFactorEnabled: false,
+  });
 
-  // Handler to add a new user
-  const handleAddUser = (e: any) => {
+  const handleAddUser = (userData: any) => {
+    console.log("Attempting to add new user:", userData);
+    // Add your API call or database operation here
+    // Instead of an alert, use a custom modal in a real app
+  };
+
+  const handleChange = (e: any) => {
+    const { id, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData((prevData) => ({ ...prevData, role: value }));
+  };
+
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    // if (!newUserName || !newUserEmail) return;
-
-    // const newUser = {
-    //   id: `user-${Date.now()}`,
-    //   name: newUserName,
-    //   email: newUserEmail,
-    //   role: newUserRole,
-    //   status: "Active",
-    // };
-    // setUsers([...users, newUser]);
-    // setNewUserName("");
-    // setNewUserEmail("");
-    // setNewUserRole("Viewer");
-    // setIsAddModalOpen(false);
+    handleAddUser(formData);
+    // You can close the modal and reset the form after successful submission
+    setIsAddModalOpen(false);
+    setFormData({
+      name: "",
+      email: "",
+      role: "Employee",
+      emailVerified: false,
+      twoFactorEnabled: false,
+    });
   };
 
   return (
@@ -56,7 +85,78 @@ export default function Header() {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleAddUser} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name Field */}
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Email Field */}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="email@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Role Field */}
+            <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
+              <Select onValueChange={handleSelectChange} value={formData.role}>
+                <SelectTrigger id="role" className="w-full">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roles.map((role) =>
+                    role !== "Super_Admin" ? (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ) : null
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Checkbox Fields */}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="emailVerified"
+                checked={formData.emailVerified}
+                onCheckedChange={
+                  (checked) => {}
+                  // setFormData((prev) => ({ ...prev, emailVerified: checked }))
+                }
+              />
+              <Label htmlFor="emailVerified">Email Verified</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="twoFactorEnabled"
+                checked={formData.twoFactorEnabled}
+                onCheckedChange={
+                  (checked) => {}
+                  // setFormData((prev) => ({
+                  //   ...prev,
+                  //   twoFactorEnabled: checked,
+                  // }))
+                }
+              />
+              <Label htmlFor="twoFactorEnabled">2FA Enabled</Label>
+            </div>
+
             <DialogFooter className="pt-4 flex justify-end gap-2">
               <DialogClose asChild>
                 <Button
