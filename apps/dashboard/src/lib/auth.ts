@@ -3,8 +3,17 @@ import { organization, emailOTP } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@database/generated/prisma/client";
 import { emailService } from "./email";
-import { Role } from "@database/generated/prisma/client";
-
+import {
+  ac,
+  owner,
+  admin,
+  member,
+  manager,
+  analyst,
+  contributor,
+  employee,
+  intern,
+} from "@/lib/premission";
 const prisma = new PrismaClient();
 
 export const auth = betterAuth({
@@ -30,6 +39,17 @@ export const auth = betterAuth({
 
         // Send email (replace with your email service)
         await emailService.sendInvite(email, invitationLink, inviterName);
+      },
+      ac,
+      roles: {
+        owner,
+        admin,
+        member,
+        manager,
+        analyst,
+        contributor,
+        employee,
+        intern,
       },
     }),
     emailOTP({

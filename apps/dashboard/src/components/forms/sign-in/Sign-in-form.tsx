@@ -38,7 +38,7 @@ export default function SignInForm() {
     }
 
     try {
-      const { data, error: signInError } = await authClient.signIn.email(
+      await authClient.signIn.email(
         {
           email,
           password,
@@ -71,6 +71,8 @@ export default function SignInForm() {
             }
 
             // If email is verified, set activeOrganizationId and redirect to main app
+            setSuccessMessage("Working on it...");
+
             const { data: organizations, error: _ } =
               await authClient.organization.list();
 

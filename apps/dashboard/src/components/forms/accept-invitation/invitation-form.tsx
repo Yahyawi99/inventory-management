@@ -52,12 +52,12 @@ export default function InvitationForm({
   rejectInvitation,
 }: InvitationFormProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-4">
           <div className="text-center space-y-2">
             <div className="mx-auto h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-              <Building className="h-6 w-6 text-blue-600" />
+              <Building className="h-6 w-6 text-sidebar" />
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
               Join {invitation?.organizationName}
@@ -161,7 +161,7 @@ export default function InvitationForm({
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-11 bg-blue-600 hover:bg-blue-700"
+                className="h-11 bg-sidebar border-2 border-sidebar hover:bg-transparent hover:text-sidebar"
               >
                 {loading ? (
                   <>

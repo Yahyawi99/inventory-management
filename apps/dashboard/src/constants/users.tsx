@@ -16,16 +16,16 @@ import {
   UserIcon,
 } from "lucide-react";
 import { getRoleBadgeColor } from "@/utils/users";
-import { Role } from "@database/generated/prisma";
 
-export const roles: Role[] = [
-  "Super_Admin",
-  "Admin",
-  "Manager",
-  "Analyst",
-  "Contributor",
-  "Employee",
-  "Intern",
+export const roles = [
+  { value: "owner", label: "Owner" },
+  { value: "admin", label: "Admin" },
+  { value: "member", label: "Member" },
+  { value: "manager", label: "Manager" },
+  { value: "analyst", label: "Analyst" },
+  { value: "contributor", label: "Contributor" },
+  { value: "employee", label: "Employee" },
+  { value: "intern", label: "Intern" },
 ];
 
 export function createTableColumns({
@@ -82,9 +82,9 @@ export function createTableColumns({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {roles.map((role) => (
-              <SelectItem key={role} value={role}>
-                {role}
+            {roles.map(({ value, label }) => (
+              <SelectItem key={label} value={value}>
+                {label}
               </SelectItem>
             ))}
           </SelectContent>

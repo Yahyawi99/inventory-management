@@ -13,7 +13,7 @@ export default function Error({ error }: { error: string }) {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-rose-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">

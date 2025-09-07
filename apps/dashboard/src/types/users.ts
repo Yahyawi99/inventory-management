@@ -40,3 +40,13 @@ export interface Invitation {
   organizationSlug: string;
   inviterEmail: string;
 }
+
+export type UserRoles =
+  | "owner"
+  | "admin"
+  | "member"
+  | "manager"
+  | "analyst"
+  | "contributor"
+  | "employee"
+  | "intern";

@@ -87,6 +87,7 @@ export default function UsersCard() {
     <>
       <Card className="w-full rounded-3xl shadow-xl transition-all duration-300">
         <CardContent className="p-8 pt-0">
+          {/* Header */}
           <UsersHeader />
 
           {/* Table */}

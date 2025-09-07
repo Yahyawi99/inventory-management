@@ -31,6 +31,10 @@ export default function Page() {
   useEffect(() => {
     if (invitationId) {
       loadInvitation();
+    } else {
+      setError("No invitation ID provided. Please check your invitation link.");
+      setStep("error");
+      setLoading(false);
     }
   }, [invitationId]);
 
