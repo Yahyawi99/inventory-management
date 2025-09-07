@@ -42,7 +42,7 @@ enum InvoiceStatus {
 }
 
 enum Role {
-  Super_Admin
+  Owner
   Admin
   Manager
   Analyst
@@ -73,16 +73,17 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  products   Product[]
-  stocks     Stock[]
-  stockItems StockItem[]
-  categories Category[]
-  customers  Customer[]
-  suppliers  Supplier[]
-  contacts   ContactPerson[]
-  orders     Order[]
-  invoices   Invoice[]
-  members    Member[]
+  products    Product[]
+  stocks      Stock[]
+  stockItems  StockItem[]
+  categories  Category[]
+  customers   Customer[]
+  suppliers   Supplier[]
+  contacts    ContactPerson[]
+  orders      Order[]
+  invoices    Invoice[]
+  members     Member[]
+  invitations Invitation[]
 
   @@unique([slug])
   @@index([email])
@@ -102,14 +103,38 @@ model User {
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
-  sessions   Session[]
-  accounts   Account[]
-  orders     Order[]
-  members    Member[]
-  twofactors TwoFactor[]
+  sessions        Session[]
+  accounts        Account[]
+  orders          Order[]
+  members         Member[]
+  twofactors      TwoFactor[]
+  sentInvitations Invitation[] @relation("InviterInvitations")
 
   @@unique([email])
   @@map("user")
+}
+
+model Invitation {
+  id        String   @id @map("_id")
+  email     String
+  role      String
+  status    String   @default("pending")
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  inviterId String
+  inviter   User   @relation("InviterInvitations", fields: [inviterId], references: [id])
+
+  @@unique([email, organizationId]) // Prevent duplicate invites to same org
+  @@index([email])
+  @@index([organizationId])
+  @@index([status])
+  @@map("invitation")
 }
 
 model TwoFactor {
@@ -173,7 +198,7 @@ model Verification {
 // junction model for organization and user
 model Member {
   id        String   @id @map("_id")
-  role      Role
+  role      String   @default("Employee")
   createdAt DateTime @default(now())
 
   organizationId String
