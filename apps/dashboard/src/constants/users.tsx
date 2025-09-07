@@ -16,6 +16,7 @@ import {
   UserIcon,
 } from "lucide-react";
 import { getRoleBadgeColor } from "@/utils/users";
+import { User } from "@/types/users";
 
 export const roles = [
   { value: "owner", label: "Owner" },
@@ -73,20 +74,24 @@ export function createTableColumns({
           <Briefcase className="h-4 w-4" /> <span>Role</span>
         </div>
       ),
-      render: (user: any) => (
+      render: (user: User) => (
         <Select
           value={user.memberRole}
+          defaultValue={user.memberRole}
           onValueChange={(value) => handleRoleChange(user.id, value)}
         >
           <SelectTrigger className="w-full  rounded-full">
-            <SelectValue />
+            <SelectValue placeholder="Select Role" />
           </SelectTrigger>
+
           <SelectContent>
-            {roles.map(({ value, label }) => (
-              <SelectItem key={label} value={value}>
-                {label}
-              </SelectItem>
-            ))}
+            {roles.map(({ value, label }) =>
+              value !== "owner" ? (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ) : null
+            )}
           </SelectContent>
         </Select>
       ),
