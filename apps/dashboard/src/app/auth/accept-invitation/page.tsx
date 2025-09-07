@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Invitation } from "@/types/users";
 import { useParams } from "next/navigation";
+import InvitationForm from "@/components/forms/accept-invitation/invitation-form";
+import Error from "@/shared/invitation/Error";
+import Loading from "@/shared/invitation/Loading";
+import Success from "@/shared/invitation/Success";
 
 export default function Page() {
   const { id: invitationId } = useParams();
@@ -12,10 +16,12 @@ export default function Page() {
 
   const [invitation, setInvitation] = useState<Invitation>();
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState("");
   const [step, setStep] = useState<
     "loading" | "create-account" | "success" | "error"
-  >("create-account");
+  >("loading");
+
   const [formData, setFormData] = useState({
     name: "",
     password: "",
@@ -24,11 +30,10 @@ export default function Page() {
 
   useEffect(() => {
     if (invitationId) {
+      loadInvitation();
     }
-    loadInvitation();
   }, [invitationId]);
 
-  // Load Invitation
   const loadInvitation = async () => {
     try {
       const result = await authClient.organization.getInvitation({
@@ -36,7 +41,7 @@ export default function Page() {
       });
 
       if (result.error) {
-        setError(result.error.message || "");
+        setError(result.error.message || "Failed to load invitation");
         setStep("error");
       } else {
         setInvitation(result.data);
@@ -71,11 +76,13 @@ export default function Page() {
       });
 
       if (result.error) {
-        setError(result.error.message || "");
+        setError(result.error.message || "Failed to accept invitation");
         setStep("error");
       } else {
         setStep("success");
-        router.push("/en/dashboard");
+        setTimeout(() => {
+          router.push("/en/dashboard");
+        }, 2000);
       }
     } catch (err) {
       setError("Failed to accept invitation");
@@ -83,7 +90,6 @@ export default function Page() {
     }
   };
 
-  // Create Account
   const createAccountAndAcceptInvitation = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -132,7 +138,7 @@ export default function Page() {
             return;
           }
         } else {
-          setError(signUpResult.error.message || "");
+          setError(signUpResult.error.message || "Failed to create account");
           return;
         }
       }
@@ -151,7 +157,9 @@ export default function Page() {
 
       // Success!
       setStep("success");
-      router.push("/dashboard");
+      setTimeout(() => {
+        router.push("/en/dashboard");
+      }, 2000);
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
     } finally {
@@ -174,168 +182,29 @@ export default function Page() {
 
   // Loading state
   if (step === "loading") {
-    return (
-      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4">Loading invitation...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   // Error state
   if (step === "error") {
-    return (
-      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <div className="text-red-500 text-4xl mb-4">⚠️</div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Invitation Error
-          </h2>
-          <p className="text-red-600 mb-6">{error}</p>
-          <button
-            onClick={() => router.push("/")}
-            className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
-          >
-            Go Home
-          </button>
-        </div>
-      </div>
-    );
+    return <Error error={error} />;
   }
 
   // Success state
   if (step === "success") {
-    return (
-      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <div className="text-green-500 text-4xl mb-4">✅</div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Welcome to {invitation?.organizationName}!
-          </h2>
-          <p className="text-gray-600 mb-6">
-            You have successfully joined as a{" "}
-            <strong>{invitation?.role}</strong>.
-          </p>
-          <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
-        </div>
-      </div>
-    );
+    return <Success invitation={invitation} />;
   }
 
   // Account creation form
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          Join {invitation?.organizationName}
-        </h2>
-        <p className="text-gray-600">
-          You've been invited as a <strong>{invitation?.role}</strong>
-        </p>
-        <p className="text-sm text-gray-500 mt-2">
-          Email: <strong>{invitation?.email}</strong>
-        </p>
-      </div>
-
-      <form onSubmit={createAccountAndAcceptInvitation} className="space-y-4">
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Full Name *
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={formData.name}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, name: e.target.value }))
-            }
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your full name"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Password *
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, password: e.target.value }))
-            }
-            required
-            minLength={8}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Create a strong password (min 8 characters)"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Confirm Password *
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                confirmPassword: e.target.value,
-              }))
-            }
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Confirm your password"
-          />
-        </div>
-
-        {error && (
-          <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
-            {error}
-          </div>
-        )}
-
-        <div className="flex space-x-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Creating Account..." : "Create Account & Join"}
-          </button>
-
-          <button
-            type="button"
-            onClick={rejectInvitation}
-            className="flex-1 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            disabled={loading}
-          >
-            Decline
-          </button>
-        </div>
-      </form>
-
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <p className="text-xs text-gray-500 text-center">
-          By creating an account, you agree to join{" "}
-          {invitation?.organizationName} and accept their terms of use.
-        </p>
-      </div>
-    </div>
+    <InvitationForm
+      invitation={invitation}
+      loading={loading}
+      error={error}
+      formData={formData}
+      setFormData={setFormData}
+      createAccountAndAcceptInvitation={createAccountAndAcceptInvitation}
+      rejectInvitation={rejectInvitation}
+    />
   );
 }
