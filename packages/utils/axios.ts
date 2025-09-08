@@ -8,7 +8,11 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage ? localStorage.getItem("token") : null;
+  // Check if we're in browser environment
+  const token =
+    typeof window !== "undefined" && localStorage
+      ? localStorage.getItem("token")
+      : null;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { fetchByEmail } from "@services/application/users";
 import { authClient } from "@/lib/auth-client";
 import { Invitation } from "@/types/users";
-import { useParams } from "next/navigation";
 import InvitationForm from "@/components/forms/accept-invitation/invitation-form";
 import Error from "@/shared/invitation/Error";
 import Loading from "@/shared/invitation/Loading";
 import Success from "@/shared/invitation/Success";
 
 export default function Page() {
-  const { id: invitationId } = useParams();
+  const searchParams = useSearchParams();
+  const invitationId = searchParams.get("id");
+  const invitationEmail = searchParams.get("email");
   const router = useRouter();
 
   const [invitation, setInvitation] = useState<Invitation>();
@@ -45,6 +48,20 @@ export default function Page() {
       });
 
       if (result.error) {
+        console.log(result.error.status);
+
+        if (result.error.status === 401) {
+          try {
+            const user = await fetchByEmail(
+              `/user?email=${encodeURIComponent(invitationEmail as string)}`
+            );
+
+            console.log(invitationEmail, user);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
         setError(result.error.message || "Failed to load invitation");
         setStep("error");
       } else {

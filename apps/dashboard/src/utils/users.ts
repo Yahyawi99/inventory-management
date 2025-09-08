@@ -1,3 +1,5 @@
+import { authClient } from "@/lib/auth-client";
+
 export const getRoleBadgeColor = (role: string): string => {
   switch (role) {
     case "Super_Admin":

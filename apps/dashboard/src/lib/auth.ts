@@ -35,7 +35,7 @@ export const auth = betterAuth({
           where: { id: inviter.userId },
         });
         const inviterName = user?.name || "";
-        const invitationLink = `${process.env.BETTER_AUTH_URL}/accept-invitation?id=${invitation.id}`;
+        const invitationLink = `${process.env.BETTER_AUTH_URL}/auth/accept-invitation?id=${invitation.id}&email=${email}`;
 
         // Send email (replace with your email service)
         await emailService.sendInvite(email, invitationLink, inviterName);

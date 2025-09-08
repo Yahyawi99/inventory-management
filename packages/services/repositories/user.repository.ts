@@ -120,4 +120,19 @@ export const UserRepository = {
       console.log(e);
     }
   },
+
+  async findByEmail(email: string) {
+    try {
+      const res = await Prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      return res;
+    } catch (e) {
+      console.log("Error while fetching user " + email);
+      console.log(e);
+    }
+  },
 };

@@ -32,7 +32,7 @@ export interface Invitation {
   id: string;
   organizationId: string;
   email: string;
-  role: "member" | "admin" | "owner";
+  role: UserRoles;
   status: InvitationStatus;
   inviterId: string;
   expiresAt: Date;
