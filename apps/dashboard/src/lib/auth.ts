@@ -1,5 +1,9 @@
 import { betterAuth } from "better-auth";
-import { organization, emailOTP } from "better-auth/plugins";
+import {
+  organization,
+  emailOTP,
+  admin as adminPlugin,
+} from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@database/generated/prisma/client";
 import { emailService } from "./email";
@@ -52,6 +56,7 @@ export const auth = betterAuth({
         intern,
       },
     }),
+
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         const user = await prisma.user.findUnique({ where: { email } });
@@ -64,6 +69,8 @@ export const auth = betterAuth({
       otpLength: 6,
       expiresIn: 60 * 10,
     }),
+
+    adminPlugin(),
   ],
 
   database: prismaAdapter(prisma, {

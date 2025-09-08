@@ -48,19 +48,8 @@ export default function Page() {
       });
 
       if (result.error) {
-        console.log(result.error.status);
-
-        if (result.error.status === 401) {
-          try {
-            const user = await fetchByEmail(
-              `/user?email=${encodeURIComponent(invitationEmail as string)}`
-            );
-
-            console.log(invitationEmail, user);
-          } catch (error) {
-            console.log(error);
-          }
-        }
+        // const userExists = await authClient.;
+        // console.log(userExists);
 
         setError(result.error.message || "Failed to load invitation");
         setStep("error");

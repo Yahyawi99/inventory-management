@@ -1,5 +1,9 @@
 import { createAuthClient } from "better-auth/client";
-import { organizationClient, emailOTPClient } from "better-auth/client/plugins";
+import {
+  organizationClient,
+  emailOTPClient,
+  adminClient,
+} from "better-auth/client/plugins";
 import {
   ac,
   owner,
@@ -28,5 +32,6 @@ export const authClient = createAuthClient({
       },
     }),
     emailOTPClient(),
+    adminClient(),
   ],
 });

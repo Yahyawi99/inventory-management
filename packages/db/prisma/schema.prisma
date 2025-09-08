@@ -41,16 +41,6 @@ enum InvoiceStatus {
   Void
 }
 
-enum Role {
-  Owner
-  Admin
-  Manager
-  Analyst
-  Contributor
-  Employee
-  Intern
-}
-
 type Address {
   street     String
   city       String
@@ -100,41 +90,22 @@ model User {
   emailVerified    Boolean
   twoFactorEnabled Boolean?
   status           UserStatus @default(Active)
+  role             String?
+  banned           Boolean?   @default(false)
+  banReason        String?
+  banExpires       DateTime?
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
-  sessions        Session[]
-  accounts        Account[]
-  orders          Order[]
-  members         Member[]
-  twofactors      TwoFactor[]
-  sentInvitations Invitation[] @relation("InviterInvitations")
+  sessions    Session[]
+  accounts    Account[]
+  orders      Order[]
+  members     Member[]
+  twofactors  TwoFactor[]
+  invitations Invitation[]
 
   @@unique([email])
   @@map("user")
-}
-
-model Invitation {
-  id        String   @id @map("_id")
-  email     String
-  role      String
-  status    String   @default("pending")
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  inviterId String
-  inviter   User   @relation("InviterInvitations", fields: [inviterId], references: [id])
-
-  @@unique([email, organizationId]) // Prevent duplicate invites to same org
-  @@index([email])
-  @@index([organizationId])
-  @@index([status])
-  @@map("invitation")
 }
 
 model TwoFactor {
@@ -156,9 +127,11 @@ model Session {
   updatedAt            DateTime
   ipAddress            String?
   userAgent            String?
-  userId               String
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   activeOrganizationId String?
+  impersonatedBy       String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@map("session")
@@ -198,8 +171,8 @@ model Verification {
 // junction model for organization and user
 model Member {
   id        String   @id @map("_id")
-  role      String   @default("Employee")
-  createdAt DateTime @default(now())
+  role      String
+  createdAt DateTime
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -211,6 +184,22 @@ model Member {
   @@index([userId])
   @@index([organizationId])
   @@map("member")
+}
+
+model Invitation {
+  id        String   @id @map("_id")
+  email     String
+  role      String?
+  status    String
+  expiresAt DateTime
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  inviterId String
+  user      User   @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@map("invitation")
 }
 
 // Item in the inventory
@@ -369,15 +358,13 @@ model ContactPerson {
 
 // single transaction for the movement of products
 model Order {
-  id                 String      @id @map("_id")
-  orderDate          DateTime    @default(now())
-  orderNumber        String
-  status             OrderStatus
-  totalItemsQuantity Int?
-  totalAmount        Float
-  orderType          OrderType
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
+  id          String      @id @map("_id")
+  orderDate   DateTime    @default(now())
+  status      OrderStatus
+  totalAmount Float
+  orderType   OrderType
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
@@ -395,7 +382,6 @@ model Order {
 
   orderLines OrderLine[]
 
-  @@unique([organizationId, orderNumber])
   @@index([organizationId])
   @@index([userId])
   @@index([customerId])
@@ -421,7 +407,7 @@ model OrderLine {
   @@index([productId])
 }
 
-// billing document generated for a sales order
+// billingocument generated for a sales order
 model Invoice {
   id            String        @id @map("_id")
   invoiceNumber String
