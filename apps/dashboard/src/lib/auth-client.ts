@@ -15,6 +15,9 @@ import {
   employee,
   intern,
 } from "@/lib/premission";
+import { PrismaClient } from "@database/generated/prisma";
+
+const prisma = new PrismaClient();
 
 export const authClient = createAuthClient({
   plugins: [
@@ -31,7 +34,9 @@ export const authClient = createAuthClient({
         intern,
       },
     }),
+
     emailOTPClient(),
+
     adminClient(),
   ],
 });

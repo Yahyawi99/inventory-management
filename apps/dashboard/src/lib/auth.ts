@@ -18,6 +18,7 @@ import {
   employee,
   intern,
 } from "@/lib/premission";
+
 const prisma = new PrismaClient();
 
 export const auth = betterAuth({
@@ -71,9 +72,38 @@ export const auth = betterAuth({
     }),
 
     adminPlugin(),
+
+    // Custom plug-in
+    {
+      id: "user-checker",
+      endpoints: {
+        checkUserExists: Object.assign(
+          async ({ body }: { body: { email: string } }) => {
+            const { email } = body;
+
+            const user = await prisma.user.findUnique({
+              where: { email },
+              select: { id: true, email: true, name: true },
+            });
+
+            console.log("user: ", user);
+
+            return {
+              exists: !!user,
+              user: user || null,
+            } as unknown as JSON;
+          },
+          {
+            path: "/check-user-exists",
+            options: { method: "POST" as const },
+          }
+        ),
+      },
+    },
   ],
 
   database: prismaAdapter(prisma, {
     provider: "mongodb",
   }),
 });
+// prototype:

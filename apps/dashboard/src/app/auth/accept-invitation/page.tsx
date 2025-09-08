@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { fetchByEmail } from "@services/application/users";
 import { authClient } from "@/lib/auth-client";
 import { Invitation } from "@/types/users";
 import InvitationForm from "@/components/forms/accept-invitation/invitation-form";
@@ -41,6 +40,24 @@ export default function Page() {
     }
   }, [invitationId]);
 
+  const checkUserExists = async (email: string) => {
+    try {
+      const response = await fetch("/api/auth/check-user-exists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error checking user existence:", error);
+      return { exists: false, user: null };
+    }
+  };
+
   const loadInvitation = async () => {
     try {
       const result = await authClient.organization.getInvitation({
@@ -50,7 +67,9 @@ export default function Page() {
       if (result.error) {
         // const userExists = await authClient.;
         // console.log(userExists);
-
+        checkUserExists(invitationEmail as string);
+        // /===================
+        // ====================
         setError(result.error.message || "Failed to load invitation");
         setStep("error");
       } else {
