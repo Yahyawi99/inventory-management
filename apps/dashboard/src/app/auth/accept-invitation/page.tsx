@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Invitation } from "@/types/users";
+import { checkUserExists } from "@/actions/checkUserExists";
 import InvitationForm from "@/components/forms/accept-invitation/invitation-form";
 import Error from "@/shared/invitation/Error";
 import Loading from "@/shared/invitation/Loading";
@@ -40,24 +41,6 @@ export default function Page() {
     }
   }, [invitationId]);
 
-  const checkUserExists = async (email: string) => {
-    try {
-      const response = await fetch("/api/auth/check-user-exists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error("Error checking user existence:", error);
-      return { exists: false, user: null };
-    }
-  };
-
   const loadInvitation = async () => {
     try {
       const result = await authClient.organization.getInvitation({
@@ -67,7 +50,15 @@ export default function Page() {
       if (result.error) {
         // const userExists = await authClient.;
         // console.log(userExists);
-        checkUserExists(invitationEmail as string);
+        const { exists } = await checkUserExists(invitationEmail as string);
+
+        if (!exists) {
+          setTimeout(() => {
+            setError("");
+            setStep("create-account");
+            return;
+          }, 3000);
+        }
         // /===================
         // ====================
         setError(result.error.message || "Failed to load invitation");
