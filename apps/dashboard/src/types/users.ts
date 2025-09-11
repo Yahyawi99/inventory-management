@@ -30,15 +30,18 @@ export interface UserSettings {
 
 export interface Invitation {
   id: string;
-  organizationId: string;
+  role: string;
   email: string;
-  role: UserRoles;
   status: InvitationStatus;
-  inviterId: string;
-  expiresAt: Date;
-  organizationName: string;
-  organizationSlug: string;
-  inviterEmail: string;
+  inviter: {
+    id: string;
+    name: string;
+  };
+  organization: {
+    id: string;
+    name: string;
+    slug: string;
+  };
 }
 
 export type UserRoles =

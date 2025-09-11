@@ -60,7 +60,7 @@ export default function InvitationForm({
               <Building className="h-6 w-6 text-sidebar" />
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
-              Join {invitation?.organizationName}
+              Join {invitation?.organization.name}
             </CardTitle>
             <CardDescription className="text-base">
               You've been invited as a{" "}
@@ -191,7 +191,7 @@ export default function InvitationForm({
             <p className="text-xs text-muted-foreground leading-relaxed">
               By creating an account, you agree to join{" "}
               <span className="font-medium">
-                {invitation?.organizationName}
+                {invitation?.organization.name}
               </span>{" "}
               and accept their terms of use.
             </p>

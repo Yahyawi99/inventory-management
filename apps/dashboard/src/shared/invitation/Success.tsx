@@ -22,7 +22,7 @@ export default function Success({
             <CheckCircle className="h-6 w-6 text-green-600" />
           </div>
           <CardTitle className="text-xl text-gray-900">
-            Welcome to {invitation?.organizationName}!
+            Welcome to {invitation?.organization.name}!
           </CardTitle>
           <CardDescription className="text-gray-600">
             You have successfully joined as a{" "}

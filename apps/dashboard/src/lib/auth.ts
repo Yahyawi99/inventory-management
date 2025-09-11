@@ -78,4 +78,3 @@ export const auth = betterAuth({
     provider: "mongodb",
   }),
 });
-// prototype:
