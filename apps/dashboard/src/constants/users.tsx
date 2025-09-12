@@ -10,9 +10,13 @@ import {
   Badge,
   Briefcase,
   CheckCircle,
+  DollarSign,
   Edit,
   Mail,
+  Package,
+  ShoppingCart,
   Trash2,
+  TrendingUp,
   UserIcon,
 } from "lucide-react";
 import { getRoleBadgeColor } from "@/utils/users";
@@ -145,3 +149,31 @@ export function createTableColumns({
     },
   ];
 }
+
+// Account stats
+export const stats = [
+  {
+    label: "Orders Processed",
+    value: "ordersProcessed",
+    icon: ShoppingCart,
+    color: "bg-green-50 text-green-600",
+  },
+  {
+    label: "Total Sales Generated",
+    value: "totalSales",
+    icon: DollarSign,
+    color: "bg-blue-50 text-blue-600",
+  },
+  {
+    label: "Total Purchases Made",
+    value: "totalPurchases",
+    icon: Package,
+    color: "bg-purple-50 text-purple-600",
+  },
+  {
+    label: "Stock Items Updated",
+    value: "stockItemsUpdated",
+    icon: TrendingUp,
+    color: "bg-orange-50 text-orange-600",
+  },
+];

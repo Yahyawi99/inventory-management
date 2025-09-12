@@ -88,19 +88,18 @@ export default function SignUpForm() {
     };
 
     try {
-      const { data: signUpData, error: signUpError } =
-        await authClient.signUp.email(
-          {
-            name: formData.adminName,
-            email: formData.adminEmail,
-            password: formData.password,
+      await authClient.signUp.email(
+        {
+          name: formData.adminName,
+          email: formData.adminEmail,
+          password: formData.password,
+        },
+        {
+          onError(ctx) {
+            setError(ctx.error.message);
           },
-          {
-            onError(ctx) {
-              setError(ctx.error.message);
-            },
-          }
-        );
+        }
+      );
 
       // Send email verification OTP
       try {

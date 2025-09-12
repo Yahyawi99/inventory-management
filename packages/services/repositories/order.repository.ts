@@ -9,7 +9,6 @@ import {
 type Order = {
   id: string;
   orderDate: Date;
-  totalItemsQuantity: number | null;
   status: OrderStatus;
   totalAmount: number;
   orderType: OrderType;

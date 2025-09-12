@@ -1,23 +1,17 @@
 import Prisma from "database";
 import { User, Prisma as P } from "database/generated/prisma/client";
 
-// interface Filters {
-//   category?: string;
-//   search?: string;
-// }
-
-// interface SortConfig {
-//   field: string;
-//   direction: "desc" | "asc";
-// }
-
-/*
-name
-email
-role
-status
-
-*/
+// Format stats
+const formatCurrency = (value: number | null | undefined): string => {
+  if (!value) return "$0";
+  if (Math.abs(value) >= 1_000_000) {
+    return `$${(value / 1_000_000).toFixed(1)}m`;
+  }
+  if (Math.abs(value) >= 1_000) {
+    return `$${(value / 1_000).toFixed(0)}k`;
+  }
+  return `$${value}`;
+};
 
 export const UserRepository = {
   async findMany(
@@ -133,6 +127,48 @@ export const UserRepository = {
     } catch (e) {
       console.log("Error while fetching user " + email);
       console.log(e);
+    }
+  },
+
+  async getStats(orgId: string, userId: string) {
+    try {
+      // TRansaction
+      const [ordersCount, totalSalesData, totalPurchasesData, productsManaged] =
+        await Prisma.$transaction([
+          Prisma.order.count({
+            where: { userId, organizationId: orgId },
+          }),
+          Prisma.order.aggregate({
+            where: { userId, organizationId: orgId, orderType: "SALES" },
+            _sum: { totalAmount: true },
+          }),
+          Prisma.order.aggregate({
+            where: { userId, organizationId: orgId, orderType: "PURCHASE" },
+            _sum: { totalAmount: true },
+          }),
+          Prisma.orderLine.findMany({
+            where: {
+              order: { userId, organizationId: orgId },
+            },
+            select: { productId: true },
+            distinct: ["productId"],
+          }),
+        ]);
+
+      const productCount = productsManaged.length;
+
+      // Format the results and construct the stats object
+      const stats = {
+        ordersProcessed: ordersCount.toLocaleString(),
+        totalSales: formatCurrency(totalSalesData._sum.totalAmount),
+        totalPurchases: formatCurrency(totalPurchasesData._sum.totalAmount),
+        stockItemsUpdated: productCount.toLocaleString(),
+      };
+
+      return stats;
+    } catch (e) {
+      console.log("Error while fetching stats: ", e);
+      return null;
     }
   },
 };

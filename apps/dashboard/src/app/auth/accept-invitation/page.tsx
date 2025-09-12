@@ -139,7 +139,6 @@ export default function Page() {
         email: invitation?.email as string,
         password: formData.password,
         name: formData.name.trim(),
-        // Don't set callbackURL here as we want to handle the flow manually
       });
 
       if (signUpResult.error) {

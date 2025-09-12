@@ -1,16 +1,9 @@
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { NextResponse, NextRequest } from "next/server";
 import { UserRepository } from "@services/repositories";
+import { headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const page =
-    Number(searchParams.get("page")) <= 0
-      ? 1
-      : Number(searchParams.get("page"));
-  const pageSize = 10;
-
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -26,21 +19,20 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await UserRepository.findMany(orgId, { page, pageSize });
+    const response = await UserRepository.getStats(orgId, userId);
 
     return NextResponse.json(
       {
         message: "success",
-        users: res?.users,
-        totalPages: res?.totalPages,
+        stats: response,
       },
-      { status: 200 }
+      { status: 200, statusText: "success" }
     );
   } catch (error) {
-    console.log("Error while fetching users ", error);
+    console.log("Error while fetching user's stats ", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500, statusText: "error" }
     );
   }
 }

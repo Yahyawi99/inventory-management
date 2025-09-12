@@ -1,14 +1,13 @@
 // app/actions/invitation-actions.ts (or lib/actions/invitation.ts)
 "use server";
 
-import { authClient } from "@/lib/auth-client";
 import { Invitation } from "@/types/users";
 import prisma from "@database/index";
 
 export async function getInvitation(invitationId: string) {
   try {
     const result = await prisma.invitation.findUnique({
-      where: { id: invitationId },
+      where: { id: invitationId, status: "pending" },
       include: {
         user: true,
         organization: true,
