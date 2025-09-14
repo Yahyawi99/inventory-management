@@ -395,9 +395,9 @@ export const UserRepository = {
       });
 
       // Sort all activities
-      const sortedActivities = activities
-        .sort((a, b) => Number(new Date(b.time)) - Number(new Date(a.time)))
-        .slice(0, 10);
+      const sortedActivities = activities.sort(
+        (a, b) => Number(new Date(b.time)) - Number(new Date(a.time))
+      );
 
       return sortedActivities;
     } catch (error) {

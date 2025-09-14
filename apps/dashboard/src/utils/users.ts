@@ -1,5 +1,3 @@
-import { authClient } from "@/lib/auth-client";
-
 export const getRoleBadgeColor = (role: string): string => {
   switch (role) {
     case "Super_Admin":
@@ -22,7 +20,7 @@ export const getRoleBadgeColor = (role: string): string => {
 };
 
 // Utility function to format time ago
-export const formatTimeAgo = (timestamp: string) => {
+export const formatTimeAgo = (timestamp: Date) => {
   const now = new Date();
   const diff = Number(now) - Number(new Date(timestamp));
 
