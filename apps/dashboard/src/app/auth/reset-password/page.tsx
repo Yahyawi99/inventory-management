@@ -13,34 +13,58 @@ import {
   Label,
 } from "app-core/src/components";
 import { authClient } from "@/lib/auth-client";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
+const ResetPassword = () => {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const URLSearchParams = useSearchParams();
+  const token = URLSearchParams.get("token");
+
+  const router = useRouter();
+
+  // Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsSubmitting(true);
     setMessage(null);
     setIsSuccess(false);
 
+    if (!token) {
+      setMessage("Invalid token.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-      await authClient.requestPasswordReset(
+      await authClient.resetPassword(
         {
-          email,
-          redirectTo: "/auth/reset-password",
+          newPassword,
+          token: token as string,
         },
         {
           onError: (ctx) => {
             setIsSuccess(false);
-            setMessage(ctx.error.message as string);
+            setMessage(ctx.error.message);
           },
           onSuccess: () => {
             setIsSuccess(true);
-            setMessage("Reset link was sent successfully!");
+            setMessage("Password updated successfully!");
+            setNewPassword("");
+            setConfirmPassword("");
+
+            router.push("/auth/sign-in");
           },
         }
       );
@@ -57,26 +81,41 @@ const ForgotPassword = () => {
       <Card className="w-full max-w-md rounded-2xl shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-gray-800">
-            Forgot Password
+            Reset Password
           </CardTitle>
           <CardDescription className="text-gray-500">
-            Enter your email to receive a password reset link.
+            Enter your new password below.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700">
-                Email
+              <Label htmlFor="new-password" className="text-gray-700">
+                New Password
               </Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="new-password"
+                type="password"
+                placeholder="••••••••"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 required
-                className="h-11 px-4 text-base"
+                className="h-10 px-4 text-base"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password" className="text-gray-700">
+                Confirm Password
+              </Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="h-10 px-4 text-base"
               />
             </div>
 
@@ -94,16 +133,16 @@ const ForgotPassword = () => {
 
             <Button
               type="submit"
-              className="w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none font-bold py-2 px-4 rounded-md transition-colors duration-200"
+              className="h-10 w-full bg-sidebar hover:bg-transparent text-white hover:text-sidebar border-1 cursor-pointer border-transparent hover:border-sidebar outline-none font-bold py-2 px-4 rounded-md transition-colors duration-200"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Sending...
+                  Resetting...
                 </>
               ) : (
-                "Send Reset Link"
+                "Reset Password"
               )}
             </Button>
           </form>
@@ -113,4 +152,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
