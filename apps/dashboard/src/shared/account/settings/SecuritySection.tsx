@@ -17,7 +17,6 @@ import {
   Label,
 } from "app-core/src/components";
 import {
-  AlertTriangle,
   Check,
   Eye,
   EyeOff,
@@ -27,6 +26,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 interface SecuritySectionProps {
   userSettings: UserSettings;
@@ -45,7 +45,9 @@ export default function SecuritySection({
     confirmPassword: "",
   });
   const [message, setMessage] = useState("");
-  const [error, setError] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const updatePassword = async () => {
     if (data.newPassword !== data.confirmPassword) {
@@ -63,19 +65,21 @@ export default function SecuritySection({
         },
         {
           onError: (ctx) => {
-            setError(true);
             setMessage(ctx.error.message as string);
-            return;
+            setIsSuccess(false);
           },
           onSuccess: async (ctx) => {
-            setError(false);
             setMessage("Password updated successfully!");
+            setIsSuccess(true);
+
+            await authClient.signOut();
+            router.push("/auth/sign-in");
           },
         }
       );
     } catch (error: any) {
-      setError(true);
-      setError(error.message || "Failed to update the password!");
+      setIsSuccess(false);
+      setIsSuccess(error.message || "Failed to update the password!");
     } finally {
       setIsLoading(false);
     }
@@ -174,12 +178,15 @@ export default function SecuritySection({
             Update Password
           </Button>
 
-          {error && (
-            <div className="flex items-center gap-2 text-(--destructive) text-xs">
-              <AlertTriangle className="h-4 w-4 mb-1" />
-              <p className="flex items-center justify-between">
-                <span>Failed to update password: {message}</span>
-              </p>
+          {message && (
+            <div
+              className={`p-4 rounded-lg text-sm text-center font-medium ${
+                isSuccess
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {message}
             </div>
           )}
         </CardContent>

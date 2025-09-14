@@ -92,7 +92,6 @@ export default function Page() {
           <SecuritySection
             userSettings={userSettings}
             setUserSettings={setUserSettings}
-            isLoading={isLoading}
           />
         );
       case "preferences":
