@@ -17,6 +17,7 @@ import {
   Label,
 } from "app-core/src/components";
 import {
+  AlertTriangle,
   Check,
   Eye,
   EyeOff,
@@ -25,19 +26,60 @@ import {
   RefreshCw,
   Smartphone,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 interface SecuritySectionProps {
   userSettings: UserSettings;
   setUserSettings: React.Dispatch<React.SetStateAction<UserSettings>>;
-  isLoading: boolean;
 }
 
 export default function SecuritySection({
   userSettings,
   setUserSettings,
-  isLoading,
 }: SecuritySectionProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState<boolean>(false);
+
+  const updatePassword = async () => {
+    if (data.newPassword !== data.confirmPassword) {
+      setMessage("Please provide matched password!!");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await authClient.changePassword(
+        {
+          newPassword: data.newPassword,
+          currentPassword: data.currentPassword,
+          revokeOtherSessions: true,
+        },
+        {
+          onError: (ctx) => {
+            setError(true);
+            setMessage(ctx.error.message as string);
+            return;
+          },
+          onSuccess: async (ctx) => {
+            setError(false);
+            setMessage("Password updated successfully!");
+          },
+        }
+      );
+    } catch (error: any) {
+      setError(true);
+      setError(error.message || "Failed to update the password!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -57,9 +99,9 @@ export default function SecuritySection({
               <Input
                 id="current-password"
                 type={showPassword ? "text" : "password"}
-                value={userSettings.currentPassword}
+                value={data.currentPassword}
                 onChange={(e) =>
-                  setUserSettings((prev) => ({
+                  setData((prev) => ({
                     ...prev,
                     currentPassword: e.target.value,
                   }))
@@ -79,28 +121,30 @@ export default function SecuritySection({
               </button>
             </div>
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="new-password">New Password</Label>
             <Input
               id="new-password"
               type="password"
-              value={userSettings.newPassword}
+              value={data.newPassword}
               onChange={(e) =>
-                setUserSettings((prev) => ({
+                setData((prev) => ({
                   ...prev,
                   newPassword: e.target.value,
                 }))
               }
             />
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="confirm-password">Confirm New Password</Label>
             <Input
               id="confirm-password"
               type="password"
-              value={userSettings.confirmPassword}
+              value={data.confirmPassword}
               onChange={(e) =>
-                setUserSettings((prev) => ({
+                setData((prev) => ({
                   ...prev,
                   confirmPassword: e.target.value,
                 }))
@@ -121,7 +165,7 @@ export default function SecuritySection({
             </ul>
           </div>
 
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} onClick={updatePassword}>
             {isLoading ? (
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
             ) : (
@@ -129,6 +173,15 @@ export default function SecuritySection({
             )}
             Update Password
           </Button>
+
+          {error && (
+            <div className="flex items-center gap-2 text-(--destructive) text-xs">
+              <AlertTriangle className="h-4 w-4 mb-1" />
+              <p className="flex items-center justify-between">
+                <span>Failed to update password: {message}</span>
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
 

@@ -28,12 +28,17 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
     requireEmailVerification: false,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      console.log(url);
+      // await emailService.resetPassword(user.email, url);
+    },
   },
 
   plugins: [
     organization({
       invitationExpiresIn: 60 * 60 * 48,
       cancelPendingInvitationsOnReInvite: true,
+
       sendInvitationEmail: async (data) => {
         const { email, invitation, inviter } = data;
         const user = await prisma.user.findUnique({
