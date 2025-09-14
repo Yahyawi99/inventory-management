@@ -5,7 +5,14 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Activity as TActivity } from "@/types/users";
 import { formatTimeAgo } from "@/utils/users";
-import { Card, Badge, CardContent } from "app-core/src/components";
+import {
+  Card,
+  Badge,
+  CardContent,
+  Alert,
+  AlertDescription,
+  Button,
+} from "app-core/src/components";
 import {
   Package,
   ShoppingCart,
@@ -18,16 +25,22 @@ import {
   FileText,
   Folder,
   Clock,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 export default function RecentActivity() {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
-  const [userActivity, setUserActivity] = useState<TActivity[] | null>(null);
+  const [userActivity, setUserActivity] = useState<TActivity[]>([]);
   const [isFetchingUserActivity, setIsFetchingUserActivity] =
     useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(10);
+
+  const visibleActivities = userActivity?.slice(0, visibleCount);
+  const hasMore = visibleCount < userActivity?.length;
 
   // Fetch Data
   useEffect(() => {
@@ -123,37 +136,69 @@ export default function RecentActivity() {
     }
   };
 
-  return (
-    <Card>
-      <CardContent>
-        <div className="space-y-4">
-          {userActivity?.map((activity, index) => (
-            <div
-              key={index}
-              className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 py-3 border-b border-gray-100 last:border-b-0"
-            >
-              <div className="mt-1 flex-shrink-0">
-                {getActivityIcon(activity.type)}
-              </div>
+  // load more
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 10);
+  };
 
-              <div className="flex-1 min-w-0 mt-2 sm:mt-0">
-                <p className="text-sm text-gray-900 break-words">
-                  {activity.action}
-                </p>
-                <div className="flex flex-wrap items-center mt-1 space-x-2">
-                  <div className="flex items-center text-xs text-gray-500">
-                    <Clock className="w-3 h-3 text-gray-400 mr-1" />
-                    {formatTimeAgo(activity.time)}
+  return (
+    <>
+      <Card>
+        <CardContent>
+          <div className="space-y-4">
+            {isFetchingUserActivity && (
+              <div className="flex items-center justify-center py-10 text-gray-500">
+                <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                Loading activities...
+              </div>
+            )}
+
+            {error && !isFetchingUserActivity && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertCircle className="w-4 h-4 mr-2" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {visibleActivities?.map((activity, index) => (
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 py-3 border-b border-gray-100 last:border-b-0"
+              >
+                <div className="mt-1 flex-shrink-0">
+                  {getActivityIcon(activity.type)}
+                </div>
+
+                <div className="flex-1 min-w-0 mt-2 sm:mt-0">
+                  <p className="text-sm text-gray-900 break-words">
+                    {activity.action}
+                  </p>
+                  <div className="flex flex-wrap items-center mt-1 space-x-2">
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Clock className="w-3 h-3 text-gray-400 mr-1" />
+                      {formatTimeAgo(activity.time)}
+                    </div>
+                    <Badge variant="outline" className="text-xs mt-1 sm:mt-0">
+                      {activity.entity}
+                    </Badge>
                   </div>
-                  <Badge variant="outline" className="text-xs mt-1 sm:mt-0">
-                    {activity.entity}
-                  </Badge>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="flex justify-center mt-5">
+        {hasMore && (
+          <Button
+            onClick={loadMore}
+            className="flex items-center space-x-1 px-4 py-2 bg-sidebar hover:bg-transparent text-white font-semibold rounded-md shadow cursor-pointer border-2 border-transparent hover:border-sidebar hover:text-sidebar"
+          >
+            Load More
+          </Button>
+        )}
+      </div>
+    </>
   );
 }
