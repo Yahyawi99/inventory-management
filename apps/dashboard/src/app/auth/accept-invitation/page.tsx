@@ -104,7 +104,7 @@ export default function Page() {
       } else {
         setStep("success");
         setTimeout(() => {
-          router.push("/en/dashboard");
+          router.push("/en");
         }, 2000);
       }
     } catch (err) {

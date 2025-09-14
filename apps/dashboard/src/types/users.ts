@@ -21,11 +21,7 @@ export interface UserSettings {
   name: string;
   email: string;
   image: string | null;
-  twoFactorEnabled: boolean;
   emailVerified: boolean;
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
 }
 
 export interface Invitation {

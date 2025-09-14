@@ -1,3 +1,4 @@
+import { authClient } from "@/lib/auth-client";
 import { UserSettings } from "@/types/users";
 import {
   Avatar,
@@ -13,18 +14,132 @@ import {
   Label,
 } from "app-core/src/components";
 import { AlertTriangle, Camera, Check, RefreshCw, Save } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface ProfileSectionProps {
-  userSettings: UserSettings;
-  setUserSettings: React.Dispatch<React.SetStateAction<UserSettings>>;
-  isLoading: boolean;
+  user: UserSettings;
+  setUser: React.Dispatch<React.SetStateAction<UserSettings>>;
 }
 
-export default function ProfileSection({
-  userSettings,
-  setUserSettings,
-  isLoading,
-}: ProfileSectionProps) {
+const MAX_SIZE_MB = Number(process.env.MAX_SIZE_MB);
+const ACCEPTED_TYPES = process.env.ACCEPTED_TYPES?.split(",") || [];
+const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+
+export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
+  const oldEmail = user.email;
+
+  const fileInputRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(user.image);
+
+  const [message, setMessage] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // upload image
+  const handleFileChange = async (event: any) => {
+    const file = event.currentTarget.files[0];
+    // setisS(null);
+    setMessage(null);
+
+    if (!file) {
+      return;
+    }
+
+    // Validate file type and size
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      // setError("Invalid file type. Please use JPG, PNG, or GIF.");
+      return;
+    }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      // setError(`File size exceeds the ${MAX_SIZE_MB}MB limit.`);
+      return;
+    }
+
+    // setLoading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${"CLOUDINARY_CLOUD_NAME"}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image to Cloudinary.");
+      }
+
+      const data = await response.json();
+      setProfileImage(data.secure_url);
+      setMessage("Profile picture updated successfully!");
+    } catch (err) {
+      // setError("Failed to upload the image. Please try again.");
+      console.error(err);
+    } finally {
+      // setLoading(false);
+      // Reset the file input value to allow the same file to be selected again
+      // fileInputRef.current.value = null;
+    }
+  };
+
+  // save user profile
+  const updateUser = async () => {
+    console.log(user);
+    if (!user.name || !user.email) {
+      setIsSuccess(false);
+      setMessage("Please provide valid name and email!");
+      return;
+    }
+
+    setMessage(null);
+    setIsLoading(true);
+
+    try {
+      // update image and name
+      if (user.name)
+        await authClient.updateUser(
+          {
+            image: user.image,
+            name: user.name,
+          },
+          {
+            onError: (ctx) => {
+              setIsSuccess(false);
+              setMessage(ctx.error.message);
+            },
+          }
+        );
+
+      // update email
+      if (oldEmail !== user.email) {
+        await authClient.changeEmail(
+          {
+            newEmail: user.email,
+            callbackURL: "/en",
+          },
+          {
+            onError: (ctx) => {
+              setIsSuccess(false);
+              setMessage(ctx.error.message);
+            },
+          }
+        );
+      }
+
+      setIsSuccess(true);
+      setMessage("Profile updated successfully!");
+    } catch (error: any) {
+      setIsSuccess(false);
+      setMessage(error.message || "Failed to update user profile");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -39,9 +154,9 @@ export default function ProfileSection({
           {/* Profile Picture */}
           <div className="flex items-center space-x-4">
             <Avatar className="w-20 h-20">
-              <AvatarImage src={userSettings.image || ""} />
+              <AvatarImage src={user.image || ""} />
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-xl font-semibold">
-                {userSettings.name
+                {user.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
@@ -70,10 +185,10 @@ export default function ProfileSection({
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
-                value={userSettings.name}
-                onChange={(e) =>
-                  setUserSettings((prev) => ({ ...prev, name: e.target.value }))
-                }
+                value={user.name}
+                onChange={(e) => {
+                  setUser({ ...user, name: e.currentTarget.value });
+                }}
               />
             </div>
 
@@ -83,20 +198,17 @@ export default function ProfileSection({
                 <Input
                   id="email"
                   type="email"
-                  value={userSettings.email}
-                  onChange={(e) =>
-                    setUserSettings((prev) => ({
-                      ...prev,
-                      email: e.target.value,
-                    }))
-                  }
+                  value={user.email}
+                  onChange={(e) => {
+                    setUser({ ...user, email: e.currentTarget.value });
+                  }}
                   className="pr-10"
                 />
-                {userSettings.emailVerified && (
+                {user.emailVerified && (
                   <Check className="absolute right-3 top-2.5 w-5 h-5 text-green-500" />
                 )}
               </div>
-              {userSettings.emailVerified ? (
+              {user.emailVerified ? (
                 <p className="text-sm text-green-600 flex items-center">
                   <Check className="w-4 h-4 mr-1" />
                   Email verified
@@ -115,7 +227,7 @@ export default function ProfileSection({
             </div>
           </div>
 
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} onClick={updateUser}>
             {isLoading ? (
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
             ) : (

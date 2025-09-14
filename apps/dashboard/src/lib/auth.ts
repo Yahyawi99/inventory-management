@@ -24,6 +24,12 @@ const prisma = new PrismaClient();
 export const auth = betterAuth({
   appName: "WareFlow",
 
+  user: {
+    changeEmail: {
+      enabled: true,
+    },
+  },
+
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,

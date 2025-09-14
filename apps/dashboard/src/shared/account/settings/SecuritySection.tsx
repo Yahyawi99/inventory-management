@@ -29,13 +29,13 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 interface SecuritySectionProps {
-  userSettings: UserSettings;
-  setUserSettings: React.Dispatch<React.SetStateAction<UserSettings>>;
+  isTwoFactorEnabled: boolean;
+  setIsTwoFactorEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function SecuritySection({
-  userSettings,
-  setUserSettings,
+  isTwoFactorEnabled,
+  setIsTwoFactorEnabled,
 }: SecuritySectionProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +69,7 @@ export default function SecuritySection({
             setIsSuccess(false);
           },
           onSuccess: async (ctx) => {
-            setMessage("Password updated successfully!");
+            setMessage("Password updated successfully! redirecting...");
             setIsSuccess(true);
 
             await authClient.signOut();
@@ -205,44 +205,39 @@ export default function SecuritySection({
             <div className="flex items-center space-x-3">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  userSettings.twoFactorEnabled ? "bg-green-100" : "bg-gray-100"
+                  isTwoFactorEnabled ? "bg-green-100" : "bg-gray-100"
                 }`}
               >
                 <Smartphone
                   className={`w-5 h-5 ${
-                    userSettings.twoFactorEnabled
-                      ? "text-green-600"
-                      : "text-gray-400"
+                    isTwoFactorEnabled ? "text-green-600" : "text-gray-400"
                   }`}
                 />
               </div>
               <div>
                 <p className="font-medium text-gray-900">Authenticator App</p>
                 <p className="text-sm text-gray-500">
-                  {userSettings.twoFactorEnabled
+                  {isTwoFactorEnabled
                     ? "Two-factor authentication is enabled"
                     : "Secure your account with 2FA"}
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              {userSettings.twoFactorEnabled && (
+              {isTwoFactorEnabled && (
                 <Button variant="outline" size="sm">
                   View Codes
                 </Button>
               )}
               <Switch
-                checked={userSettings.twoFactorEnabled}
+                checked={isTwoFactorEnabled}
                 onCheckedChange={(checked) =>
-                  setUserSettings((prev) => ({
-                    ...prev,
-                    twoFactorEnabled: checked,
-                  }))
+                  setIsTwoFactorEnabled(!isTwoFactorEnabled)
                 }
               />
             </div>
           </div>
-          {userSettings.twoFactorEnabled && (
+          {isTwoFactorEnabled && (
             <Alert className="mt-4">
               <Check className="h-4 w-4" />
               <AlertDescription>

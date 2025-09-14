@@ -1,74 +1,71 @@
 "use client";
 
-import React, { useState } from "react";
-import { UserSettings } from "@/types/users";
-import {
-  User,
-  Shield,
-  Eye,
-  EyeOff,
-  Save,
-  Lock,
-  Smartphone,
-  Moon,
-  Sun,
-  Monitor,
-  Trash2,
-  Camera,
-  Check,
-  AlertTriangle,
-  RefreshCw,
-  Globe,
-  Clock,
-  Palette,
-  Database,
-  Download,
-  Upload,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Badge,
-  Button,
-  Input,
-  Label,
-  Switch,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Alert,
-  AlertDescription,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Separator,
-} from "app-core/src/components";
+import React, { useEffect, useState } from "react";
+import { UserSettings, User } from "@/types/users";
+import { useAuth } from "@/context/AuthContext";
 import SettingsNavigation from "@/shared/account/settings/SettingsNavigation";
 import ProfileSection from "@/shared/account/settings/ProfileSection";
 import SecuritySection from "@/shared/account/settings/SecuritySection";
 import PreferencesSection from "@/shared/account/settings/PreferencesSection";
 import DataPrivacySection from "@/shared/account/settings/DataPrivacySection";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState("profile");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // User settings state based on schema
-  const [userSettings, setUserSettings] = useState<UserSettings>({
-    name: "Sarah Johnson",
-    email: "sarah.johnson@logitech-solutions.com",
+  const [user, setUser] = useState<UserSettings>({
+    name: "",
+    email: "",
     emailVerified: true,
-    image: "null",
-    twoFactorEnabled: true,
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    image: null,
   });
+  const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace(`/auth/sign-in`);
+      return;
+    }
+
+    const fetchUserData = async () => {
+      setIsFetchingUser(true);
+      setError(null);
+      try {
+        const response = await fetch("/api/user/profile");
+
+        if (!response.ok) {
+          throw new Error(response.statusText || "Failed to fetch user.");
+        }
+
+        const { user }: { user: User } = await response.json();
+
+        setUser({
+          name: user.name,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          image: user.image,
+        });
+        setIsTwoFactorEnabled(user.twoFactorEnabled);
+      } catch (err: any) {
+        console.error("Error fetching user:", err);
+        setError(
+          err.message || "An unexpected error occurred while fetching user."
+        );
+      } finally {
+        setIsFetchingUser(false);
+      }
+    };
+
+    if (isAuthenticated && !isAuthLoading) {
+      fetchUserData();
+    }
+  }, [isAuthenticated, isAuthLoading, router]);
 
   // const handleSave = async (section: string) => {
   //   setIsLoading(true);
@@ -80,18 +77,12 @@ export default function Page() {
   const renderContent = () => {
     switch (activeTab) {
       case "profile":
-        return (
-          <ProfileSection
-            userSettings={userSettings}
-            setUserSettings={setUserSettings}
-            isLoading={isLoading}
-          />
-        );
+        return <ProfileSection user={user} setUser={setUser} />;
       case "security":
         return (
           <SecuritySection
-            userSettings={userSettings}
-            setUserSettings={setUserSettings}
+            isTwoFactorEnabled={isTwoFactorEnabled}
+            setIsTwoFactorEnabled={setIsTwoFactorEnabled}
           />
         );
       case "preferences":
@@ -99,13 +90,7 @@ export default function Page() {
       case "data":
         return <DataPrivacySection />;
       default:
-        return (
-          <ProfileSection
-            userSettings={userSettings}
-            setUserSettings={setUserSettings}
-            isLoading={isLoading}
-          />
-        );
+        return <ProfileSection user={user} setUser={setUser} />;
     }
   };
 
