@@ -1,5 +1,5 @@
 import Prisma from "database";
-import { User, Prisma as P } from "database/generated/prisma/client";
+import { Prisma as P } from "database/generated/prisma/client";
 
 // Format stats
 const formatCurrency = (value: number | null | undefined): string => {
@@ -13,6 +13,18 @@ const formatCurrency = (value: number | null | undefined): string => {
   return `$${value}`;
 };
 
+type Entity<T = Record<string, any>> = {
+  [K in keyof T]: T[K];
+};
+
+interface Activity {
+  action: string;
+  time: Date;
+  type: string;
+  entity: string;
+}
+
+// Repository
 export const UserRepository = {
   async findMany(
     orgId: string,
@@ -115,21 +127,6 @@ export const UserRepository = {
     }
   },
 
-  async findByEmail(email: string) {
-    try {
-      const res = await Prisma.user.findUnique({
-        where: {
-          email,
-        },
-      });
-
-      return res;
-    } catch (e) {
-      console.log("Error while fetching user " + email);
-      console.log(e);
-    }
-  },
-
   async getStats(orgId: string, userId: string) {
     try {
       // TRansaction
@@ -169,6 +166,243 @@ export const UserRepository = {
     } catch (e) {
       console.log("Error while fetching stats: ", e);
       return null;
+    }
+  },
+
+  async getRecentActivities(organizationId: string, userId: string) {
+    const activities: Activity[] = [];
+
+    try {
+      // 1. STOCK ITEM UPDATES (updatedAt != createdAt)
+      const stockUpdates = await Prisma.stockItem.findMany({
+        where: {
+          organizationId,
+          updatedAt: { gt: Prisma.stockItem.fields.createdAt },
+        },
+        include: {
+          product: true,
+          stock: true,
+        },
+        orderBy: { updatedAt: "desc" },
+        take: 5,
+      });
+
+      stockUpdates.forEach((item) => {
+        activities.push({
+          action: `Updated stock quantity for Product ${item.product.sku} in ${item.stock.name}`,
+          time: item.updatedAt,
+          type: "stock_update",
+          entity: "StockItem",
+        });
+      });
+
+      // 2. NEW PURCHASE ORDERS (created by user)
+      const purchaseOrders = await Prisma.order.findMany({
+        where: {
+          userId,
+          organizationId,
+          orderType: "PURCHASE",
+        },
+        include: { supplier: true },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+      });
+
+      purchaseOrders.forEach((order) => {
+        const orderNumber = `PO-${order.id.slice(-8)}`;
+        activities.push({
+          action: `Created new purchase order ${orderNumber} for ${order.supplier?.name}`,
+          time: order.createdAt,
+          type: "purchase_order",
+          entity: "Order",
+        });
+      });
+
+      // 3. NEW SALES ORDERS (created by user)
+      const salesOrders = await Prisma.order.findMany({
+        where: {
+          userId,
+          organizationId,
+          orderType: "SALES",
+        },
+        include: { customer: true },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+      });
+
+      salesOrders.forEach((order) => {
+        const orderNumber = `SO-${order.id.slice(-8)}`;
+        activities.push({
+          action: `Processed sales order ${orderNumber} for ${order.customer?.name}`,
+          time: order.createdAt,
+          type: "sales_order",
+          entity: "Order",
+        });
+      });
+
+      // 4. NEW CATEGORIES (created recently)
+      const newCategories = await Prisma.category.findMany({
+        where: {
+          organizationId,
+        },
+        orderBy: { createdAt: "desc" },
+        take: 3,
+      });
+
+      newCategories.forEach((category) => {
+        activities.push({
+          action: `Added new product category: ${category.name}`,
+          time: category.createdAt,
+          type: "category_create",
+          entity: "Category",
+        });
+      });
+
+      // 5. UPDATED CATEGORIES
+      const updatedCategories = await Prisma.category.findMany({
+        where: {
+          organizationId,
+          updatedAt: { gt: Prisma.category.fields.createdAt },
+        },
+        orderBy: { updatedAt: "desc" },
+        take: 3,
+      });
+
+      updatedCategories.forEach((category) => {
+        activities.push({
+          action: `Updated product category: ${category.name}`,
+          time: category.updatedAt,
+          type: "category_update",
+          entity: "Category",
+        });
+      });
+
+      // 6. NEW PRODUCTS
+      const newProducts = await Prisma.product.findMany({
+        where: {
+          organizationId,
+        },
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+        take: 3,
+      });
+
+      newProducts.forEach((product) => {
+        activities.push({
+          action: `Added new product: ${product.name} (${product.sku})`,
+          time: product.createdAt,
+          type: "product_create",
+          entity: "Product",
+        });
+      });
+
+      // 7. UPDATED PRODUCTS
+      const updatedProducts = await Prisma.product.findMany({
+        where: {
+          organizationId,
+          updatedAt: { gt: Prisma.product.fields.createdAt },
+        },
+        include: { category: true },
+        orderBy: { updatedAt: "desc" },
+        take: 3,
+      });
+
+      updatedProducts.forEach((product) => {
+        activities.push({
+          action: `Updated product information for ${product.name} (${product.sku})`,
+          time: product.updatedAt,
+          type: "product_update",
+          entity: "Product",
+        });
+      });
+
+      // 8. NEW SUPPLIERS
+      const newSuppliers = await Prisma.supplier.findMany({
+        where: {
+          organizationId,
+        },
+        orderBy: { createdAt: "desc" },
+        take: 2,
+      });
+
+      newSuppliers.forEach((supplier) => {
+        activities.push({
+          action: `Added new supplier: ${supplier.name}`,
+          time: supplier.createdAt,
+          type: "supplier_create",
+          entity: "Supplier",
+        });
+      });
+
+      // 9. UPDATED SUPPLIERS
+      const updatedSuppliers = await Prisma.supplier.findMany({
+        where: {
+          organizationId,
+          updatedAt: { gt: Prisma.supplier.fields.createdAt },
+        },
+        orderBy: { updatedAt: "desc" },
+        take: 2,
+      });
+
+      updatedSuppliers.forEach((supplier) => {
+        activities.push({
+          action: `Updated supplier contact information for ${supplier.name}`,
+          time: supplier.updatedAt,
+          type: "supplier_update",
+          entity: "Supplier",
+        });
+      });
+
+      // 10. NEW CUSTOMERS
+      const newCustomers = await Prisma.customer.findMany({
+        where: {
+          organizationId,
+        },
+        orderBy: { createdAt: "desc" },
+        take: 2,
+      });
+
+      newCustomers.forEach((customer) => {
+        activities.push({
+          action: `Added new customer: ${customer.name}`,
+          time: customer.createdAt,
+          type: "customer_create",
+          entity: "Customer",
+        });
+      });
+
+      // 11. NEW INVOICES
+      const newInvoices = await Prisma.invoice.findMany({
+        where: {
+          organizationId,
+        },
+        include: {
+          order: {
+            include: { customer: true },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 3,
+      });
+
+      newInvoices.forEach((invoice) => {
+        activities.push({
+          action: `Generated invoice ${invoice.invoiceNumber} for ${invoice.order.customer?.name}`,
+          time: invoice.createdAt,
+          type: "invoice_create",
+          entity: "Invoice",
+        });
+      });
+
+      // Sort all activities
+      const sortedActivities = activities
+        .sort((a, b) => Number(new Date(b.time)) - Number(new Date(a.time)))
+        .slice(0, 10);
+
+      return sortedActivities;
+    } catch (error) {
+      console.error("Error fetching recent activities:", error);
+      throw error;
     }
   },
 };

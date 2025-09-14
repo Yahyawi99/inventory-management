@@ -1,11 +1,4 @@
-import {
-  Card,
-  Badge,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "app-core/src/components";
+import { Card, Badge, CardContent } from "app-core/src/components";
 import {
   Activity,
   CheckCircle,
@@ -50,6 +43,7 @@ const recentActivity = [
 ];
 
 export default function RecentActivity() {
+  // activity icon
   const getActivityIcon = (type: string) => {
     switch (type) {
       case "stock_update":

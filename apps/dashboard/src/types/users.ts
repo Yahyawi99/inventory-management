@@ -53,3 +53,19 @@ export type UserRoles =
   | "contributor"
   | "employee"
   | "intern";
+
+type Entity<T = Record<string, any>> = {
+  [K in keyof T]: T[K];
+};
+
+export interface Activity {
+  id: string;
+  type: string;
+  icon: string;
+  iconColor: string;
+  iconBg: string;
+  title: string;
+  timestamp: Date;
+  badge: string;
+  entity: Entity;
+}
