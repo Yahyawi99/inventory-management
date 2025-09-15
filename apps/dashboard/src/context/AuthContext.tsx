@@ -23,8 +23,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const userData = data?.user && data?.user;
       const sessionData = data?.session;
 
-      console.log(data);
-
       if (userData) {
         const newUser: User = {
           id: userData?.id,
