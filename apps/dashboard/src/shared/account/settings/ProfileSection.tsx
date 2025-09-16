@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { UserSettings } from "@/types/users";
 import {
@@ -17,19 +18,27 @@ import {
 import { Input } from "app-core/src/components/ui/input";
 import { Label } from "app-core/src/components/ui/label";
 import { AlertTriangle, Camera, Check, RefreshCw, Save } from "lucide-react";
-import { useRef, useState } from "react";
 
 interface ProfileSectionProps {
   user: UserSettings;
   setUser: React.Dispatch<React.SetStateAction<UserSettings>>;
+  isFetchingUser: boolean;
 }
 
 // You can keep these for client-side validation before uploading
 const MAX_SIZE_MB = 2;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/gif"];
 
-export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
-  const oldEmail = user.email;
+export default function ProfileSection({
+  user,
+  setUser,
+  isFetchingUser,
+}: ProfileSectionProps) {
+  const oldEmail = useRef("");
+
+  useEffect(() => {
+    oldEmail.current = user.email;
+  }, [isFetchingUser]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,6 +46,7 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isVerifyLoading, setIsVerifyLoading] = useState(false);
 
   // Trigger the hidden file input
   const handleAvatarClick = () => {
@@ -84,6 +94,9 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
 
       setIsSuccess(true);
       setMessage("Profile picture changed. Click 'Save Changes' to keep it.");
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } catch (error: any) {
       setIsSuccess(false);
       setMessage(error.message || "Upload failed!");
@@ -99,7 +112,11 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
   // Handle removing the profile image
   const handleRemoveImage = () => {
     setUser({ ...user, image: null });
+    setIsSuccess(true);
     setMessage("Profile picture removed. Click 'Save Changes' to confirm.");
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
   };
 
   // Save all user profile changes
@@ -119,11 +136,17 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
         name: user.name,
       });
 
-      if (oldEmail !== user.email) {
-        await authClient.changeEmail({
-          newEmail: user.email,
-          callbackURL: "/en",
-        });
+      if (oldEmail.current !== user.email) {
+        try {
+          await authClient.changeEmail({
+            newEmail: user.email,
+            callbackURL: "/en/account",
+          });
+        } catch (error) {
+          setIsSuccess(false);
+          setMessage("Failed to update your email!");
+          return;
+        }
       }
 
       setIsSuccess(true);
@@ -133,6 +156,27 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
       setMessage(error.message || "Failed to update user profile");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Verify email
+  const sendVerificationLink = async () => {
+    setIsVerifyLoading(true);
+
+    try {
+      await authClient.sendVerificationEmail({
+        email: user.email,
+        callbackURL: "/en/account",
+      });
+
+      setIsSuccess(true);
+      setMessage("verification link sent successfully!");
+    } catch (error) {
+      setIsSuccess(false);
+      setMessage("Failed to send the verification link!");
+      return;
+    } finally {
+      setIsVerifyLoading(false);
     }
   };
 
@@ -150,7 +194,7 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
           {/* Profile Picture */}
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src={user.image || ""} />
+              <AvatarImage src={user.image || undefined} />
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-xl font-semibold text-white">
                 {user.name
                   ?.split(" ")
@@ -238,8 +282,13 @@ export default function ProfileSection({ user, setUser }: ProfileSectionProps) {
                     <AlertTriangle className="mr-1 h-4 w-4" />
                     Email not verified
                   </p>
-                  <Button variant="outline" size="sm">
-                    Send Verification
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={sendVerificationLink}
+                    disabled={isVerifyLoading}
+                  >
+                    {isVerifyLoading ? "Sending..." : "Send Verification"}
                   </Button>
                 </div>
               )}

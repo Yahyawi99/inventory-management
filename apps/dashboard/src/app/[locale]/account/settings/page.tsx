@@ -77,7 +77,13 @@ export default function Page() {
   const renderContent = () => {
     switch (activeTab) {
       case "profile":
-        return <ProfileSection user={user} setUser={setUser} />;
+        return (
+          <ProfileSection
+            user={user}
+            setUser={setUser}
+            isFetchingUser={isFetchingUser}
+          />
+        );
       case "security":
         return (
           <SecuritySection
@@ -90,7 +96,13 @@ export default function Page() {
       case "data":
         return <DataPrivacySection />;
       default:
-        return <ProfileSection user={user} setUser={setUser} />;
+        return (
+          <ProfileSection
+            user={user}
+            setUser={setUser}
+            isFetchingUser={isFetchingUser}
+          />
+        );
     }
   };
 

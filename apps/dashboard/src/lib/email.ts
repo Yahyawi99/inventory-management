@@ -20,6 +20,7 @@ export const emailConfigs = {
   },
 };
 
+// Email generators
 export const generateOTPEmail = (userName: string, otp: string) => ({
   html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -183,6 +184,58 @@ export const generateResetPasswordEmail = (resetLink: string) => ({
   `,
 });
 
+export const generateEmailVerification = (verificationLink: string) => ({
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #333; margin-bottom: 10px;">WareFlow - Verify Your Email</h1>
+        <p style="color: #666; font-size: 16px;">
+          Thanks for signing up! Please verify your email address to complete your registration.
+        </p>
+      </div>
+      
+      <div style="background: #f8f9fa; border-radius: 10px; padding: 30px; text-align: center; margin: 30px 0;">
+        <p style="color: #333; font-size: 18px; margin-bottom: 20px;">
+          Welcome to WareFlow!
+        </p>
+        <p style="color: #666; margin-bottom: 30px;">
+          To get started, click the button below to verify your email:
+        </p>
+        <a href="${verificationLink}" style="display: inline-block; background: #28a745; color: white; text-decoration: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold;">
+          Verify Email
+        </a>
+        <p style="color: #666; font-size: 14px; margin-top: 20px;">
+          This verification link will expire in <strong>24 hours</strong>.
+        </p>
+      </div>
+      
+      <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px;">
+        <p style="color: #999; font-size: 12px; text-align: center;">
+          If you did not sign up for a WareFlow account, you can safely ignore this email.
+        </p>
+        <p style="color: #999; font-size: 12px; text-align: center; margin-top: 10px;">
+          <strong>The WareFlow Team</strong>
+        </p>
+      </div>
+    </div>
+  `,
+  text: `
+    WareFlow - Verify Your Email
+    
+    Thanks for signing up! Please verify your email address to complete your registration.
+    
+    Click the link below to verify your email:
+    ${verificationLink}
+    
+    This verification link will expire in 24 hours.
+    
+    If you did not sign up for a WareFlow account, you can safely ignore this email.
+    
+    Best regards,
+    The WareFlow Team
+  `,
+});
+
 // error handling
 const handleError = (error: unknown) => {
   if (error instanceof Error) {
@@ -312,6 +365,35 @@ export class EmailService {
 
       throw new Error(
         "Failed to send reset password link. Please try again later."
+      );
+    }
+  }
+
+  async sendEmailVerification(userEmail: string, verificationLink: string) {
+    try {
+      await this.transporter.verify();
+
+      const emailContent = generateEmailVerification(verificationLink);
+
+      const info = await this.transporter.sendMail({
+        from: {
+          name: "WareFlow",
+          address: process.env.EMAIL_FROM || "noreply@wareflow.com",
+        },
+        to: userEmail,
+        subject: "WareFlow -  Email Verification Link",
+        ...emailContent,
+      });
+
+      return { success: true, messageId: info.messageId };
+    } catch (error) {
+      console.error("Failed to send verification link:", error);
+
+      // more specific error messages
+      handleError(error);
+
+      throw new Error(
+        "Failed to send verification link. Please try again later."
       );
     }
   }

@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       cloudinary.uploader
         .upload_stream(
           {
-            folder: "WareFlow",
+            upload_preset: "WareFlow",
           },
           (error, result) => {
             if (error) {
