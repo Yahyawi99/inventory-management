@@ -111,6 +111,8 @@ export default function ProfileSection({
 
   // Handle removing the profile image
   const handleRemoveImage = () => {
+    if (!user.image) return;
+
     setUser({ ...user, image: null });
     setIsSuccess(true);
     setMessage("Profile picture removed. Click 'Save Changes' to confirm.");
