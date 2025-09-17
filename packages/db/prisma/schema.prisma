@@ -413,7 +413,7 @@ model Invoice {
   id            String        @id @map("_id")
   invoiceNumber String
   invoiceDate   DateTime      @default(now())
-  ueDate        DateTime
+  dueDate       DateTime
   totalAmount   Float
   status        InvoiceStatus
   createdAt     DateTime      @default(now())
