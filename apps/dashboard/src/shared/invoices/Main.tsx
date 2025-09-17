@@ -170,7 +170,7 @@ export default function InvoicesPage() {
       },
       {
         title: "Total Revenue",
-        value: metricsData.totalRevenue,
+        value: "$" + metricsData.totalRevenue,
         change: metricsData.totalRevenueChange,
       },
     ]);
