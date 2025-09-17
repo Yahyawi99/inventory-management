@@ -103,6 +103,7 @@ model User {
   members     Member[]
   twofactors  TwoFactor[]
   invitations Invitation[]
+  invoices    Invoice[]
 
   @@unique([email])
   @@map("user")
@@ -421,6 +422,9 @@ model Invoice {
 
   orderId String @unique
   order   Order  @relation(fields: [orderId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
