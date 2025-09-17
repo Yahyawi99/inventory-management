@@ -10,25 +10,19 @@ export const InvoiceFilterDrawerData: FilterDrawerData = {
     desc: "Refine your Invoice list",
   },
   filterOptions: {
+    // values: ["All", "Paid", "Pending", "Overdue", "Void"],
+
     status: {
       name: "Invoice Status",
       options: [
         { label: "All Invoices", value: "All" },
         { label: "Pending", value: "Pending" },
-        { label: "Processing", value: "Processing" },
-        { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
-        { label: "Cancelled", value: "Cancelled" },
+        { label: "Paid", value: "Paid" },
+        { label: "Overdue", value: "OverDue" },
+        { label: "Cancelled", value: "Void" },
       ],
     },
 
-    customerType: {
-      name: "Customer Type",
-      options: [
-        { label: "All Customers", value: "All" },
-        { label: "B2B", value: "B2B" },
-        { label: "B2c", value: "B2C" },
-      ],
-    },
     orderType: {
       name: "Order Type",
       options: [

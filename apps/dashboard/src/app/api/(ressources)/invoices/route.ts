@@ -60,10 +60,12 @@ export async function GET(req: NextRequest) {
       { page, pageSize }
     );
 
+    console.log(response?.invoices.length);
+
     return NextResponse.json(
       {
         message: "success",
-        orders: response?.invoices,
+        invoices: response?.invoices,
         totalPages: response?.totalPages,
       },
       { status: 200 }

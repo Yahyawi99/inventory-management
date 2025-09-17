@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { fetch } from "@services/application/orders";
 import { Order } from "@/types/orders";
 import {
   ActiveFilters,
@@ -13,7 +12,7 @@ import {
 import { getInvoiceSummaryMetrics } from "@/utils/invoices";
 import { exportOrdersAsJson } from "@/utils/shared";
 import {
-  // OrderFilterDrawerData,
+  InvoiceFilterDrawerData,
   InvoiceSortableFields,
   InvoiceStatusFilters,
   // tableColumns,
@@ -75,15 +74,17 @@ export default function InvoicesPage() {
       try {
         const response = await fetch("/api/invoices");
 
-        if (response.status !== 200) {
+        if (!response.ok) {
           throw new Error(
-            response.data.message || "Failed to fetch invoices from API."
+            response.statusText || "Failed to fetch invoices from API."
           );
         }
 
-        const data: Invoice[] = response.data.orders;
+        const { invoices }: { invoices: Invoice[] } = await response.json();
 
-        setSummaryInvoices(data);
+        console.log(invoices);
+
+        setSummaryInvoices(invoices);
       } catch (err: any) {
         console.error("Error fetching invoices:", err);
         setError(
@@ -120,14 +121,14 @@ export default function InvoicesPage() {
 
       const response = await fetch(apiUrl);
 
-      if (response.status !== 200) {
-        throw new Error(
-          response.data.message || "Failed to fetch table invoices from API."
-        );
-      }
+      // if (response.status !== 200) {
+      //   throw new Error(
+      //     response.data.message || "Failed to fetch table invoices from API."
+      //   );
+      // }
 
-      setTableInvoices(response.data.orders);
-      setPagination({ ...pagination, totalPages: response.data.totalPages });
+      // setTableInvoices(response.data.orders);
+      // setPagination({ ...pagination, totalPages: response.data.totalPages });
     } catch (err: any) {
       console.error("Error fetching table invoices:", err);
       setError(
@@ -201,16 +202,16 @@ export default function InvoicesPage() {
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryInvoices} />
 
-      {/* <DataControls
+      <DataControls
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
-        DrawerData={OrderFilterDrawerData}
+        DrawerData={InvoiceFilterDrawerData}
         sortableFields={InvoiceSortableFields}
         filterOptions={InvoiceStatusFilters}
-      /> */}
+      />
 
       {/* <TableView
         data={tableInvoices}

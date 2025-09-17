@@ -1,11 +1,10 @@
 import Prisma from "database";
 import {
   InvoiceStatus,
-  OrderStatus,
   OrderType,
   Invoice,
   Prisma as P,
-} from "database/generated/prisma/client";
+} from "database/generated/prisma/index.js";
 
 interface Filters {
   status?: InvoiceStatus[];

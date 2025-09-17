@@ -409,7 +409,7 @@ model OrderLine {
   @@index([productId])
 }
 
-// billingocument generated for a sales order
+// billing document generated for a sales order
 model Invoice {
   id            String        @id @map("_id")
   invoiceNumber String
