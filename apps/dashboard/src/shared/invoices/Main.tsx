@@ -4,11 +4,14 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
-import { Order, OrderSummaryMetrics } from "@/types/orders";
-import { ActiveFilters } from "@/types/invoices";
-import { getOrderSummaryMetrics } from "@/utils/orders";
+import { Order } from "@/types/orders";
+import {
+  ActiveFilters,
+  Invoice,
+  InvoiceSummaryMetrics,
+} from "@/types/invoices";
+import { getInvoiceSummaryMetrics } from "@/utils/invoices";
 import { exportOrdersAsJson } from "@/utils/shared";
-import { OrderFilterDrawerData, tableColumns } from "@/constants/orders";
 import {
   // OrderFilterDrawerData,
   InvoiceSortableFields,
@@ -29,7 +32,7 @@ export default function InvoicesPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
-  const [summaryInvoices, setSummaryInvoices] = useState<Order[]>([]);
+  const [summaryInvoices, setSummaryInvoices] = useState<Invoice[]>([]);
   const [isFetchingSummaryInvoices, setIsFetchingSummaryInvoices] =
     useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
@@ -70,7 +73,7 @@ export default function InvoicesPage() {
       setIsFetchingSummaryInvoices(true);
       setError(null);
       try {
-        const response = await fetch("/api/orders/invoices");
+        const response = await fetch("/api/invoices");
 
         if (response.status !== 200) {
           throw new Error(
@@ -78,7 +81,7 @@ export default function InvoicesPage() {
           );
         }
 
-        const data: Order[] = response.data.orders;
+        const data: Invoice[] = response.data.orders;
 
         setSummaryInvoices(data);
       } catch (err: any) {
@@ -144,37 +147,37 @@ export default function InvoicesPage() {
 
   // MetricsData
   const metricsData = useMemo(() => {
-    return getOrderSummaryMetrics(summaryInvoices);
+    return getInvoiceSummaryMetrics(summaryInvoices);
   }, [summaryInvoices]);
 
   useEffect(() => {
     setCardMetrics([
       {
         title: "Total Invoices",
-        value: metricsData.totalOrders,
-        change: metricsData.totalOrdersChange,
+        value: metricsData.totalInvoices,
+        change: metricsData.totalInvoicesChange,
       },
       {
-        title: "Order items over time",
-        value: metricsData.totalOrderItems,
-        change: metricsData.totalOrderItemsChange,
+        title: "Paid Invoices",
+        value: metricsData.totalPaidInvoices,
+        change: metricsData.totalPaidInvoicesChange,
       },
       {
-        title: "Cancelled Orders",
-        value: metricsData.totalCancelledOrders,
-        change: metricsData.totalCancelledOrdersChange,
+        title: "Overdue Invoices",
+        value: metricsData.totalOverdueInvoices,
+        change: metricsData.totalOverdueInvoicesChange,
       },
       {
-        title: "Fulfilled Orders",
-        value: metricsData.totalFulfilledOrders,
-        change: metricsData.totalFulfilledOrdersChange,
+        title: "Total Revenue",
+        value: metricsData.totalRevenue,
+        change: metricsData.totalRevenueChange,
       },
     ]);
   }, [summaryInvoices]);
 
   // export data
   const exportData = () => {
-    exportOrdersAsJson<OrderSummaryMetrics>(
+    exportOrdersAsJson<InvoiceSummaryMetrics>(
       tableInvoices,
       {
         filter: activeFilters,
@@ -196,7 +199,7 @@ export default function InvoicesPage() {
     <section className="overflow-x-hidden">
       <Header data={headerData} exportData={exportData} />
 
-      {/* <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryInvoices} /> */}
+      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryInvoices} />
 
       {/* <DataControls
         activeFilters={activeFilters}

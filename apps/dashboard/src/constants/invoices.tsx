@@ -1,4 +1,44 @@
-import { HeaderData, SortableField } from "app-core/src/types";
+import {
+  FilterDrawerData,
+  HeaderData,
+  SortableField,
+} from "app-core/src/types";
+
+export const InvoiceFilterDrawerData: FilterDrawerData = {
+  header: {
+    title: "Filter Invoices",
+    desc: "Refine your Invoice list",
+  },
+  filterOptions: {
+    status: {
+      name: "Invoice Status",
+      options: [
+        { label: "All Invoices", value: "All" },
+        { label: "Pending", value: "Pending" },
+        { label: "Processing", value: "Processing" },
+        { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
+        { label: "Cancelled", value: "Cancelled" },
+      ],
+    },
+
+    customerType: {
+      name: "Customer Type",
+      options: [
+        { label: "All Customers", value: "All" },
+        { label: "B2B", value: "B2B" },
+        { label: "B2c", value: "B2C" },
+      ],
+    },
+    orderType: {
+      name: "Order Type",
+      options: [
+        { label: "All Types", value: "All" },
+        { label: "Sales", value: "Sales" },
+        { label: "Purchase", value: "Purchase" },
+      ],
+    },
+  },
+};
 
 export const InvoiceSortableFields: SortableField[] = [
   { title: "Invoice Number", field: "invoiceNumber", direction: "desc" },

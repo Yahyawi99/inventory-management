@@ -58,3 +58,14 @@ export const exportOrdersAsJson = <T>(
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 };
+
+// calculate percentage
+export const calculatePercentageChange = (
+  currentValue: number,
+  previousValue: number
+): number => {
+  if (previousValue === 0) {
+    return currentValue > 0 ? 100 : 0;
+  }
+  return ((currentValue - previousValue) / previousValue) * 100;
+};

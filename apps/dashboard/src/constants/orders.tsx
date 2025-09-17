@@ -18,7 +18,7 @@ export const OrderFilterDrawerData: FilterDrawerData = {
   },
   filterOptions: {
     status: {
-      name: "Order Status",
+      name: "Order Invoices",
       options: [
         { label: "All Status", value: "All" },
         { label: "Pending", value: "Pending" },
