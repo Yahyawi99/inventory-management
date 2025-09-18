@@ -3,19 +3,21 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Order } from "@/types/orders";
 import {
   ActiveFilters,
   Invoice,
   InvoiceSummaryMetrics,
 } from "@/types/invoices";
-import { getInvoiceSummaryMetrics } from "@/utils/invoices";
+import {
+  getInvoiceSummaryMetrics,
+  buildInvoicesApiUrl,
+} from "@/utils/invoices";
 import { exportOrdersAsJson } from "@/utils/shared";
 import {
   InvoiceFilterDrawerData,
   InvoiceSortableFields,
   InvoiceStatusFilters,
-  // tableColumns,
+  tableColumns,
   headerData,
 } from "@/constants/invoices";
 import {
@@ -36,7 +38,7 @@ export default function InvoicesPage() {
     useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
 
-  const [tableInvoices, setTableInvoices] = useState<Order[]>([]);
+  const [tableInvoices, setTableInvoices] = useState<Invoice[]>([]);
   const [isFetchingTableInvoices, setIsFetchingTableInvoices] = useState(true);
 
   const [pagination, setPagination] = useState<Pagination>({
@@ -111,24 +113,28 @@ export default function InvoicesPage() {
     setIsFetchingTableInvoices(true);
     setError(null);
     try {
-      // const apiUrl = buildOrdersApiUrl(
-      //   "/api/orders/invoices",
-      //   activeFilters,
-      //   activeOrderBy,
-      //   pagination
-      // );
-      const apiUrl = "";
+      const apiUrl = buildInvoicesApiUrl(
+        "/api/invoices",
+        activeFilters,
+        activeOrderBy,
+        pagination
+      );
 
       const response = await fetch(apiUrl);
 
-      // if (response.status !== 200) {
-      //   throw new Error(
-      //     response.data.message || "Failed to fetch table invoices from API."
-      //   );
-      // }
+      if (!response.ok) {
+        throw new Error(
+          response.statusText || "Failed to fetch invoices from API."
+        );
+      }
 
-      // setTableInvoices(response.data.orders);
-      // setPagination({ ...pagination, totalPages: response.data.totalPages });
+      const {
+        invoices,
+        totalPages,
+      }: { invoices: Invoice[]; totalPages: number } = await response.json();
+
+      setTableInvoices(invoices);
+      setPagination({ ...pagination, totalPages });
     } catch (err: any) {
       console.error("Error fetching table invoices:", err);
       setError(
@@ -213,15 +219,15 @@ export default function InvoicesPage() {
         filterOptions={InvoiceStatusFilters}
       />
 
-      {/* <TableView
+      <TableView
         data={tableInvoices}
         isFetchingData={isFetchingTableInvoices}
         currentPage={pagination.page}
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Order> data={tableInvoices} columns={tableColumns} />
-      </TableView> */}
+        <DataTable<Invoice> data={tableInvoices} columns={tableColumns} />
+      </TableView>
     </section>
   );
 }

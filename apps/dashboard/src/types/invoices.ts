@@ -1,4 +1,4 @@
-import { InvoiceStatus } from "@database/generated/prisma";
+import { InvoiceStatus, OrderLine } from "@database/generated/prisma";
 import { OrderType } from "./orders";
 
 export interface Invoice {
@@ -12,7 +12,7 @@ export interface Invoice {
   invoiceNumber: string;
   invoiceDate: Date;
   dueDate: Date;
-  order: { orderNumber: string };
+  order: { orderNumber: string; orderType: OrderType; orderLines: OrderLine[] };
 }
 
 export interface Metrics {

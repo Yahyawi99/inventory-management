@@ -6,10 +6,8 @@ import {
   HeaderData,
 } from "app-core/src/types";
 import { Order } from "@/types/orders";
-import {
-  getOrderStatusDisplay,
-  getTotalOrderLineQuantity,
-} from "@/utils/orders";
+import { getOrderStatusDisplay } from "@/utils/orders";
+import { getTotalOrderLineQuantity } from "@/utils/shared";
 
 export const OrderFilterDrawerData: FilterDrawerData = {
   header: {

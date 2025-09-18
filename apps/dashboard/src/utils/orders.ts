@@ -2,7 +2,6 @@ import {
   Order,
   OrderStatus,
   ActiveFilters,
-  StatusDisplay,
   Metrics,
   OrderSummaryMetrics,
 } from "@/types/orders";
@@ -11,8 +10,8 @@ import {
   getDateRangesForComparison,
   isDateWithinRange,
 } from "@/utils/dateHelpers";
-import { SortConfig, Pagination, Data } from "app-core/src/types";
-import { calculatePercentageChange } from "./shared";
+import { SortConfig, Pagination, StatusDisplay } from "app-core/src/types";
+import { calculatePercentageChange, getTotalOrderLineQuantity } from "./shared";
 
 // status styles for the orders table
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
@@ -56,22 +55,6 @@ export const generateOrderNumber = (
     .toUpperCase();
 
   return `${prefix}${timestampPart}-${randomPart}`;
-};
-
-// get the total items of each order
-export const getTotalOrderLineQuantity = (
-  orderLines: OrderLine[] | null | undefined
-): number => {
-  if (!orderLines || orderLines.length === 0) {
-    return 0;
-  }
-
-  const totalQuantity = orderLines.reduce(
-    (sum, line) => sum + line.quantity,
-    0
-  );
-
-  return totalQuantity;
 };
 
 // calculate the summary cards data

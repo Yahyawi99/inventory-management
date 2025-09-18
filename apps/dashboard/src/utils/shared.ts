@@ -1,3 +1,4 @@
+import { OrderLine } from "@database/generated/prisma";
 import {
   ActiveFilters,
   Data,
@@ -68,4 +69,18 @@ export const calculatePercentageChange = (
     return currentValue > 0 ? 100 : 0;
   }
   return ((currentValue - previousValue) / previousValue) * 100;
+};
+
+// get the total items of each order
+export const getTotalOrderLineQuantity = (orderLines: OrderLine[]): number => {
+  if (!orderLines || orderLines.length === 0) {
+    return 0;
+  }
+
+  const totalQuantity = orderLines.reduce(
+    (sum, line) => sum + line.quantity,
+    0
+  );
+
+  return totalQuantity;
 };

@@ -31,11 +31,6 @@ export interface ActiveFilters {
   orderType?: "All" | OrderType;
 }
 
-export interface StatusDisplay {
-  text: string;
-  colorClass: string;
-}
-
 export interface Metrics {
   totalOrders: number;
   totalOrderItems: number;

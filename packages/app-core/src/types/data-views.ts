@@ -58,3 +58,8 @@ export interface SortableField {
   field: string;
   direction: "desc" | "asc";
 }
+
+export interface StatusDisplay {
+  text: string;
+  colorClass: string;
+}
