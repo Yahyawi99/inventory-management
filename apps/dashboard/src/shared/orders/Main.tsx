@@ -4,7 +4,12 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
-import { Order, ActiveFilters, OrderSummaryMetrics } from "@/types/orders";
+import {
+  Order,
+  ActiveFilters,
+  OrderSummaryMetrics,
+  OrderType,
+} from "@/types/orders";
 import { buildOrdersApiUrl, getOrderSummaryMetrics } from "@/utils/orders";
 import { exportOrdersAsJson } from "@/utils/shared";
 import {
@@ -23,7 +28,11 @@ import {
 } from "app-core/src/components";
 import { MetricsData, SortConfig, Pagination } from "app-core/src/types";
 
-export default function OrdersPage() {
+interface OrdersPageProps {
+  type: OrderType | null;
+}
+
+export default function OrdersPage({ type }: OrdersPageProps) {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
@@ -45,7 +54,7 @@ export default function OrdersPage() {
     status: "All",
     search: "",
     customerType: "All",
-    orderType: "All",
+    orderType: type ? type : "All",
   });
   const [activeOrderBy, setActiveOrderBy] = useState<SortConfig>({
     field: "orderDate",
@@ -201,7 +210,19 @@ export default function OrdersPage() {
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
-        DrawerData={OrderFilterDrawerData}
+        DrawerData={
+          type
+            ? {
+                header: { ...OrderFilterDrawerData.header },
+                filterOptions: {
+                  status: { ...OrderFilterDrawerData.filterOptions.status },
+                  customerType: {
+                    ...OrderFilterDrawerData.filterOptions.customerType,
+                  },
+                },
+              }
+            : OrderFilterDrawerData
+        }
         sortableFields={OrderSortableFields}
         filterOptions={orderStatusFilters}
       />

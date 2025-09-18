@@ -84,8 +84,6 @@ export default function InvoicesPage() {
 
         const { invoices }: { invoices: Invoice[] } = await response.json();
 
-        console.log(invoices);
-
         setSummaryInvoices(invoices);
       } catch (err: any) {
         console.error("Error fetching invoices:", err);

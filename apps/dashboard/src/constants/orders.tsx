@@ -34,6 +34,7 @@ export const OrderFilterDrawerData: FilterDrawerData = {
         { label: "B2c", value: "B2C" },
       ],
     },
+
     orderType: {
       name: "Order Type",
       options: [

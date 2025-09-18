@@ -10,7 +10,7 @@ export const routes = {
     all: "/en/orders",
     purchase: "/en/orders/purchase",
     sale: "/en/orders/sale",
-    invoices: "/en/orders/invoices",
+    invoices: "/en/invoices",
   },
   usersRoles: {
     manageUsers: "/en/users-roles/manage-users",
