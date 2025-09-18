@@ -46,7 +46,7 @@ export const getInvoiceSummaryMetrics = (
   };
 
   invoices.forEach((invoice) => {
-    const invoiceDate = new Date(invoice.invoiceDate);
+    const invoiceDate = new Date(invoice.invoiceDate.$date);
 
     if (
       isDateWithinRange(

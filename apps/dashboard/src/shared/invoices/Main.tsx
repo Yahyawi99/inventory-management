@@ -176,7 +176,7 @@ export default function InvoicesPage() {
       },
       {
         title: "Total Revenue",
-        value: "$" + metricsData.totalRevenue,
+        value: "$" + metricsData.totalRevenue.toFixed(2),
         change: metricsData.totalRevenueChange,
       },
     ]);

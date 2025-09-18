@@ -2,16 +2,16 @@ import { InvoiceStatus, OrderLine } from "@database/generated/prisma";
 import { OrderType } from "./orders";
 
 export interface Invoice {
-  id: string;
+  _id: string;
   status: InvoiceStatus;
   totalAmount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: { $date: Date };
+  updatedAt: { $date: Date };
   organizationId: string;
   userId: string;
   invoiceNumber: string;
-  invoiceDate: Date;
-  dueDate: Date;
+  invoiceDate: { $date: Date };
+  dueDate: { $date: Date };
   order: { orderNumber: string; orderType: OrderType; orderLines: OrderLine[] };
 }
 
