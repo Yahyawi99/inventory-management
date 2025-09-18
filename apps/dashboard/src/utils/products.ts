@@ -1,9 +1,6 @@
 import { ProductsSummaryMetrics, Product } from "@/types/products";
 import { Category } from "@/types/categories";
-import {
-  getDateRangesForComparison,
-  getSeedDateRanges,
-} from "@/utils/dateHelpers";
+import { getDateRangesForComparison } from "@/utils/dateHelpers";
 import { StockItem } from "@/types/products";
 import { fetch } from "@services/application/categories";
 import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";

@@ -5,7 +5,7 @@ import {
   Column,
   HeaderData,
 } from "app-core/src/types";
-import { Order } from "@/types/orders";
+import { Order, OrderStatus, OrderType } from "@/types/orders";
 import { getOrderStatusDisplay } from "@/utils/orders";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
 
@@ -16,13 +16,13 @@ export const OrderFilterDrawerData: FilterDrawerData = {
   },
   filterOptions: {
     status: {
-      name: "Order Invoices",
+      name: "Order Status",
       options: [
         { label: "All Status", value: "All" },
-        { label: "Pending", value: "Pending" },
-        { label: "Processing", value: "Processing" },
+        { label: "Pending", value: OrderStatus.Pending },
+        { label: "Processing", value: OrderStatus.Processing },
         { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
-        { label: "Cancelled", value: "Cancelled" },
+        { label: "Cancelled", value: OrderStatus.Cancelled },
       ],
     },
 
@@ -38,8 +38,8 @@ export const OrderFilterDrawerData: FilterDrawerData = {
       name: "Order Type",
       options: [
         { label: "All Types", value: "All" },
-        { label: "Sales", value: "Sales" },
-        { label: "Purchase", value: "Purchase" },
+        { label: "Sales", value: OrderType.SALES },
+        { label: "Purchase", value: OrderType.PURCHASE },
       ],
     },
   },

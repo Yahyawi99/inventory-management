@@ -1,3 +1,4 @@
+import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
 import {
   InvoiceStatus,
@@ -25,64 +26,130 @@ export const InvoiceRepository = {
     orderBy: SortConfig = { field: "invoiceDate", direction: "desc" },
     { page, pageSize }: { page: number; pageSize: number }
   ): Promise<{ totalPages: number; invoices: Invoice[] } | null> {
-    // Where clause
-    const whereClause: P.InvoiceWhereInput = {
+    // Build the pipeline
+    const pipeline: InputJsonValue[] | undefined = [
+      {
+        $match: {},
+      },
+      {
+        $lookup: {
+          from: "Order",
+          localField: "orderId",
+          foreignField: "_id",
+          as: "order",
+        },
+      },
+      {
+        $unwind: {
+          path: "$order",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "OrderLine",
+          localField: "order._id",
+          foreignField: "orderId",
+          as: "order.orderLines",
+        },
+      },
+    ];
+
+    const filterMatch: Record<string, any> = {
       organizationId: orgId,
       userId,
     };
 
+    // search
     if (filters.search) {
-      whereClause.OR = [
-        { invoiceNumber: { contains: filters.search, mode: "insensitive" } },
+      const regex = { $regex: filters.search, $options: "i" };
+
+      filterMatch.$or = [
+        { invoiceNumber: regex },
+        { barcode: regex },
         {
           order: {
             customer: {
-              name: { contains: filters.search, mode: "insensitive" },
+              name: regex,
             },
             supplier: {
-              name: { contains: filters.search, mode: "insensitive" },
+              name: regex,
             },
           },
         },
       ];
     }
 
+    // Status
+    if (filters.status) {
+      filterMatch.status = filters.status;
+    }
+
+    // OrderType
     if (filters.orderType) {
-      whereClause.order = {
+      filterMatch.order = {
         orderType: filters.orderType,
       };
     }
 
-    if (filters.status) {
-      whereClause.status = { in: filters.status };
+    //  OrderBy
+    pipeline.push({
+      $addFields: {
+        totalStockQuantity: { $sum: "$order.orderLines.quantity" },
+      },
+    });
+
+    if (orderBy && orderBy.field) {
+      if (orderBy.field === "totalItemsQuantity") {
+        pipeline.push({
+          $sort: {
+            totalStockQuantity: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      } else {
+        pipeline.push({
+          $sort: {
+            [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      }
     }
 
-    // OrderBy clause
-    const orderByClause: P.InvoiceOrderByWithRelationInput = {};
-    if (orderBy) {
-      orderByClause[orderBy.field as keyof P.InvoiceOrderByWithRelationInput] =
-        orderBy.direction;
+    if (Object.keys(filterMatch).length > 0) {
+      pipeline.push({ $match: filterMatch });
     }
+
+    pipeline.push({
+      $facet: {
+        paginatedResults: [
+          { $skip: (page - 1) * pageSize },
+          { $limit: pageSize },
+        ],
+        totalCount: [{ $count: "count" }],
+      },
+    });
 
     try {
-      const res = await Prisma.invoice.findMany({
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        where: whereClause,
-        orderBy: orderByClause,
-        include: {
-          order: true,
-        },
+      const response = await Prisma.invoice.aggregateRaw({
+        pipeline,
       });
 
-      const totalOrders = await Prisma.invoice.count({
-        where: whereClause,
-      });
-      const totalPages = Math.ceil(totalOrders / pageSize);
+      const result = response[0] as
+        | { paginatedResults: Invoice[]; totalCount: [{ count: number }] }
+        | undefined;
 
-      return { totalPages, invoices: res };
+      const totalInvoices =
+        result && result.totalCount && result.totalCount.length > 0
+          ? result.totalCount[0].count
+          : 0;
+      const totalPages = Math.ceil(totalInvoices / pageSize);
+
+      return {
+        totalPages,
+        invoices: result?.paginatedResults as Invoice[],
+      };
     } catch (e) {
-      console.log("Error while fetching orders: ", e);
+      console.log("Error while fetching invoices: ", e);
       return null;
     }
   },

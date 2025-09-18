@@ -154,7 +154,7 @@ export const ProductRepository = {
         products: result?.paginatedResults as Product[],
       };
     } catch (e) {
-      console.log("Error while fetching orders: ", e);
+      console.log("Error while fetching products: ", e);
       return null;
     }
   },

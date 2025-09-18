@@ -1,7 +1,7 @@
 import { Invoice } from "@/types/invoices";
 import { getInvoiceStatusDisplay } from "@/utils/invoices";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
-import { OrderType } from "@database/generated/prisma";
+import { InvoiceStatus, OrderType } from "@database/generated/prisma";
 import { Button, Input } from "app-core/src/components";
 import {
   Column,
@@ -87,19 +87,15 @@ export const tableColumns: Column<Invoice>[] = [
     render: (invoice) => {
       const type = invoice.order.orderType;
       return (
-        <span
-          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${
-            type === OrderType.SALES
-              ? "bg-lime-100 text-lime-800"
-              : "bg-emerald-100 text-emerald-800"
-          }`}
+        <p
+          className={`text-xs bg-gray-100 w-[80px] font-semibold rounded-full capitalize py-1 mx-auto`}
         >
           {type.toLowerCase()}
-        </span>
+        </p>
       );
     },
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "w-fit text-center text-gray-700",
+    cellClass: "text-center  text-gray-700",
   },
   {
     key: "items",
@@ -188,10 +184,10 @@ export const InvoiceFilterDrawerData: FilterDrawerData = {
       name: "Invoice Status",
       options: [
         { label: "All Invoices", value: "All" },
-        { label: "Pending", value: "Pending" },
-        { label: "Paid", value: "Paid" },
-        { label: "Overdue", value: "OverDue" },
-        { label: "Cancelled", value: "Void" },
+        { label: "Pending", value: InvoiceStatus.Pending },
+        { label: "Paid", value: InvoiceStatus.Paid },
+        { label: "Overdue", value: InvoiceStatus.Overdue },
+        { label: "Cancelled", value: InvoiceStatus.Void },
       ],
     },
 
@@ -199,8 +195,8 @@ export const InvoiceFilterDrawerData: FilterDrawerData = {
       name: "Order Type",
       options: [
         { label: "All Types", value: "All" },
-        { label: "Sales", value: "Sales" },
-        { label: "Purchase", value: "Purchase" },
+        { label: "Sales", value: OrderType.SALES },
+        { label: "Purchase", value: OrderType.PURCHASE },
       ],
     },
   },
