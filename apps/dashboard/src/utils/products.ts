@@ -2,7 +2,6 @@ import { ProductsSummaryMetrics, Product } from "@/types/products";
 import { Category } from "@/types/categories";
 import { getDateRangesForComparison } from "@/utils/dateHelpers";
 import { StockItem } from "@/types/products";
-import { fetch } from "@services/application/categories";
 import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";
 
 // Summary cards
@@ -121,13 +120,15 @@ export const getTotalProductStockQuantity = (stockItems: StockItem[]) => {
 
 // Categories options for drawer filter
 export const buildCategoriesOptions = async () => {
-  const {
-    data: { categories },
-  }: { data: { categories: Category[] } } = await fetch(
-    "/inventory/categories"
-  );
+  const response = await fetch("/api/inventory/categories");
 
-  const categoriesOptions = categories?.map((category) => {
+  if (!response.ok) {
+    throw new Error("Error while fetching categories for Products page");
+  }
+
+  const { categories } = await response.json();
+
+  const categoriesOptions = categories?.map((category: Category) => {
     const { name } = category;
     return { label: name, value: name };
   });

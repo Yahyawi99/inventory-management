@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { fetch } from "@services/application/products";
 import { Product, ProductsSummaryMetrics } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
 import {
@@ -18,14 +17,15 @@ import {
   ActiveFilters,
   SortConfig,
   Pagination,
+  FilterDrawerData,
 } from "app-core/src/types";
 import {
-  productFilterDrawerData,
+  getProductFilterDrawerData,
   productSortableFields,
   productCategoryFilters,
   tableColumns,
 } from "@/constants/products";
-import { buildOrdersApiUrl } from "@/utils/products";
+import { buildProductsApiUrl } from "@/utils/products";
 import { exportOrdersAsJson } from "@/utils/shared";
 
 const headerData = {
@@ -39,6 +39,9 @@ export default function Products() {
 
   const [tableProducts, setTableProducts] = useState<Product[]>([]);
   const [isFetchingTableProducts, setIsFetchingTableProducts] = useState(true);
+
+  const [productFilterDrawerData, setProductFilterDrawerData] =
+    useState<FilterDrawerData | null>(null);
 
   const [summaryProducts, setSummaryProducts] = useState<Product[]>([]);
   const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
@@ -74,8 +77,8 @@ export default function Products() {
     setIsFetchingTableProducts(true);
     setError(null);
     try {
-      const apiUrl = buildOrdersApiUrl(
-        "/inventory/products",
+      const apiUrl = buildProductsApiUrl(
+        "/api/inventory/products",
         activeFilters,
         activeOrderBy,
         pagination
@@ -83,14 +86,16 @@ export default function Products() {
 
       const response = await fetch(apiUrl);
 
-      if (response.status !== 200) {
+      if (!response.ok) {
         throw new Error(
-          response.data.message || "Failed to fetch table orders from API."
+          response.statusText || "Failed to fetch table orders from API."
         );
       }
 
-      setTableProducts(response.data.products);
-      setPagination({ ...pagination, totalPages: response.data.totalPages });
+      const { products, totalPages } = await response.json();
+
+      setTableProducts(products);
+      setPagination({ ...pagination, totalPages });
     } catch (err: any) {
       console.error("Error fetching table orders:", err);
       setError(
@@ -126,17 +131,17 @@ export default function Products() {
       setIsFetchingSummaryProducts(true);
       setError(null);
       try {
-        const response = await fetch("/inventory/products");
+        const response = await fetch("/api/inventory/products");
 
-        if (response.status !== 200) {
+        if (!response.ok) {
           throw new Error(
-            response.data.message || "Failed to fetch products from API."
+            response.statusText || "Failed to fetch products from API."
           );
         }
 
-        const data: Product[] = response.data.products;
+        const { products } = await response.json();
 
-        setSummaryProducts(data);
+        setSummaryProducts(products);
       } catch (err: any) {
         console.error("Error fetching products:", err);
         setError(
@@ -191,6 +196,12 @@ export default function Products() {
       metricsData
     );
   };
+
+  // =======================
+  // fetch categories
+  useEffect(() => {
+    getProductFilterDrawerData().then(setProductFilterDrawerData);
+  }, []);
 
   return (
     <section className="overflow-x-hidden">

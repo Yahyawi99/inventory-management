@@ -1,7 +1,7 @@
 import { ProductStatus } from "@/types/products";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
-import { Category, Prisma as P } from "database/generated/prisma/client";
+import { Category } from "database/generated/prisma/client";
 
 interface Filters {
   status?: ProductStatus;

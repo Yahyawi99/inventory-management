@@ -1,4 +1,4 @@
-import { StockItem, Product } from "@/types/products";
+import { Product } from "@/types/products";
 import {
   buildCategoriesOptions,
   getProductStockStatusDisplay,
@@ -7,27 +7,31 @@ import {
 import { Input, Button } from "app-core/src/components";
 import { Column, SortableField, FilterDrawerData } from "app-core/src/types";
 
-export const productFilterDrawerData: FilterDrawerData = {
-  header: {
-    title: "Filter Products",
-    desc: "Refine your Product list",
-  },
-  filterOptions: {
-    status: {
-      name: "Product's Stock Status",
-      options: [
-        { label: "All Products", value: "All" },
-        { label: "In Stock Products", value: "In Stock" },
-        { label: "Low Stock Products", value: "Low Stock" },
-        { label: "Out of Stock Products", value: "Out of Stock" },
-      ],
+export async function getProductFilterDrawerData(): Promise<FilterDrawerData> {
+  const categoryOptions = await buildCategoriesOptions();
+
+  return {
+    header: {
+      title: "Filter Products",
+      desc: "Refine your Product list",
     },
-    category: {
-      name: "Product Category",
-      options: await buildCategoriesOptions(),
+    filterOptions: {
+      status: {
+        name: "Product's Stock Status",
+        options: [
+          { label: "All Products", value: "All" },
+          { label: "In Stock Products", value: "In Stock" },
+          { label: "Low Stock Products", value: "Low Stock" },
+          { label: "Out of Stock Products", value: "Out of Stock" },
+        ],
+      },
+      category: {
+        name: "Product Category",
+        options: categoryOptions,
+      },
     },
-  },
-};
+  };
+}
 
 export const productSortableFields: SortableField[] = [
   { title: "Name", field: "name", direction: "desc" },

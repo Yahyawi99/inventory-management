@@ -20,10 +20,10 @@ import {
   SelectValue,
   Separator,
 } from "..";
-import { FilterDrawerData, ActiveFilters } from "@/types/data-views";
+import { FilterDrawerData, ActiveFilters } from "../../types/data-views";
 
 interface FilterDrawerProps {
-  data: FilterDrawerData;
+  data: FilterDrawerData | null;
   activeFilters: ActiveFilters;
   setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
 }
@@ -52,14 +52,12 @@ export function FilterDrawer({
   };
 
   const onClearFilters = () => {
-    const clearedFilters = Object.entries(data.filterOptions).reduce(
-      (acc, [key, value]) => {
-        console.log(value);
+    const clearedFilters =
+      data &&
+      Object.entries(data.filterOptions).reduce((acc, [key, value]) => {
         acc[key] = Array.isArray(value.options) ? value.options[0].value : "";
         return acc;
-      },
-      {} as ActiveFilters
-    );
+      }, {} as ActiveFilters);
 
     setDrawerFilters({
       ...clearedFilters,
@@ -87,62 +85,66 @@ export function FilterDrawer({
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle className="text-2xl font-bold text-gray-900">
-              {data.header.title}
+              {data?.header.title}
             </DrawerTitle>
             <DrawerDescription className="text-gray-500">
-              {data.header.desc}
+              {data?.header.desc}
             </DrawerDescription>
           </DrawerHeader>
 
           <div className="p-4 pb-0 space-y-6">
-            {Object.entries(data.filterOptions).map(
-              ([filterKey, filterConfig]) => {
-                return (
-                  <div key={filterConfig.name}>
-                    <div>
-                      <Label
-                        htmlFor={`${filterKey}-filter`}
-                        className="text-base font-semibold text-gray-700 mb-2 block"
-                      >
-                        {filterConfig.name}
-                      </Label>
-
-                      <Select
-                        value={drawerFilters[filterKey]}
-                        onValueChange={(selectedValue) => {
-                          handleSelectChange(filterKey, selectedValue);
-                        }}
-                      >
-                        <SelectTrigger
-                          id={`${filterKey}-filter`}
-                          className="w-full"
+            {data &&
+              Object.entries(data.filterOptions).map(
+                ([filterKey, filterConfig]) => {
+                  return (
+                    <div key={filterConfig.name}>
+                      <div>
+                        <Label
+                          htmlFor={`${filterKey}-filter`}
+                          className="text-base font-semibold text-gray-700 mb-2 block"
                         >
-                          <SelectValue placeholder={`Select ${filterKey}`} />
-                        </SelectTrigger>
+                          {filterConfig.name}
+                        </Label>
 
-                        <SelectContent>
-                          {Array.isArray(filterConfig.options) &&
-                            filterConfig.options.map(
-                              ({ label: optionLabel, value: optionValue }) => {
-                                return (
-                                  <SelectItem
-                                    key={optionValue}
-                                    value={optionValue}
-                                  >
-                                    {optionLabel}
-                                  </SelectItem>
-                                );
-                              }
-                            )}
-                        </SelectContent>
-                      </Select>
+                        <Select
+                          value={drawerFilters[filterKey]}
+                          onValueChange={(selectedValue) => {
+                            handleSelectChange(filterKey, selectedValue);
+                          }}
+                        >
+                          <SelectTrigger
+                            id={`${filterKey}-filter`}
+                            className="w-full"
+                          >
+                            <SelectValue placeholder={`Select ${filterKey}`} />
+                          </SelectTrigger>
+
+                          <SelectContent>
+                            {Array.isArray(filterConfig.options) &&
+                              filterConfig.options.map(
+                                ({
+                                  label: optionLabel,
+                                  value: optionValue,
+                                }) => {
+                                  return (
+                                    <SelectItem
+                                      key={optionValue}
+                                      value={optionValue}
+                                    >
+                                      {optionLabel}
+                                    </SelectItem>
+                                  );
+                                }
+                              )}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <Separator className="bg-gray-200" />
                     </div>
-
-                    <Separator className="bg-gray-200" />
-                  </div>
-                );
-              }
-            )}
+                  );
+                }
+              )}
           </div>
 
           <DrawerFooter className="flex-row justify-between pt-6">

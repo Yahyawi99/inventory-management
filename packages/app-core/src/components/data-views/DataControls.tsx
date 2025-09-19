@@ -16,7 +16,7 @@ interface DataControlsProps {
   setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
   setActiveOrderBy: React.Dispatch<React.SetStateAction<SortConfig>>;
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
-  DrawerData: FilterDrawerData;
+  DrawerData: FilterDrawerData | null;
   sortableFields: SortableField[];
   filterOptions: { field: string; values: string[] };
 }
