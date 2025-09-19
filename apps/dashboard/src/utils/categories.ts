@@ -19,17 +19,13 @@ export const buildCategoriesApiUrl = (
 ): string => {
   const queryParams = new URLSearchParams();
 
-  // if (activeFilters.category && activeFilters.category !== "All") {
-  //   queryParams.append("category", activeFilters.category);
-  // }
+  if (activeFilters.status && activeFilters.status !== "All") {
+    queryParams.append("status", activeFilters.status);
+  }
 
-  // if (activeFilters.status && activeFilters.status !== "All") {
-  //   queryParams.append("status", activeFilters.status);
-  // }
-
-  // if (activeFilters.search) {
-  //   queryParams.append("search", activeFilters.search);
-  // }
+  if (activeFilters.search) {
+    queryParams.append("search", activeFilters.search);
+  }
 
   // if (activeOrderBy) {
   //   queryParams.append("orderBy", JSON.stringify(activeOrderBy));

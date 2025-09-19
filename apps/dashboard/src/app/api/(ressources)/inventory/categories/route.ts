@@ -2,9 +2,19 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 import { categoryRepository } from "@services/repositories";
+import { ProductStatus } from "@/types/products";
+
+interface Filters {
+  status?: ProductStatus;
+  search?: string;
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
+
+  const search = searchParams.get("search");
+  const status = searchParams.get("status");
+
   const page =
     Number(searchParams.get("page")) <= 0
       ? 1
@@ -25,10 +35,22 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // filters
+  // Filters
+  const filters: Filters = {};
+
+  if (search) {
+    filters.search = search;
+  }
+
+  if (status && status !== "All") {
+    filters.status = status as ProductStatus;
+  }
 
   try {
-    const res = await categoryRepository.findMany(orgId, { page, pageSize });
+    const res = await categoryRepository.findMany(orgId, filters, {
+      page,
+      pageSize,
+    });
 
     return NextResponse.json(
       {

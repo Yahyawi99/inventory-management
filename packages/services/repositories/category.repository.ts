@@ -1,9 +1,10 @@
+import { ProductStatus } from "@/types/products";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
 import { Category, Prisma as P } from "database/generated/prisma/client";
 
 interface Filters {
-  category?: string;
+  status?: ProductStatus;
   search?: string;
 }
 
@@ -15,23 +16,29 @@ interface SortConfig {
 export const categoryRepository = {
   async findMany(
     orgId: string,
+    filters: Filters,
     { page, pageSize }: { page: number; pageSize: number }
   ): Promise<{ totalPages: number; categories: Category[] } | null> {
+    // build the $match object
+    const filterMatch: Record<string, any> = {
+      organizationId: orgId,
+    };
+
+    // search
+    if (filters.search) {
+      const regex = { $regex: filters.search, $options: "i" };
+
+      filterMatch.$or = [{ name: regex }, { description: regex }];
+    }
+
     // build the pipeline
     const pipeline: InputJsonValue[] | undefined = [
-      // Step 1: Filter by organizationId first for efficiency
-      {
-        $match: {
-          organizationId: orgId,
-        },
-      },
-      // Step 2: Look up products and their total stock in one go
+      { $match: filterMatch },
       {
         $lookup: {
           from: "Product",
           let: { categoryId: "$_id" },
           pipeline: [
-            // Match products to the current category
             {
               $match: {
                 $expr: {
@@ -39,7 +46,6 @@ export const categoryRepository = {
                 },
               },
             },
-            // Look up stock items for each product
             {
               $lookup: {
                 from: "StockItem",
@@ -48,7 +54,6 @@ export const categoryRepository = {
                 as: "stockItems",
               },
             },
-            // Add a field for the total stock of this product
             {
               $addFields: {
                 totalProductStock: { $sum: "$stockItems.quantity" },
@@ -58,7 +63,6 @@ export const categoryRepository = {
           as: "products",
         },
       },
-      // Step 3: Add new fields for the counts and totals
       {
         $addFields: {
           productCount: { $size: "$products" },
@@ -67,17 +71,37 @@ export const categoryRepository = {
           },
         },
       },
-      // Step 4: Use $facet for pagination and total count
-      {
-        $facet: {
-          paginatedResults: [
-            { $skip: (page - 1) * pageSize },
-            { $limit: pageSize },
-          ],
-          totalCount: [{ $count: "count" }],
-        },
-      },
     ];
+
+    // status
+    const stockFilter: Record<string, any> = {};
+    if (filters.status) {
+      switch (filters.status) {
+        case "In Stock":
+          stockFilter.totalStockQuantity = { $gte: 50 };
+          break;
+        case "Low Stock":
+          stockFilter.totalStockQuantity = { $gt: 0, $lt: 50 };
+          break;
+        case "Out of Stock":
+          stockFilter.totalStockQuantity = { $lte: 0 };
+          break;
+      }
+    }
+    if (Object.keys(stockFilter).length > 0) {
+      pipeline.push({ $match: stockFilter });
+    }
+
+    // Facet
+    pipeline.push({
+      $facet: {
+        paginatedResults: [
+          { $skip: (page - 1) * pageSize },
+          { $limit: pageSize },
+        ],
+        totalCount: [{ $count: "count" }],
+      },
+    });
 
     try {
       const response = await Prisma.category.aggregateRaw({
