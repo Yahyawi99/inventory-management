@@ -94,6 +94,8 @@ export default function Products() {
 
       const { products, totalPages } = await response.json();
 
+      console.log(products[0]);
+
       setTableProducts(products);
       setPagination({ ...pagination, totalPages });
     } catch (err: any) {

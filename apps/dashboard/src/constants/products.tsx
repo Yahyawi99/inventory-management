@@ -81,7 +81,7 @@ export const tableColumns: Column<Product>[] = [
     header: "Category",
     render: (product) => (
       <span className="text-gray-700">
-        {product.category.length > 0 ? product.category[0].name : "N/A"}
+        {product.category ? product.category.name : "N/A"}
       </span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
