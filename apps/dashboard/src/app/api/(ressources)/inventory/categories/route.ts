@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
 
   const search = searchParams.get("search");
   const status = searchParams.get("status");
+  const orderBy = JSON.parse(searchParams.get("orderBy") as string);
 
   const page =
     Number(searchParams.get("page")) <= 0
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await categoryRepository.findMany(orgId, filters, {
+    const res = await categoryRepository.findMany(orgId, filters, orderBy, {
       page,
       pageSize,
     });

@@ -17,6 +17,10 @@ export const categoryRepository = {
   async findMany(
     orgId: string,
     filters: Filters,
+    orderBy: SortConfig = {
+      field: "createdAt",
+      direction: "desc",
+    },
     { page, pageSize }: { page: number; pageSize: number }
   ): Promise<{ totalPages: number; categories: Category[] } | null> {
     // build the $match object
@@ -90,6 +94,23 @@ export const categoryRepository = {
     }
     if (Object.keys(stockFilter).length > 0) {
       pipeline.push({ $match: stockFilter });
+    }
+
+    // OrderBy
+    if (orderBy && orderBy.field) {
+      if (orderBy.field === "stock") {
+        pipeline.push({
+          $sort: {
+            totalStockQuantity: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      } else {
+        pipeline.push({
+          $sort: {
+            [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      }
     }
 
     // Facet

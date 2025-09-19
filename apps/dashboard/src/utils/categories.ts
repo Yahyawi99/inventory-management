@@ -27,9 +27,9 @@ export const buildCategoriesApiUrl = (
     queryParams.append("search", activeFilters.search);
   }
 
-  // if (activeOrderBy) {
-  //   queryParams.append("orderBy", JSON.stringify(activeOrderBy));
-  // }
+  if (activeOrderBy) {
+    queryParams.append("orderBy", JSON.stringify(activeOrderBy));
+  }
 
   if (pagination) {
     queryParams.append("page", pagination.page + "");
