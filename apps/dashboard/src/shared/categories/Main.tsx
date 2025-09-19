@@ -74,11 +74,10 @@ export default function Products() {
         );
       }
 
-      const data = await response.json();
-      console.log(data);
+      const { totalPages, categories } = await response.json();
 
-      // setTableCategories(response.data.products);
-      // setPagination({ ...pagination, totalPages: response.data.totalPages });
+      setTableCategories(categories);
+      setPagination({ ...pagination, totalPages });
     } catch (err: any) {
       console.error("Error fetching table orders:", err);
       setError(

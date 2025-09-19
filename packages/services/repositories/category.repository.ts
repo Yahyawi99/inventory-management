@@ -79,25 +79,6 @@ export const categoryRepository = {
       },
     ];
 
-    // const filterMatch: Record<string, any> = {
-    // };
-
-    // pagination
-    // pipeline.push({
-    //   $facet: {
-    //     paginatedResults: [
-    //       { $skip: (page - 1) * pageSize },
-    //       { $limit: pageSize },
-    //     ],
-    //     totalCount: [{ $count: "count" }],
-    //   },
-    // });
-
-    // Push the filter object
-    // if (Object.keys(filterMatch).length > 0) {
-    //   pipeline.push({ $match: filterMatch });
-    // }
-
     try {
       const response = await Prisma.category.aggregateRaw({
         pipeline,
@@ -113,7 +94,6 @@ export const categoryRepository = {
           : 0;
       const totalPages = Math.ceil(totalCategories / pageSize);
 
-      console.log(result?.paginatedResults[0]);
       return {
         totalPages,
         categories: result?.paginatedResults as Category[],

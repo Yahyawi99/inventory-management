@@ -60,6 +60,21 @@ export const tableColumns: Column<Category>[] = [
     cellClass: "text-center font-medium text-gray-900",
   },
   {
+    key: "createdAt",
+    header: "Created On",
+    render: (category) => (
+      <span className="text-gray-700">
+        {new Date(category.createdAt.$date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })}
+      </span>
+    ),
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center text-gray-700",
+  },
+  {
     key: "productCount",
     header: "Products",
     render: (category) => (
@@ -68,13 +83,12 @@ export const tableColumns: Column<Category>[] = [
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
   },
+
   {
-    key: "createdAt",
-    header: "Created On",
+    key: "totalStock",
+    header: "Total Stock",
     render: (category) => (
-      <span className="text-gray-700">
-        {new Date(category.createdAt.$date).toLocaleDateString()}
-      </span>
+      <span className="text-gray-700">{category.totalStockQuantity}</span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
@@ -96,15 +110,6 @@ export const tableColumns: Column<Category>[] = [
     },
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center",
-  },
-  {
-    key: "totalStock",
-    header: "Total Stock",
-    render: (category) => (
-      <span className="text-gray-700">{category.totalStockQuantity}</span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center text-gray-700",
   },
   {
     key: "actions",

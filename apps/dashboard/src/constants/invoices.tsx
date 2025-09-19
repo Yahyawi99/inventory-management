@@ -39,7 +39,7 @@ export const tableColumns: Column<Invoice>[] = [
     header: "Date",
     render: (invoice) => (
       <span>
-        {new Date(invoice.invoiceDate).toLocaleDateString("en-US", {
+        {new Date(invoice.invoiceDate.$date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
           year: "numeric",
@@ -54,7 +54,7 @@ export const tableColumns: Column<Invoice>[] = [
     header: "Due Date",
     render: (invoice) => (
       <span className="font-medium text-gray-800">
-        {new Date(invoice.dueDate).toLocaleDateString("en-US", {
+        {new Date(invoice.dueDate.$date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
           year: "numeric",
