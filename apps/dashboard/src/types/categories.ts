@@ -1,8 +1,9 @@
 export interface Category {
-  id: string;
+  _id: string;
   name: string;
   description: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: { $date: Date };
+  updatedAt: { $date: Date };
   organizationId: string;
+  products: { name: string }[];
 }

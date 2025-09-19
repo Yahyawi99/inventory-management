@@ -1,9 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { categoryRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { NextResponse, NextRequest } from "next/server";
+import { categoryRepository } from "@services/repositories";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const page =
+    Number(searchParams.get("page")) <= 0
+      ? 1
+      : Number(searchParams.get("page"));
+  const pageSize = 10;
+
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -18,18 +25,21 @@ export async function GET(req: NextRequest, res: NextResponse) {
     );
   }
 
+  // filters
+
   try {
-    const response = await categoryRepository.findMany(orgId);
+    const res = await categoryRepository.findMany(orgId, { page, pageSize });
 
     return NextResponse.json(
       {
         message: "success",
-        categories: response,
+        categories: res?.categories,
+        totalPages: res?.totalPages,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error while fetching organization's orders ", error);
+    console.log("Error while fetching categories ", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

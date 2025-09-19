@@ -135,7 +135,7 @@ export const buildCategoriesOptions = async () => {
 };
 
 // generate api URL for table products data fetching
-export const buildOrdersApiUrl = (
+export const buildProductsApiUrl = (
   base: string,
   activeFilters: ActiveFilters,
   activeOrderBy: SortConfig,
