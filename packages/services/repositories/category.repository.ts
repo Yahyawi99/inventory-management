@@ -19,47 +19,87 @@ export const categoryRepository = {
   ): Promise<{ totalPages: number; categories: Category[] } | null> {
     // build the pipeline
     const pipeline: InputJsonValue[] | undefined = [
+      // Step 1: Filter by organizationId first for efficiency
       {
-        $match: {},
+        $match: {
+          organizationId: orgId,
+        },
       },
+      // Step 2: Look up products and their total stock in one go
       {
         $lookup: {
           from: "Product",
-          localField: "productId",
-          foreignField: "_id",
+          let: { categoryId: "$_id" },
+          pipeline: [
+            // Match products to the current category
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$categoryId", "$$categoryId"],
+                },
+              },
+            },
+            // Look up stock items for each product
+            {
+              $lookup: {
+                from: "StockItem",
+                localField: "_id",
+                foreignField: "productId",
+                as: "stockItems",
+              },
+            },
+            // Add a field for the total stock of this product
+            {
+              $addFields: {
+                totalProductStock: { $sum: "$stockItems.quantity" },
+              },
+            },
+          ],
           as: "products",
         },
       },
+      // Step 3: Add new fields for the counts and totals
       {
-        $unwind: {
-          path: "$products",
-          preserveNullAndEmptyArrays: true,
+        $addFields: {
+          productCount: { $size: "$products" },
+          totalStockQuantity: {
+            $sum: "$products.totalProductStock",
+          },
+        },
+      },
+      // Step 4: Use $facet for pagination and total count
+      {
+        $facet: {
+          paginatedResults: [
+            { $skip: (page - 1) * pageSize },
+            { $limit: pageSize },
+          ],
+          totalCount: [{ $count: "count" }],
         },
       },
     ];
 
-    const filterMatch: Record<string, any> = {
-      organizationId: orgId,
-    };
+    // const filterMatch: Record<string, any> = {
+    // };
 
     // pagination
-    pipeline.push({
-      $facet: {
-        paginatedResults: [
-          { $skip: (page - 1) * pageSize },
-          { $limit: pageSize },
-        ],
-        totalCount: [{ $count: "count" }],
-      },
-    });
+    // pipeline.push({
+    //   $facet: {
+    //     paginatedResults: [
+    //       { $skip: (page - 1) * pageSize },
+    //       { $limit: pageSize },
+    //     ],
+    //     totalCount: [{ $count: "count" }],
+    //   },
+    // });
 
     // Push the filter object
-    if (Object.keys(filterMatch).length > 0) {
-      pipeline.push({ $match: filterMatch });
-    }
+    // if (Object.keys(filterMatch).length > 0) {
+    //   pipeline.push({ $match: filterMatch });
+    // }
 
     try {
-      const response = await Prisma.product.aggregateRaw({
+      const response = await Prisma.category.aggregateRaw({
         pipeline,
       });
 
@@ -73,6 +113,7 @@ export const categoryRepository = {
           : 0;
       const totalPages = Math.ceil(totalCategories / pageSize);
 
+      console.log(result?.paginatedResults[0]);
       return {
         totalPages,
         categories: result?.paginatedResults as Category[],
@@ -81,24 +122,6 @@ export const categoryRepository = {
       console.log("Error while fetching categories: ", e);
       return null;
     }
-
-    // ==============
-    // const whereClause: P.CategoryWhereInput = {
-    //   organizationId: orgId,
-    // };
-
-    // try {
-    //   const res = await Prisma.category.findMany({
-    //     skip: (page - 1) * pageSize,
-    //     take: pageSize,
-    //     where: whereClause,
-    //   });
-
-    //   return res;
-    // } catch (e) {
-    //   console.log("Error while fetching categories: ", e);
-    //   return null;
-    // }
   },
 
   async findById(id: string) {

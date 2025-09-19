@@ -106,6 +106,7 @@ export const getProductStockStatusDisplay = (stockItems: StockItem[]) => {
     (sum, item) => sum + item.quantity,
     0
   );
+
   if (totalQuantity > 50) {
     return { text: "In Stock", colorClass: "bg-green-100 text-green-800" };
   } else if (totalQuantity > 0) {

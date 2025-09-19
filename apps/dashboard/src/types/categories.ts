@@ -5,5 +5,6 @@ export interface Category {
   createdAt: { $date: Date };
   updatedAt: { $date: Date };
   organizationId: string;
-  products: { name: string }[];
+  productCount: number;
+  totalStockQuantity: number;
 }

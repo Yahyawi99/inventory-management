@@ -1,4 +1,5 @@
 import { Category } from "@/types/categories";
+import { getProductStockStatusDisplay } from "@/utils/categories";
 import { Button, Input } from "app-core/src/components";
 import { Column, FilterDrawerData, SortableField } from "app-core/src/types";
 
@@ -62,7 +63,7 @@ export const tableColumns: Column<Category>[] = [
     key: "productCount",
     header: "Products",
     render: (category) => (
-      <span className="text-gray-700">{category.products.length}</span>
+      <span className="text-gray-700">{category.productCount}</span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
@@ -74,6 +75,33 @@ export const tableColumns: Column<Category>[] = [
       <span className="text-gray-700">
         {new Date(category.createdAt.$date).toLocaleDateString()}
       </span>
+    ),
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center text-gray-700",
+  },
+  {
+    key: "stockStatus",
+    header: "Stock Status",
+    render: (category) => {
+      const statusDisplay = getProductStockStatusDisplay(
+        category.totalStockQuantity
+      );
+      return (
+        <span
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
+        >
+          {statusDisplay.text}
+        </span>
+      );
+    },
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center",
+  },
+  {
+    key: "totalStock",
+    header: "Total Stock",
+    render: (category) => (
+      <span className="text-gray-700">{category.totalStockQuantity}</span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
