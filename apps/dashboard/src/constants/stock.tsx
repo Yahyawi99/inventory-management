@@ -18,7 +18,7 @@ export const stockSortableFields: SortableField[] = [
 
 export const stockStatusFilters = {
   field: "status",
-  values: ["All", "In Stock", "Low Stock", "Out of Stock"],
+  values: ["All", "Available", "Low", "Empty"],
 };
 
 export const stockFilterDrawerData: FilterDrawerData = {
