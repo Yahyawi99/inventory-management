@@ -100,7 +100,7 @@ export default function InvitationForm({
                 }
                 required
                 placeholder="Enter your full name"
-                className="h-11"
+                className="h-10"
               />
             </div>
 
@@ -122,7 +122,7 @@ export default function InvitationForm({
                 required
                 minLength={8}
                 placeholder="Create a strong password (min 8 characters)"
-                className="h-11"
+                className="h-10"
               />
             </div>
 

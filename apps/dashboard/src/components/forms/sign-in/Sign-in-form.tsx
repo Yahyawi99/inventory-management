@@ -119,7 +119,7 @@ export default function SignInForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+              className="border-gray-300 h-10 focus:border-red-500 focus:ring-red-500 rounded-md"
             />
           </div>
 
@@ -134,7 +134,7 @@ export default function SignInForm() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+              className="border-gray-300 h-10 focus:border-red-500 focus:ring-red-500 rounded-md"
             />
           </div>
 

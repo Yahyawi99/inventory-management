@@ -45,6 +45,11 @@ export const productCategoryFilters = {
   values: ["All", "In Stock", "Low Stock", "Out of Stock"],
 };
 
+export const headerData = {
+  title: "Products",
+  buttonTxt: "Create Product",
+};
+
 // /=========================================
 
 // --- Product-Specific Table Columns ---
