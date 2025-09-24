@@ -17,14 +17,14 @@ import {
   ActiveFilters,
   SortConfig,
   Pagination,
-  FilterDrawerData,
 } from "app-core/src/types";
+import { tableColumns } from "@/constants/products";
 import {
-  getProductFilterDrawerData,
-  productCategoryFilters,
-  tableColumns,
-} from "@/constants/products";
-import { headerData, stockSortableFields } from "@/constants/stock";
+  headerData,
+  stockSortableFields,
+  stockStatusFilters,
+  stockFilterDrawerData,
+} from "@/constants/stock";
 import { buildProductsApiUrl } from "@/utils/products";
 import { exportOrdersAsJson } from "@/utils/shared";
 
@@ -34,7 +34,7 @@ import { exportOrdersAsJson } from "@/utils/shared";
 
 // Total Stock Locations: The number of physical places where you store your inventory.
 
-// Total Inventory Value: The total dollar value of your entire inventory, calculated by summing up the value of each product based on its price and quantity.
+// Total Inventory Value: The total dollar value of your en tire inventory, calculated by summing up the value of each product based on its price and quantity.
 
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
@@ -42,9 +42,6 @@ export default function Products() {
 
   const [tableProducts, setTableProducts] = useState<Product[]>([]);
   const [isFetchingTableProducts, setIsFetchingTableProducts] = useState(true);
-
-  const [productFilterDrawerData, setProductFilterDrawerData] =
-    useState<FilterDrawerData | null>(null);
 
   const [summaryProducts, setSummaryProducts] = useState<Product[]>([]);
   const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
@@ -202,12 +199,6 @@ export default function Products() {
     );
   };
 
-  // =======================
-  // fetch categories
-  useEffect(() => {
-    getProductFilterDrawerData().then(setProductFilterDrawerData);
-  }, []);
-
   return (
     <section className="overflow-x-hidden">
       <Header data={headerData} exportData={exportData} />
@@ -220,9 +211,9 @@ export default function Products() {
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
-        DrawerData={productFilterDrawerData}
+        DrawerData={stockFilterDrawerData}
         sortableFields={stockSortableFields}
-        filterOptions={productCategoryFilters}
+        filterOptions={stockStatusFilters}
       />
 
       <TableView
