@@ -89,11 +89,26 @@ export default function UsersCard({ children }: UsersCardProps) {
   });
   return (
     <>
-      <Card className="w-full rounded-3xl shadow-xl transition-all duration-300">
-        <CardContent className="p-8 pt-0">
-          {/* Header */}
-          {children}
+      {children ? (
+        <Card className="w-full rounded-3xl shadow-xl transition-all duration-300">
+          <CardContent className="p-8 pt-0">
+            {/* Header */}
+            {children}
 
+            {/* Table */}
+            <TableView
+              data={tableUsers}
+              isFetchingData={isFetchingTableUsers}
+              currentPage={pagination.page}
+              totalPages={pagination?.totalPages ? pagination.totalPages : 0}
+              setPagination={setPagination}
+            >
+              <DataTable<User> data={tableUsers} columns={tableColumns} />
+            </TableView>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
           {/* Table */}
           <TableView
             data={tableUsers}
@@ -104,8 +119,8 @@ export default function UsersCard({ children }: UsersCardProps) {
           >
             <DataTable<User> data={tableUsers} columns={tableColumns} />
           </TableView>
-        </CardContent>
-      </Card>
+        </>
+      )}
 
       {/* Delete Modal */}
       <DeleteModal

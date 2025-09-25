@@ -13,33 +13,33 @@ import { MenuItemType } from "@/types/sidebar";
 export const MenuItems: MenuItemType[] = [
   {
     id: "dashboard",
-    name: "Dashboard", // Display name
+    name: "Dashboard",
     href: routes.dashboard,
     icon: faChartSimple,
-    subMenuItems: [], // Empty array as it has no sub-items
+    subMenuItems: [],
   },
   {
     id: "inventory",
-    name: "Inventory", // Display name
+    name: "Inventory",
     icon: faBoxesStacked,
     subMenuItems: [
       {
-        id: "inventory-products-sub", // Unique ID for sub-item
+        id: "inventory-products-sub",
         name: "Products",
         href: routes.inventory.products,
       },
       {
-        id: "inventory-categories-sub", // Unique ID for sub-item
+        id: "inventory-categories-sub",
         name: "Categories",
         href: routes.inventory.categories,
       },
       {
-        id: "inventory-stock-levels-sub", // Unique ID for sub-item
+        id: "inventory-stock-levels-sub",
         name: "Stock Levels",
         href: routes.inventory.stockLevels,
       },
       {
-        id: "inventory-barcodes-sub", // Unique ID for sub-item
+        id: "inventory-barcodes-sub",
         name: "Barcodes",
         href: routes.inventory.barcodes,
       },
@@ -74,45 +74,38 @@ export const MenuItems: MenuItemType[] = [
   },
   {
     id: "users-roles",
-    name: "Users & Roles", // Display name
+    name: "Users & Roles",
     icon: faUsers,
     subMenuItems: [
       {
-        id: "users-roles-manage-sub", // Unique ID for sub-item
+        id: "users-roles-manage-sub",
         name: "Manage Users",
         href: routes.usersRoles.manageUsers,
       },
       {
-        id: "users-roles-permissions-sub", // Unique ID for sub-item
+        id: "users-roles-permissions-sub",
         name: "Roles & Permissions",
         href: routes.usersRoles.rolesPermissions,
       },
     ],
   },
   {
-    id: "reports",
-    name: "Reports", // Display name
-    href: routes.reports,
-    icon: faChartLine,
-    subMenuItems: [], // Empty array as it has no sub-items
-  },
-  {
     id: "settings",
-    name: "Settings", // Display name
+    name: "Settings",
     icon: faGear,
     subMenuItems: [
       {
-        id: "settings-company-profile-sub", // Unique ID for sub-item
+        id: "settings-company-profile-sub",
         name: "Company Profile",
         href: routes.settings.companyProfile,
       },
       {
-        id: "settings-integrations-sub", // Unique ID for sub-item
+        id: "settings-integrations-sub",
         name: "Integrations",
         href: routes.settings.integrations,
       },
       {
-        id: "settings-notifications-sub", // Unique ID for sub-item
+        id: "settings-notifications-sub",
         name: "Notifications",
         href: routes.settings.notifications,
       },
@@ -124,5 +117,12 @@ export const MenuItems: MenuItemType[] = [
     href: routes.activityLog,
     icon: faScroll,
     subMenuItems: [], // Empty array as it has no sub-items
+  },
+  {
+    id: "reports",
+    name: "Reports",
+    href: routes.reports,
+    icon: faChartLine,
+    subMenuItems: [],
   },
 ];

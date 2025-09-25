@@ -1,4 +1,4 @@
-import RecentActivity from "@/shared/account/activity/Activity";
+import RecentActivity from "@/shared/account/activity";
 import { Activity } from "lucide-react";
 
 export default function UserActivity() {
