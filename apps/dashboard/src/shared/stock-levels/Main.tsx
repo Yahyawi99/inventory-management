@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { Product, ProductsSummaryMetrics } from "@/types/products";
-import { getProductSummaryMetrics } from "@/utils/products";
 import {
   Header,
   SummaryCards,
@@ -26,16 +24,8 @@ import {
   tableColumns,
 } from "@/constants/stock";
 import { exportOrdersAsJson } from "@/utils/shared";
-import { Stock } from "@/types/stocks";
-import { buildStocksApiUrl } from "@/utils/stocks";
-
-// Total Products: The total count of unique products in your inventory.
-
-// Total Stock Quantity: The sum of all individual units across all stock locations.
-
-// Total Stock Locations: The number of physical places where you store your inventory.
-
-// Total Inventory Value: The total dollar value of your en tire inventory, calculated by summing up the value of each product based on its price and quantity.
+import { Stock, StockSummaryMetrics } from "@/types/stocks";
+import { buildStocksApiUrl, getStockLevelsMetrics } from "@/utils/stocks";
 
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
@@ -44,9 +34,8 @@ export default function Products() {
   const [tableStocks, setTableStocks] = useState<Stock[]>([]);
   const [isFetchingTableStocks, setIsFetchingTableStocks] = useState(true);
 
-  const [summaryProducts, setSummaryProducts] = useState<Product[]>([]);
-  const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
-    useState(true);
+  const [summaryStocks, setSummaryStocks] = useState<Stock[]>([]);
+  const [isFetchingSummaryStocks, setIsFetchingSummaryStocks] = useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
@@ -67,7 +56,7 @@ export default function Products() {
 
   // =======================
   // Table Data
-  const fetchTableProducts = useCallback(async () => {
+  const fetchTableStocks = useCallback(async () => {
     if (!user || !user.activeOrganizationId) {
       setIsFetchingTableStocks(false);
       setError("User or organization ID not available for table.");
@@ -109,9 +98,9 @@ export default function Products() {
 
   useEffect(() => {
     if (isAuthenticated && !isAuthLoading) {
-      fetchTableProducts();
+      fetchTableStocks();
     }
-  }, [isAuthLoading, fetchTableProducts]);
+  }, [isAuthLoading, fetchTableStocks]);
 
   // =======================
   // Summary cards Data
@@ -121,14 +110,14 @@ export default function Products() {
       return;
     }
 
-    const fetchSummaryProducts = async () => {
+    const fetchSummaryStocks = async () => {
       if (!user || !user.activeOrganizationId) {
-        setIsFetchingSummaryProducts(false);
+        setIsFetchingSummaryStocks(false);
         setError("User or organization ID not available.");
         return;
       }
 
-      setIsFetchingSummaryProducts(true);
+      setIsFetchingSummaryStocks(true);
       setError(null);
       try {
         const response = await fetch("/api/inventory/stocks");
@@ -141,67 +130,68 @@ export default function Products() {
 
         const { stocks } = await response.json();
 
-        // setSummaryProducts(products);
+        setSummaryStocks(stocks);
       } catch (err: any) {
-        console.error("Error fetching products:", err);
+        console.error("Error fetching stocks:", err);
         setError(
-          err.message || "An unexpected error occurred while fetching products."
+          err.message || "An unexpected error occurred while fetching stocks."
         );
       } finally {
-        setIsFetchingSummaryProducts(false);
+        setIsFetchingSummaryStocks(false);
       }
     };
 
     if (isAuthenticated && !isAuthLoading) {
-      fetchSummaryProducts();
+      fetchSummaryStocks();
     }
   }, [isAuthenticated, isAuthLoading, user, router]);
 
   const metricsData = useMemo(() => {
-    return getProductSummaryMetrics(summaryProducts);
-  }, [summaryProducts]);
+    return getStockLevelsMetrics(summaryStocks);
+  }, [summaryStocks]);
 
   useEffect(() => {
     setCardMetrics([
       {
         title: "Total Products",
-        value: 0,
-        change: 0,
+        value: metricsData.totalProducts,
+        change: metricsData.totalProductsChange,
       },
       {
         title: "Total Stock Quantity:",
-        value: 0,
-        change: 0,
+        value: metricsData.totalStockQuantity,
+        change: metricsData.totalStockQuantityChange,
+      },
+
+      {
+        title: "Total Inventory Value",
+        value: "$" + metricsData.totalInventoryValue.toFixed(2),
+        change: metricsData.totalInventoryValueChange,
       },
       {
         title: "Total Stock Locations",
-        value: 0,
-        change: 0,
-      },
-      {
-        title: "Total Inventory Value",
-        value: 0,
-        change: 0,
+        value: metricsData.totalStockLocations,
+        change: metricsData.totalStockLocationsChange,
       },
     ]);
-  }, [summaryProducts]);
+  }, [summaryStocks]);
 
   const exportData = () => {
-    // exportOrdersAsJson<ProductsSummaryMetrics>(
-    //   tableProducts,
-    //   {
-    //     filter: activeFilters,
-    //     orderBy: activeOrderBy,
-    //   },
-    //   metricsData
-    // );
+    exportOrdersAsJson<StockSummaryMetrics>(
+      tableStocks,
+      {
+        filter: activeFilters,
+        orderBy: activeOrderBy,
+      },
+      metricsData
+    );
   };
 
   return (
     <section className="overflow-x-hidden">
       <Header data={headerData} exportData={exportData} />
 
-      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryProducts} />
+      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryStocks} />
 
       <DataControls
         activeFilters={activeFilters}

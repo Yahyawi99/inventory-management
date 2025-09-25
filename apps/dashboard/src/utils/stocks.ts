@@ -1,3 +1,4 @@
+import { Stock, StockSummaryMetrics } from "@/types/stocks";
 import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";
 
 // stock status
@@ -37,4 +38,33 @@ export const buildStocksApiUrl = (
 
   const queryString = queryParams.toString();
   return `${base}${queryString ? `?${queryString}` : ""}`;
+};
+
+// Summary Metrics
+export const getStockLevelsMetrics = (
+  allStocks: Stock[]
+): StockSummaryMetrics => {
+  // --- 1. Total Products and Total Stock Quantity ---
+  // Based on your clarification, the total number of products is the sum of all quantities.
+  const totalProducts = allStocks.reduce(
+    (sum, stock) => sum + stock.totalQuantity,
+    0
+  );
+
+  // --- 2. Total Inventory Value ---
+  const totalInventoryValue = allStocks.reduce(
+    (sum, stock) => sum + stock.totalValue,
+    0
+  );
+
+  return {
+    totalProducts,
+    totalStockLocations: allStocks.length,
+    totalStockQuantity: totalProducts,
+    totalInventoryValue: totalInventoryValue,
+    totalProductsChange: undefined,
+    totalStockQuantityChange: undefined,
+    totalInventoryValueChange: undefined,
+    totalStockLocationsChange: undefined,
+  };
 };
