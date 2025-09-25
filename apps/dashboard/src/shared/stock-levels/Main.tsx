@@ -94,8 +94,6 @@ export default function Products() {
 
       const { products, totalPages } = await response.json();
 
-      console.log(products[0]);
-
       setTableProducts(products);
       setPagination({ ...pagination, totalPages });
     } catch (err: any) {
@@ -133,7 +131,7 @@ export default function Products() {
       setIsFetchingSummaryProducts(true);
       setError(null);
       try {
-        const response = await fetch("/api/inventory/products");
+        const response = await fetch("/api/inventory/stocks");
 
         if (!response.ok) {
           throw new Error(
@@ -141,9 +139,10 @@ export default function Products() {
           );
         }
 
-        const { products } = await response.json();
+        const data = await response.json();
 
-        setSummaryProducts(products);
+        console.log(data);
+        // setSummaryProducts(products);
       } catch (err: any) {
         console.error("Error fetching products:", err);
         setError(

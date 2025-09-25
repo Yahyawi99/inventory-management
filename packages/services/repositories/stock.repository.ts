@@ -1,10 +1,10 @@
-import { ProductStatus } from "@/types/products";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
 import { Category, Stock } from "database/generated/prisma/client";
 
+type StockStatus = "Available" | "Low" | "Empty";
 interface Filters {
-  status?: "Available" | "Low" | "Empty";
+  status?: StockStatus;
   search?: string;
 }
 
@@ -13,7 +13,7 @@ interface SortConfig {
   direction: "desc" | "asc";
 }
 
-export const categoryRepository = {
+export const StockRepository = {
   async findMany(
     orgId: string,
     filters: Filters,
@@ -29,71 +29,75 @@ export const categoryRepository = {
     };
 
     // search
-    if (filters.search) {
-      const regex = { $regex: filters.search, $options: "i" };
+    // if (filters.search) {
+    //   const regex = { $regex: filters.search, $options: "i" };
 
-      filterMatch.$or = [{ name: regex }, { location: regex }];
-    }
+    //   filterMatch.$or = [{ name: regex }, { location: regex }];
+    // }
 
     // build the pipeline
     const pipeline: InputJsonValue[] | undefined = [
       { $match: filterMatch },
       {
         $lookup: {
-          from: "stockItem",
-          let: { stockId: "$_id" },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $eq: ["$stockId", "$$stockId"],
-                },
-              },
-            },
-            {
-              $lookup: {
-                from: "Product",
-                localField: "_id",
-                foreignField: "productId",
-                as: "product",
-              },
-            },
-            {
-              $addFields: {
-                productPrice: "$product.price",
-              },
-            },
-          ],
+          from: "StockItem",
+          localField: "_id",
+          foreignField: "stockId",
           as: "stockItems",
         },
+      },
+      {
+        $unwind: "$stockItems",
+      },
+      {
+        $lookup: {
+          from: "Product",
+          localField: "stockItems.productId",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
       },
       {
         $addFields: {
           totalQuantity: {
             $sum: "$stockItems.quantity",
           },
+          itemValue: {
+            $multiply: ["$stockItems.quantity", "$product.price"],
+          },
+        },
+      },
+
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          totalValue: { $sum: "$itemValue" },
         },
       },
     ];
 
     // status
-    const stockFilter: Record<string, any> = {};
-    if (filters.status) {
-      switch (filters.status) {
-        case "Available":
-          stockFilter.totalStockQuantity = { $gte: 50 };
-          break;
-        case "Low":
-          stockFilter.totalStockQuantity = { $gt: 0, $lt: 50 };
-          break;
-        case "Empty":
-          stockFilter.totalStockQuantity = { $lte: 0 };
-          break;
-      }
-    }
-    if (Object.keys(stockFilter).length > 0) {
-      pipeline.push({ $match: stockFilter });
-    }
+    // const stockFilter: Record<string, any> = {};
+    // if (filters.status) {
+    //   switch (filters.status) {
+    //     case "Available":
+    //       stockFilter.totalQuantity = { $gte: 50 };
+    //       break;
+    //     case "Low":
+    //       stockFilter.totalQuantity = { $gt: 0, $lt: 50 };
+    //       break;
+    //     case "Empty":
+    //       stockFilter.totalQuantity = { $lte: 0 };
+    //       break;
+    //   }
+    // }
+    // if (Object.keys(stockFilter).length > 0) {
+    //   pipeline.push({ $match: stockFilter });
+    // }
 
     // OrderBy
     // if (orderBy && orderBy.field) {
@@ -124,12 +128,12 @@ export const categoryRepository = {
     });
 
     try {
-      const response = await Prisma.category.aggregateRaw({
+      const response = await Prisma.stock.aggregateRaw({
         pipeline,
       });
 
       const result = response[0] as
-        | { paginatedResults: Category[]; totalCount: [{ count: number }] }
+        | { paginatedResults: Stock[]; totalCount: [{ count: number }] }
         | undefined;
 
       const totalCategories =
@@ -140,10 +144,10 @@ export const categoryRepository = {
 
       return {
         totalPages,
-        stocks: result?.paginatedResults as Category[],
+        stocks: result?.paginatedResults as Stock[],
       };
     } catch (e) {
-      console.log("Error while fetching categories: ", e);
+      console.log("Error while fetching stocks: ", e);
       return null;
     }
   },

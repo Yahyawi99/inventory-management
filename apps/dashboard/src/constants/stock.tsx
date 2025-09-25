@@ -12,7 +12,7 @@ export const headerData: HeaderData = {
 export const stockSortableFields: SortableField[] = [
   { title: "Name", field: "name", direction: "desc" },
   { title: "Date", field: "createdAt", direction: "desc" },
-  { title: "Amount", field: "totalAmount", direction: "desc" },
+  { title: "Total Value", field: "totalValue", direction: "desc" },
   { title: "quantity", field: "totalQuantity", direction: "desc" },
 ];
 
