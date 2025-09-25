@@ -1,4 +1,5 @@
 import Main from "@/shared/account/premissions/Main";
+import MainHeader from "@/shared/account/premissions/Header";
 
 export default function Page() {
   return (
@@ -14,7 +15,9 @@ export default function Page() {
         </div>
       </div>
 
-      <Main />
+      <Main>
+        <MainHeader />
+      </Main>
     </div>
   );
 }

@@ -14,7 +14,11 @@ import UsersHeader from "./Header";
 import DeleteModal from "./DeleteModal";
 import { User } from "@/types/users";
 
-export default function UsersCard() {
+interface UsersCardProps {
+  children?: React.ReactNode;
+}
+
+export default function UsersCard({ children }: UsersCardProps) {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const [tableUsers, setTableUsers] = useState<User[]>([]);
@@ -88,7 +92,7 @@ export default function UsersCard() {
       <Card className="w-full rounded-3xl shadow-xl transition-all duration-300">
         <CardContent className="p-8 pt-0">
           {/* Header */}
-          <UsersHeader />
+          {children}
 
           {/* Table */}
           <TableView
