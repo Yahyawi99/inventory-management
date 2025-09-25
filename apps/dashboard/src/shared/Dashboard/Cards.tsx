@@ -1,83 +1,93 @@
+import { DollarSign } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
 } from "app-core/src/components";
-import { faDollarSign } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Cards() {
   return (
-    <div>
-      <div className="flex justify-between items-center mb-3">
-        <h2>All Expenses</h2>
-
+    <div className="w-full">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold">All Expenses</h2>
         <Select>
-          <SelectTrigger className="w-[180px] bg-(--card) shadow-md shadow-gray-300 data-[state=closed]:shadow-[none] outline-none">
+          <SelectTrigger className="w-[180px] rounded-lg">
             <SelectValue placeholder="Metrics" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="light">Expenses</SelectItem>
-            <SelectItem value="dark">Inventory Overview</SelectItem>
-            <SelectItem value="system">Orders</SelectItem>
+            <SelectItem value="expenses">Expenses</SelectItem>
+            <SelectItem value="inventory">Inventory Overview</SelectItem>
+            <SelectItem value="orders">Orders</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
-        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
-          <div className="flex justify-between items-center">
-            <FontAwesomeIcon
-              icon={faDollarSign}
-              className="bg-green-600 px-3 py-2 rounded-4xl text-(--card)"
-            />
-            <p>Total Expenses</p>
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="rounded-lg shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Expenses
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-gray-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$21,536.00</div>
+            <p className="text-xs text-muted-foreground">
+              +15% Increase since last week.
+            </p>
+          </CardContent>
+        </Card>
 
-          <p className="mt-6 mb-0 font-bold">$21536.00</p>
-          <p className="text-xs">15% Increase since last week.</p>
-        </div>
+        <Card className="rounded-lg shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Expenses
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-gray-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$21,536.00</div>
+            <p className="text-xs text-muted-foreground">
+              +15% Increase since last week.
+            </p>
+          </CardContent>
+        </Card>
 
-        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
-          <div className="flex justify-between items-center">
-            <FontAwesomeIcon
-              icon={faDollarSign}
-              className="bg-(--chart-3) px-3 py-2 rounded-4xl text-(--card)"
-            />
-            <p>Total Expenses</p>
-          </div>
+        <Card className="rounded-lg shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Expenses
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-gray-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$21,536.00</div>
+            <p className="text-xs text-muted-foreground">
+              +15% Increase since last week.
+            </p>
+          </CardContent>
+        </Card>
 
-          <p className="mt-6 mb-0 font-bold">$21536.00</p>
-          <p className="text-xs">15% Increase since last week.</p>
-        </div>
-
-        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
-          <div className="flex justify-between items-center">
-            <FontAwesomeIcon
-              icon={faDollarSign}
-              className="bg-(--chart-5) px-3 py-2 rounded-4xl text-(--card)"
-            />
-            <p>Total Expenses</p>
-          </div>
-
-          <p className="mt-6 mb-0 font-bold">$21536.00</p>
-          <p className="text-xs">15% Increase since last week.</p>
-        </div>
-
-        <div className="min-w-[220px] max-w-full bg-(--card) flex-1 py-3 px-3 rounded-(--radius)">
-          <div className="flex justify-between items-center">
-            <FontAwesomeIcon
-              icon={faDollarSign}
-              className="bg-(--destructive) px-3 py-2 rounded-4xl text-(--card)"
-            />
-            <p>Total Expenses</p>
-          </div>
-
-          <p className="mt-6 mb-0 font-bold">$21536.00</p>
-          <p className="text-xs">15% Increase since last week.</p>
-        </div>
+        <Card className="rounded-lg shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Total Expenses
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-gray-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$21,536.00</div>
+            <p className="text-xs text-muted-foreground">
+              +15% Increase since last week.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
