@@ -29,11 +29,11 @@ export const StockRepository = {
     };
 
     // search
-    // if (filters.search) {
-    //   const regex = { $regex: filters.search, $options: "i" };
+    if (filters.search) {
+      const regex = { $regex: filters.search, $options: "i" };
 
-    //   filterMatch.$or = [{ name: regex }, { location: regex }];
-    // }
+      filterMatch.$or = [{ name: regex }, { location: regex }];
+    }
 
     // build the pipeline
     const pipeline: InputJsonValue[] | undefined = [
@@ -75,46 +75,57 @@ export const StockRepository = {
         $group: {
           _id: "$_id",
           name: { $first: "$name" },
+          location: { $first: "$location" },
+          createdAt: { $first: "$createdAt" },
+          updatedAt: { $first: "$updatedAt" },
           totalValue: { $sum: "$itemValue" },
+          totalQuantity: { $first: "$totalQuantity" },
         },
       },
     ];
 
-    // status
-    // const stockFilter: Record<string, any> = {};
-    // if (filters.status) {
-    //   switch (filters.status) {
-    //     case "Available":
-    //       stockFilter.totalQuantity = { $gte: 50 };
-    //       break;
-    //     case "Low":
-    //       stockFilter.totalQuantity = { $gt: 0, $lt: 50 };
-    //       break;
-    //     case "Empty":
-    //       stockFilter.totalQuantity = { $lte: 0 };
-    //       break;
-    //   }
-    // }
-    // if (Object.keys(stockFilter).length > 0) {
-    //   pipeline.push({ $match: stockFilter });
-    // }
+    // status;
+    const stockFilter: Record<string, any> = {};
+    if (filters.status) {
+      console.log(filters.status);
+      switch (filters.status) {
+        case "Available":
+          stockFilter.totalQuantity = { $gte: 50 };
+          break;
+        case "Low":
+          stockFilter.totalQuantity = { $gt: 0, $lt: 50 };
+          break;
+        case "Empty":
+          stockFilter.totalQuantity = { $lte: 0 };
+          break;
+      }
+    }
+    if (Object.keys(stockFilter).length > 0) {
+      pipeline.push({ $match: stockFilter });
+    }
 
     // OrderBy
-    // if (orderBy && orderBy.field) {
-    //   if (orderBy.field === "stock") {
-    //     pipeline.push({
-    //       $sort: {
-    //         totalStockQuantity: orderBy.direction === "desc" ? -1 : 1,
-    //       },
-    //     });
-    //   } else {
-    //     pipeline.push({
-    //       $sort: {
-    //         [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
-    //       },
-    //     });
-    //   }
-    // }
+    if (orderBy && orderBy.field) {
+      if (orderBy.field === "quantity") {
+        pipeline.push({
+          $sort: {
+            totalQuantity: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      } else if (orderBy.field === "value") {
+        pipeline.push({
+          $sort: {
+            totalValue: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      } else {
+        pipeline.push({
+          $sort: {
+            [orderBy.field]: orderBy.direction === "desc" ? -1 : 1,
+          },
+        });
+      }
+    }
 
     // Facet
     pipeline.push({

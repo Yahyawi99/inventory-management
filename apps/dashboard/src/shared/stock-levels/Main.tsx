@@ -18,15 +18,16 @@ import {
   SortConfig,
   Pagination,
 } from "app-core/src/types";
-import { tableColumns } from "@/constants/products";
 import {
   headerData,
   stockSortableFields,
   stockStatusFilters,
   stockFilterDrawerData,
+  tableColumns,
 } from "@/constants/stock";
-import { buildProductsApiUrl } from "@/utils/products";
 import { exportOrdersAsJson } from "@/utils/shared";
+import { Stock } from "@/types/stocks";
+import { buildStocksApiUrl } from "@/utils/stocks";
 
 // Total Products: The total count of unique products in your inventory.
 
@@ -40,8 +41,8 @@ export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
 
-  const [tableProducts, setTableProducts] = useState<Product[]>([]);
-  const [isFetchingTableProducts, setIsFetchingTableProducts] = useState(true);
+  const [tableStocks, setTableStocks] = useState<Stock[]>([]);
+  const [isFetchingTableStocks, setIsFetchingTableStocks] = useState(true);
 
   const [summaryProducts, setSummaryProducts] = useState<Product[]>([]);
   const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
@@ -50,7 +51,6 @@ export default function Products() {
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     status: "All",
-    category: "All",
     search: "",
   });
   const [activeOrderBy, setActiveOrderBy] = useState<SortConfig>({
@@ -69,16 +69,16 @@ export default function Products() {
   // Table Data
   const fetchTableProducts = useCallback(async () => {
     if (!user || !user.activeOrganizationId) {
-      setIsFetchingTableProducts(false);
+      setIsFetchingTableStocks(false);
       setError("User or organization ID not available for table.");
       return;
     }
 
-    setIsFetchingTableProducts(true);
+    setIsFetchingTableStocks(true);
     setError(null);
     try {
-      const apiUrl = buildProductsApiUrl(
-        "/api/inventory/products",
+      const apiUrl = buildStocksApiUrl(
+        "/api/inventory/stocks",
         activeFilters,
         activeOrderBy,
         pagination
@@ -92,9 +92,9 @@ export default function Products() {
         );
       }
 
-      const { products, totalPages } = await response.json();
+      const { stocks, totalPages } = await response.json();
 
-      setTableProducts(products);
+      setTableStocks(stocks);
       setPagination({ ...pagination, totalPages });
     } catch (err: any) {
       console.error("Error fetching table orders:", err);
@@ -103,7 +103,7 @@ export default function Products() {
           "An unexpected error occurred while fetching table orders."
       );
     } finally {
-      setIsFetchingTableProducts(false);
+      setIsFetchingTableStocks(false);
     }
   }, [user, isAuthenticated, activeFilters, activeOrderBy, pagination.page]);
 
@@ -139,9 +139,8 @@ export default function Products() {
           );
         }
 
-        const data = await response.json();
+        const { stocks } = await response.json();
 
-        console.log(data);
         // setSummaryProducts(products);
       } catch (err: any) {
         console.error("Error fetching products:", err);
@@ -188,14 +187,14 @@ export default function Products() {
   }, [summaryProducts]);
 
   const exportData = () => {
-    exportOrdersAsJson<ProductsSummaryMetrics>(
-      tableProducts,
-      {
-        filter: activeFilters,
-        orderBy: activeOrderBy,
-      },
-      metricsData
-    );
+    // exportOrdersAsJson<ProductsSummaryMetrics>(
+    //   tableProducts,
+    //   {
+    //     filter: activeFilters,
+    //     orderBy: activeOrderBy,
+    //   },
+    //   metricsData
+    // );
   };
 
   return (
@@ -216,13 +215,13 @@ export default function Products() {
       />
 
       <TableView
-        data={tableProducts}
-        isFetchingData={isFetchingTableProducts}
+        data={tableStocks}
+        isFetchingData={isFetchingTableStocks}
         currentPage={pagination.page}
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Product> data={tableProducts} columns={tableColumns} />
+        <DataTable<Stock> data={tableStocks} columns={tableColumns} />
       </TableView>
     </section>
   );
