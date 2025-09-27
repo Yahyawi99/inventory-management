@@ -18,21 +18,22 @@ import {
 const START_DATE = new Date("2025-06-25T00:00:00.000Z");
 const MONTHS_AGO_DATE = new Date("2024-07-24T00:00:00.000Z");
 
-export const salesTrendData = Array.from({ length: 30 })
-  .map((_, i) => {
-    const date = faker.date.soon({ days: 30, refDate: START_DATE });
-    const revenue = parseFloat(
-      faker.finance.amount({ min: 4000, max: 8000, dec: 2 })
-    );
-    const orderCount = faker.number.int({ min: 20, max: 100 });
+// export const salesTrendData = Array.from({ length: 30 })
+//   .map((_, i) => {
+//     const date = faker.date.soon({ days: 30, refDate: START_DATE });
+//     const revenue = parseFloat(
+//       faker.finance.amount({ min: 4000, max: 8000, dec: 2 })
+//     );
+//     const orderCount = faker.number.int({ min: 20, max: 100 });
 
-    return {
-      date: date.toISOString().split("T")[0],
-      revenue: parseFloat(revenue.toFixed(2)),
-      orderCount: orderCount,
-    };
-  })
-  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+//     return {
+//       date: date.toISOString().split("T")[0],
+//       revenue: parseFloat(revenue.toFixed(2)),
+//       orderCount: orderCount,
+//     };
+//   })
+//   .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
 const chartConfig = {
   sales: {
     label: "company sales",
@@ -53,24 +54,13 @@ export default function Chart() {
   const [isFetchingChartData, setIsFetchingChartData] =
     useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [chartData, setChartData] = useState<{
-    revenue: number;
-    orderCount: number;
-  }>({
-    revenue: 0,
-    orderCount: 0,
-  });
-
-  const total = useMemo(
-    () => ({
-      revenue: salesTrendData.reduce((acc, curr) => acc + curr.revenue, 0),
-      orderCount: salesTrendData.reduce(
-        (acc, curr) => acc + curr.orderCount,
-        0
-      ),
-    }),
-    []
-  );
+  const [chartData, setChartData] = useState<
+    {
+      date: Date;
+      revenue: number;
+      orderCount: number;
+    }[]
+  >([]);
 
   const fetchTableOrders = useCallback(async () => {
     setIsFetchingChartData(true);
@@ -86,10 +76,7 @@ export default function Chart() {
 
       const data = await response.json();
 
-      setChartData({
-        revenue: data.chartData.totalRevenue,
-        orderCount: data.chartData.totalOrderCount,
-      });
+      setChartData(data.chartData);
     } catch (err: any) {
       console.error("Error fetching table orders:", err);
       setError(
@@ -104,6 +91,14 @@ export default function Chart() {
   useEffect(() => {
     fetchTableOrders();
   }, [fetchTableOrders]);
+
+  const total = useMemo(
+    () => ({
+      revenue: chartData.reduce((acc, curr) => acc + curr.revenue, 0),
+      orderCount: chartData.reduce((acc, curr) => acc + curr.orderCount, 0),
+    }),
+    [chartData]
+  );
 
   return (
     <Card className="py-4 sm:py-0">
@@ -144,7 +139,7 @@ export default function Chart() {
         >
           <LineChart
             accessibilityLayer
-            data={salesTrendData}
+            data={chartData}
             margin={{
               left: 12,
               right: 12,
