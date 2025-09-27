@@ -255,6 +255,7 @@ export default function ProfileSection({
                 onChange={(e) => {
                   setUser({ ...user, name: e.currentTarget.value });
                 }}
+                placeholder="Your FullName"
               />
             </div>
             <div className="space-y-2">
@@ -268,6 +269,7 @@ export default function ProfileSection({
                     setUser({ ...user, email: e.currentTarget.value });
                   }}
                   className="pr-10"
+                  placeholder="youremail@gmail.com"
                 />
                 {user.emailVerified && (
                   <Check className="absolute right-3 top-2.5 h-5 w-5 text-green-500" />

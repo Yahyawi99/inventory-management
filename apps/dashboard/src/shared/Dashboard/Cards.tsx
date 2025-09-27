@@ -10,8 +10,51 @@ import {
   CardHeader,
   CardTitle,
 } from "app-core/src/components";
+import { useEffect, useState } from "react";
+import { buildInvoicesApiUrl } from "@/utils/invoices";
 
 export default function Cards() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>("");
+  const [metric, setMetric] = useState<string>("expenses");
+
+  const [data, setData] = useState([]);
+
+  // Expenses
+  const fetchExpenses = async () => {
+    setLoading(true);
+    try {
+      const apiUrl = buildInvoicesApiUrl(
+        "/api/invoices",
+        {},
+        {
+          field: "createdAt",
+          direction: "desc",
+        },
+        { pageSize: Infinity }
+      );
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(
+          response.statusText || "Something went wrong, please try again later!"
+        );
+      }
+
+      const { invoices } = await response.json();
+      setData(invoices);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (metric === "expenses") {
+      fetchExpenses();
+    }
+  }, [metric]);
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">

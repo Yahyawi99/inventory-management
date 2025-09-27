@@ -119,6 +119,7 @@ export const buildInvoicesApiUrl = (
 
   if (pagination) {
     queryParams.append("page", pagination.page + "");
+    queryParams.append("pageSize", pagination.pageSize + "");
   }
 
   const queryString = queryParams.toString();

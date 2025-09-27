@@ -36,8 +36,9 @@ export interface FilterDrawerData {
 }
 
 export interface Pagination {
-  page: number;
-  totalPages: number | null;
+  page?: number;
+  totalPages?: number | null;
+  pageSize?: number;
 }
 
 export interface MetricsData {

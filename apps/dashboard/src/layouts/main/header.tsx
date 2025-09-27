@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import { Bebas_Neue } from "next/font/google";
+import Link from "next/link";
 import {
   faBell,
   faCircle,
@@ -8,7 +9,6 @@ import {
   faHandPeace,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { User } from "better-auth/*";
 
 const BebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -45,12 +45,12 @@ export default function Header() {
           />
         </div>
 
-        <div>
+        <Link href={"/en/account/settings"}>
           <FontAwesomeIcon
             icon={faSliders}
             className="cursor-pointer text-(--muted-foreground) scale-110"
           />
-        </div>
+        </Link>
       </div>
     </header>
   );
