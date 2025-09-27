@@ -1,23 +1,5 @@
-import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
-import {
-  InvoiceStatus,
-  OrderType,
-  Invoice,
-  Prisma as P,
-  Order,
-} from "database/generated/prisma/index.js";
-
-interface Filters {
-  status?: InvoiceStatus[];
-  search?: string;
-  orderType?: OrderType;
-}
-
-interface SortConfig {
-  field: string;
-  direction: "desc" | "asc";
-}
+import { OrderType, Order } from "database/generated/prisma/index.js";
 
 export const ChartsRepository = {
   async SalesChart(
@@ -26,7 +8,7 @@ export const ChartsRepository = {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
     try {
-      const response = await Prisma.order.findMany({
+      const orders = await Prisma.order.findMany({
         where: {
           organizationId: orgId,
           orderType: OrderType.SALES,
@@ -34,8 +16,8 @@ export const ChartsRepository = {
         },
       });
 
-      // calculate data
-      const dailyGroups = response.reduce((acc, order: Order) => {
+      // calculate metrics
+      const groupedOrders = orders.reduce((acc, order: Order) => {
         const dateKey = order.orderDate.toISOString().split("T")[0];
 
         if (!acc[dateKey]) {
@@ -52,7 +34,7 @@ export const ChartsRepository = {
       }, {} as Record<string, { totalRevenue: number; totalOrderCount: number }>);
 
       // Convert to desired format
-      const result = Object.entries(dailyGroups)
+      const result = Object.entries(groupedOrders)
         .map(([dateStr, data]) => {
           const date = new Date(dateStr);
           return {
@@ -73,4 +55,6 @@ export const ChartsRepository = {
       return null;
     }
   },
+
+  async AOVChart(orgId: string) {},
 };

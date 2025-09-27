@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { faker } from "@faker-js/faker";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -15,29 +14,7 @@ import {
   CardTitle,
 } from "app-core/src/components";
 
-const START_DATE = new Date("2025-06-25T00:00:00.000Z");
-const MONTHS_AGO_DATE = new Date("2024-07-24T00:00:00.000Z");
-
-// export const salesTrendData = Array.from({ length: 30 })
-//   .map((_, i) => {
-//     const date = faker.date.soon({ days: 30, refDate: START_DATE });
-//     const revenue = parseFloat(
-//       faker.finance.amount({ min: 4000, max: 8000, dec: 2 })
-//     );
-//     const orderCount = faker.number.int({ min: 20, max: 100 });
-
-//     return {
-//       date: date.toISOString().split("T")[0],
-//       revenue: parseFloat(revenue.toFixed(2)),
-//       orderCount: orderCount,
-//     };
-//   })
-//   .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
 const chartConfig = {
-  sales: {
-    label: "company sales",
-  },
   revenue: {
     label: "Revenue",
     color: "var(--chart-1)",
@@ -51,9 +28,6 @@ const chartConfig = {
 export default function Chart() {
   const [activeChart, setActiveChart] =
     useState<keyof typeof chartConfig>("revenue");
-  const [isFetchingChartData, setIsFetchingChartData] =
-    useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [chartData, setChartData] = useState<
     {
       date: Date;
@@ -63,8 +37,6 @@ export default function Chart() {
   >([]);
 
   const fetchTableOrders = useCallback(async () => {
-    setIsFetchingChartData(true);
-    setError(null);
     try {
       const response = await fetch("/api/charts/sales");
 
@@ -79,12 +51,6 @@ export default function Chart() {
       setChartData(data.chartData);
     } catch (err: any) {
       console.error("Error fetching table orders:", err);
-      setError(
-        err.message ||
-          "An unexpected error occurred while fetching table orders."
-      );
-    } finally {
-      setIsFetchingChartData(false);
     }
   }, []);
 

@@ -5,7 +5,6 @@ import InventoryValueChart from "@/shared/charts/InventoryValueChart";
 import AOVChart from "@/shared/charts/AOVChart";
 
 export default function Charts() {
-  // add a date filter later
   return (
     <div className=" flex flex-col gap-5">
       <SalesChart />
