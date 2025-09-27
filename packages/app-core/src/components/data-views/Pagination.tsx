@@ -11,7 +11,7 @@ import {
 import { Pagination as TPagination } from "../../types";
 
 interface PaginationProps {
-  currentPage: number;
+  currentPage: number | undefined;
   totalPages: number;
   setPagination: React.Dispatch<React.SetStateAction<TPagination>>;
 }
@@ -21,7 +21,10 @@ export function PagePagination({
   totalPages,
   setPagination,
 }: PaginationProps) {
-  const safeCurrentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
+  const safeCurrentPage = Math.max(
+    1,
+    Math.min(currentPage as number, totalPages || 1)
+  );
 
   const getPageNumbers = () => {
     const pages = [];

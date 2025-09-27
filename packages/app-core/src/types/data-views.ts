@@ -73,9 +73,3 @@ export interface FinancialMetricsResult {
 export interface FinancialDashboardMetrics {
   [metricName: string]: FinancialMetricsResult;
 }
-
-export interface DashboardMetric {
-  title: string;
-  icon: React.ComponentType<{ className?: string }>;
-  dataKey: keyof FinancialDashboardMetrics;
-}

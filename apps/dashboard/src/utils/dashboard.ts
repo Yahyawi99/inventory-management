@@ -47,7 +47,7 @@ const calculateTotals = (invoices: Invoice[]) => {
 
 // ===================
 // Metrics calculation
-export const calculateFinancialMetrics = (
+export const calculateExpensesFinancialMetrics = (
   allInvoices: Invoice[]
 ): FinancialDashboardMetrics => {
   const { current: currentPeriod, previous: previousPeriod } =

@@ -4,7 +4,7 @@ import { Data, Pagination } from "../../types";
 interface DataTableProps {
   data: Data[];
   isFetchingData: boolean;
-  currentPage: number;
+  currentPage: number | undefined;
   totalPages: number;
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
   children: React.ReactNode;
