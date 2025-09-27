@@ -24,8 +24,6 @@ export async function GET(req: NextRequest) {
       : Number(searchParams.get("page"));
   const pageSize = Number(searchParams.get("pageSize")) || 10;
 
-  console.log(pageSize);
-
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -61,8 +59,6 @@ export async function GET(req: NextRequest) {
       orderBy,
       { page, pageSize }
     );
-
-    console.log(response?.invoices.length);
 
     return NextResponse.json(
       {

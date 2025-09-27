@@ -1,6 +1,6 @@
 "use client";
 
-import { MetricsData } from "@/types";
+import { MetricsData } from "../../types";
 import { Card, CardContent, CardTitle } from "..";
 import { CardsSkeleton } from "..";
 

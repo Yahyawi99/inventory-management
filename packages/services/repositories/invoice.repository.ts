@@ -119,15 +119,24 @@ export const InvoiceRepository = {
       pipeline.push({ $match: filterMatch });
     }
 
-    pipeline.push({
-      $facet: {
-        paginatedResults: [
-          { $skip: (page - 1) * pageSize },
-          { $limit: pageSize },
-        ],
-        totalCount: [{ $count: "count" }],
-      },
-    });
+    if (pageSize === Infinity) {
+      pipeline.push({
+        $facet: {
+          paginatedResults: [],
+          totalCount: [{ $count: "count" }],
+        },
+      });
+    } else {
+      pipeline.push({
+        $facet: {
+          paginatedResults: [
+            { $skip: (page - 1) * pageSize },
+            { $limit: pageSize },
+          ],
+          totalCount: [{ $count: "count" }],
+        },
+      });
+    }
 
     try {
       const response = await Prisma.invoice.aggregateRaw({

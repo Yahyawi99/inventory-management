@@ -64,3 +64,18 @@ export interface StatusDisplay {
   text: string;
   colorClass: string;
 }
+
+export interface FinancialMetricsResult {
+  value: number;
+  change: number;
+}
+
+export interface FinancialDashboardMetrics {
+  [metricName: string]: FinancialMetricsResult;
+}
+
+export interface DashboardMetric {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  dataKey: keyof FinancialDashboardMetrics;
+}
