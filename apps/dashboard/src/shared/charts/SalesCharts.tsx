@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { faker } from "@faker-js/faker";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import {
@@ -50,6 +50,16 @@ const chartConfig = {
 export default function Chart() {
   const [activeChart, setActiveChart] =
     useState<keyof typeof chartConfig>("revenue");
+  const [isFetchingChartData, setIsFetchingChartData] =
+    useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [chartData, setChartData] = useState<{
+    revenue: number;
+    orderCount: number;
+  }>({
+    revenue: 0,
+    orderCount: 0,
+  });
 
   const total = useMemo(
     () => ({
@@ -61,6 +71,39 @@ export default function Chart() {
     }),
     []
   );
+
+  const fetchTableOrders = useCallback(async () => {
+    setIsFetchingChartData(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/charts/sales");
+
+      if (response.status !== 200) {
+        throw new Error(
+          response.statusText || "Failed to fetch sales chart data."
+        );
+      }
+
+      const data = await response.json();
+
+      setChartData({
+        revenue: data.chartData.totalRevenue,
+        orderCount: data.chartData.totalOrderCount,
+      });
+    } catch (err: any) {
+      console.error("Error fetching table orders:", err);
+      setError(
+        err.message ||
+          "An unexpected error occurred while fetching table orders."
+      );
+    } finally {
+      setIsFetchingChartData(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTableOrders();
+  }, [fetchTableOrders]);
 
   return (
     <Card className="py-4 sm:py-0">

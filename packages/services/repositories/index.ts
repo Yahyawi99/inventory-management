@@ -4,3 +4,4 @@ export * from "./category.repository";
 export * from "./user.repository";
 export * from "./invoice.repository";
 export * from "./stock.repository";
+export * from "./charts.repository";
