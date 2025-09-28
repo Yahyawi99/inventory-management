@@ -1,13 +1,10 @@
-export default function RecentActivity() {
+import RecentActivity from "../account/activity";
+export default function Activity() {
   return (
     <div className="">
-      <h3>Recent Activity</h3>
+      <h2 className="text-xl font-semibold mb-3">Recent Activity</h2>
 
-      <p>Comming soon.........</p>
-
-      {/* Latest Order */}
-      {/* Recent Stock Changes : A feed of significant inventory movements */}
-      {/* Critical Alerts */}
+      <RecentActivity />
     </div>
   );
 }

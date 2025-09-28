@@ -34,7 +34,7 @@ const btnsData: Btn[] = [
 export default function Action() {
   return (
     <div className="mb-5">
-      <h2 className="mb-2">Quick Actions</h2>
+      <h2 className="text-xl font-semibold mb-3">Quick Actions</h2>
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2">
         {btnsData.map((btn, i) => {
