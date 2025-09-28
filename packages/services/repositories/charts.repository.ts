@@ -281,4 +281,73 @@ export const ChartsRepository = {
       return null;
     }
   },
+
+  async ordersStatusChart(orgId: string): Promise<
+    | {
+        status: string;
+        count: number;
+        fill: string;
+      }[]
+    | null
+  > {
+    try {
+      const orders = await Prisma.order.findMany({
+        where: {
+          organizationId: orgId,
+        },
+      });
+
+      // calculate metrics
+      const formattedOrdersData = orders.reduce(
+        (acc, order: Order) => {
+          const status = order.status;
+
+          if (!acc[status]) {
+            acc[status] = {
+              status,
+              count: 0,
+              fill:
+                "rgba(" +
+                (Math.random() * 225).toFixed(2) +
+                "," +
+                (Math.random() * 225).toFixed(2) +
+                "," +
+                (Math.random() * 225).toFixed(2) +
+                ")",
+            };
+          }
+
+          acc[status].count++;
+
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            status: string;
+            count: number;
+            fill: string;
+          }
+        >
+      );
+
+      // Convert to desired format
+      const result = Object.entries(formattedOrdersData).map(
+        ([status, data]) => {
+          const { fill, count } = data;
+
+          return {
+            status,
+            count,
+            fill,
+          };
+        }
+      );
+
+      return result;
+    } catch (e) {
+      console.log("Error while fetching aov chart data: ", e);
+      return null;
+    }
+  },
 };

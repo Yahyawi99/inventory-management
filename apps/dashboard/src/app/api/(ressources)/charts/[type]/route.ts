@@ -40,6 +40,10 @@ export async function GET(
         response = await ChartsRepository.inventoryChart(orgId);
         break;
 
+      case "ordersStatus":
+        response = await ChartsRepository.ordersStatusChart(orgId);
+        break;
+
       default:
         response = null;
         break;

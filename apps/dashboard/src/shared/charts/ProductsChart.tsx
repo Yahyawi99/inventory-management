@@ -22,6 +22,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const PREVIOUS_MONTH = new Date(
+  Date.now() - 30 * 24 * 3600 * 1000
+).toLocaleDateString("en-US", {
+  month: "long",
+});
+const CURRENT_MONTH = new Date().toLocaleDateString("en-US", {
+  month: "long",
+});
+const CURRENT_YEAR = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+});
+
 export default function Chart() {
   const [chartData, setChartData] = useState<
     {
@@ -58,7 +70,9 @@ export default function Chart() {
     <Card className="flex-1">
       <CardHeader>
         <CardTitle>Top Selling Products</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {PREVIOUS_MONTH} - {CURRENT_MONTH} {CURRENT_YEAR}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

@@ -11,37 +11,10 @@ import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "app-core/src/components";
 import { useCallback, useEffect, useMemo, useState } from "react";
-
-// export const inventoryValueByCategoryData = [
-//   { category: "Jewelry", totalValue: 145234.56, fill: "var(--chart-1)" },
-//   { category: "Toys", totalValue: 121987.12, fill: "var(--chart-2)" },
-//   { category: "Home", totalValue: 98765.43, fill: "var(--chart-3)" },
-//   { category: "Kids", totalValue: 75432.1, fill: "var(--chart-4)" },
-//   { category: "Electronics", totalValue: 50123.45, fill: "var(--chart-5)" },
-// ];
-
-const chartConfig = {
-  categories: {
-    label: "Categories",
-  },
-  Jewelry: {
-    label: "Jewelry",
-  },
-  Electronics: {
-    label: "Electronics",
-  },
-  Toys: {
-    label: "Toys",
-  },
-  Home: {
-    label: "Home",
-  },
-  Kids: {
-    label: "Kids",
-  },
-} satisfies ChartConfig;
 
 export default function Chart() {
   const [chartData, setChartData] = useState<
@@ -52,11 +25,9 @@ export default function Chart() {
     }[]
   >([]);
 
-  const [chartConfig, setChartConfig] = useState<{
-    [key: string]: { label: string };
-  }>({
-    categories: {
-      label: "Categories",
+  const [chartConfig, setChartConfig] = useState<ChartConfig>({
+    visitors: {
+      label: "Visitors",
     },
   });
 
@@ -72,6 +43,8 @@ export default function Chart() {
 
       const data = await response.json();
 
+      console.log(data.chartData.length);
+
       setChartData(data.chartData);
     } catch (err: any) {
       console.error("Error fetching inventory chart data:", err);
@@ -85,7 +58,10 @@ export default function Chart() {
   useMemo(() => {
     chartData.forEach((value) => {
       setChartConfig((prev) => {
-        prev[value["category"]] = { label: value["category"] };
+        prev[value["category"]] = {
+          label: value["category"],
+          color: value["fill"],
+        };
         return prev;
       });
     });
@@ -106,11 +82,11 @@ export default function Chart() {
           className="mx-auto aspect-square max-h-[300px]"
         >
           <PieChart>
-            <Pie data={chartData} dataKey="totalValue" nameKey="category" />
-            <ChartLegend
-              content={<ChartLegendContent nameKey="category" />}
-              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
             />
+            <Pie data={chartData} dataKey="totalValue" nameKey="category" />
           </PieChart>
         </ChartContainer>
       </CardContent>
