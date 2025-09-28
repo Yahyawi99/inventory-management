@@ -2,17 +2,13 @@ import Prisma from "database";
 import { OrderType, Order } from "database/generated/prisma/index.js";
 
 interface Product {
-  id: string;
   name: string;
-  description: string | null;
-  sku: string;
-  price: number;
-  barcode: string;
-  createdAt: Date;
-  updatedAt: Date;
-  organizationId: string;
-  categoryId: string;
   orderLines: { quantity: number; unitPrice: number }[];
+}
+
+interface Category {
+  name: string;
+  products: { price: number }[];
 }
 
 export const ChartsRepository = {
@@ -110,9 +106,6 @@ export const ChartsRepository = {
       // Convert to desired format
       const result = Object.entries(groupedOrders)
         .map(([month, data]) => {
-          console.log(data.totalRevenue);
-          console.log(data.totalOrderCount);
-
           return {
             month,
             aov: parseInt(
@@ -204,6 +197,83 @@ export const ChartsRepository = {
           const dateB = new Date(b.quantitySold);
           return dateA.getTime() - dateB.getTime();
         });
+
+      return result;
+    } catch (e) {
+      console.log("Error while fetching aov chart data: ", e);
+      return null;
+    }
+  },
+
+  async inventoryChart(orgId: string): Promise<
+    | {
+        category: string;
+        totalValue: number;
+        fill: string;
+      }[]
+    | null
+  > {
+    try {
+      const products = await Prisma.category.findMany({
+        where: {
+          organizationId: orgId,
+        },
+        include: {
+          products: {
+            select: { price: true },
+          },
+        },
+      });
+
+      // calculate metrics
+      const formattedCategoriesData = products.reduce(
+        (acc, category: Category) => {
+          const name = category.name;
+
+          if (!acc[name]) {
+            acc[name] = {
+              category: name,
+              totalValue: 0,
+              fill:
+                "rgba(" +
+                (Math.random() * 225).toFixed(2) +
+                "," +
+                (Math.random() * 225).toFixed(2) +
+                "," +
+                (Math.random() * 225).toFixed(2) +
+                ")",
+            };
+          }
+
+          category.products.forEach((product) => {
+            acc[name].totalValue += product.price;
+          });
+
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            category: string;
+            totalValue: number;
+            fill: string;
+          }
+        >
+      );
+
+      // Convert to desired format
+      const result = Object.entries(formattedCategoriesData).map(
+        ([name, data]) => {
+          const { fill, totalValue } = data;
+
+          return {
+            category: name,
+            totalValue,
+            fill,
+          };
+        }
+      );
+      console.log(result);
 
       return result;
     } catch (e) {
