@@ -56,5 +56,66 @@ export const ChartsRepository = {
     }
   },
 
-  async AOVChart(orgId: string) {},
+  async AOVChart(
+    orgId: string
+  ): Promise<{ month: string; aov: number }[] | null> {
+    const yearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+
+    try {
+      const orders = await Prisma.order.findMany({
+        where: {
+          organizationId: orgId,
+          orderType: OrderType.SALES,
+          orderDate: { gte: yearAgo },
+        },
+      });
+
+      // calculate metrics
+      const groupedOrders = orders.reduce((acc, order: Order) => {
+        const dateKey = order.orderDate.toISOString().split("T")[0];
+
+        const month = new Date(dateKey).toLocaleDateString("en-US", {
+          month: "short",
+          year: "numeric",
+        });
+
+        if (!acc[month]) {
+          acc[month] = {
+            month,
+            totalRevenue: 0,
+            totalOrderCount: 0,
+          };
+        }
+
+        acc[month].totalRevenue += order.totalAmount;
+        acc[month].totalOrderCount += 1;
+
+        return acc;
+      }, {} as Record<string, { month: string; totalRevenue: number; totalOrderCount: number }>);
+
+      // Convert to desired format
+      const result = Object.entries(groupedOrders)
+        .map(([month, data]) => {
+          console.log(data.totalRevenue);
+          console.log(data.totalOrderCount);
+
+          return {
+            month,
+            aov: parseInt(
+              (data.totalRevenue / data.totalOrderCount).toFixed(2)
+            ),
+          };
+        })
+        .sort((a, b) => {
+          const dateA = new Date(a.month);
+          const dateB = new Date(b.month);
+          return dateA.getTime() - dateB.getTime();
+        });
+
+      return result;
+    } catch (e) {
+      console.log("Error while fetching aov chart data: ", e);
+      return null;
+    }
+  },
 };

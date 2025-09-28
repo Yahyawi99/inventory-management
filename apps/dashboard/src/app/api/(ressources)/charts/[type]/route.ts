@@ -22,9 +22,14 @@ export async function GET(
     );
   }
   try {
+    let response: any = null;
     switch (chartType) {
       case "sales":
-        var response = await ChartsRepository.SalesChart(orgId);
+        response = await ChartsRepository.SalesChart(orgId);
+        break;
+
+      case "aov":
+        response = await ChartsRepository.AOVChart(orgId);
         break;
 
       default:

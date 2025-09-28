@@ -12,6 +12,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "app-core/src/components";
+import { useCallback, useEffect, useState } from "react";
 
 export const description = "A linear line chart";
 
@@ -38,6 +39,35 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function Chart() {
+  const [chartData, setChartData] = useState<
+    {
+      month: string;
+      aov: number;
+    }[]
+  >([]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch("/api/charts/aov");
+
+      if (response.status !== 200) {
+        throw new Error(
+          response.statusText || "Failed to fetch AOV chart data."
+        );
+      }
+
+      const data = await response.json();
+
+      setChartData(data.chartData);
+    } catch (err: any) {
+      console.error("Error fetching AOV chart data:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
     <Card className="flex-1">
       <CardHeader>
@@ -51,7 +81,7 @@ export default function Chart() {
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
-            data={aovTrendData}
+            data={chartData}
             margin={{
               left: 12,
               right: 12,

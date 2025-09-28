@@ -36,7 +36,7 @@ export default function Chart() {
     }[]
   >([]);
 
-  const fetchTableOrders = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch("/api/charts/sales");
 
@@ -50,13 +50,13 @@ export default function Chart() {
 
       setChartData(data.chartData);
     } catch (err: any) {
-      console.error("Error fetching table orders:", err);
+      console.error("Error fetching sales chart data:", err);
     }
   }, []);
 
   useEffect(() => {
-    fetchTableOrders();
-  }, [fetchTableOrders]);
+    fetchData();
+  }, [fetchData]);
 
   const total = useMemo(
     () => ({
