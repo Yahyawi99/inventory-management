@@ -32,6 +32,10 @@ export async function GET(
         response = await ChartsRepository.AOVChart(orgId);
         break;
 
+      case "topProducts":
+        response = await ChartsRepository.topProductsChart(orgId);
+        break;
+
       default:
         response = null;
         break;

@@ -1,6 +1,20 @@
 import Prisma from "database";
 import { OrderType, Order } from "database/generated/prisma/index.js";
 
+interface Product {
+  id: string;
+  name: string;
+  description: string | null;
+  sku: string;
+  price: number;
+  barcode: string;
+  createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
+  categoryId: string;
+  orderLines: { quantity: number; unitPrice: number }[];
+}
+
 export const ChartsRepository = {
   async SalesChart(
     orgId: string
@@ -109,6 +123,85 @@ export const ChartsRepository = {
         .sort((a, b) => {
           const dateA = new Date(a.month);
           const dateB = new Date(b.month);
+          return dateA.getTime() - dateB.getTime();
+        });
+
+      return result;
+    } catch (e) {
+      console.log("Error while fetching aov chart data: ", e);
+      return null;
+    }
+  },
+
+  async topProductsChart(orgId: string): Promise<
+    | {
+        productName: string;
+        quantitySold: number;
+        revenueGenerated: number;
+      }[]
+    | null
+  > {
+    const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    try {
+      const products = await Prisma.product.findMany({
+        where: {
+          organizationId: orgId,
+          createdAt: {
+            gte: monthAgo,
+          },
+        },
+        include: {
+          orderLines: {
+            select: { quantity: true, unitPrice: true },
+          },
+        },
+      });
+
+      // calculate metrics
+      const formattedProductsData = products.reduce(
+        (acc, product: Product) => {
+          const name = product.name;
+
+          if (!acc[name]) {
+            acc[name] = {
+              productName: name,
+              quantitySold: 0,
+              revenueGenerated: 0,
+            };
+          }
+
+          product.orderLines.forEach((orderLine) => {
+            acc[name].quantitySold += orderLine.quantity;
+            acc[name].revenueGenerated += orderLine.unitPrice;
+          });
+
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            productName: string;
+            quantitySold: number;
+            revenueGenerated: number;
+          }
+        >
+      );
+
+      // Convert to desired format
+      const result = Object.entries(formattedProductsData)
+        .map(([name, data]) => {
+          const { quantitySold, revenueGenerated } = data;
+
+          return {
+            productName: name,
+            quantitySold,
+            revenueGenerated,
+          };
+        })
+        .sort((a, b) => {
+          const dateA = new Date(a.quantitySold);
+          const dateB = new Date(b.quantitySold);
           return dateA.getTime() - dateB.getTime();
         });
 

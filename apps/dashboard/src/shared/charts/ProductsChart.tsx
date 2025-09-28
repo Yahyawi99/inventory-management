@@ -13,20 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "app-core/src/components";
-
-export const description = "A bar chart";
-
-export const topSellingProductsData = Array.from({ length: 10 }).map((_, i) => {
-  const quantitySold = faker.number.int({ min: 50, max: 300 - i * 15 });
-  const price = parseFloat(faker.finance.amount({ min: 10, max: 500, dec: 2 }));
-  const revenueGenerated = parseFloat((quantitySold * price).toFixed(2));
-
-  return {
-    productName: faker.commerce.productName(),
-    quantitySold: quantitySold,
-    revenueGenerated: revenueGenerated,
-  };
-});
+import { useCallback, useEffect, useState } from "react";
 
 const chartConfig = {
   productName: {
@@ -36,6 +23,37 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function Chart() {
+  const [chartData, setChartData] = useState<
+    {
+      productName: string;
+      quantitySold: number;
+      revenueGenerated: number;
+    }[]
+  >([]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch("/api/charts/topProducts");
+
+      if (response.status !== 200) {
+        throw new Error(
+          response.statusText ||
+            "Failed to fetch top selling Products chart data."
+        );
+      }
+
+      const data = await response.json();
+
+      setChartData(data.chartData);
+    } catch (err: any) {
+      console.error("Error fetching top selling Products chart data:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
     <Card className="flex-1">
       <CardHeader>
@@ -44,7 +62,7 @@ export default function Chart() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={topSellingProductsData}>
+          <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="productName"
