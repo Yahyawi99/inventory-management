@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
-  Alert,
-  AlertDescription,
   Badge,
   Button,
   Card,
@@ -13,118 +11,15 @@ import {
   CardHeader,
   CardTitle,
   Input,
-  Switch,
   Label,
 } from "app-core/src/components";
-import {
-  Check,
-  Eye,
-  EyeOff,
-  Lock,
-  LogOut,
-  MapPin,
-  Monitor,
-  RefreshCw,
-  Smartphone,
-  SmartphoneIcon,
-  Tablet,
-} from "lucide-react";
+import { Eye, EyeOff, Lock, LogOut, MapPin, RefreshCw } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Session } from "@/types/users";
+import { timeSince, parseUserAgent } from "@/utils/users";
 
-interface SecuritySectionProps {
-  isTwoFactorEnabled: boolean;
-  setIsTwoFactorEnabled: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const timeSince = (dateString: string) => {
-  const date = new Date(dateString);
-  const seconds = Math.floor((Number(new Date()) - Number(date)) / 1000);
-
-  if (seconds < 30) return "Active now";
-
-  let interval = seconds / 31536000;
-  if (interval >= 1)
-    return (
-      Math.floor(interval) +
-      (Math.floor(interval) > 1 ? " years ago" : " year ago")
-    );
-  interval = seconds / 2592000;
-  if (interval >= 1)
-    return (
-      Math.floor(interval) +
-      (Math.floor(interval) > 1 ? " months ago" : " month ago")
-    );
-  interval = seconds / 86400;
-  if (interval >= 1)
-    return (
-      Math.floor(interval) +
-      (Math.floor(interval) > 1 ? " days ago" : " day ago")
-    );
-  interval = seconds / 3600;
-  if (interval >= 1)
-    return (
-      Math.floor(interval) +
-      (Math.floor(interval) > 1 ? " hours ago" : " hour ago")
-    );
-  interval = seconds / 60;
-  if (interval >= 1)
-    return (
-      Math.floor(interval) +
-      (Math.floor(interval) > 1 ? " minutes ago" : " minute ago")
-    );
-
-  return "Active now";
-};
-
-const parseUserAgent = (userAgent: string) => {
-  if (!userAgent) {
-    return { device: "Unknown Client/Device", Icon: Monitor };
-  }
-
-  let device = "Unknown Device";
-  let Icon = Monitor;
-  let browser = "Unknown Browser";
-
-  // 1. Browser Detection
-  if (userAgent.includes("Chrome")) browser = "Chrome";
-  else if (userAgent.includes("Firefox")) browser = "Firefox";
-  else if (userAgent.includes("Safari") && !userAgent.includes("Chrome"))
-    browser = "Safari";
-  else if (userAgent.includes("Edge")) browser = "Edge";
-
-  // 2. Device/OS Detection
-  if (/(iPhone|iPod)/i.test(userAgent)) {
-    device = "iPhone / iOS";
-    Icon = SmartphoneIcon;
-  } else if (/(iPad|tablet)/i.test(userAgent)) {
-    device = "iPad / Tablet";
-    Icon = Tablet;
-  } else if (/(Android)/i.test(userAgent)) {
-    device = userAgent.includes("Mobile") ? "Android Mobile" : "Android Tablet";
-    Icon = userAgent.includes("Mobile") ? Smartphone : Tablet;
-  } else if (userAgent.includes("Windows NT")) {
-    device = "Windows Desktop";
-    Icon = Monitor;
-  } else if (userAgent.includes("Macintosh")) {
-    device = "Mac OS Desktop";
-    Icon = Monitor;
-  } else if (userAgent.includes("Linux")) {
-    device = "Linux Desktop";
-    Icon = Monitor;
-  } else {
-    device = "Unknown OS";
-  }
-
-  return { device: `${browser} on ${device}`, Icon };
-};
-// ============
-
-export default function SecuritySection({
-  isTwoFactorEnabled,
-  setIsTwoFactorEnabled,
-}: SecuritySectionProps) {
+export default function SecuritySection() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
@@ -138,9 +33,12 @@ export default function SecuritySection({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const router = useRouter();
-  const { user } = useAuth();
 
   const updatePassword = async () => {
+    if (!data.currentPassword || !data.newPassword || !data.confirmPassword) {
+      setMessage("Please provide valid password values!!");
+      return;
+    }
     if (data.newPassword !== data.confirmPassword) {
       setMessage("Please provide matched password!!");
       return;
@@ -190,16 +88,13 @@ export default function SecuritySection({
       }
 
       const processedSessions = data?.map(({ session }) => {
-        // Use session.userAgent directly from the input type
         const { device, Icon } = parseUserAgent(session.userAgent as string);
-        // Use session.updatedAt directly from the input type
         const lastActive = timeSince(session.updatedAt.toISOString());
         return {
           ...session,
           device,
-          Icon, // The React component for the device type (e.g., Monitor)
+          Icon,
           lastActive,
-          // Handle optional ipAddress field
           ip: session.ipAddress || "IP Redacted / Unknown",
         };
       });
@@ -308,7 +203,11 @@ export default function SecuritySection({
             </ul>
           </div>
 
-          <Button disabled={isLoading} onClick={updatePassword}>
+          <Button
+            className="bg-sidebar hover:bg-sidebar hover:opacity-75"
+            disabled={isLoading}
+            onClick={updatePassword}
+          >
             {isLoading ? (
               <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
             ) : (
@@ -372,7 +271,12 @@ export default function SecuritySection({
                             {session.device}
                           </p>
                           {current && (
-                            <Badge variant="default">Current Session</Badge>
+                            <Badge
+                              className="bg-white text-sidebar"
+                              variant="default"
+                            >
+                              Current Session
+                            </Badge>
                           )}
                         </div>
                         <p className="text-sm text-gray-600 mt-1">
@@ -421,7 +325,7 @@ export default function SecuritySection({
               variant="default"
               // onClick={signOutOthers}
               disabled={!(userSessions && userSessions.length > 1)}
-              className={`w-full ${
+              className={`w-full bg-sidebar hover:bg-sidebar hover:opacity-75 ${
                 userSessions && userSessions.length > 1
                   ? "shadow-lg shadow-blue-500/50"
                   : ""
