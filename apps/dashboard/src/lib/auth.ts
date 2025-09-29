@@ -3,6 +3,7 @@ import {
   organization,
   emailOTP,
   admin as adminPlugin,
+  multiSession,
 } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@database/generated/prisma/client";
@@ -91,6 +92,8 @@ export const auth = betterAuth({
     }),
 
     adminPlugin(),
+
+    multiSession(),
   ],
 
   database: prismaAdapter(prisma, {

@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(newUser);
       } else {
         setUser(null);
-        console.log(await authClient.getSession());
       }
     } catch (error) {
       setUser(null);

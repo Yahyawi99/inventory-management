@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { UserSettings } from "@/types/users";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import {
   Alert,
   AlertDescription,
@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { Session } from "@/types/users";
 
 interface SecuritySectionProps {
   isTwoFactorEnabled: boolean;
@@ -44,10 +45,13 @@ export default function SecuritySection({
     newPassword: "",
     confirmPassword: "",
   });
+  const [userSessions, setUserSessions] = useState<Session[] | null>(null);
+  const [currentSession, setCurrentSession] = useState<Session | null>(null);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const router = useRouter();
+  const { user } = useAuth();
 
   const updatePassword = async () => {
     if (data.newPassword !== data.confirmPassword) {
@@ -84,6 +88,38 @@ export default function SecuritySection({
       setIsLoading(false);
     }
   };
+
+  // sessions
+  const fetchSessions = async () => {
+    try {
+      // all sessions
+      const { data, error } =
+        await authClient.multiSession.listDeviceSessions();
+
+      if (error) {
+        setIsSuccess(false);
+        setMessage(error.message as string);
+        return;
+      }
+      setUserSessions(data);
+
+      // current session
+      const currentSession = await authClient.getSession();
+      if (currentSession.error) {
+        setIsSuccess(false);
+        setMessage(currentSession.error.message as string);
+        return;
+      }
+      setCurrentSession(currentSession.data);
+    } catch (error) {
+      setIsSuccess(false);
+      setMessage("Can't fetch User Sessions");
+    }
+  };
+
+  useEffect(() => {
+    fetchSessions();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -252,81 +288,109 @@ export default function SecuritySection({
       {/* Active Sessions */}
       <Card>
         <CardHeader>
-          <CardTitle>Active Sessions</CardTitle>
+          <CardTitle>Active Login Sessions</CardTitle>
           <CardDescription>
-            Manage your active login sessions across devices
+            Manage and revoke sessions where your account is currently logged
+            in.
+            <p className="mt-2 text-sm font-semibold text-gray-700">
+              User: {user?.name} ({user?.email})
+            </p>
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {[
-              {
-                device: "Chrome on MacBook Pro",
-                location: "Denver, CO",
-                current: true,
-                lastActive: "Active now",
-                ip: "192.168.1.100",
-              },
-              {
-                device: "Mobile App on iPhone",
-                location: "Denver, CO",
-                current: false,
-                lastActive: "2 hours ago",
-                ip: "192.168.1.101",
-              },
-              {
-                device: "Firefox on Windows",
-                location: "Los Angeles, CA",
-                current: false,
-                lastActive: "1 day ago",
-                ip: "10.0.0.5",
-              },
-            ].map((session, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 border rounded-lg"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Monitor className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <p className="font-medium text-gray-900">
-                        {session.device}
-                      </p>
-                      {session.current && (
-                        <Badge variant="secondary">Current</Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      {session.location} • {session.lastActive}
-                    </p>
-                    <p className="text-xs text-gray-400">{session.ip}</p>
-                  </div>
-                </div>
-                {!session.current && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700 border-red-200 hover:bg-red-50"
-                  >
-                    Revoke
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 pt-4 border-t">
-            <Button
-              variant="outline"
-              className="w-full text-red-600 hover:text-red-700"
-            >
-              Sign Out All Other Sessions
-            </Button>
-          </div>
-        </CardContent>
       </Card>
     </div>
   );
+}
+
+{
+  /* <CardContent>
+  <div className="space-y-4">
+    {userSessions &&
+      userSessions.map(({ session, user }) => (
+        <div
+          key={session.id}
+          className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 transition duration-150 ease-in-out border rounded-xl ${
+            session.current
+              ? "border-green-300 bg-green-50 shadow-md"
+              : "border-gray-100 bg-white hover:bg-gray-50"
+          }`}
+        >
+          <div className="flex items-start space-x-4 mb-3 sm:mb-0 w-full sm:w-auto">
+            <div
+              className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                session.current ? "bg-green-200" : "bg-blue-100"
+              }`}
+            >
+              <session.Icon
+                className={`w-6 h-6 ${
+                  session.current ? "text-green-800" : "text-blue-600"
+                }`}
+              />
+            </div>
+            <div>
+              <div className="flex items-center space-x-3 flex-wrap">
+                <p className="font-semibold text-gray-900 text-lg">
+                  {session.device}
+                </p>
+                {session.current && (
+                  <Badge variant="current">Current Session</Badge>
+                )}
+              </div>
+              <p className="text-sm text-gray-600 mt-1">
+                <MapPin className="inline w-3 h-3 mr-1 text-gray-400" />
+                {session.location} •{" "}
+                <span
+                  className={`font-medium ${
+                    session.current ? "text-green-700" : "text-gray-700"
+                  }`}
+                >
+                  {session.lastActive}
+                </span>
+              </p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                IP Address: {session.ip}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex-shrink-0 self-end sm:self-center">
+            {!session.current ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => revokeSession(session.id)}
+                className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+              >
+                <LogOut className="w-4 h-4 mr-1.5" />
+                Revoke
+              </Button>
+            ) : (
+              <p className="text-sm font-medium text-green-700 italic">
+                <span className="hidden sm:inline">Authenticated</span>
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+  </div>
+
+  <div className="mt-8 pt-6 border-t border-gray-100">
+    <Button
+      variant="primary"
+      onClick={signOutOthers}
+      disabled={!hasMultipleSessions}
+      className={`w-full ${
+        hasMultipleSessions ? "shadow-lg shadow-blue-500/50" : ""
+      }`}
+    >
+      <LogOut className="w-5 h-5 mr-3" />
+      Sign Out All Other Sessions ({activeSessions.length - 1 || 0})
+    </Button>
+    {!hasMultipleSessions && (
+      <p className="text-center text-xs text-gray-500 mt-2">
+        No other active sessions detected.
+      </p>
+    )}
+  </div>
+</CardContent>; */
 }

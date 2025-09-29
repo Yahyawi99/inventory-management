@@ -3,6 +3,7 @@ import {
   organizationClient,
   emailOTPClient,
   adminClient,
+  multiSessionClient,
 } from "better-auth/client/plugins";
 import {
   ac,
@@ -38,5 +39,7 @@ export const authClient = createAuthClient({
     emailOTPClient(),
 
     adminClient(),
+
+    multiSessionClient(),
   ],
 });
