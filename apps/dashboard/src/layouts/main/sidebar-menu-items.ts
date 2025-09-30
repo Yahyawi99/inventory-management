@@ -38,11 +38,6 @@ export const MenuItems: MenuItemType[] = [
         name: "Stock Levels",
         href: routes.inventory.stockLevels,
       },
-      {
-        id: "inventory-barcodes-sub",
-        name: "Barcodes",
-        href: routes.inventory.barcodes,
-      },
     ],
   },
   {

@@ -4,7 +4,6 @@ export const routes = {
     products: "/en/inventory/products",
     categories: "/en/inventory/categories",
     stockLevels: "/en/inventory/stock-levels",
-    barcodes: "/en/inventory/barcodes",
   },
   orders: {
     all: "/en/orders",

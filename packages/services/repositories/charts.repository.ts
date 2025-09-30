@@ -273,7 +273,6 @@ export const ChartsRepository = {
           };
         }
       );
-      console.log(result);
 
       return result;
     } catch (e) {
