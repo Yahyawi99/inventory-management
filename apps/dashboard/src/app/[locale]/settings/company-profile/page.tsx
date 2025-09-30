@@ -5,9 +5,8 @@ import {
   TabsContent,
 } from "app-core/src/components";
 import OrganizationInfo from "@/shared/company-profile/OrganizationInfo";
+import TeamManagement from "@/shared/company-profile/TeamManagement";
 import OrganizationStats from "@/shared/company-profile/OrganizationStats";
-import MembersList from "@/shared/company-profile/MembersList";
-import Invitations from "@/shared/company-profile/Invitations";
 import QuickActions from "@/shared/company-profile/QuickActions";
 import OrgHealth from "@/shared/company-profile/OrgHealth";
 import RecentActivity from "@/shared/company-profile/RecentActivity";
@@ -39,7 +38,6 @@ export default function CompanyProfilePage() {
 
           <TabsContent value="info">
             <OrganizationInfo />
-            <Invitations />
           </TabsContent>
 
           <TabsContent value="stats">
@@ -48,7 +46,7 @@ export default function CompanyProfilePage() {
           </TabsContent>
 
           <TabsContent value="team">
-            <MembersList />
+            <TeamManagement />
           </TabsContent>
 
           <TabsContent value="activity">

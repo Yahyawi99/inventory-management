@@ -71,12 +71,15 @@ export default function OrganizationInfo() {
       .join("");
 
   return (
-    <Card>
+    <Card className="mb-2 text-[14px]">
       <CardHeader className="flex justify-between">
         <CardTitle>Organization Details</CardTitle>
         {!isEditing ? (
-          <Button onClick={() => setIsEditing(true)}>
-            <Edit className="w-4 h-4 mr-2" />
+          <Button
+            className="bg-sidebar hover:bg-sidebar hover:opacity-75"
+            onClick={() => setIsEditing(true)}
+          >
+            <Edit className="w-4 h-4 mr-2 " />
             Edit
           </Button>
         ) : (
@@ -85,7 +88,11 @@ export default function OrganizationInfo() {
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={isLoading}>
+            <Button
+              className="bg-sidebar hover:bg-sidebar hover:opacity-75"
+              onClick={handleSave}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
               ) : (
@@ -96,14 +103,17 @@ export default function OrganizationInfo() {
           </div>
         )}
       </CardHeader>
+
       <CardContent className="space-y-6">
         <div className="flex items-center space-x-4">
           <Avatar className="w-20 h-20">
             <AvatarImage src={orgData.logo ?? undefined} />
-            <AvatarFallback>{getInitials(orgData.name)}</AvatarFallback>
+            <AvatarFallback className="text-[16px] bg-gradient-to-br from-blue-500 to-indigo-600 text-xl font-semibold text-white">
+              {getInitials(orgData.name)}
+            </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-xl font-semibold">{orgData.name}</h2>
+            <h2 className=" font-semibold">{orgData.name}</h2>
             <p className="text-gray-500">@{orgData.slug}</p>
             <Badge variant="outline">ID: {orgData.id}</Badge>
           </div>
@@ -136,7 +146,7 @@ export default function OrganizationInfo() {
                 onChange={(e) => handleInputChange("slug", e.target.value)}
               />
             ) : (
-              <div className="p-2 bg-gray-50 rounded">{orgData.slug}</div>
+              <div className="p-2 text- bg-gray-50 rounded">{orgData.slug}</div>
             )}
           </div>
         </div>

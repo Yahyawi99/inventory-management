@@ -85,12 +85,7 @@ export default function Page() {
           />
         );
       case "security":
-        return (
-          <SecuritySection
-            isTwoFactorEnabled={isTwoFactorEnabled}
-            setIsTwoFactorEnabled={setIsTwoFactorEnabled}
-          />
-        );
+        return <SecuritySection />;
       case "preferences":
         return <PreferencesSection isLoading={isLoading} />;
       case "data":
