@@ -22,6 +22,7 @@ export * from "./ui/switch";
 export * from "./ui/dialog";
 export * from "./ui/checkbox";
 export * from "./ui/tabs";
+export * from "./ui/progress";
 
 export * from "./data-views/FilterDrawer";
 export * from "./data-views/Header";
