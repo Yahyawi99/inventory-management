@@ -1,24 +1,51 @@
-"use client";
-
 import {
+  Button,
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  Button,
+  Badge,
+  Separator,
+  Alert,
+  AlertDescription,
 } from "app-core/src/components";
+import {
+  AlertCircle,
+  Check,
+  FileText,
+  Package,
+  Truck,
+  Users,
+} from "lucide-react";
 
-export default function QuickActions() {
+export default function Actions() {
   return (
-    <Card className="rounded-2xl shadow-sm mb-6">
-      <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-wrap gap-3">
-        <Button>New Project</Button>
-        <Button variant="secondary">Add Member</Button>
-        <Button variant="outline">Generate Report</Button>
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>Common organization tasks</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Button className="w-full justify-start" variant="default">
+            <Users className="w-4 h-4 mr-2" />
+            Invite Team Member
+          </Button>
+          <Button className="w-full justify-start" variant="outline">
+            <Package className="w-4 h-4 mr-2" />
+            Add Products
+          </Button>
+          <Button className="w-full justify-start" variant="outline">
+            <Truck className="w-4 h-4 mr-2" />
+            Manage Suppliers
+          </Button>
+          <Button className="w-full justify-start" variant="outline">
+            <FileText className="w-4 h-4 mr-2" />
+            Generate Reports
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

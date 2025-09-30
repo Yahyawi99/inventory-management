@@ -6,10 +6,8 @@ import {
 } from "app-core/src/components";
 import OrganizationInfo from "@/shared/company-profile/OrganizationInfo";
 import TeamManagement from "@/shared/company-profile/TeamManagement";
-import OrganizationStats from "@/shared/company-profile/OrganizationStats";
+import OverviewMetrics from "@/shared/company-profile/OverviewMetrics";
 import QuickActions from "@/shared/company-profile/QuickActions";
-import OrgHealth from "@/shared/company-profile/OrgHealth";
-import RecentActivity from "@/shared/company-profile/RecentActivity";
 
 export default function CompanyProfilePage() {
   return (
@@ -20,40 +18,38 @@ export default function CompanyProfilePage() {
           Manage your organization information and settings
         </p>
 
-        <Tabs defaultValue="info">
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl">
-            <TabsTrigger className="cursor-pointer" value="info">
-              Info
-            </TabsTrigger>
-            <TabsTrigger className="cursor-pointer" value="stats">
-              Overview
-            </TabsTrigger>
-            <TabsTrigger className="cursor-pointer" value="team">
-              Team
-            </TabsTrigger>
-            <TabsTrigger className="cursor-pointer" value="activity">
-              Activity
-            </TabsTrigger>
-          </TabsList>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Tabs defaultValue="info" className="lg:col-span-2 space-y-6">
+            <TabsList className="grid grid-cols-3 w-full max-w-3xl">
+              <TabsTrigger className="cursor-pointer" value="info">
+                Info
+              </TabsTrigger>
+              <TabsTrigger className="cursor-pointer" value="stats">
+                Overview
+              </TabsTrigger>
+              <TabsTrigger className="cursor-pointer" value="team">
+                Team
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="info">
-            <OrganizationInfo />
-          </TabsContent>
+            {/* info */}
+            <TabsContent value="info">
+              <OrganizationInfo />
+            </TabsContent>
 
-          <TabsContent value="stats">
-            <OrganizationStats />
-            <OrgHealth />
-          </TabsContent>
+            {/* stats */}
+            <TabsContent value="stats">
+              <OverviewMetrics />
+            </TabsContent>
 
-          <TabsContent value="team">
-            <TeamManagement />
-          </TabsContent>
+            {/* team */}
+            <TabsContent value="team">
+              <TeamManagement />
+            </TabsContent>
+          </Tabs>
 
-          <TabsContent value="activity">
-            <RecentActivity />
-            <QuickActions />
-          </TabsContent>
-        </Tabs>
+          <QuickActions />
+        </div>
       </div>
     </div>
   );
