@@ -17,6 +17,14 @@ export const formatOrganizationStats = (
     return `${sign}${change} ${suffix}`;
   };
 
+  const getChangeType = (
+    change: number
+  ): "increase" | "decrease" | "neutral" => {
+    if (change > 0) return "increase";
+    if (change < 0) return "decrease";
+    return "neutral";
+  };
+
   return [
     {
       label: "Team Members",
@@ -24,6 +32,7 @@ export const formatOrganizationStats = (
       icon: Users,
       color: "bg-blue-50 text-blue-600",
       change: formatChange(overview.teamMembers.change),
+      changeType: getChangeType(overview.teamMembers.change),
     },
     {
       label: "Products",
@@ -31,6 +40,7 @@ export const formatOrganizationStats = (
       icon: Package,
       color: "bg-green-50 text-green-600",
       change: formatChange(overview.products.change),
+      changeType: getChangeType(overview.products.change),
     },
     {
       label: "Active Orders",
@@ -38,6 +48,7 @@ export const formatOrganizationStats = (
       icon: ShoppingCart,
       color: "bg-purple-50 text-purple-600",
       change: formatChange(overview.activeOrders.change),
+      changeType: getChangeType(overview.activeOrders.change),
     },
     {
       label: "Suppliers",
@@ -45,6 +56,7 @@ export const formatOrganizationStats = (
       icon: Truck,
       color: "bg-orange-50 text-orange-600",
       change: formatChange(overview.suppliers.change),
+      changeType: getChangeType(overview.suppliers.change),
     },
     {
       label: "Stock Locations",
@@ -52,6 +64,7 @@ export const formatOrganizationStats = (
       icon: MapPin,
       color: "bg-pink-50 text-pink-600",
       change: formatChange(overview.stockLocations.change, "warehouses"),
+      changeType: getChangeType(overview.stockLocations.change),
     },
     {
       label: "Customers",
@@ -59,6 +72,7 @@ export const formatOrganizationStats = (
       icon: Users,
       color: "bg-indigo-50 text-indigo-600",
       change: formatChange(overview.customers.change),
+      changeType: getChangeType(overview.customers.change),
     },
   ];
 };
