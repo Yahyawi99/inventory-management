@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getInitials } from "@/utils/shared";
+import { formatDate } from "@/utils/dateHelpers";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -26,7 +30,9 @@ import {
   Calendar,
   Clock,
   RefreshCw,
+  AlertCircle,
 } from "lucide-react";
+import { Organization } from "@/types/users";
 
 const initialOrgData = {
   id: "org_123456",
@@ -42,33 +48,147 @@ const initialOrgData = {
 
 export default function OrganizationInfo() {
   const [isEditing, setIsEditing] = useState(false);
-  const [orgData, setOrgData] = useState(initialOrgData);
+  const [orgData, setOrgData] = useState<Organization | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const router = useRouter();
+
+  const fetchOrgData = async () => {
+    setIsFetching(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/organization");
+
+      if (!response.ok) {
+        throw new Error("Something went wrong, please try again later!");
+      }
+
+      const { organization } = await response.json();
+      setOrgData(organization);
+    } catch (error) {
+      console.error("Failed to fetch organization data:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load organization data"
+      );
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.push("/auth/login");
+      return;
+    }
+
+    if (isAuthenticated && !isAuthLoading) {
+      fetchOrgData();
+    }
+  }, [isAuthenticated, isAuthLoading, user]);
 
   const handleInputChange = (field: string, value: string) => {
-    setOrgData((prev) => ({ ...prev, [field]: value }));
+    setOrgData((prev) => (prev ? { ...prev, [field]: value } : null));
+    setSaveError(null); // Clear save error when user makes changes
   };
 
   const handleSave = async () => {
     setIsLoading(true);
-    await new Promise((res) => setTimeout(res, 1000));
-    setIsLoading(false);
-    setIsEditing(false);
-    console.log("Saved:", orgData);
+    setSaveError(null);
+
+    try {
+      const response = await fetch("/api/organization", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orgData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save changes");
+      }
+
+      const { organization } = await response.json();
+      setOrgData(organization);
+      setIsEditing(false);
+      console.log("Saved:", organization);
+    } catch (error) {
+      console.error("Failed to save organization data:", error);
+      setSaveError(
+        error instanceof Error ? error.message : "Failed to save changes"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  const handleRetry = () => {
+    fetchOrgData();
+  };
 
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("");
+  // Loading state
+  if (isFetching) {
+    return (
+      <Card className="mb-2 text-[14px]">
+        <CardHeader>
+          <CardTitle>Organization Details</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <RefreshCw className="w-8 h-8 text-gray-400 animate-spin mb-4" />
+          <p className="text-gray-500">Loading organization details...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <Card className="mb-2 text-[14px]">
+        <CardHeader>
+          <CardTitle>Organization Details</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+          <p className="text-gray-700 font-medium mb-2">
+            Failed to Load Organization
+          </p>
+          <p className="text-gray-500 text-sm mb-4">{error}</p>
+          <Button onClick={handleRetry} variant="outline">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Try Again
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // No data state
+  if (!orgData) {
+    return (
+      <Card className="mb-2 text-[14px]">
+        <CardHeader>
+          <CardTitle>Organization Details</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <AlertCircle className="w-12 h-12 text-gray-400 mb-4" />
+          <p className="text-gray-700 font-medium mb-2">
+            No Organization Found
+          </p>
+          <p className="text-gray-500 text-sm">
+            Organization data is not available
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="mb-2 text-[14px]">
@@ -84,7 +204,15 @@ export default function OrganizationInfo() {
           </Button>
         ) : (
           <div className="flex space-x-2">
-            <Button variant="outline" onClick={() => setIsEditing(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsEditing(false);
+                setSaveError(null);
+                fetchOrgData();
+              }}
+              disabled={isLoading}
+            >
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
@@ -105,20 +233,39 @@ export default function OrganizationInfo() {
       </CardHeader>
 
       <CardContent className="space-y-6">
+        {/* Save Error Alert */}
+        {saveError && (
+          <div className="flex items-start p-3 bg-red-50 border border-red-200 rounded-md">
+            <AlertCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-red-800">
+                Failed to save changes
+              </p>
+              <p className="text-sm text-red-600">{saveError}</p>
+            </div>
+            <button
+              onClick={() => setSaveError(null)}
+              className="text-red-500 hover:text-red-700"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         <div className="flex items-center space-x-4">
           <Avatar className="w-20 h-20">
-            <AvatarImage src={orgData.logo ?? undefined} />
+            <AvatarImage src={orgData?.logo ?? undefined} />
             <AvatarFallback className="text-[16px] bg-gradient-to-br from-blue-500 to-indigo-600 text-xl font-semibold text-white">
-              {getInitials(orgData.name)}
+              {getInitials(orgData?.name || "")}
             </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className=" font-semibold">{orgData.name}</h2>
-            <p className="text-gray-500">@{orgData.slug}</p>
-            <Badge variant="outline">ID: {orgData.id}</Badge>
+            <h2 className=" font-semibold">{orgData?.name}</h2>
+            <p className="text-gray-500">@{orgData && orgData.slug}</p>
+            <Badge variant="outline">ID: {orgData?.id}</Badge>
           </div>
           {isEditing && (
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={isLoading}>
               <Upload className="w-4 h-4 mr-2" />
               Upload Logo
             </Button>
@@ -131,22 +278,36 @@ export default function OrganizationInfo() {
             <Label>Name</Label>
             {isEditing ? (
               <Input
-                value={orgData.name}
+                value={orgData?.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
+                disabled={isLoading}
               />
             ) : (
-              <div className="p-2 bg-gray-50 rounded">{orgData.name}</div>
+              <div
+                className={`p-2 bg-gray-50 ${
+                  orgData?.name || "text-gray-500"
+                } rounded`}
+              >
+                {orgData?.name || "N/A"}
+              </div>
             )}
           </div>
           <div>
             <Label>Slug</Label>
             {isEditing ? (
               <Input
-                value={orgData.slug}
+                value={orgData?.slug || ""}
                 onChange={(e) => handleInputChange("slug", e.target.value)}
+                disabled={isLoading}
               />
             ) : (
-              <div className="p-2 text- bg-gray-50 rounded">{orgData.slug}</div>
+              <div
+                className={`p-2 text- bg-gray-50 ${
+                  orgData?.slug || "text-gray-500"
+                } rounded`}
+              >
+                {orgData?.slug || "N/A"}
+              </div>
             )}
           </div>
         </div>
@@ -157,13 +318,18 @@ export default function OrganizationInfo() {
             <Label>Email</Label>
             {isEditing ? (
               <Input
-                value={orgData.email}
+                value={orgData?.email || ""}
                 onChange={(e) => handleInputChange("email", e.target.value)}
+                disabled={isLoading}
               />
             ) : (
-              <div className="flex items-center p-2 bg-gray-50 rounded">
+              <div
+                className={`flex items-center p-2 bg-gray-50 ${
+                  orgData?.email || "text-gray-500"
+                } rounded`}
+              >
                 <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                {orgData.email}
+                {orgData?.email || "N/A"}
               </div>
             )}
           </div>
@@ -171,13 +337,18 @@ export default function OrganizationInfo() {
             <Label>Phone</Label>
             {isEditing ? (
               <Input
-                value={orgData.phone}
+                value={orgData?.phone || ""}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
+                disabled={isLoading}
               />
             ) : (
-              <div className="flex items-center p-2 bg-gray-50 rounded">
+              <div
+                className={`flex items-center p-2 bg-gray-50 ${
+                  orgData?.phone || "text-gray-500"
+                } rounded`}
+              >
                 <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                {orgData.phone}
+                {orgData?.phone || "N/A"}
               </div>
             )}
           </div>
@@ -188,13 +359,18 @@ export default function OrganizationInfo() {
           <Label>Address</Label>
           {isEditing ? (
             <Textarea
-              value={orgData.address}
+              value={orgData?.address || ""}
               onChange={(e) => handleInputChange("address", e.target.value)}
+              disabled={isLoading}
             />
           ) : (
-            <div className="flex p-2 bg-gray-50 rounded">
+            <div
+              className={`flex p-2 bg-gray-50 ${
+                orgData?.address || "text-gray-500"
+              } rounded`}
+            >
               <MapPin className="w-4 h-4 mr-2 text-gray-400" />
-              {orgData.address}
+              {orgData?.address || "N/A"}
             </div>
           )}
         </div>
@@ -203,11 +379,11 @@ export default function OrganizationInfo() {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center text-gray-600">
             <Calendar className="w-4 h-4 mr-2" />
-            Created: {formatDate(orgData.createdAt)}
+            Created: {formatDate(orgData?.createdAt as Date)}
           </div>
           <div className="flex items-center text-gray-600">
             <Clock className="w-4 h-4 mr-2" />
-            Updated: {formatDate(orgData.updatedAt)}
+            Updated: {formatDate(orgData?.updatedAt as Date)}
           </div>
         </div>
       </CardContent>

@@ -34,7 +34,7 @@ export const isDateWithinRange = (
   return d >= startDate && d <= endDate;
 };
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string | Date) => {
   if (!dateString) return "Not provided";
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",

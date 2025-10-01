@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { organizationRepository } from "@services/repositories";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -18,7 +19,12 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const response = organizationRepository.findById(orgId);
+    const response = await organizationRepository.findById(orgId);
+
+    return NextResponse.json(
+      { message: "success", organization: response },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(
       "Something went wrong while trying to fetch organization data."

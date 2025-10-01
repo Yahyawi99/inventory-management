@@ -78,3 +78,16 @@ export interface Session {
     image?: string | null | undefined;
   };
 }
+
+export interface Organization {
+  address: string | null;
+  metadata: string | null;
+  id: string;
+  name: string;
+  email: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  logo: string | null;
+  slug: string | null;
+  phone: string | null;
+}

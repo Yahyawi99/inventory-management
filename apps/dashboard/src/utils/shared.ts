@@ -84,3 +84,10 @@ export const getTotalOrderLineQuantity = (orderLines: OrderLine[]): number => {
 
   return totalQuantity;
 };
+
+// get Initial from a name
+export const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
