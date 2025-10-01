@@ -35,3 +35,38 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const body = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+  const userId = data?.session?.userId as string;
+
+  if (!userId || !orgId) {
+    return NextResponse.json(
+      { error: "User and Organization id are required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const response = await organizationRepository.updateById(orgId, body);
+
+    return NextResponse.json(
+      { message: "success", organization: response },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(
+      "Something went wrong while trying to fetch organization data."
+    );
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

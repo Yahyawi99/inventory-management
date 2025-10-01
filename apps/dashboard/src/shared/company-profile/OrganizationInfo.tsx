@@ -94,8 +94,8 @@ export default function OrganizationInfo() {
   }, [isAuthenticated, isAuthLoading, user]);
 
   const handleInputChange = (field: string, value: string) => {
-    setOrgData((prev) => (prev ? { ...prev, [field]: value } : null));
-    setSaveError(null); // Clear save error when user makes changes
+    if (orgData) setOrgData({ ...orgData, [field]: value });
+    setSaveError(null);
   };
 
   const handleSave = async () => {
@@ -108,7 +108,15 @@ export default function OrganizationInfo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(orgData),
+        body: JSON.stringify({
+          name: orgData?.name,
+          slug: orgData?.slug,
+          logo: orgData?.logo,
+          metadata: orgData?.metadata,
+          address: orgData?.address,
+          phone: orgData?.phone,
+          email: orgData?.email,
+        }),
       });
 
       if (!response.ok) {
@@ -118,7 +126,6 @@ export default function OrganizationInfo() {
       const { organization } = await response.json();
       setOrgData(organization);
       setIsEditing(false);
-      console.log("Saved:", organization);
     } catch (error) {
       console.error("Failed to save organization data:", error);
       setSaveError(
@@ -252,7 +259,7 @@ export default function OrganizationInfo() {
           </div>
         )}
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 flex-wrap gap-1">
           <Avatar className="w-20 h-20">
             <AvatarImage src={orgData?.logo ?? undefined} />
             <AvatarFallback className="text-[16px] bg-gradient-to-br from-blue-500 to-indigo-600 text-xl font-semibold text-white">
