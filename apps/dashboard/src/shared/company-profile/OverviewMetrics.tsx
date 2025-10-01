@@ -1,3 +1,10 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { OrganizationOverview } from "@/types/organization";
+import { formatOrganizationStats } from "@/utils/organization";
 import {
   Card,
   CardContent,
@@ -60,6 +67,50 @@ const stats = [
 ];
 
 export default function OverviewMetrics() {
+  const [orgStats, setOrgStats] = useState<any | null>(null);
+  const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const router = useRouter();
+
+  const fetchOrgStats = async () => {
+    setIsFetching(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/organization/stats");
+
+      if (!response.ok) {
+        throw new Error("Something went wrong, please try again later!");
+      }
+
+      const { stats }: { stats: OrganizationOverview } = await response.json();
+      const data = formatOrganizationStats(stats);
+      console.log(data);
+    } catch (error) {
+      console.error("Failed to fetch organization stats:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load organization stats"
+      );
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.push("/auth/login");
+      return;
+    }
+
+    if (isAuthenticated && !isAuthLoading) {
+      fetchOrgStats();
+    }
+  }, [isAuthenticated, isAuthLoading, user]);
+
   return (
     <Card>
       <CardHeader>

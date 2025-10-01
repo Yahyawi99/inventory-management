@@ -32,7 +32,7 @@ import {
   RefreshCw,
   AlertCircle,
 } from "lucide-react";
-import { Organization } from "@/types/users";
+import { Organization } from "@/types/organization";
 
 const initialOrgData = {
   id: "org_123456",
