@@ -17,14 +17,6 @@ export const formatOrganizationStats = (
     return `${sign}${change} ${suffix}`;
   };
 
-  const getChangeType = (
-    change: number
-  ): "increase" | "decrease" | "neutral" => {
-    if (change > 0) return "increase";
-    if (change < 0) return "decrease";
-    return "neutral";
-  };
-
   return [
     {
       label: "Team Members",

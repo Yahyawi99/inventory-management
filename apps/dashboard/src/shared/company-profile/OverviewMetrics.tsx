@@ -85,8 +85,10 @@ export default function OverviewMetrics() {
         throw new Error("Something went wrong, please try again later!");
       }
 
-      const { stats }: { stats: OrganizationOverview } = await response.json();
-      const data = formatOrganizationStats(stats);
+      const {
+        stats: { overview },
+      }: { stats: { overview: OrganizationOverview } } = await response.json();
+      const data = formatOrganizationStats(overview);
       console.log(data);
     } catch (error) {
       console.error("Failed to fetch organization stats:", error);
