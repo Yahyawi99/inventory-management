@@ -20,3 +20,16 @@ export interface FormattedStat {
   change: string;
   changeType: "increase" | "decrease" | "neutral";
 }
+
+export interface Organization {
+  address: string | null;
+  metadata: string | null;
+  id: string;
+  name: string;
+  email: string | null;
+  slug: string | null;
+  phone: string | null;
+  logo: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}

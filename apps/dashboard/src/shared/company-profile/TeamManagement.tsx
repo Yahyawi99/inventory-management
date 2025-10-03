@@ -1,5 +1,8 @@
 "use client";
 
+import { getInitials } from "@/utils/shared";
+import { getRoleBadgeVariant } from "@/utils/organization";
+import { formatDate } from "@/utils/dateHelpers";
 import {
   Card,
   CardContent,
@@ -60,47 +63,6 @@ export const pendingInvitations = [
     expiresAt: "2024-09-29",
   },
 ];
-
-export const getInitials = (name: string) => {
-  if (!name) return "";
-
-  // Split the name, filter out empty strings, and take the first character of the first and last parts.
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-
-  if (parts.length === 0) return "";
-
-  const firstNameInitial = parts[0][0];
-  const lastNameInitial = parts.length > 1 ? parts[parts.length - 1][0] : "";
-
-  return (firstNameInitial + lastNameInitial).toUpperCase();
-};
-
-export const getRoleBadgeVariant = (role: string) => {
-  switch (role.toLowerCase()) {
-    case "admin":
-      return "bg-indigo-100 text-indigo-800 ring-indigo-500";
-    case "editor":
-      return "bg-blue-100 text-blue-800 ring-blue-500";
-    case "viewer":
-      return "bg-green-100 text-green-800 ring-green-500";
-    case "guest":
-      return "bg-gray-100 text-gray-800 ring-gray-500";
-    default:
-      return "bg-yellow-100 text-yellow-800 ring-yellow-500";
-  }
-};
-
-export const formatDate = (dateInput: Date | string) => {
-  if (!dateInput) return "N/A";
-
-  const date = new Date(dateInput);
-
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-};
 
 export default function TeamManagement() {
   return (

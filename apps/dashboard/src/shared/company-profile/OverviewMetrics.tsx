@@ -6,13 +6,20 @@ import { useAuth } from "@/context/AuthContext";
 import { FormattedStat, OrganizationOverview } from "@/types/organization";
 import { formatOrganizationStats } from "@/utils/organization";
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "app-core/src/components";
-import { Minus, TrendingDown, TrendingUp } from "lucide-react";
+import {
+  AlertCircle,
+  Minus,
+  RefreshCw,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 
 export default function OverviewMetrics() {
   const [orgStats, setOrgStats] = useState<FormattedStat[] | null>(null);
@@ -51,6 +58,10 @@ export default function OverviewMetrics() {
     }
   };
 
+  const handleRetry = () => {
+    fetchOrgStats();
+  };
+
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
       router.push("/auth/login");
@@ -61,6 +72,43 @@ export default function OverviewMetrics() {
       fetchOrgStats();
     }
   }, [isAuthenticated, isAuthLoading, user]);
+
+  // Loading state
+  if (isFetching) {
+    return (
+      <Card className="mb-2 text-[14px]">
+        <CardHeader>
+          <CardTitle>Organization Overview</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <RefreshCw className="w-8 h-8 text-gray-400 animate-spin mb-4" />
+          <p className="text-gray-500">Loading organization stats...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <Card className="mb-2 text-[14px]">
+        <CardHeader>
+          <CardTitle>Organization Details</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-12">
+          <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+          <p className="text-gray-700 font-medium mb-2">
+            Failed to Load Organization
+          </p>
+          <p className="text-gray-500 text-sm mb-4">{error}</p>
+          <Button onClick={handleRetry} variant="outline">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Try Again
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
