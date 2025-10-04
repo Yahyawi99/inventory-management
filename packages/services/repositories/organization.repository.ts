@@ -1,5 +1,9 @@
 import Prisma from "database";
-import { OrderStatus, Organization } from "database/generated/prisma/client";
+import {
+  Member,
+  OrderStatus,
+  Organization,
+} from "database/generated/prisma/client";
 
 interface NewOrg {
   address: string | null;
@@ -186,6 +190,27 @@ export const organizationRepository = {
       return formattedOutput;
     } catch (e) {
       console.log("Error while fetching organization data " + orgId);
+      return null;
+    }
+  },
+
+  async getRecentMembers(orgId: string): Promise<Member[] | null> {
+    try {
+      const members = await Prisma.member.findMany({
+        where: {
+          organizationId: orgId,
+          createdAt: {
+            gte: new Date(new Date().getTime() - 7 * 24 * 3600 * 1000),
+          },
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      return members;
+    } catch (error) {
+      console.log("Failed to fetch recent members!");
       return null;
     }
   },

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { getInitials } from "@/utils/shared";
 import { getRoleBadgeVariant } from "@/utils/organization";
 import { formatDate } from "@/utils/dateHelpers";
@@ -16,7 +17,7 @@ import {
 } from "app-core/src/components";
 import { ChevronRight, Mail, Users } from "lucide-react";
 
-export const recentMembers = [
+export const recentMemberss = [
   {
     id: 1,
     name: "Samantha Reyes",
@@ -65,6 +66,39 @@ export const pendingInvitations = [
 ];
 
 export default function TeamManagement() {
+  // latest users (7 week)
+  const [recentMembers, setRecentMembers] = useState();
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchRecentUsers = async () => {
+    setFetching(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/organization/recent-members");
+
+      if (!response.ok) {
+        throw new Error(
+          "Something went wrong while trying to fetch recent members!"
+        );
+      }
+
+      const { members } = await response.json();
+      setRecentMembers(members);
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch recent members!"
+      );
+    } finally {
+      setFetching(false);
+    }
+  };
+
+  // pending invitations
+
   return (
     <div className="space-y-6">
       {/* Team Members */}
@@ -85,7 +119,7 @@ export default function TeamManagement() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {recentMembers.map((member, index) => (
+            {recentMemberss.map((member, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-3 border rounded-xl hover:bg-blue-50/50 transition-colors"
