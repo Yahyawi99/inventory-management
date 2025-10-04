@@ -26,7 +26,7 @@ export interface UserSettings {
 
 export interface Invitation {
   id: string;
-  role: string;
+  role: UserRoles;
   email: string;
   status: InvitationStatus;
   inviter: {
