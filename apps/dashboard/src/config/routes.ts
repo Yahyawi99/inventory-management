@@ -18,7 +18,6 @@ export const routes = {
   reports: "/en/reports",
   settings: {
     companyProfile: "/en/settings/company-profile",
-    integrations: "/en/settings/integrations",
     notifications: "/en/settings/notifications",
   },
   activityLog: "/en/activity-log",

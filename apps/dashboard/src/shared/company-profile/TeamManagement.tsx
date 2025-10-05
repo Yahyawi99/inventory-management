@@ -326,7 +326,9 @@ export default function TeamManagement() {
                         {invitation.role}
                       </Badge>
                       <Button
-                        onClick={() => resendInvitation(invitation.role)}
+                        onClick={() =>
+                          resendInvitation(invitation.email, invitation.role)
+                        }
                         variant="outline"
                         size="sm"
                         className="md:flex"

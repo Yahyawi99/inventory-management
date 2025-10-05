@@ -84,28 +84,7 @@ export const MenuItems: MenuItemType[] = [
       },
     ],
   },
-  {
-    id: "settings",
-    name: "Settings",
-    icon: faGear,
-    subMenuItems: [
-      {
-        id: "settings-company-profile-sub",
-        name: "Company Profile",
-        href: routes.settings.companyProfile,
-      },
-      {
-        id: "settings-integrations-sub",
-        name: "Integrations",
-        href: routes.settings.integrations,
-      },
-      {
-        id: "settings-notifications-sub",
-        name: "Notifications",
-        href: routes.settings.notifications,
-      },
-    ],
-  },
+
   {
     id: "activity-log",
     name: "Activity Log", // Display name
@@ -119,5 +98,22 @@ export const MenuItems: MenuItemType[] = [
     href: routes.reports,
     icon: faChartLine,
     subMenuItems: [],
+  },
+  {
+    id: "settings",
+    name: "Settings",
+    icon: faGear,
+    subMenuItems: [
+      {
+        id: "settings-company-profile-sub",
+        name: "Company Profile",
+        href: routes.settings.companyProfile,
+      },
+      {
+        id: "settings-notifications-sub",
+        name: "Notifications",
+        href: routes.settings.notifications,
+      },
+    ],
   },
 ];
