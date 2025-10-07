@@ -93,13 +93,6 @@ export const MenuItems: MenuItemType[] = [
     subMenuItems: [], // Empty array as it has no sub-items
   },
   {
-    id: "reports",
-    name: "Reports",
-    href: routes.reports,
-    icon: faChartLine,
-    subMenuItems: [],
-  },
-  {
     id: "settings",
     name: "Settings",
     icon: faGear,

@@ -15,7 +15,6 @@ export const routes = {
     manageUsers: "/en/users-roles/manage-users",
     rolesPermissions: "/en/users-roles/roles-permissions",
   },
-  reports: "/en/reports",
   settings: {
     companyProfile: "/en/settings/company-profile",
     notifications: "/en/settings/notifications",
