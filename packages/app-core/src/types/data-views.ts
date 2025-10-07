@@ -73,3 +73,58 @@ export interface FinancialMetricsResult {
 export interface FinancialDashboardMetrics {
   [metricName: string]: FinancialMetricsResult;
 }
+
+// creation Form
+interface FormFieldBase {
+  name: string;
+  label: string;
+  required?: boolean;
+  placeholder?: string;
+  gridArea?: string;
+  defaultValue?: any;
+}
+
+interface TextFieldConfig extends FormFieldBase {
+  type: "text" | "email" | "password";
+}
+
+interface NumberFieldConfig extends FormFieldBase {
+  type: "number";
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+interface TextareaFieldConfig extends FormFieldBase {
+  type: "textarea";
+  rows?: number;
+}
+
+interface SelectFieldConfig extends FormFieldBase {
+  type: "select";
+  options: Array<{ id: string; name: string }>;
+}
+
+interface CheckboxFieldConfig extends FormFieldBase {
+  type: "checkbox";
+}
+
+interface DateFieldConfig extends FormFieldBase {
+  type: "date";
+}
+
+export type FormField =
+  | TextFieldConfig
+  | NumberFieldConfig
+  | TextareaFieldConfig
+  | SelectFieldConfig
+  | CheckboxFieldConfig
+  | DateFieldConfig;
+
+export interface FormConfig {
+  title: string;
+  description: string;
+  entityName: string;
+  fields: FormField[];
+  onSubmit?: (data: any) => Promise<void>;
+}
