@@ -86,6 +86,7 @@ interface FormFieldBase {
 
 interface TextFieldConfig extends FormFieldBase {
   type: "text" | "email" | "password";
+  readOnly?: boolean;
 }
 
 interface NumberFieldConfig extends FormFieldBase {

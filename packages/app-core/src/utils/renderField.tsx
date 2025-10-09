@@ -98,6 +98,7 @@ export const renderField = (
           {...commonInputProps}
           value={formData[field.name]}
           onChange={(e) => handleChange(field.name, e.target.value)}
+          readOnly={field.readOnly}
         />
       );
   }

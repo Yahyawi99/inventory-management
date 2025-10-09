@@ -209,6 +209,144 @@ export const headerData: HeaderData = {
   buttonTxt: "Create Order",
 };
 
+// --- PURCHASE ORDER FORM CONFIG ---
+export const purchaseOrderFormConfig: FormConfig = {
+  title: "Create New Order",
+  description:
+    "Select the order type and fill in the details for the new transaction.",
+  entityName: "Order",
+  fields: [
+    {
+      name: "type",
+      label: "Order Type",
+      type: "text",
+      required: true,
+      readOnly: true,
+      defaultValue: "PURCHASE",
+      gridArea: "1/2",
+    },
+    {
+      name: "partnerId",
+      label: "Customer/Supplier",
+      type: "select",
+      required: true,
+      options: [
+        { id: "p-001", name: "Acme Corp" },
+        { id: "p-002", name: "Beta Suppliers" },
+        { id: "p-003", name: "Cali Retail" },
+      ],
+      gridArea: "1/2",
+    },
+    {
+      name: "orderDate",
+      label: "Order Date",
+      type: "text", // Using text for date input simulation
+      required: true,
+      placeholder: "YYYY-MM-DD",
+      gridArea: "1/2",
+    },
+    {
+      name: "dueDate",
+      label: "Due Date",
+      type: "text", // Using text for date input simulation
+      required: false,
+      placeholder: "YYYY-MM-DD",
+      gridArea: "1/2",
+    },
+    {
+      name: "reference",
+      label: "Reference Number",
+      type: "text",
+      required: false,
+      placeholder: "PO-4567-B",
+      gridArea: "1",
+    },
+    {
+      name: "notes",
+      label: "Internal Notes",
+      type: "textarea",
+      required: false,
+      placeholder: "Any special instructions or delivery details.",
+      gridArea: "1",
+      rows: 3,
+    },
+  ],
+  onSubmit: async (data: any) => {
+    // Your API call here
+    console.log("Submitting order:", data);
+    // await createOrder(data);
+  },
+};
+
+// --- SALES ORDER FORM CONFIG ---
+export const salesOrderFormConfig: FormConfig = {
+  title: "Create New Order",
+  description:
+    "Select the order type and fill in the details for the new transaction.",
+  entityName: "Order",
+  fields: [
+    {
+      name: "type",
+      label: "Order Type",
+      type: "text",
+      required: true,
+      readOnly: true,
+      defaultValue: "SALES",
+      gridArea: "1/2",
+    },
+    {
+      name: "partnerId",
+      label: "Customer/Supplier",
+      type: "select",
+      required: true,
+      options: [
+        { id: "p-001", name: "Acme Corp" },
+        { id: "p-002", name: "Beta Suppliers" },
+        { id: "p-003", name: "Cali Retail" },
+      ],
+      gridArea: "1/2",
+    },
+    {
+      name: "orderDate",
+      label: "Order Date",
+      type: "text", // Using text for date input simulation
+      required: true,
+      placeholder: "YYYY-MM-DD",
+      gridArea: "1/2",
+    },
+    {
+      name: "dueDate",
+      label: "Due Date",
+      type: "text", // Using text for date input simulation
+      required: false,
+      placeholder: "YYYY-MM-DD",
+      gridArea: "1/2",
+    },
+    {
+      name: "reference",
+      label: "Reference Number",
+      type: "text",
+      required: false,
+      placeholder: "PO-4567-B",
+      gridArea: "1",
+    },
+    {
+      name: "notes",
+      label: "Internal Notes",
+      type: "textarea",
+      required: false,
+      placeholder: "Any special instructions or delivery details.",
+      gridArea: "1",
+      rows: 3,
+    },
+  ],
+  onSubmit: async (data: any) => {
+    // Your API call here
+    console.log("Submitting order:", data);
+    // await createOrder(data);
+  },
+};
+
 // --- ORDER FORM CONFIG ---
 export const orderFormConfig: FormConfig = {
   title: "Create New Order",

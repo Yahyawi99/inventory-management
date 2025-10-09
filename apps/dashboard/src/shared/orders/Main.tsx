@@ -19,6 +19,8 @@ import {
   tableColumns,
   headerData,
   orderFormConfig,
+  purchaseOrderFormConfig,
+  salesOrderFormConfig,
 } from "@/constants/orders";
 import {
   Header,
@@ -204,7 +206,13 @@ export default function OrdersPage({ type }: OrdersPageProps) {
       <Header
         data={headerData}
         exportData={exportData}
-        formConfig={orderFormConfig}
+        formConfig={
+          type === "PURCHASE"
+            ? purchaseOrderFormConfig
+            : type === "SALES"
+            ? salesOrderFormConfig
+            : orderFormConfig
+        }
       />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />
