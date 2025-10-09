@@ -174,7 +174,11 @@ export const tableColumns: Column<Category>[] = [
 ];
 
 // --- STOCK CATEGORY FORM CONFIG ---
-export const CategoryFormConfig: FormConfig = {
+interface SubmitData {
+  name: string;
+  description: string;
+}
+export const CategoryFormConfig: FormConfig<SubmitData> = {
   title: "Add New Category",
   description:
     "Create a new category for organizing stock and inventory items.",
@@ -185,7 +189,7 @@ export const CategoryFormConfig: FormConfig = {
       label: "Category Name",
       type: "text",
       required: true,
-      placeholder: "Warehouse Storage",
+      placeholder: "Electronics",
       gridArea: "1",
     },
     {
@@ -198,9 +202,7 @@ export const CategoryFormConfig: FormConfig = {
       rows: 4,
     },
   ],
-  onSubmit: async (data: any) => {
-    // Your API call here
-    console.log("Submitting stock category:", data);
-    // await createStockCategory(data);
+  onSubmit: async (data: SubmitData) => {
+    console.log("Submitting stock category: ", data);
   },
 };

@@ -122,10 +122,10 @@ export type FormField =
   | CheckboxFieldConfig
   | DateFieldConfig;
 
-export interface FormConfig {
+export interface FormConfig<T> {
   title: string;
   description: string;
   entityName: string;
   fields: FormField[];
-  onSubmit?: (data: any) => Promise<void>;
+  onSubmit?: (data: T) => Promise<void>;
 }

@@ -17,13 +17,12 @@ import {
 } from "..";
 import { Loader2 } from "lucide-react";
 
-interface CreationFormProps {
-  data: HeaderData;
-  formConfig: FormConfig;
+interface CreationFormProps<T> {
+  formConfig: FormConfig<T>;
 }
 
-export default function CreationForm({ data, formConfig }: CreationFormProps) {
-  const initialData = formConfig.fields.reduce((acc: any, field) => {
+export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
+  const initialData = formConfig.fields.reduce((acc: any, field: any) => {
     acc[field.name] =
       field.defaultValue ?? (field.type === "checkbox" ? false : "");
     return acc;
@@ -35,7 +34,7 @@ export default function CreationForm({ data, formConfig }: CreationFormProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Group fields by layout area
-  const groupedFields = formConfig.fields.reduce((acc: any, field) => {
+  const groupedFields = formConfig.fields.reduce((acc: any, field: any) => {
     const area = field.gridArea || "1";
     acc[area] = acc[area] || [];
     acc[area].push(field);
@@ -49,6 +48,8 @@ export default function CreationForm({ data, formConfig }: CreationFormProps) {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setMessage("");
+
+    // formConfig.onSubmit()
   };
 
   return (

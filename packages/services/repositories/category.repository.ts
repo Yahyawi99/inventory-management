@@ -161,4 +161,25 @@ export const categoryRepository = {
       console.log(e);
     }
   },
+
+  async create(
+    orgId: string,
+    name: string,
+    description: string
+  ): Promise<Category | null> {
+    try {
+      const category = Prisma.category.create({
+        data: {
+          organizationId: orgId,
+          name,
+          description,
+        },
+      });
+
+      return category;
+    } catch (error) {
+      console.log("Something went wrong during category creation!");
+      return null;
+    }
+  },
 };

@@ -2,19 +2,19 @@ import { FormConfig, HeaderData } from "../../types";
 import CreationForm from "./CreationForm";
 import { Button } from "..";
 
-interface Props {
+interface Props<T> {
   exportData: () => void;
   data: HeaderData;
-  formConfig: FormConfig;
-  secondaryFormConfig?: FormConfig;
+  formConfig: FormConfig<T>;
+  secondaryFormConfig?: FormConfig<T>;
 }
 
-export function Header({
+export function Header<T>({
   exportData,
   data,
   formConfig,
   secondaryFormConfig,
-}: Props) {
+}: Props<T>) {
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
       <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
@@ -43,9 +43,9 @@ export function Header({
           <span>Export</span>
         </Button>
 
-        <CreationForm data={data} formConfig={formConfig} />
+        <CreationForm formConfig={formConfig} />
         {secondaryFormConfig && (
-          <CreationForm data={data} formConfig={secondaryFormConfig} />
+          <CreationForm formConfig={secondaryFormConfig} />
         )}
       </div>
     </div>

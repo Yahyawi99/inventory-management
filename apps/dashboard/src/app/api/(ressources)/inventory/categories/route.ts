@@ -69,3 +69,40 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+
+  console.log(body);
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const res = null; //await categoryRepository.create(orgId);
+
+    return NextResponse.json(
+      {
+        message: "success",
+        category: res,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("Error while creating category ", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
