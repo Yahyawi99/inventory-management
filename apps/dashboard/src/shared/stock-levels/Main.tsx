@@ -22,6 +22,8 @@ import {
   stockStatusFilters,
   stockFilterDrawerData,
   tableColumns,
+  stockFormConfig,
+  stockItemFormConfig,
 } from "@/constants/stock";
 import { exportOrdersAsJson } from "@/utils/shared";
 import { Stock, StockSummaryMetrics } from "@/types/stocks";
@@ -189,7 +191,12 @@ export default function Products() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header data={headerData} exportData={exportData} />
+      <Header
+        data={headerData}
+        exportData={exportData}
+        formConfig={stockFormConfig}
+        secondaryFormConfig={stockItemFormConfig}
+      />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryStocks} />
 

@@ -4,6 +4,7 @@ import { Button, Input } from "app-core/src/components";
 import {
   Column,
   FilterDrawerData,
+  FormConfig,
   HeaderData,
   SortableField,
 } from "app-core/src/types";
@@ -170,3 +171,83 @@ export const tableColumns: Column<Stock>[] = [
     cellClass: "text-center px-4 py-3",
   },
 ];
+
+// --- STOCK LOCATION FORM CONFIG ---
+export const stockFormConfig: FormConfig = {
+  title: "Add New Stock Location",
+  description:
+    "Creates a new location (warehouse, shelf, bin) where inventory can be stored.",
+  entityName: "Stock Location",
+  fields: [
+    {
+      name: "name",
+      label: "Location Name",
+      type: "text",
+      required: true,
+      placeholder: "Warehouse Aisle 5, Bin B",
+      gridArea: "1/2",
+    },
+    {
+      name: "locationDetail",
+      label: "Physical Address/Details",
+      type: "text",
+      required: false,
+      placeholder: "Third floor, North section (maps to 'location' field)",
+      gridArea: "1/2",
+    },
+  ],
+  onSubmit: async (data) => {
+    console.log("Submitting new Stock Location:", data);
+  },
+};
+
+// --- STOCK ITEM FORM CONFIG  ---
+export const stockItemFormConfig: FormConfig = {
+  title: "Initialize Product Stock Quantity",
+  description:
+    "Records the initial quantity of a specific product at a defined stock location.",
+  entityName: "Stock Item Quantity",
+  fields: [
+    {
+      name: "productId",
+      label: "Product",
+      type: "select",
+      required: true,
+      options: [
+        { id: "p-001", name: "Wireless Headset X20" },
+        { id: "p-002", name: "Ergonomic Keyboard" },
+        { id: "p-003", name: "4K Monitor" },
+      ],
+      placeholder: "Select the product SKU",
+      gridArea: "1",
+    },
+    {
+      name: "stockId",
+      label: "Stock Location",
+      type: "select",
+      required: true,
+      options: [
+        { id: "loc-a", name: "Warehouse Aisle 5, Bin B" },
+        { id: "loc-b", name: "Back Room Storage" },
+        { id: "loc-c", name: "Receiving Dock" },
+      ],
+      placeholder: "Select the storage location",
+      gridArea: "1/2",
+    },
+    {
+      name: "quantity",
+      label: "Initial Quantity",
+      type: "number",
+      required: true,
+      placeholder: "50",
+      gridArea: "1/2",
+      step: 1,
+      defaultValue: 0,
+    },
+  ],
+  onSubmit: async (data) => {
+    // API call to create a new 'StockItem' record
+    console.log("Submitting new Stock Item Quantity:", data);
+    // await createStockItem(data);
+  },
+};

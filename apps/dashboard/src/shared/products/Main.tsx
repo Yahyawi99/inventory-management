@@ -24,6 +24,7 @@ import {
   productSortableFields,
   productCategoryFilters,
   tableColumns,
+  productFormConfig,
 } from "@/constants/products";
 import { buildProductsApiUrl } from "@/utils/products";
 import { exportOrdersAsJson } from "@/utils/shared";
@@ -207,7 +208,11 @@ export default function Products() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header data={headerData} exportData={exportData} />
+      <Header
+        data={headerData}
+        exportData={exportData}
+        formConfig={productFormConfig}
+      />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryProducts} />
 

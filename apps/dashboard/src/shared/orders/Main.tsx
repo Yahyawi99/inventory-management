@@ -18,6 +18,7 @@ import {
   orderStatusFilters,
   tableColumns,
   headerData,
+  orderFormConfig,
 } from "@/constants/orders";
 import {
   Header,
@@ -200,7 +201,11 @@ export default function OrdersPage({ type }: OrdersPageProps) {
 
   return (
     <section className="overflow-x-hidden">
-      <Header data={headerData} exportData={exportData} />
+      <Header
+        data={headerData}
+        exportData={exportData}
+        formConfig={orderFormConfig}
+      />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />
 

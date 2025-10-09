@@ -268,7 +268,7 @@ model Stock {
 // junction model for stock and product
 model StockItem {
   id        String   @id @map("_id")
-  quantity  Int // Quantity of THIS product in THIS stock location
+  quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

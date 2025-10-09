@@ -16,6 +16,7 @@ import {
   categoriesFilterDrawerData,
   categorySortableFields,
   categoryCategoryFilters,
+  CategoryFormConfig,
 } from "@/constants/categories";
 import { buildCategoriesApiUrl } from "@/utils/categories";
 import { exportOrdersAsJson } from "@/utils/shared";
@@ -106,7 +107,11 @@ export default function Products() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header data={headerData} exportData={exportData} />
+      <Header
+        data={headerData}
+        exportData={exportData}
+        formConfig={CategoryFormConfig}
+      />
 
       <DataControls
         activeFilters={activeFilters}

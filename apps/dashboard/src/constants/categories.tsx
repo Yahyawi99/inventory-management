@@ -1,7 +1,12 @@
 import { Category } from "@/types/categories";
-import { getProductStockStatusDisplay } from "@/utils/categories";
+import { getCategoryStockStatusDisplay } from "@/utils/categories";
 import { Button, Input } from "app-core/src/components";
-import { Column, FilterDrawerData, SortableField } from "app-core/src/types";
+import {
+  Column,
+  FilterDrawerData,
+  FormConfig,
+  SortableField,
+} from "app-core/src/types";
 
 export const headerData = {
   title: "Categories",
@@ -97,7 +102,7 @@ export const tableColumns: Column<Category>[] = [
     key: "stockStatus",
     header: "Stock Status",
     render: (category) => {
-      const statusDisplay = getProductStockStatusDisplay(
+      const statusDisplay = getCategoryStockStatusDisplay(
         category.totalStockQuantity
       );
       return (
@@ -167,3 +172,35 @@ export const tableColumns: Column<Category>[] = [
     cellClass: "text-center px-4 py-3",
   },
 ];
+
+// --- STOCK CATEGORY FORM CONFIG ---
+export const CategoryFormConfig: FormConfig = {
+  title: "Add New Category",
+  description:
+    "Create a new category for organizing stock and inventory items.",
+  entityName: "Stock Category",
+  fields: [
+    {
+      name: "name",
+      label: "Category Name",
+      type: "text",
+      required: true,
+      placeholder: "Warehouse Storage",
+      gridArea: "1",
+    },
+    {
+      name: "description",
+      label: "Description",
+      type: "textarea",
+      required: false,
+      placeholder: "A brief description of the items this category will hold.",
+      gridArea: "1",
+      rows: 4,
+    },
+  ],
+  onSubmit: async (data: any) => {
+    // Your API call here
+    console.log("Submitting stock category:", data);
+    // await createStockCategory(data);
+  },
+};

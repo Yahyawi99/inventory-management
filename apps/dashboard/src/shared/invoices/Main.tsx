@@ -19,6 +19,7 @@ import {
   InvoiceStatusFilters,
   tableColumns,
   headerData,
+  invoiceFormConfig,
 } from "@/constants/invoices";
 import {
   Header,
@@ -202,7 +203,11 @@ export default function InvoicesPage() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header data={headerData} exportData={exportData} />
+      <Header
+        data={headerData}
+        exportData={exportData}
+        formConfig={invoiceFormConfig}
+      />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryInvoices} />
 

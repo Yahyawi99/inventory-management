@@ -6,6 +6,7 @@ import { Button, Input } from "app-core/src/components";
 import {
   Column,
   FilterDrawerData,
+  FormConfig,
   HeaderData,
   SortableField,
 } from "app-core/src/types";
@@ -217,4 +218,76 @@ export const InvoiceStatusFilters = {
 export const headerData: HeaderData = {
   title: "Invoices",
   buttonTxt: "Create Invoice",
+};
+
+export const invoiceFormConfig: FormConfig = {
+  title: "Create New Invoice",
+  description: "Generate a new invoice, typically linked to a completed order.",
+  entityName: "Invoice",
+  fields: [
+    {
+      name: "orderId",
+      label: "Source Order",
+      type: "select",
+      required: true,
+      options: [
+        { id: "ord-901", name: "Order #901 (Acme Corp)" },
+        { id: "ord-902", name: "Order #902 (Beta Suppliers)" },
+      ],
+      placeholder: "Select the order to invoice",
+      gridArea: "1",
+    },
+    {
+      name: "issueDate",
+      label: "Issue Date",
+      type: "text", // Using text for date input simulation
+      required: true,
+      placeholder: "YYYY-MM-DD",
+      gridArea: "1/2",
+    },
+    {
+      name: "dueDate",
+      label: "Payment Due Date",
+      type: "text", // Using text for date input simulation
+      required: true,
+      placeholder: "YYYY-MM-DD",
+      gridArea: "1/2",
+    },
+    {
+      name: "amount",
+      label: "Total Amount ($)",
+      type: "number",
+      required: true,
+      placeholder: "550.00",
+      gridArea: "1/2",
+      step: 0.01,
+    },
+    {
+      name: "status",
+      label: "Payment Status",
+      type: "select",
+      required: true,
+      options: [
+        { id: "draft", name: "Draft" },
+        { id: "sent", name: "Sent" },
+        { id: "paid", name: "Paid" },
+        { id: "void", name: "Void" },
+      ],
+      gridArea: "1/2",
+    },
+    {
+      name: "paymentTerms",
+      label: "Payment Terms",
+      type: "textarea",
+      required: false,
+      placeholder: "e.g., Net 30 days.",
+      gridArea: "1",
+      rows: 2,
+    },
+  ],
+  onSubmit: async (data: any) => {
+    // Your API call here
+    console.log("Submitting invoice:", data);
+    // await createInvoice(data);
+  },
 };

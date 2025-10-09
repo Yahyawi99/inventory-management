@@ -70,7 +70,7 @@ export default function CreationForm({ data, formConfig }: CreationFormProps) {
             <path d="M12 5v14" />
             <path d="M5 12h14" />
           </svg>
-          <span>{data.buttonTxt}</span>
+          <span>{formConfig.title}</span>
         </Button>
       </DialogTrigger>
 
