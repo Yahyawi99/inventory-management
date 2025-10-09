@@ -127,5 +127,5 @@ export interface FormConfig<T> {
   description: string;
   entityName: string;
   fields: FormField[];
-  onSubmit?: (data: T) => Promise<void>;
+  onSubmit: (data: T) => Promise<{ ok: boolean; message: string }>;
 }

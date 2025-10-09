@@ -15,7 +15,7 @@ import {
   DialogTrigger,
   Label,
 } from "..";
-import { Loader2 } from "lucide-react";
+import { AlertCircle, Check, Loader2 } from "lucide-react";
 
 interface CreationFormProps<T> {
   formConfig: FormConfig<T>;
@@ -28,7 +28,10 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
     return acc;
   }, {});
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<{
+    ok: boolean;
+    message: string;
+  } | null>(null);
   const [formData, setFormData] = useState(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -47,9 +50,38 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    setMessage("");
+    setMessage(null);
 
-    // formConfig.onSubmit()
+    try {
+      const response = await formConfig.onSubmit(formData);
+
+      if (!response.ok) {
+        alert(response);
+        return;
+      }
+
+      alert(response);
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? { ok: false, message: error.message }
+          : { ok: false, message: "Failed to submit form data!" }
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const alert = (data: { ok: boolean; message: string }) => {
+    setMessage(data);
+
+    setTimeout(
+      () => {
+        if (data.ok) window.location.reload();
+        setMessage(null);
+      },
+      data.ok ? 1000 : 3000
+    );
   };
 
   return (
@@ -76,12 +108,28 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[450px] rounded-2xl p-6">
-        <DialogHeader className="mb-4">
+        <DialogHeader className="mb-7">
           <DialogTitle className="text-2xl font-bold">
             {formConfig.title}
           </DialogTitle>
           <DialogDescription>{formConfig.description}</DialogDescription>
         </DialogHeader>
+
+        {message && (
+          <Alert
+            variant={!message.ok ? "destructive" : "default"}
+            className=" border-none absolute top-[100px] "
+          >
+            {!message.ok ? (
+              <AlertCircle className="w-12 h-12 text-red-500" />
+            ) : (
+              <Check className="w-12 h-12 stroke-green-500" />
+            )}
+            <AlertDescription className={`${message.ok && "text-green-500"}`}>
+              {message.message}
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="space-y-6">
           {Object.keys(groupedFields).map((area) => {
@@ -115,7 +163,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto bg-sidebar hover:bg-sidebar hover:opacity-75"
             >
               {isSubmitting ? (
                 <>
@@ -128,15 +176,6 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
             </Button>
           </div>
         </div>
-
-        {message && (
-          <Alert
-            variant={message.startsWith("Error") ? "destructive" : "default"}
-            className="mt-4"
-          >
-            <AlertDescription>{message}</AlertDescription>
-          </Alert>
-        )}
       </DialogContent>
     </Dialog>
   );

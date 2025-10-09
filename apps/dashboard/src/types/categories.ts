@@ -8,3 +8,8 @@ export interface Category {
   productCount: number;
   totalStockQuantity: number;
 }
+
+export interface SubmitData {
+  name: string;
+  description: string;
+}

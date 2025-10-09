@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 import { categoryRepository } from "@services/repositories";
 import { ProductStatus } from "@/types/products";
+import { SubmitData } from "@/types/categories";
 
 interface Filters {
   status?: ProductStatus;
@@ -71,7 +72,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const body: SubmitData = await req.json();
 
   console.log(body);
 
@@ -89,7 +90,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const res = null; //await categoryRepository.create(orgId);
+    const res = await categoryRepository.create(
+      orgId,
+      body.name,
+      body.description
+    );
 
     return NextResponse.json(
       {
@@ -99,10 +104,23 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error while creating category ", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+    console.log(
+      "Error while creating category ",
+      error instanceof Error && error.message
     );
+
+    if (
+      error instanceof Error &&
+      error.message.includes("Category_organizationId_name_key")
+    )
+      return NextResponse.json(
+        { error: "Category name already exist!" },
+        { status: 500 }
+      );
+    else
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
   }
 }

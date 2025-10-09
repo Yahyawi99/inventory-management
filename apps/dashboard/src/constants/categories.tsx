@@ -1,4 +1,4 @@
-import { Category } from "@/types/categories";
+import { Category, SubmitData } from "@/types/categories";
 import { getCategoryStockStatusDisplay } from "@/utils/categories";
 import { Button, Input } from "app-core/src/components";
 import {
@@ -174,15 +174,11 @@ export const tableColumns: Column<Category>[] = [
 ];
 
 // --- STOCK CATEGORY FORM CONFIG ---
-interface SubmitData {
-  name: string;
-  description: string;
-}
 export const CategoryFormConfig: FormConfig<SubmitData> = {
   title: "Add New Category",
   description:
     "Create a new category for organizing stock and inventory items.",
-  entityName: "Stock Category",
+  entityName: "Category",
   fields: [
     {
       name: "name",
@@ -202,7 +198,44 @@ export const CategoryFormConfig: FormConfig<SubmitData> = {
       rows: 4,
     },
   ],
-  onSubmit: async (data: SubmitData) => {
-    console.log("Submitting stock category: ", data);
+  onSubmit: async (
+    data: SubmitData
+  ): Promise<{ ok: boolean; message: string }> => {
+    if (!data.name) {
+      return { ok: false, message: "Category name is required!" };
+    }
+
+    try {
+      const response = await fetch("/api/inventory/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          description: data.description,
+        }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        return {
+          ok: false,
+          message: error,
+        };
+      }
+
+      return {
+        ok: true,
+        message: "Category created successfully.",
+      };
+    } catch (error) {
+      console.log("Failed to create Category");
+      return {
+        ok: false,
+        message:
+          error instanceof Error ? error.message : "Failed to create Category",
+      };
+    }
   },
 };

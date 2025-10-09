@@ -172,13 +172,13 @@ export const categoryRepository = {
         data: {
           organizationId: orgId,
           name,
-          description,
+          description: description ? description : "",
         },
       });
 
       return category;
     } catch (error) {
-      console.log("Something went wrong during category creation!");
+      console.log("Something went wrong during category creation!", error);
       return null;
     }
   },
