@@ -74,8 +74,6 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const body: SubmitData = await req.json();
 
-  console.log(body);
-
   const data = await auth.api.getSession({
     headers: await headers(),
   });

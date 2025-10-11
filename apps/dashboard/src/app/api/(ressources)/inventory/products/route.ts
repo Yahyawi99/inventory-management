@@ -78,6 +78,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function POST(req: NextRequest) {
   const body: SubmitData = await req.json();
 
+  body.price = Number(body.price);
+
   const data = await auth.api.getSession({
     headers: await headers(),
   });
@@ -93,6 +95,14 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await ProductRepository.Create(orgId, body);
+
+    return NextResponse.json(
+      {
+        message: "success",
+        product: response,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Error while creating a new Product", error);
 
@@ -114,7 +124,9 @@ export async function POST(req: NextRequest) {
       );
     else
       return NextResponse.json(
-        { error: "Internal Server Error" },
+        {
+          error: "Internal Server Error",
+        },
         { status: 500 }
       );
   }

@@ -60,9 +60,11 @@ export const headerData = {
 
 export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
   const categoryOptions = await buildCategoriesOptions();
-  const formattedCategories = categoryOptions.map((element, i) => {
-    return { id: element.id, name: element.value };
-  });
+  const formattedCategories = categoryOptions
+    .filter((ele) => ele.id)
+    .map((element, i) => {
+      return { id: element.id, name: element.value };
+    }) as { id: string; name: string }[];
 
   return {
     title: "Add New Product",
@@ -133,7 +135,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       }
 
       try {
-        const response = await fetch("/api/inventory/product", {
+        const response = await fetch("/api/inventory/products", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

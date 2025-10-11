@@ -33,11 +33,13 @@ export const renderField = (
             <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
           </SelectTrigger>
           <SelectContent>
-            {field.options.map((option) => (
-              <SelectItem key={option.id} value={option.id}>
-                {option.name}
-              </SelectItem>
-            ))}
+            {field.options.map((option) => {
+              return (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.name}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       );

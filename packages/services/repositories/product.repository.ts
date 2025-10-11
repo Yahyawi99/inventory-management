@@ -193,7 +193,7 @@ export const ProductRepository = {
       return product;
     } catch (error) {
       console.log("Error while creating a new Product: ", error);
-      return null;
+      throw error;
     }
   },
 };

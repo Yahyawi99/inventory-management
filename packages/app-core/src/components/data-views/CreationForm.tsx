@@ -56,8 +56,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
       const response = await formConfig.onSubmit(formData);
 
       if (!response.ok) {
-        alert(response);
-        return;
+        return alert(response);
       }
 
       alert(response);
@@ -75,13 +74,13 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
   const alert = (data: { ok: boolean; message: string }) => {
     setMessage(data);
 
-    setTimeout(
-      () => {
-        if (data.ok) window.location.reload();
-        setMessage(null);
-      },
-      data.ok ? 1000 : 3000
-    );
+    // setTimeout(
+    //   () => {
+    //     if (data.ok) window.location.reload();
+    //     setMessage(null);
+    //   },
+    //   data.ok ? 1000 : 3000
+    // );
   };
 
   return (
@@ -108,28 +107,12 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[450px] rounded-2xl p-6">
-        <DialogHeader className="mb-7">
+        <DialogHeader className="mb-2">
           <DialogTitle className="text-2xl font-bold">
             {formConfig.title}
           </DialogTitle>
           <DialogDescription>{formConfig.description}</DialogDescription>
         </DialogHeader>
-
-        {message && (
-          <Alert
-            variant={!message.ok ? "destructive" : "default"}
-            className=" border-none absolute top-[100px] "
-          >
-            {!message.ok ? (
-              <AlertCircle className="w-12 h-12 text-red-500" />
-            ) : (
-              <Check className="w-12 h-12 stroke-green-500" />
-            )}
-            <AlertDescription className={`${message.ok && "text-green-500"}`}>
-              {message.message}
-            </AlertDescription>
-          </Alert>
-        )}
 
         <div className="space-y-6">
           {Object.keys(groupedFields).map((area) => {
@@ -158,7 +141,23 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
             );
           })}
 
-          <div className="pt-4 flex justify-end">
+          {message && (
+            <Alert
+              variant={!message.ok ? "destructive" : "default"}
+              className="border-none absolute left-0 bottom-[30px] w-fit"
+            >
+              {!message.ok ? (
+                <AlertCircle className="w-12 h-12 text-red-500" />
+              ) : (
+                <Check className="w-12 h-12 stroke-green-500" />
+              )}
+              <AlertDescription className={`${message.ok && "text-green-500"}`}>
+                {message.message}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <div className="pt-6 flex justify-end">
             <Button
               type="button"
               onClick={handleSubmit}
