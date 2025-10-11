@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ProductRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { ProductStatus } from "@/types/products";
+import { ProductStatus, SubmitData } from "@/types/products";
 
 interface Filters {
   status?: ProductStatus;
@@ -68,6 +68,33 @@ export async function GET(req: NextRequest, res: NextResponse) {
     );
   } catch (error) {
     console.log("Error while fetching organization's products ", error);
+    return NextResponse.json(
+      { error: "Internal Server Error :" + error },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  const body: SubmitData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const response = await ProductRepository.Create(orgId, body);
+  } catch (error) {
+    console.log("Error while creating a new Product", error);
     return NextResponse.json(
       { error: "Internal Server Error :" + error },
       { status: 500 }

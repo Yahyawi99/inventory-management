@@ -167,7 +167,7 @@ export const categoryRepository = {
     description: string
   ): Promise<Category | null> {
     try {
-      const category = Prisma.category.create({
+      const category = await Prisma.category.create({
         data: {
           organizationId: orgId,
           name,

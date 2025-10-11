@@ -205,7 +205,7 @@ model Invitation {
 
 // Item in the inventory
 model Product {
-  id          String   @id @map("_id")
+  id          String   @id @default(uuid()) @map("_id")
   name        String
   description String?
   sku         String

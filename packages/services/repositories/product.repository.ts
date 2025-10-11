@@ -13,6 +13,15 @@ interface SortConfig {
   direction: "desc" | "asc";
 }
 
+interface SubmitData {
+  name: string;
+  description?: string;
+  sku: string;
+  barcode?: string;
+  price: number;
+  categoryId: string;
+}
+
 export const ProductRepository = {
   async findMany(
     orgId: string,
@@ -169,6 +178,22 @@ export const ProductRepository = {
     } catch (e) {
       console.log("Error while fetching order " + id);
       console.log(e);
+    }
+  },
+
+  async Create(orgId: string, data: SubmitData): Promise<Product | null> {
+    try {
+      const product = await Prisma.product.create({
+        data: {
+          organizationId: orgId,
+          ...data,
+        },
+      });
+
+      return product;
+    } catch (error) {
+      console.log("Error while creating a new Product: ", error);
+      return null;
     }
   },
 };
