@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { Product, ProductsSummaryMetrics } from "@/types/products";
+import { Product, ProductsSummaryMetrics, SubmitData } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
 import {
   Header,
@@ -18,13 +18,14 @@ import {
   SortConfig,
   Pagination,
   FilterDrawerData,
+  FormConfig,
 } from "app-core/src/types";
 import {
   getProductFilterDrawerData,
   productSortableFields,
   productCategoryFilters,
   tableColumns,
-  productFormConfig,
+  getProductFormConfig,
 } from "@/constants/products";
 import { buildProductsApiUrl } from "@/utils/products";
 import { exportOrdersAsJson } from "@/utils/shared";
@@ -43,6 +44,8 @@ export default function Products() {
 
   const [productFilterDrawerData, setProductFilterDrawerData] =
     useState<FilterDrawerData | null>(null);
+  const [productFormConfig, setProductFormConfig] =
+    useState<FormConfig<SubmitData> | null>(null);
 
   const [summaryProducts, setSummaryProducts] = useState<Product[]>([]);
   const [isFetchingSummaryProducts, setIsFetchingSummaryProducts] =
@@ -204,6 +207,7 @@ export default function Products() {
   // fetch categories
   useEffect(() => {
     getProductFilterDrawerData().then(setProductFilterDrawerData);
+    getProductFormConfig().then(setProductFormConfig);
   }, []);
 
   return (

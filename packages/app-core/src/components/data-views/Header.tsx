@@ -5,7 +5,7 @@ import { Button } from "..";
 interface Props<T> {
   exportData: () => void;
   data: HeaderData;
-  formConfig: FormConfig<T>;
+  formConfig: FormConfig<T> | null;
   secondaryFormConfig?: FormConfig<T>;
 }
 
@@ -43,7 +43,8 @@ export function Header<T>({
           <span>Export</span>
         </Button>
 
-        <CreationForm formConfig={formConfig} />
+        {formConfig && <CreationForm formConfig={formConfig} />}
+
         {secondaryFormConfig && (
           <CreationForm formConfig={secondaryFormConfig} />
         )}

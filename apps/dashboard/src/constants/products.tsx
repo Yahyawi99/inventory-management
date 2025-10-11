@@ -1,4 +1,4 @@
-import { Product } from "@/types/products";
+import { Product, SubmitData } from "@/types/products";
 import {
   buildCategoriesOptions,
   getProductStockStatusDisplay,
@@ -55,80 +55,81 @@ export const headerData = {
   buttonTxt: "Create Product",
 };
 
+// ===================
 // Creation Form
-export const productFormConfig: FormConfig = {
-  title: "Add New Product",
-  description: "Fill in the details for the new product.",
-  entityName: "Product",
-  fields: [
-    {
-      name: "name",
-      label: "Product Name",
-      type: "text",
-      required: true,
-      placeholder: "Wireless Headset X20",
-      gridArea: "1/2",
+
+export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
+  const categoryOptions = await buildCategoriesOptions();
+  const formattedCategories = categoryOptions.map((element, i) => {
+    return { id: "cat-" + i, name: element.value };
+  });
+
+  return {
+    title: "Add New Product",
+    description: "Fill in the details for the new product.",
+    entityName: "Product",
+    fields: [
+      {
+        name: "name",
+        label: "Product Name",
+        type: "text",
+        required: true,
+        placeholder: "Wireless Headset X20",
+        gridArea: "1",
+      },
+      {
+        name: "sku",
+        label: "SKU",
+        type: "text",
+        required: true,
+        placeholder: "WHX20-BLK",
+        gridArea: "1/2",
+      },
+      {
+        name: "price",
+        label: "Price ($)",
+        type: "number",
+        required: true,
+        placeholder: "199.99",
+        gridArea: "1/2",
+        step: 0.01,
+      },
+      {
+        name: "barcode",
+        label: "Barcode (EAN)",
+        type: "text",
+        required: false,
+        placeholder: "123456789012",
+        gridArea: "1/2",
+      },
+      {
+        name: "categoryId",
+        label: "Category",
+        type: "select",
+        required: true,
+        options: formattedCategories,
+        gridArea: "1/2",
+      },
+      {
+        name: "description",
+        label: "Description",
+        type: "textarea",
+        required: false,
+        placeholder: "Detailed product description...",
+        gridArea: "1",
+        rows: 4,
+      },
+    ],
+    onSubmit: async (
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      // Your API call here
+      console.log("Submitting product:", data);
+      // await createProduct(data);
+      return { ok: true, message: "string" };
     },
-    {
-      name: "sku",
-      label: "SKU",
-      type: "text",
-      required: true,
-      placeholder: "WHX20-BLK",
-      gridArea: "1/2",
-    },
-    {
-      name: "price",
-      label: "Price ($)",
-      type: "number",
-      required: true,
-      placeholder: "199.99",
-      gridArea: "1/2",
-      step: 0.01,
-    },
-    {
-      name: "barcode",
-      label: "Barcode (EAN)",
-      type: "text",
-      required: false,
-      placeholder: "123456789012",
-      gridArea: "1/2",
-    },
-    {
-      name: "categoryId",
-      label: "Category",
-      type: "select",
-      required: true,
-      options: [
-        { id: "cat-1", name: "Electronics" },
-        { id: "cat-2", name: "Accessories" },
-        { id: "cat-3", name: "Audio" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "inStock",
-      label: "In Stock",
-      type: "checkbox",
-      gridArea: "1/2",
-      defaultValue: true,
-    },
-    {
-      name: "description",
-      label: "Description",
-      type: "textarea",
-      required: false,
-      placeholder: "Detailed product description...",
-      gridArea: "1",
-      rows: 4,
-    },
-  ],
-  onSubmit: async (data) => {
-    // Your API call here
-    console.log("Submitting product:", data);
-    // await createProduct(data);
-  },
-};
+  };
+}
 
 // /=========================================
 

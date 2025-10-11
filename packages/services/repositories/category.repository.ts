@@ -1,10 +1,9 @@
-import { ProductStatus } from "@/types/products";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
 import { Category } from "database/generated/prisma/client";
 
 interface Filters {
-  status?: ProductStatus;
+  status?: "All" | "In Stock" | "Low Stock" | "Out of Stock";
   search?: string;
 }
 

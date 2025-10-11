@@ -56,3 +56,12 @@ export interface ProductsSummaryMetrics {
 }
 
 export type ProductStatus = "All" | "In Stock" | "Low Stock" | "Out of Stock";
+
+export interface SubmitData {
+  name: String;
+  description?: String;
+  sku: String;
+  barcode?: String;
+  price: Number;
+  categoryId: String;
+}
