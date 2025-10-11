@@ -95,9 +95,27 @@ export async function POST(req: NextRequest) {
     const response = await ProductRepository.Create(orgId, body);
   } catch (error) {
     console.log("Error while creating a new Product", error);
-    return NextResponse.json(
-      { error: "Internal Server Error :" + error },
-      { status: 500 }
-    );
+
+    if (
+      error instanceof Error &&
+      error.message.includes("Product_organizationId_sku_key")
+    )
+      return NextResponse.json(
+        { error: "Product SKU already exist!" },
+        { status: 500 }
+      );
+    else if (
+      error instanceof Error &&
+      error.message.includes("Product_organizationId_barcode_key")
+    )
+      return NextResponse.json(
+        { error: "Product BARCODE already exist!" },
+        { status: 500 }
+      );
+    else
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
   }
 }

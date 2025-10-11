@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FormConfig, FormField, HeaderData } from "../../types";
+import { FormConfig, FormField } from "../../types";
 import { renderField } from "../../utils/renderField";
 import {
   Alert,

@@ -61,7 +61,7 @@ export const headerData = {
 export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
   const categoryOptions = await buildCategoriesOptions();
   const formattedCategories = categoryOptions.map((element, i) => {
-    return { id: "cat-" + i, name: element.value };
+    return { id: element.id, name: element.value };
   });
 
   return {
@@ -123,10 +123,51 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
     onSubmit: async (
       data: SubmitData
     ): Promise<{ ok: boolean; message: string }> => {
-      // Your API call here
-      console.log("Submitting product:", data);
-      // await createProduct(data);
-      return { ok: true, message: "string" };
+      const { name, description, sku, barcode, price, categoryId } = data;
+
+      if (!name || !sku || !price || !price || !categoryId) {
+        return {
+          ok: false,
+          message: "Please fill out all the required fields!",
+        };
+      }
+
+      try {
+        const response = await fetch("/api/inventory/product", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            description: description ? description : "",
+            sku,
+            barcode: barcode ? barcode : "",
+            price,
+            categoryId,
+          }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: "Product created successfully.",
+        };
+      } catch (error) {
+        console.log("Failed to create Product");
+        return {
+          ok: false,
+          message:
+            error instanceof Error ? error.message : "Failed to create Product",
+        };
+      }
     },
   };
 }

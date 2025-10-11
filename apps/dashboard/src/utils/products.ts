@@ -121,8 +121,8 @@ export const buildCategoriesOptions = async () => {
   const { categories } = await response.json();
 
   const categoriesOptions = categories?.map((category: Category) => {
-    const { name } = category;
-    return { label: name, value: name };
+    const { name, _id } = category;
+    return { id: _id, label: name, value: name };
   });
 
   return [{ label: "All Products", value: "All" }, ...categoriesOptions];
