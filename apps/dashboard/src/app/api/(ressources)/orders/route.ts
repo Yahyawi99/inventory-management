@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { OrderRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { CustomerType, OrderStatus, OrderType } from "@/types/orders";
+import {
+  CustomerType,
+  OrderStatus,
+  OrderType,
+  SubmitData,
+} from "@/types/orders";
 
 interface Filters {
   status?: OrderStatus[];
@@ -82,7 +87,32 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const body: SubmitData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+  const userId = data?.session?.userId as string;
+
+  if (!userId || !orgId) {
+    return NextResponse.json(
+      { error: "User and Organization id are required, check your session!" },
+      { status: 401 }
+    );
+  }
+
   try {
+    const response = await OrderRepository.create(orgId, userId, body);
+
+    return NextResponse.json(
+      {
+        message: "success",
+        order: response,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Failed to create an Order: ", error);
 
