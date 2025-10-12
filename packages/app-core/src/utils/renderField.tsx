@@ -6,6 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
+  Button,
+  Label,
 } from "../components";
 import { FormField } from "../types";
 
@@ -22,6 +24,164 @@ export const renderField = (
   };
 
   switch (field.type) {
+    case "repeater":
+      const items = formData[field.name] || field.defaultValue || [{}];
+
+      return (
+        <div className="space-y-3 col-span-full">
+          <div className="flex items-center justify-between">
+            <Label>
+              {field.label}{" "}
+              {field.required && <span className="text-red-500">*</span>}
+            </Label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const newItems = [...items, {}];
+                handleChange(field.name, newItems);
+              }}
+              className="flex items-center gap-1 hover:bg-sidebar hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+              Add Line
+            </Button>
+          </div>
+
+          <div className="space-y-3">
+            {items.map((item: any, index: number) => {
+              // Calculate subtotal for this line
+              const quantity = parseFloat(item.quantity) || 0;
+              const unitPrice = parseFloat(item.unitPrice) || 0;
+              const subtotal = quantity * unitPrice;
+
+              return (
+                <div
+                  key={index}
+                  className="border rounded-lg p-4 bg-gray-50 space-y-3"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      Line {index + 1}
+                    </span>
+                    {items.length > (field.minItems || 1) && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const newItems = items.filter(
+                            (_: any, i: number) => i !== index
+                          );
+                          handleChange(field.name, newItems);
+                        }}
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 px-2"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 6h18" />
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        </svg>
+                        <span className="ml-1">Remove</span>
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {field.fields?.map((subField: FormField) => {
+                      const subFieldValue =
+                        item[subField.name] ?? subField.defaultValue ?? "";
+
+                      return (
+                        <div key={subField.name} className="space-y-1.5">
+                          <Label
+                            htmlFor={`${field.name}-${index}-${subField.name}`}
+                          >
+                            {subField.label}{" "}
+                            {subField.required && (
+                              <span className="text-red-500">*</span>
+                            )}
+                          </Label>
+                          {renderField(
+                            {
+                              ...subField,
+                              name: `${field.name}-${index}-${subField.name}`,
+                            },
+                            {
+                              [`${field.name}-${index}-${subField.name}`]:
+                                subFieldValue,
+                            },
+                            (name: string, value: any) => {
+                              const newItems = [...items];
+                              newItems[index] = {
+                                ...newItems[index],
+                                [subField.name]: value,
+                              };
+                              handleChange(field.name, newItems);
+                            }
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {subtotal > 0 && (
+                    <div className="text-right pt-2 border-t">
+                      <span className="text-sm font-semibold">
+                        Subtotal: ${subtotal.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Total Amount Display */}
+          {items.length > 0 && (
+            <div className="bg-sidebar text-white p-4 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold">Total Amount:</span>
+                <span className="text-2xl font-bold">
+                  $
+                  {items
+                    .reduce((sum: number, item: any) => {
+                      const quantity = parseFloat(item.quantity) || 0;
+                      const unitPrice = parseFloat(item.unitPrice) || 0;
+                      return sum + quantity * unitPrice;
+                    }, 0)
+                    .toFixed(2)}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+
     case "select":
       return (
         <Select
@@ -33,7 +193,7 @@ export const renderField = (
             <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
           </SelectTrigger>
           <SelectContent>
-            {field.options.map((option) => {
+            {field.options?.map((option) => {
               return (
                 <SelectItem key={option.id} value={option.id}>
                   {option.name}

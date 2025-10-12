@@ -32,6 +32,16 @@ interface SortConfig {
   direction: "desc" | "asc";
 }
 
+interface SubmitData {
+  orderNumber: string;
+  orderDate: Date;
+  status: OrderStatus;
+  totalAmount: number;
+  orderType: OrderType;
+  customerId: string | null;
+  supplierId: string | null;
+}
+
 export const OrderRepository = {
   async findMany(
     orgId: string,
@@ -104,7 +114,7 @@ export const OrderRepository = {
       return { totalPages, orders: res };
     } catch (e) {
       console.log("Error while fetching orders: ", e);
-      return null;
+      throw e;
     }
   },
 
@@ -117,7 +127,22 @@ export const OrderRepository = {
       });
     } catch (e) {
       console.log("Error while fetching order " + id);
-      console.log(e);
+      throw e;
+    }
+  },
+
+  async create(orgId: string, userId: string, data: SubmitData) {
+    try {
+      const order = await Prisma.order.create({
+        data: {
+          organizationId: orgId,
+          userId,
+          ...data,
+        },
+      });
+    } catch (error) {
+      console.log("Failed to create an Order: ", error);
+      throw error;
     }
   },
 };

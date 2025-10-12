@@ -215,6 +215,7 @@ export async function getOrderFormConfig(
   organizationId: string
 ): Promise<FormConfig<SubmitData>> {
   const data = await getCustomersAndSuppliers(organizationId);
+  // const products = await getProducts(organizationId); // Fetch products for order lines
 
   const customers = data.customers.map((customer) => ({
     id: customer.id,
@@ -225,6 +226,14 @@ export async function getOrderFormConfig(
     id: supplier.id,
     name: supplier.name,
   }));
+
+  // const productOptions = products.map((product) => ({
+  //   id: product.id,
+  //   name: product.name,
+  //   price: product.price, // Include price for auto-filling unit price
+  // }));
+
+  const productOptions: any[] = [];
 
   return {
     title: "Create New Order",
@@ -300,14 +309,6 @@ export async function getOrderFormConfig(
         gridArea: "1/2",
       },
       {
-        name: "totalAmount",
-        label: "Total Amount",
-        type: "number",
-        required: true,
-        placeholder: "0.00",
-        gridArea: "1/2",
-      },
-      {
         name: "notes",
         label: "Internal Notes",
         type: "textarea",
@@ -316,30 +317,112 @@ export async function getOrderFormConfig(
         gridArea: "1",
         rows: 3,
       },
+      {
+        name: "orderLines",
+        label: "Order Lines",
+        type: "repeater",
+        required: true,
+        gridArea: "1",
+        minItems: 1,
+        defaultValue: [{}],
+        fields: [
+          {
+            name: "productId",
+            label: "Product",
+            type: "select",
+            required: true,
+            options: productOptions,
+            gridArea: "1/3",
+          },
+          {
+            name: "quantity",
+            label: "Quantity",
+            type: "number",
+            required: true,
+            defaultValue: 1,
+            min: 1,
+            gridArea: "1/3",
+          },
+          {
+            name: "unitPrice",
+            label: "Unit Price",
+            type: "number",
+            required: true,
+            defaultValue: 0,
+            min: 0,
+            step: 0.01,
+            gridArea: "1/3",
+          },
+        ],
+      },
     ],
     onSubmit: async (
       data: SubmitData
     ): Promise<{ ok: boolean; message: string }> => {
-      // Transform data to match Order schema
+      return { ok: true, message: "" };
+      // Validate at least one order line exists
+      // if (!data.orderLines || data.orderLines.length === 0) {
+      //   return {
+      //     ok: false,
+      //     message: "Order must have at least one order line",
+      //   };
+      // }
+
+      // // Validate all order lines have required fields
+      // const invalidLines = data.orderLines.filter(
+      //   (line) => !line.productId || line.quantity <= 0 || line.unitPrice < 0
+      // );
+
+      // if (invalidLines.length > 0) {
+      //   return {
+      //     ok: false,
+      //     message:
+      //       "All order lines must have a product, valid quantity, and price",
+      //   };
+      // }
+
+      // // Calculate total amount from order lines
+      // const totalAmount = data.orderLines.reduce(
+      //   (sum: number, line: any) => sum + line.quantity * line.unitPrice,
+      //   0
+      // );
+
+      // // Transform data to match Order schema
       // const orderData = {
       //   orderNumber: data.orderNumber,
       //   orderDate: new Date(data.orderDate),
       //   status: data.status,
-      //   totalAmount: parseFloat(data.totalAmount),
+      //   totalAmount: totalAmount,
       //   orderType: data.orderType,
-      //   organizationId: data.organizationId, // Should be passed from context
-      //   userId: data.userId, // Should be passed from context
+      //   organizationId: organizationId,
+      //   userId: data.userId, // Should be passed from context/session
       //   customerId: data.orderType === "SALES" ? data.customerId : null,
       //   supplierId: data.orderType === "PURCHASE" ? data.supplierId : null,
+      //   notes: data.notes || null,
+      //   orderLines: data.orderLines.map((line: any) => ({
+      //     productId: line.productId,
+      //     quantity: parseInt(line.quantity),
+      //     unitPrice: parseFloat(line.unitPrice),
+      //   })),
       // };
 
-      // console.log("Submitting order:", orderData);
-      return { ok: true, message: "string" };
-      // await createOrder(orderData);
+      // try {
+      //   console.log("Submitting order:", orderData);
+      //   // await createOrder(orderData);
+      //   return {
+      //     ok: true,
+      //     message: `Order ${data.orderNumber} created successfully with ${data.orderLines.length} line(s)`,
+      //   };
+      // } catch (error) {
+      //   console.error("Error creating order:", error);
+      //   return {
+      //     ok: false,
+      //     message: "Failed to create order. Please try again.",
+      //   };
+      // }
     },
   };
 }
-
 // --- SALES ORDER FORM CONFIG ---
 export const salesOrderFormConfig: FormConfig<SubmitData> = {
   title: "Create New Order",

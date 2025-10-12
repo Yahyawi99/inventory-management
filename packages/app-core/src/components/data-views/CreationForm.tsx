@@ -106,59 +106,72 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[450px] rounded-2xl p-6">
-        <DialogHeader className="mb-2">
+      <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
+        <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
           <DialogTitle className="text-2xl font-bold">
             {formConfig.title}
           </DialogTitle>
           <DialogDescription>{formConfig.description}</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {Object.keys(groupedFields).map((area) => {
-            const fields = groupedFields[area];
-            const isHalfWidth = area === "1/2";
+        <div className="px-6 pb-6 overflow-y-auto flex-1">
+          <div className="space-y-6">
+            {Object.keys(groupedFields).map((area) => {
+              const fields = groupedFields[area];
+              const isHalfWidth = area === "1/2";
 
-            return (
-              <div
-                key={area}
-                className={`grid gap-5 ${
-                  isHalfWidth ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"
-                }`}
-              >
-                {fields.map((field: FormField) => {
-                  // Check if field should be visible based on dependsOn condition
-                  const shouldShow =
-                    !field.dependsOn ||
-                    formData[field.dependsOn.field] === field.dependsOn.value;
+              return (
+                <div
+                  key={area}
+                  className={`grid gap-5 ${
+                    isHalfWidth ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"
+                  }`}
+                >
+                  {fields.map((field: FormField) => {
+                    // Check if field should be visible based on dependsOn condition
+                    const shouldShow =
+                      !field.dependsOn ||
+                      formData[field.dependsOn.field] === field.dependsOn.value;
 
-                  if (!shouldShow) return null;
+                    if (!shouldShow) return null;
 
-                  return (
-                    <div key={field.name} className="space-y-1.5">
-                      <Label htmlFor={field.name}>
-                        {field.label}{" "}
-                        {field.required && (
-                          <span className="text-red-500">*</span>
-                        )}
-                      </Label>
-                      {renderField(field, formData, handleChange)}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+                    // Repeater fields span full width
+                    if (field.type === "repeater") {
+                      return (
+                        <div key={field.name} className="col-span-full">
+                          {renderField(field, formData, handleChange)}
+                        </div>
+                      );
+                    }
 
+                    return (
+                      <div key={field.name} className="space-y-1.5">
+                        <Label htmlFor={field.name}>
+                          {field.label}{" "}
+                          {field.required && (
+                            <span className="text-red-500">*</span>
+                          )}
+                        </Label>
+                        {renderField(field, formData, handleChange)}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="px-6 pb-6 pt-4 border-t flex-shrink-0 bg-white">
           {message && (
             <Alert
               variant={!message.ok ? "destructive" : "default"}
-              className="border-none absolute left-0 bottom-[30px] w-fit"
+              className="mb-4"
             >
               {!message.ok ? (
-                <AlertCircle className="w-12 h-12 text-red-500" />
+                <AlertCircle className="w-4 h-4 text-red-500" />
               ) : (
-                <Check className="w-12 h-12 stroke-green-500" />
+                <Check className="w-4 h-4 stroke-green-500" />
               )}
               <AlertDescription className={`${message.ok && "text-green-500"}`}>
                 {message.message}
@@ -166,7 +179,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
             </Alert>
           )}
 
-          <div className="pt-6 flex justify-end">
+          <div className="flex justify-end">
             <Button
               type="button"
               onClick={handleSubmit}

@@ -111,6 +111,12 @@ interface CheckboxFieldConfig extends FormFieldBase {
   type: "checkbox";
 }
 
+interface RepeaterFieldConfig extends FormFieldBase {
+  type: "repeater";
+  minItems: number;
+  fields: FormField[];
+}
+
 interface DateFieldConfig extends FormFieldBase {
   type: "date";
 }
@@ -121,7 +127,8 @@ export type FormField =
   | TextareaFieldConfig
   | SelectFieldConfig
   | CheckboxFieldConfig
-  | DateFieldConfig;
+  | DateFieldConfig
+  | RepeaterFieldConfig;
 
 export interface FormConfig<T> {
   title: string;
