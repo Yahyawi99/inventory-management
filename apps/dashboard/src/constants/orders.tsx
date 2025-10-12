@@ -9,6 +9,7 @@ import {
 import { Order, OrderStatus, OrderType, SubmitData } from "@/types/orders";
 import { getOrderStatusDisplay } from "@/utils/orders";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
+import { getCustomersAndSuppliers } from "@/lib/actions/getCustomersAndSuppliers";
 
 export const OrderFilterDrawerData: FilterDrawerData = {
   header: {
@@ -210,9 +211,21 @@ export const headerData: HeaderData = {
 };
 
 // --- ORDER FORM CONFIG ---
-export async function getOrderFormConfig(): Promise<FormConfig<SubmitData>> {
-  const customers = [];
-  const suppliers = [];
+export async function getOrderFormConfig(
+  organizationId: string
+): Promise<FormConfig<SubmitData>> {
+  const data = await getCustomersAndSuppliers(organizationId);
+
+  const customers = data.customers.map((customer) => ({
+    id: customer.id,
+    name: customer.name,
+  }));
+
+  const suppliers = data.suppliers.map((supplier) => ({
+    id: supplier.id,
+    name: supplier.name,
+  }));
+
   return {
     title: "Create New Order",
     description:
@@ -235,11 +248,7 @@ export async function getOrderFormConfig(): Promise<FormConfig<SubmitData>> {
         label: "Customer",
         type: "select",
         required: false,
-        options: [
-          { id: "c-001", name: "Acme Corp" },
-          { id: "c-002", name: "Beta Retail" },
-          { id: "c-003", name: "Cali Distributors" },
-        ],
+        options: customers,
         gridArea: "1/2",
         dependsOn: {
           field: "orderType",
@@ -251,11 +260,7 @@ export async function getOrderFormConfig(): Promise<FormConfig<SubmitData>> {
         label: "Supplier",
         type: "select",
         required: false,
-        options: [
-          { id: "s-001", name: "Global Suppliers Inc" },
-          { id: "s-002", name: "Premium Wholesalers" },
-          { id: "s-003", name: "Quality Materials Ltd" },
-        ],
+        options: suppliers,
         gridArea: "1/2",
         dependsOn: {
           field: "orderType",

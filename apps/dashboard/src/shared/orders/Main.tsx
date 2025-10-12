@@ -9,6 +9,7 @@ import {
   ActiveFilters,
   OrderSummaryMetrics,
   OrderType,
+  SubmitData,
 } from "@/types/orders";
 import { buildOrdersApiUrl, getOrderSummaryMetrics } from "@/utils/orders";
 import { exportOrdersAsJson } from "@/utils/shared";
@@ -18,7 +19,7 @@ import {
   orderStatusFilters,
   tableColumns,
   headerData,
-  orderFormConfig,
+  getOrderFormConfig,
   purchaseOrderFormConfig,
   salesOrderFormConfig,
 } from "@/constants/orders";
@@ -29,7 +30,12 @@ import {
   TableView,
   DataTable,
 } from "app-core/src/components";
-import { MetricsData, SortConfig, Pagination } from "app-core/src/types";
+import {
+  MetricsData,
+  SortConfig,
+  Pagination,
+  FormConfig,
+} from "app-core/src/types";
 
 interface OrdersPageProps {
   type: OrderType | null;
@@ -42,6 +48,9 @@ export default function OrdersPage({ type }: OrdersPageProps) {
   const [summaryOrders, setSummaryOrders] = useState<Order[]>([]);
   const [isFetchingSummaryOrders, setIsFetchingSummaryOrders] = useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
+
+  const [orderFormConfig, setOrderFormConfig] =
+    useState<FormConfig<SubmitData> | null>(null);
 
   const [tableOrders, setTableOrders] = useState<Order[]>([]);
   const [isFetchingTableOrders, setIsFetchingTableOrders] = useState(true);
@@ -192,6 +201,13 @@ export default function OrdersPage({ type }: OrdersPageProps) {
       metricsData
     );
   };
+
+  // FormConfic data
+  useEffect(() => {
+    getOrderFormConfig(user?.activeOrganizationId as string).then(
+      setOrderFormConfig
+    );
+  }, [user]);
 
   if (error) {
     return (
