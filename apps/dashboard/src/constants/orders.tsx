@@ -6,7 +6,7 @@ import {
   HeaderData,
   FormConfig,
 } from "app-core/src/types";
-import { Order, OrderStatus, OrderType } from "@/types/orders";
+import { Order, OrderStatus, OrderType, SubmitData } from "@/types/orders";
 import { getOrderStatusDisplay } from "@/utils/orders";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
 
@@ -209,77 +209,134 @@ export const headerData: HeaderData = {
   buttonTxt: "Create Order",
 };
 
-// --- PURCHASE ORDER FORM CONFIG ---
-export const purchaseOrderFormConfig: FormConfig = {
-  title: "Create New Order",
-  description:
-    "Select the order type and fill in the details for the new transaction.",
-  entityName: "Order",
-  fields: [
-    {
-      name: "type",
-      label: "Order Type",
-      type: "text",
-      required: true,
-      readOnly: true,
-      defaultValue: "PURCHASE",
-      gridArea: "1/2",
+// --- ORDER FORM CONFIG ---
+export async function getOrderFormConfig(): Promise<FormConfig<SubmitData>> {
+  const customers = [];
+  const suppliers = [];
+  return {
+    title: "Create New Order",
+    description:
+      "Select the order type and fill in the details for the new transaction.",
+    entityName: "Order",
+    fields: [
+      {
+        name: "orderType",
+        label: "Order Type",
+        type: "select",
+        required: true,
+        options: [
+          { id: "PURCHASE", name: "Purchase Order" },
+          { id: "SALES", name: "Sales Order" },
+        ],
+        gridArea: "1/2",
+      },
+      {
+        name: "customerId",
+        label: "Customer",
+        type: "select",
+        required: false,
+        options: [
+          { id: "c-001", name: "Acme Corp" },
+          { id: "c-002", name: "Beta Retail" },
+          { id: "c-003", name: "Cali Distributors" },
+        ],
+        gridArea: "1/2",
+        dependsOn: {
+          field: "orderType",
+          value: "SALES",
+        },
+      },
+      {
+        name: "supplierId",
+        label: "Supplier",
+        type: "select",
+        required: false,
+        options: [
+          { id: "s-001", name: "Global Suppliers Inc" },
+          { id: "s-002", name: "Premium Wholesalers" },
+          { id: "s-003", name: "Quality Materials Ltd" },
+        ],
+        gridArea: "1/2",
+        dependsOn: {
+          field: "orderType",
+          value: "PURCHASE",
+        },
+      },
+      {
+        name: "orderDate",
+        label: "Order Date",
+        type: "date",
+        required: true,
+        defaultValue: new Date().toISOString().split("T")[0],
+        gridArea: "1/2",
+      },
+      {
+        name: "orderNumber",
+        label: "Order Number",
+        type: "text",
+        required: true,
+        placeholder: "PO-2024-001",
+        gridArea: "1/2",
+      },
+      {
+        name: "status",
+        label: "Order Status",
+        type: "select",
+        required: true,
+        defaultValue: "PENDING",
+        options: [
+          { id: "PENDING", name: "Pending" },
+          { id: "CONFIRMED", name: "Confirmed" },
+          { id: "PROCESSING", name: "Processing" },
+          { id: "SHIPPED", name: "Shipped" },
+          { id: "DELIVERED", name: "Delivered" },
+          { id: "CANCELLED", name: "Cancelled" },
+        ],
+        gridArea: "1/2",
+      },
+      {
+        name: "totalAmount",
+        label: "Total Amount",
+        type: "number",
+        required: true,
+        placeholder: "0.00",
+        gridArea: "1/2",
+      },
+      {
+        name: "notes",
+        label: "Internal Notes",
+        type: "textarea",
+        required: false,
+        placeholder: "Any special instructions or delivery details.",
+        gridArea: "1",
+        rows: 3,
+      },
+    ],
+    onSubmit: async (
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      // Transform data to match Order schema
+      // const orderData = {
+      //   orderNumber: data.orderNumber,
+      //   orderDate: new Date(data.orderDate),
+      //   status: data.status,
+      //   totalAmount: parseFloat(data.totalAmount),
+      //   orderType: data.orderType,
+      //   organizationId: data.organizationId, // Should be passed from context
+      //   userId: data.userId, // Should be passed from context
+      //   customerId: data.orderType === "SALES" ? data.customerId : null,
+      //   supplierId: data.orderType === "PURCHASE" ? data.supplierId : null,
+      // };
+
+      // console.log("Submitting order:", orderData);
+      return { ok: true, message: "string" };
+      // await createOrder(orderData);
     },
-    {
-      name: "partnerId",
-      label: "Customer/Supplier",
-      type: "select",
-      required: true,
-      options: [
-        { id: "p-001", name: "Acme Corp" },
-        { id: "p-002", name: "Beta Suppliers" },
-        { id: "p-003", name: "Cali Retail" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "orderDate",
-      label: "Order Date",
-      type: "text", // Using text for date input simulation
-      required: true,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "dueDate",
-      label: "Due Date",
-      type: "text", // Using text for date input simulation
-      required: false,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "reference",
-      label: "Reference Number",
-      type: "text",
-      required: false,
-      placeholder: "PO-4567-B",
-      gridArea: "1",
-    },
-    {
-      name: "notes",
-      label: "Internal Notes",
-      type: "textarea",
-      required: false,
-      placeholder: "Any special instructions or delivery details.",
-      gridArea: "1",
-      rows: 3,
-    },
-  ],
-  onSubmit: async (data: any) => {
-    // Your API call here
-    console.log("Submitting order:", data);
-    // await createOrder(data);
-  },
-};
+  };
+}
 
 // --- SALES ORDER FORM CONFIG ---
-export const salesOrderFormConfig: FormConfig = {
+export const salesOrderFormConfig: FormConfig<SubmitData> = {
   title: "Create New Order",
   description:
     "Select the order type and fill in the details for the new transaction.",
@@ -340,15 +397,17 @@ export const salesOrderFormConfig: FormConfig = {
       rows: 3,
     },
   ],
-  onSubmit: async (data: any) => {
+  onSubmit: async (
+    data: SubmitData
+  ): Promise<{ ok: boolean; message: string }> => {
     // Your API call here
-    console.log("Submitting order:", data);
+    return { ok: true, message: "" };
     // await createOrder(data);
   },
 };
 
-// --- ORDER FORM CONFIG ---
-export const orderFormConfig: FormConfig = {
+// --- PURCHASE ORDER FORM CONFIG ---
+export const purchaseOrderFormConfig: FormConfig<SubmitData> = {
   title: "Create New Order",
   description:
     "Select the order type and fill in the details for the new transaction.",
@@ -411,9 +470,11 @@ export const orderFormConfig: FormConfig = {
       rows: 3,
     },
   ],
-  onSubmit: async (data: any) => {
+  onSubmit: async (
+    data: SubmitData
+  ): Promise<{ ok: boolean; message: string }> => {
     // Your API call here
-    console.log("Submitting order:", data);
+    return { ok: true, message: "" };
     // await createOrder(data);
   },
 };

@@ -44,3 +44,13 @@ export interface OrderSummaryMetrics extends Metrics {
   totalCancelledOrdersChange: number;
   totalFulfilledOrdersChange: number;
 }
+
+export interface SubmitData {
+  orderNumber: string;
+  orderDate: Date;
+  status: OrderStatus;
+  totalAmount: number;
+  orderType: OrderType;
+  customerId: string | null;
+  supplierId: string | null;
+}

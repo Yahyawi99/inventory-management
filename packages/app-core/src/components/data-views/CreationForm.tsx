@@ -126,17 +126,26 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
                   isHalfWidth ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"
                 }`}
               >
-                {fields.map((field: FormField) => (
-                  <div key={field.name} className="space-y-1.5">
-                    <Label htmlFor={field.name}>
-                      {field.label}{" "}
-                      {field.required && (
-                        <span className="text-red-500">*</span>
-                      )}
-                    </Label>
-                    {renderField(field, formData, handleChange)}
-                  </div>
-                ))}
+                {fields.map((field: FormField) => {
+                  // Check if field should be visible based on dependsOn condition
+                  const shouldShow =
+                    !field.dependsOn ||
+                    formData[field.dependsOn.field] === field.dependsOn.value;
+
+                  if (!shouldShow) return null;
+
+                  return (
+                    <div key={field.name} className="space-y-1.5">
+                      <Label htmlFor={field.name}>
+                        {field.label}{" "}
+                        {field.required && (
+                          <span className="text-red-500">*</span>
+                        )}
+                      </Label>
+                      {renderField(field, formData, handleChange)}
+                    </div>
+                  );
+                })}
               </div>
             );
           })}

@@ -82,6 +82,7 @@ interface FormFieldBase {
   placeholder?: string;
   gridArea?: string;
   defaultValue?: any;
+  dependsOn?: { field: string; value: string };
 }
 
 interface TextFieldConfig extends FormFieldBase {
