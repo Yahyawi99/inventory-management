@@ -74,13 +74,13 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
   const alert = (data: { ok: boolean; message: string }) => {
     setMessage(data);
 
-    // setTimeout(
-    //   () => {
-    //     if (data.ok) window.location.reload();
-    //     setMessage(null);
-    //   },
-    //   data.ok ? 1000 : 3000
-    // );
+    setTimeout(
+      () => {
+        if (data.ok) window.location.reload();
+        setMessage(null);
+      },
+      data.ok ? 1000 : 3000
+    );
   };
 
   return (

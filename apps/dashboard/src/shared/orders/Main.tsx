@@ -204,9 +204,10 @@ export default function OrdersPage({ type }: OrdersPageProps) {
 
   // FormConfic data
   useEffect(() => {
-    getOrderFormConfig(user?.activeOrganizationId as string).then(
-      setOrderFormConfig
-    );
+    if (user?.activeOrganizationId)
+      getOrderFormConfig(user?.activeOrganizationId as string).then(
+        setOrderFormConfig
+      );
   }, [user]);
 
   if (error) {

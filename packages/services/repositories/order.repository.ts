@@ -32,7 +32,7 @@ interface SortConfig {
   direction: "desc" | "asc";
 }
 
-interface SubmitData {
+export interface SubmitData {
   orderNumber: string;
   orderDate: Date;
   status: OrderStatus;
@@ -40,6 +40,7 @@ interface SubmitData {
   orderType: OrderType;
   customerId: string | null;
   supplierId: string | null;
+  orderLines: { productId: string; quantity: number; unitPrice: number }[];
 }
 
 export const OrderRepository = {
@@ -132,14 +133,44 @@ export const OrderRepository = {
   },
 
   async create(orgId: string, userId: string, data: SubmitData) {
+    const {
+      orderType,
+      customerId,
+      supplierId,
+      orderDate,
+      orderNumber,
+      status,
+      totalAmount,
+      orderLines,
+    } = data;
+
     try {
       const order = await Prisma.order.create({
         data: {
-          organizationId: orgId,
           userId,
-          ...data,
+          organizationId: orgId,
+          orderType,
+          customerId,
+          supplierId,
+          orderDate,
+          orderNumber,
+          status,
+          totalAmount: Number(totalAmount),
         },
       });
+
+      orderLines.forEach(async (ol) => {
+        await Prisma.orderLine.create({
+          data: {
+            orderId: order.id,
+            productId: ol.productId,
+            quantity: Number(ol.quantity),
+            unitPrice: Number(ol.unitPrice),
+          },
+        });
+      });
+
+      return order;
     } catch (error) {
       console.log("Failed to create an Order: ", error);
       throw error;

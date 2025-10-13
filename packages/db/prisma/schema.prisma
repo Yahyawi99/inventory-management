@@ -393,7 +393,7 @@ model Order {
 
 // single product entry within an Order
 model OrderLine {
-  id        String   @id @map("_id")
+  id        String   @id @default(uuid()) @map("_id")
   quantity  Int
   unitPrice Float
   createdAt DateTime @default(now())

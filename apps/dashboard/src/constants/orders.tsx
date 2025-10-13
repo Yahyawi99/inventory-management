@@ -233,7 +233,10 @@ export async function getOrderFormConfig(
   //   price: product.price, // Include price for auto-filling unit price
   // }));
 
-  const productOptions: any[] = [];
+  const productOptions: any[] = [
+    { id: "id-0", name: "Ball" },
+    { id: "id-1", name: "PC" },
+  ];
 
   return {
     title: "Create New Order",
@@ -290,32 +293,22 @@ export async function getOrderFormConfig(
         type: "text",
         required: true,
         placeholder: "PO-2024-001",
-        gridArea: "1/2",
+        gridArea: "1",
       },
       {
         name: "status",
         label: "Order Status",
         type: "select",
         required: true,
-        defaultValue: "PENDING",
+        defaultValue: OrderStatus.Pending,
         options: [
-          { id: "PENDING", name: "Pending" },
-          { id: "CONFIRMED", name: "Confirmed" },
-          { id: "PROCESSING", name: "Processing" },
-          { id: "SHIPPED", name: "Shipped" },
-          { id: "DELIVERED", name: "Delivered" },
-          { id: "CANCELLED", name: "Cancelled" },
+          { id: OrderStatus.Pending, name: "Pending" },
+          { id: OrderStatus.Delivered, name: "Delivered" },
+          { id: OrderStatus.Processing, name: "Processing" },
+          { id: OrderStatus.Shipped, name: "Shipped" },
+          { id: OrderStatus.Cancelled, name: "Cancelled" },
         ],
         gridArea: "1/2",
-      },
-      {
-        name: "notes",
-        label: "Internal Notes",
-        type: "textarea",
-        required: false,
-        placeholder: "Any special instructions or delivery details.",
-        gridArea: "1",
-        rows: 3,
       },
       {
         name: "orderLines",
@@ -331,6 +324,7 @@ export async function getOrderFormConfig(
             label: "Product",
             type: "select",
             required: true,
+            defaultValue: "",
             options: productOptions,
             gridArea: "1/3",
           },
@@ -359,7 +353,6 @@ export async function getOrderFormConfig(
     onSubmit: async (
       data: SubmitData
     ): Promise<{ ok: boolean; message: string }> => {
-      console.log(data);
       const {
         orderType,
         customerId,
@@ -370,18 +363,48 @@ export async function getOrderFormConfig(
         orderLines,
       } = data;
 
-      if (!orderType || orderDate || orderNumber || status) {
+      const totalAmount = orderLines
+        .reduce(
+          (
+            sum: number,
+            ol: {
+              productId: string;
+              quantity: number;
+              unitPrice: number;
+            }
+          ) => {
+            const quantity = ol.quantity || 0;
+            const unitPrice = ol.unitPrice || 0;
+            return sum + quantity * unitPrice;
+          },
+          0
+        )
+        .toFixed(2);
+
+      if (!orderType || !orderDate || !orderNumber || !status) {
         return { ok: false, message: "Please fill in the required fields!" };
       }
 
       if (!orderLines.length) {
         return { ok: false, message: "You must have at least one orderLine!" };
+      } else {
+        const invalidLines = orderLines.filter(
+          (line) => !line.productId || !line.quantity || !line.unitPrice
+        );
+
+        if (invalidLines.length > 0) {
+          return {
+            ok: false,
+            message:
+              "All order lines must have a product, valid quantity, and price",
+          };
+        }
       }
 
       if (!customerId && !supplierId) {
         return {
           ok: false,
-          message: "Please provide at either customerId or supplierId",
+          message: "Please provide either customerId or supplierId",
         };
       }
 
@@ -394,7 +417,7 @@ export async function getOrderFormConfig(
           body: JSON.stringify({
             ...data,
             orderDate: new Date(data.orderDate),
-            orderNumber: parseInt(data.orderNumber),
+            totalAmount,
           }),
         });
 
