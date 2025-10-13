@@ -359,7 +359,67 @@ export async function getOrderFormConfig(
     onSubmit: async (
       data: SubmitData
     ): Promise<{ ok: boolean; message: string }> => {
-      return { ok: true, message: "" };
+      console.log(data);
+      const {
+        orderType,
+        customerId,
+        supplierId,
+        orderDate,
+        orderNumber,
+        status,
+        orderLines,
+      } = data;
+
+      if (!orderType || orderDate || orderNumber || status) {
+        return { ok: false, message: "Please fill in the required fields!" };
+      }
+
+      if (!orderLines.length) {
+        return { ok: false, message: "You must have at least one orderLine!" };
+      }
+
+      if (!customerId && !supplierId) {
+        return {
+          ok: false,
+          message: "Please provide at either customerId or supplierId",
+        };
+      }
+
+      try {
+        const response = await fetch("/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...data,
+            orderDate: new Date(data.orderDate),
+            orderNumber: parseInt(data.orderNumber),
+          }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error.message,
+          };
+        }
+
+        return {
+          ok: true,
+          message: "Order created Successfully",
+        };
+      } catch (error) {
+        return {
+          ok: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to create an Order!",
+        };
+      }
+
       // Validate at least one order line exists
       // if (!data.orderLines || data.orderLines.length === 0) {
       //   return {

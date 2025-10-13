@@ -53,4 +53,6 @@ export interface SubmitData {
   orderType: OrderType;
   customerId: string | null;
   supplierId: string | null;
+  notes: string;
+  orderLines: { productId: string; quantity: number; unitPrice: number }[];
 }
