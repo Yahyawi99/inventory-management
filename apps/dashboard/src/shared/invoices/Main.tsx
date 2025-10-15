@@ -7,6 +7,7 @@ import {
   ActiveFilters,
   Invoice,
   InvoiceSummaryMetrics,
+  SubmitData,
 } from "@/types/invoices";
 import {
   getInvoiceSummaryMetrics,
@@ -19,7 +20,7 @@ import {
   InvoiceStatusFilters,
   tableColumns,
   headerData,
-  invoiceFormConfig,
+  getInvoiceFormConfig,
 } from "@/constants/invoices";
 import {
   Header,
@@ -28,7 +29,12 @@ import {
   TableView,
   DataTable,
 } from "app-core/src/components";
-import { MetricsData, SortConfig, Pagination } from "app-core/src/types";
+import {
+  MetricsData,
+  SortConfig,
+  Pagination,
+  FormConfig,
+} from "app-core/src/types";
 
 export default function InvoicesPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -38,6 +44,9 @@ export default function InvoicesPage() {
   const [isFetchingSummaryInvoices, setIsFetchingSummaryInvoices] =
     useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
+
+  const [invoiceFormConfig, setInvoiceFormConfig] =
+    useState<FormConfig<SubmitData> | null>(null);
 
   const [tableInvoices, setTableInvoices] = useState<Invoice[]>([]);
   const [isFetchingTableInvoices, setIsFetchingTableInvoices] = useState(true);
@@ -193,6 +202,13 @@ export default function InvoicesPage() {
     );
   };
 
+  // form config data
+  useEffect(() => {
+    if (user)
+      getInvoiceFormConfig(user?.activeOrganizationId as string).then(
+        setInvoiceFormConfig
+      );
+  }, [user]);
   if (error) {
     return (
       <div className="p-8 text-center text-red-500">

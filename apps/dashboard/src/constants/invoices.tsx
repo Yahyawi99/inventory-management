@@ -1,4 +1,5 @@
-import { Invoice } from "@/types/invoices";
+import { getOrders } from "@/lib/actions/getOrders";
+import { Invoice, SubmitData } from "@/types/invoices";
 import { getInvoiceStatusDisplay } from "@/utils/invoices";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
 import { InvoiceStatus, OrderType } from "@database/generated/prisma";
@@ -220,74 +221,145 @@ export const headerData: HeaderData = {
   buttonTxt: "Create Invoice",
 };
 
-export const invoiceFormConfig: FormConfig = {
-  title: "Create New Invoice",
-  description: "Generate a new invoice, typically linked to a completed order.",
-  entityName: "Invoice",
-  fields: [
-    {
-      name: "orderId",
-      label: "Source Order",
-      type: "select",
-      required: true,
-      options: [
-        { id: "ord-901", name: "Order #901 (Acme Corp)" },
-        { id: "ord-902", name: "Order #902 (Beta Suppliers)" },
-      ],
-      placeholder: "Select the order to invoice",
-      gridArea: "1",
+export async function getInvoiceFormConfig(
+  organizationId: string
+): Promise<FormConfig<SubmitData>> {
+  const orders = await getOrders(organizationId);
+
+  const orderOptions = orders.map((order) => ({
+    id: order.id,
+    name: `${order.orderNumber} - ${
+      order.orderType
+    } - $${order.totalAmount.toFixed(2)}`,
+    totalAmount: order.totalAmount,
+  }));
+
+  return {
+    title: "Create New Invoice",
+    description:
+      "Generate an invoice for an existing order with payment terms.",
+    entityName: "Invoice",
+    fields: [
+      {
+        name: "orderId",
+        label: "Order",
+        type: "select",
+        required: true,
+        options: orderOptions,
+        gridArea: "1/2",
+        placeholder: "Select an order",
+      },
+      {
+        name: "invoiceNumber",
+        label: "Invoice Number",
+        type: "text",
+        required: true,
+        placeholder: "INV-2024-001",
+        gridArea: "1",
+      },
+      {
+        name: "invoiceDate",
+        label: "Invoice Date",
+        type: "date",
+        required: true,
+        defaultValue: new Date().toISOString().split("T")[0],
+        gridArea: "1/2",
+      },
+      {
+        name: "dueDate",
+        label: "Due Date",
+        type: "date",
+        required: true,
+        gridArea: "1/2",
+        placeholder: "Payment due date",
+      },
+      {
+        name: "totalAmount",
+        label: "Total Amount",
+        type: "number",
+        required: true,
+        placeholder: "0.00",
+        step: 0.01,
+        min: 0,
+        gridArea: "1/2",
+      },
+      {
+        name: "status",
+        label: "Invoice Status",
+        type: "select",
+        required: true,
+        defaultValue: "PENDING",
+        options: [
+          { id: InvoiceStatus.Pending, name: "Pending" },
+          { id: InvoiceStatus.Paid, name: "Paid" },
+          { id: InvoiceStatus.Overdue, name: "Overdue" },
+          { id: InvoiceStatus.Void, name: "Cancelled" },
+        ],
+        gridArea: "1/2",
+      },
+    ],
+    onSubmit: async (
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      const {
+        invoiceNumber,
+        invoiceDate,
+        dueDate,
+        totalAmount,
+        status,
+        orderId,
+      } = data;
+
+      if (
+        !invoiceNumber ||
+        !invoiceDate ||
+        !dueDate ||
+        !totalAmount ||
+        !status ||
+        !orderId
+      ) {
+        return {
+          ok: false,
+          message: "Please fill in all required field!",
+        };
+      }
+      if (new Date(invoiceDate) > new Date(dueDate)) {
+        return {
+          ok: false,
+          message: "Invoice date cannot be after the due date",
+        };
+      }
+
+      if (parseFloat(totalAmount) <= 0) {
+        return {
+          ok: false,
+          message: "Total amount must be greater than zero",
+        };
+      }
+
+      const invoiceData = {
+        invoiceNumber: invoiceNumber,
+        invoiceDate: new Date(invoiceDate),
+        dueDate: new Date(dueDate),
+        totalAmount: parseFloat(totalAmount),
+        status: status,
+        orderId: orderId,
+      };
+
+      try {
+        console.log("Submitting invoice:", invoiceData);
+        // await createInvoice(invoiceData);
+        return {
+          ok: true,
+          message: `Invoice ${invoiceNumber} created successfully`,
+        };
+      } catch (error) {
+        console.error("Error creating invoice:", error);
+        return {
+          ok: false,
+          message: "Failed to create invoice. Please try again.",
+        };
+      }
     },
-    {
-      name: "issueDate",
-      label: "Issue Date",
-      type: "text", // Using text for date input simulation
-      required: true,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "dueDate",
-      label: "Payment Due Date",
-      type: "text", // Using text for date input simulation
-      required: true,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "amount",
-      label: "Total Amount ($)",
-      type: "number",
-      required: true,
-      placeholder: "550.00",
-      gridArea: "1/2",
-      step: 0.01,
-    },
-    {
-      name: "status",
-      label: "Payment Status",
-      type: "select",
-      required: true,
-      options: [
-        { id: "draft", name: "Draft" },
-        { id: "sent", name: "Sent" },
-        { id: "paid", name: "Paid" },
-        { id: "void", name: "Void" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "paymentTerms",
-      label: "Payment Terms",
-      type: "textarea",
-      required: false,
-      placeholder: "e.g., Net 30 days.",
-      gridArea: "1",
-      rows: 2,
-    },
-  ],
-  onSubmit: async (data: any) => {
-    // Your API call here
-    console.log("Submitting invoice:", data);
-    // await createInvoice(data);
-  },
-};
+  };
+}

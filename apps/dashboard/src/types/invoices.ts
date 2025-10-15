@@ -34,3 +34,12 @@ export interface ActiveFilters {
   search?: string;
   orderType?: "All" | OrderType;
 }
+
+export interface SubmitData {
+  invoiceNumber: string;
+  invoiceDate: Date;
+  dueDate: Date;
+  totalAmount: string;
+  status: InvoiceStatus;
+  orderId: string;
+}
