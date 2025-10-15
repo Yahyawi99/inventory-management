@@ -9,7 +9,8 @@ import {
 import { Order, OrderStatus, OrderType, SubmitData } from "@/types/orders";
 import { getOrderStatusDisplay } from "@/utils/orders";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
-import { getCustomersAndSuppliers } from "@/lib/actions/getCustomersAndSuppliers";
+import { getFormConfigData } from "@/lib/actions/getFormConfigData";
+import { Product } from "@/types/products";
 
 export const OrderFilterDrawerData: FilterDrawerData = {
   header: {
@@ -214,8 +215,9 @@ export const headerData: HeaderData = {
 export async function getOrderFormConfig(
   organizationId: string
 ): Promise<FormConfig<SubmitData>> {
-  const data = await getCustomersAndSuppliers(organizationId);
-  // const products = await getProducts(organizationId); // Fetch products for order lines
+  try {
+  } catch (error) {}
+  const data = await getFormConfigData(organizationId);
 
   const customers = data.customers.map((customer) => ({
     id: customer.id,
@@ -227,16 +229,11 @@ export async function getOrderFormConfig(
     name: supplier.name,
   }));
 
-  // const productOptions = products.map((product) => ({
-  //   id: product.id,
-  //   name: product.name,
-  //   price: product.price, // Include price for auto-filling unit price
-  // }));
-
-  const productOptions: any[] = [
-    { id: "id-0", name: "Ball" },
-    { id: "id-1", name: "PC" },
-  ];
+  const products = data.products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+  }));
 
   return {
     title: "Create New Order",
@@ -325,7 +322,7 @@ export async function getOrderFormConfig(
             type: "select",
             required: true,
             defaultValue: "",
-            options: productOptions,
+            options: products,
             gridArea: "1/3",
           },
           {

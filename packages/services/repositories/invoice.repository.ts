@@ -4,7 +4,6 @@ import {
   InvoiceStatus,
   OrderType,
   Invoice,
-  Prisma as P,
 } from "database/generated/prisma/index.js";
 
 interface Filters {

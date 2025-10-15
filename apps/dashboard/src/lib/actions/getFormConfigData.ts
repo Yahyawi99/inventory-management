@@ -2,7 +2,7 @@
 
 import prisma from "@database/index";
 
-export async function getCustomersAndSuppliers(orgId: string) {
+export async function getFormConfigData(orgId: string) {
   if (!orgId) {
     throw new Error("Organization id is required");
   }
@@ -15,8 +15,13 @@ export async function getCustomersAndSuppliers(orgId: string) {
     where: { organizationId: orgId },
   });
 
+  const products = await prisma.product.findMany({
+    where: { organizationId: orgId },
+  });
+
   return {
     customers,
     suppliers,
+    products,
   };
 }

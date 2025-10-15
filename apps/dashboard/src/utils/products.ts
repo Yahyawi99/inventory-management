@@ -112,7 +112,9 @@ export const getTotalProductStockQuantity = (stockItems: StockItem[]) => {
 
 // Categories options for drawer filter
 export const buildCategoriesOptions = async () => {
-  const response = await fetch("/api/inventory/categories");
+  const response = await fetch(
+    `/api/inventory/categories?pageSize=${Infinity}`
+  );
 
   if (!response.ok) {
     throw new Error("Error while fetching categories for Products page");

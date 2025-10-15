@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     Number(searchParams.get("page")) <= 0
       ? 1
       : Number(searchParams.get("page"));
-  const pageSize = 10;
+  const pageSize = Number(searchParams.get("pageSize")) || 10;
 
   const data = await auth.api.getSession({
     headers: await headers(),

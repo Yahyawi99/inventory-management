@@ -181,6 +181,7 @@ export const ProductRepository = {
     }
   },
 
+  // add infinity to categories
   async Create(orgId: string, data: SubmitData): Promise<Product | null> {
     try {
       const product = await Prisma.product.create({

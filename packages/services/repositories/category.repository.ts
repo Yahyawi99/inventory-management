@@ -113,15 +113,24 @@ export const categoryRepository = {
     }
 
     // Facet
-    pipeline.push({
-      $facet: {
-        paginatedResults: [
-          { $skip: (page - 1) * pageSize },
-          { $limit: pageSize },
-        ],
-        totalCount: [{ $count: "count" }],
-      },
-    });
+    if (pageSize === Infinity) {
+      pipeline.push({
+        $facet: {
+          paginatedResults: [],
+          totalCount: [{ $count: "count" }],
+        },
+      });
+    } else {
+      pipeline.push({
+        $facet: {
+          paginatedResults: [
+            { $skip: (page - 1) * pageSize },
+            { $limit: pageSize },
+          ],
+          totalCount: [{ $count: "count" }],
+        },
+      });
+    }
 
     try {
       const response = await Prisma.category.aggregateRaw({
