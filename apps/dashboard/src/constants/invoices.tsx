@@ -323,6 +323,7 @@ export async function getInvoiceFormConfig(
           message: "Please fill in all required field!",
         };
       }
+
       if (new Date(invoiceDate) > new Date(dueDate)) {
         return {
           ok: false,
@@ -347,8 +348,22 @@ export async function getInvoiceFormConfig(
       };
 
       try {
-        console.log("Submitting invoice:", invoiceData);
-        // await createInvoice(invoiceData);
+        const response = await fetch("/api/invoices", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(invoiceData),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
         return {
           ok: true,
           message: `Invoice ${invoiceNumber} created successfully`,
