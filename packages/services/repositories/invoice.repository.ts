@@ -17,6 +17,15 @@ interface SortConfig {
   direction: "desc" | "asc";
 }
 
+interface SubmitData {
+  invoiceNumber: string;
+  invoiceDate: Date;
+  dueDate: Date;
+  totalAmount: number;
+  status: InvoiceStatus;
+  orderId: string;
+}
+
 export const InvoiceRepository = {
   async findMany(
     orgId: string,
@@ -172,6 +181,24 @@ export const InvoiceRepository = {
     } catch (e) {
       console.log("Error while fetching order " + id);
       console.log(e);
+    }
+  },
+
+  async create(orgId: string, userId: string, data: SubmitData) {
+    try {
+      const invoice = await Prisma.invoice.create({
+        data: {
+          organizationId: orgId,
+          userId,
+          ...data,
+          totalAmount: Number(data.totalAmount),
+        },
+      });
+
+      return invoice;
+    } catch (error) {
+      console.log("Failed to create invoice ", error);
+      throw error;
     }
   },
 };

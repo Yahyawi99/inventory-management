@@ -39,7 +39,7 @@ export interface SubmitData {
   invoiceNumber: string;
   invoiceDate: Date;
   dueDate: Date;
-  totalAmount: string;
+  totalAmount: number;
   status: InvoiceStatus;
   orderId: string;
 }

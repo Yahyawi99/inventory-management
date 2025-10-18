@@ -411,7 +411,7 @@ model OrderLine {
 
 // billing document generated for a sales order
 model Invoice {
-  id            String        @id @map("_id")
+  id            String        @id @default(uuid()) @map("_id")
   invoiceNumber String
   invoiceDate   DateTime      @default(now())
   dueDate       DateTime

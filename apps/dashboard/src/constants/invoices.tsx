@@ -331,7 +331,7 @@ export async function getInvoiceFormConfig(
         };
       }
 
-      if (parseFloat(totalAmount) <= 0) {
+      if (totalAmount <= 0) {
         return {
           ok: false,
           message: "Total amount must be greater than zero",
@@ -342,7 +342,7 @@ export async function getInvoiceFormConfig(
         invoiceNumber: invoiceNumber,
         invoiceDate: new Date(invoiceDate),
         dueDate: new Date(dueDate),
-        totalAmount: parseFloat(totalAmount),
+        totalAmount,
         status: status,
         orderId: orderId,
       };
