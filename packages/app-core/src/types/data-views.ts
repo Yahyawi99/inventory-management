@@ -104,7 +104,7 @@ interface TextareaFieldConfig extends FormFieldBase {
 
 interface SelectFieldConfig extends FormFieldBase {
   type: "select";
-  options: Array<{ id: string; name: string }>;
+  options: Array<{ id: string; name: string }> | null;
 }
 
 interface CheckboxFieldConfig extends FormFieldBase {

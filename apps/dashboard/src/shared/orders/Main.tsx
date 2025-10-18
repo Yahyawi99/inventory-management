@@ -20,8 +20,6 @@ import {
   tableColumns,
   headerData,
   getOrderFormConfig,
-  purchaseOrderFormConfig,
-  salesOrderFormConfig,
 } from "@/constants/orders";
 import {
   Header,
@@ -205,7 +203,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
   // FormConfic data
   useEffect(() => {
     if (user?.activeOrganizationId)
-      getOrderFormConfig(user?.activeOrganizationId as string).then(
+      getOrderFormConfig(user?.activeOrganizationId as string, type).then(
         setOrderFormConfig
       );
   }, [user]);
@@ -223,13 +221,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
       <Header
         data={headerData}
         exportData={exportData}
-        formConfig={
-          type === "PURCHASE"
-            ? purchaseOrderFormConfig
-            : type === "SALES"
-            ? salesOrderFormConfig
-            : orderFormConfig
-        }
+        formConfig={orderFormConfig}
       />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />

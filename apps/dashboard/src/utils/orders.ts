@@ -5,13 +5,13 @@ import {
   Metrics,
   OrderSummaryMetrics,
 } from "@/types/orders";
-import { OrderLine } from "@database/generated/prisma";
 import {
   getDateRangesForComparison,
   isDateWithinRange,
 } from "@/utils/dateHelpers";
 import { SortConfig, Pagination, StatusDisplay } from "app-core/src/types";
 import { calculatePercentageChange, getTotalOrderLineQuantity } from "./shared";
+import { getFormConfigData } from "@/lib/actions/getFormConfigData";
 
 // status styles for the orders table
 export const getOrderStatusDisplay = (status: OrderStatus): StatusDisplay => {
@@ -180,4 +180,31 @@ export const buildOrdersApiUrl = (
 
   const queryString = queryParams.toString();
   return `${base}${queryString ? `?${queryString}` : ""}`;
+};
+
+// FormConfig
+export const FetchFormConfigData = async (organizationId: string) => {
+  const data = await getFormConfigData(organizationId);
+
+  const customers = data.customers.map((customer) => ({
+    id: customer.id,
+    name: customer.name,
+  }));
+
+  const suppliers = data.suppliers.map((supplier) => ({
+    id: supplier.id,
+    name: supplier.name,
+  }));
+
+  const products = data.products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+  }));
+
+  return {
+    customers,
+    suppliers,
+    products,
+  };
 };

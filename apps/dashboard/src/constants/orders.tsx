@@ -7,7 +7,7 @@ import {
   FormConfig,
 } from "app-core/src/types";
 import { Order, OrderStatus, OrderType, SubmitData } from "@/types/orders";
-import { getOrderStatusDisplay } from "@/utils/orders";
+import { FetchFormConfigData, getOrderStatusDisplay } from "@/utils/orders";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
 import { getFormConfigData } from "@/lib/actions/getFormConfigData";
 import { Product } from "@/types/products";
@@ -212,28 +212,235 @@ export const headerData: HeaderData = {
 };
 
 // --- ORDER FORM CONFIG ---
+// export async function getOrderFormConfig(
+//   organizationId: string
+// ): Promise<FormConfig<SubmitData>> {
+//   const { customers, suppliers, products } = await FetchFormConfigData(
+//     organizationId
+//   );
+
+//   return {
+//     title: "Create New Order",
+//     description:
+//       "Select the order type and fill in the details for the new transaction.",
+//     entityName: "Order",
+//     fields: [
+//       {
+//         name: "orderType",
+//         label: "Order Type",
+//         type: "select",
+//         required: true,
+//         options: [
+//           { id: "PURCHASE", name: "Purchase Order" },
+//           { id: "SALES", name: "Sales Order" },
+//         ],
+//         gridArea: "1/2",
+//       },
+//       {
+//         name: "customerId",
+//         label: "Customer",
+//         type: "select",
+//         required: false,
+//         options: customers,
+//         gridArea: "1/2",
+//         dependsOn: {
+//           field: "orderType",
+//           value: "SALES",
+//         },
+//       },
+//       {
+//         name: "supplierId",
+//         label: "Supplier",
+//         type: "select",
+//         required: false,
+//         options: suppliers,
+//         gridArea: "1/2",
+//         dependsOn: {
+//           field: "orderType",
+//           value: "PURCHASE",
+//         },
+//       },
+//       {
+//         name: "orderDate",
+//         label: "Order Date",
+//         type: "date",
+//         required: true,
+//         defaultValue: new Date().toISOString().split("T")[0],
+//         gridArea: "1/2",
+//       },
+//       {
+//         name: "orderNumber",
+//         label: "Order Number",
+//         type: "text",
+//         required: true,
+//         placeholder: "PO-2024-001",
+//         gridArea: "1",
+//       },
+//       {
+//         name: "status",
+//         label: "Order Status",
+//         type: "select",
+//         required: true,
+//         defaultValue: OrderStatus.Pending,
+//         options: [
+//           { id: OrderStatus.Pending, name: "Pending" },
+//           { id: OrderStatus.Delivered, name: "Delivered" },
+//           { id: OrderStatus.Processing, name: "Processing" },
+//           { id: OrderStatus.Shipped, name: "Shipped" },
+//           { id: OrderStatus.Cancelled, name: "Cancelled" },
+//         ],
+//         gridArea: "1/2",
+//       },
+//       {
+//         name: "orderLines",
+//         label: "Order Lines",
+//         type: "repeater",
+//         required: true,
+//         gridArea: "1",
+//         minItems: 1,
+//         defaultValue: [{}],
+//         fields: [
+//           {
+//             name: "productId",
+//             label: "Product",
+//             type: "select",
+//             required: true,
+//             defaultValue: "",
+//             options: products,
+//             gridArea: "1/3",
+//           },
+//           {
+//             name: "quantity",
+//             label: "Quantity",
+//             type: "number",
+//             required: true,
+//             defaultValue: 1,
+//             min: 1,
+//             gridArea: "1/3",
+//           },
+//           {
+//             name: "unitPrice",
+//             label: "Unit Price",
+//             type: "number",
+//             required: true,
+//             defaultValue: 0,
+//             min: 0,
+//             step: 0.01,
+//             gridArea: "1/3",
+//           },
+//         ],
+//       },
+//     ],
+//     onSubmit: async (
+//       data: SubmitData
+//     ): Promise<{ ok: boolean; message: string }> => {
+//       const {
+//         orderType,
+//         customerId,
+//         supplierId,
+//         orderDate,
+//         orderNumber,
+//         status,
+//         orderLines,
+//       } = data;
+
+//       const totalAmount = orderLines
+//         .reduce(
+//           (
+//             sum: number,
+//             ol: {
+//               productId: string;
+//               quantity: number;
+//               unitPrice: number;
+//             }
+//           ) => {
+//             const quantity = ol.quantity || 0;
+//             const unitPrice = ol.unitPrice || 0;
+//             return sum + quantity * unitPrice;
+//           },
+//           0
+//         )
+//         .toFixed(2);
+
+//       if (!orderType || !orderDate || !orderNumber || !status) {
+//         return { ok: false, message: "Please fill in the required fields!" };
+//       }
+
+//       if (!orderLines.length) {
+//         return { ok: false, message: "You must have at least one orderLine!" };
+//       } else {
+//         const invalidLines = orderLines.filter(
+//           (line) => !line.productId || !line.quantity || !line.unitPrice
+//         );
+
+//         if (invalidLines.length > 0) {
+//           return {
+//             ok: false,
+//             message:
+//               "All order lines must have a product, valid quantity, and price",
+//           };
+//         }
+//       }
+
+//       if (!customerId && !supplierId) {
+//         return {
+//           ok: false,
+//           message: "Please provide either customerId or supplierId",
+//         };
+//       }
+
+//       try {
+//         const response = await fetch("/api/orders", {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({
+//             ...data,
+//             orderDate: new Date(data.orderDate),
+//             totalAmount,
+//           }),
+//         });
+
+//         if (!response.ok) {
+//           const { error } = await response.json();
+//           return {
+//             ok: false,
+//             message: error.message,
+//           };
+//         }
+
+//         return {
+//           ok: true,
+//           message: "Order created Successfully",
+//         };
+//       } catch (error) {
+//         return {
+//           ok: false,
+//           message:
+//             error instanceof Error
+//               ? error.message
+//               : "Failed to create an Order!",
+//         };
+//       }
+//     },
+//   };
+// }
+// --- SALES ORDER FORM CONFIG ---
 export async function getOrderFormConfig(
-  organizationId: string
+  organizationId: string,
+  orderType: OrderType | null
 ): Promise<FormConfig<SubmitData>> {
-  try {
-  } catch (error) {}
-  const data = await getFormConfigData(organizationId);
+  const { customers, suppliers, products } = await FetchFormConfigData(
+    organizationId
+  );
 
-  const customers = data.customers.map((customer) => ({
-    id: customer.id,
-    name: customer.name,
-  }));
-
-  const suppliers = data.suppliers.map((supplier) => ({
-    id: supplier.id,
-    name: supplier.name,
-  }));
-
-  const products = data.products.map((product) => ({
-    id: product.id,
-    name: product.name,
-    price: product.price,
-  }));
+  const orderOptions = !orderType
+    ? [
+        { id: "PURCHASE", name: "Purchase Order" },
+        { id: "SALES", name: "Sales Order" },
+      ]
+    : null;
 
   return {
     title: "Create New Order",
@@ -242,14 +449,13 @@ export async function getOrderFormConfig(
     entityName: "Order",
     fields: [
       {
-        name: "orderType",
+        name: "type",
         label: "Order Type",
-        type: "select",
+        type: orderType ? "text" : "select",
         required: true,
-        options: [
-          { id: "PURCHASE", name: "Purchase Order" },
-          { id: "SALES", name: "Sales Order" },
-        ],
+        readOnly: orderType === "PURCHASE" || orderType === "SALES",
+        defaultValue: orderType ? orderType : "",
+        options: orderOptions,
         gridArea: "1/2",
       },
       {
@@ -439,210 +645,6 @@ export async function getOrderFormConfig(
               : "Failed to create an Order!",
         };
       }
-
-      // Validate at least one order line exists
-      // if (!data.orderLines || data.orderLines.length === 0) {
-      //   return {
-      //     ok: false,
-      //     message: "Order must have at least one order line",
-      //   };
-      // }
-
-      // // Validate all order lines have required fields
-      // const invalidLines = data.orderLines.filter(
-      //   (line) => !line.productId || line.quantity <= 0 || line.unitPrice < 0
-      // );
-
-      // if (invalidLines.length > 0) {
-      //   return {
-      //     ok: false,
-      //     message:
-      //       "All order lines must have a product, valid quantity, and price",
-      //   };
-      // }
-
-      // // Calculate total amount from order lines
-      // const totalAmount = data.orderLines.reduce(
-      //   (sum: number, line: any) => sum + line.quantity * line.unitPrice,
-      //   0
-      // );
-
-      // // Transform data to match Order schema
-      // const orderData = {
-      //   orderNumber: data.orderNumber,
-      //   orderDate: new Date(data.orderDate),
-      //   status: data.status,
-      //   totalAmount: totalAmount,
-      //   orderType: data.orderType,
-      //   organizationId: organizationId,
-      //   userId: data.userId, // Should be passed from context/session
-      //   customerId: data.orderType === "SALES" ? data.customerId : null,
-      //   supplierId: data.orderType === "PURCHASE" ? data.supplierId : null,
-      //   notes: data.notes || null,
-      //   orderLines: data.orderLines.map((line: any) => ({
-      //     productId: line.productId,
-      //     quantity: parseInt(line.quantity),
-      //     unitPrice: parseFloat(line.unitPrice),
-      //   })),
-      // };
-
-      // try {
-      //   console.log("Submitting order:", orderData);
-      //   // await createOrder(orderData);
-      //   return {
-      //     ok: true,
-      //     message: `Order ${data.orderNumber} created successfully with ${data.orderLines.length} line(s)`,
-      //   };
-      // } catch (error) {
-      //   console.error("Error creating order:", error);
-      //   return {
-      //     ok: false,
-      //     message: "Failed to create order. Please try again.",
-      //   };
-      // }
     },
   };
 }
-// --- SALES ORDER FORM CONFIG ---
-export const salesOrderFormConfig: FormConfig<SubmitData> = {
-  title: "Create New Order",
-  description:
-    "Select the order type and fill in the details for the new transaction.",
-  entityName: "Order",
-  fields: [
-    {
-      name: "type",
-      label: "Order Type",
-      type: "text",
-      required: true,
-      readOnly: true,
-      defaultValue: "SALES",
-      gridArea: "1/2",
-    },
-    {
-      name: "partnerId",
-      label: "Customer/Supplier",
-      type: "select",
-      required: true,
-      options: [
-        { id: "p-001", name: "Acme Corp" },
-        { id: "p-002", name: "Beta Suppliers" },
-        { id: "p-003", name: "Cali Retail" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "orderDate",
-      label: "Order Date",
-      type: "text", // Using text for date input simulation
-      required: true,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "dueDate",
-      label: "Due Date",
-      type: "text", // Using text for date input simulation
-      required: false,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "reference",
-      label: "Reference Number",
-      type: "text",
-      required: false,
-      placeholder: "PO-4567-B",
-      gridArea: "1",
-    },
-    {
-      name: "notes",
-      label: "Internal Notes",
-      type: "textarea",
-      required: false,
-      placeholder: "Any special instructions or delivery details.",
-      gridArea: "1",
-      rows: 3,
-    },
-  ],
-  onSubmit: async (
-    data: SubmitData
-  ): Promise<{ ok: boolean; message: string }> => {
-    // Your API call here
-    return { ok: true, message: "" };
-    // await createOrder(data);
-  },
-};
-
-// --- PURCHASE ORDER FORM CONFIG ---
-export const purchaseOrderFormConfig: FormConfig<SubmitData> = {
-  title: "Create New Order",
-  description:
-    "Select the order type and fill in the details for the new transaction.",
-  entityName: "Order",
-  fields: [
-    {
-      name: "type",
-      label: "Order Type",
-      type: "select",
-      required: true,
-      options: [
-        { id: "sale", name: "Sale Order (Customer)" },
-        { id: "purchase", name: "Purchase Order (Supplier)" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "partnerId",
-      label: "Customer/Supplier",
-      type: "select",
-      required: true,
-      options: [
-        { id: "p-001", name: "Acme Corp" },
-        { id: "p-002", name: "Beta Suppliers" },
-        { id: "p-003", name: "Cali Retail" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "orderDate",
-      label: "Order Date",
-      type: "text", // Using text for date input simulation
-      required: true,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "dueDate",
-      label: "Due Date",
-      type: "text", // Using text for date input simulation
-      required: false,
-      placeholder: "YYYY-MM-DD",
-      gridArea: "1/2",
-    },
-    {
-      name: "reference",
-      label: "Reference Number",
-      type: "text",
-      required: false,
-      placeholder: "PO-4567-B",
-      gridArea: "1",
-    },
-    {
-      name: "notes",
-      label: "Internal Notes",
-      type: "textarea",
-      required: false,
-      placeholder: "Any special instructions or delivery details.",
-      gridArea: "1",
-      rows: 3,
-    },
-  ],
-  onSubmit: async (
-    data: SubmitData
-  ): Promise<{ ok: boolean; message: string }> => {
-    // Your API call here
-    return { ok: true, message: "" };
-    // await createOrder(data);
-  },
-};
