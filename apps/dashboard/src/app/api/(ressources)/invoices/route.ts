@@ -109,6 +109,12 @@ export async function POST(req: NextRequest) {
       }
     );
   } catch (error) {
+    if (error instanceof Error && error.message.includes("Invoice_orderId_key"))
+      return NextResponse.json(
+        { error: "An invoice for this order already exist!" },
+        { status: 500 }
+      );
+
     return NextResponse.json(
       {
         error: "Internal server error",
