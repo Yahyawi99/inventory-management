@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { StockRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { CustomerType, OrderStatus, OrderType } from "@/types/orders";
 
 type StockStatus = "Available" | "Low" | "Empty";
 interface Filters {

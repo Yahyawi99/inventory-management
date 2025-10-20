@@ -6,15 +6,9 @@ interface Props<T> {
   exportData: () => void;
   data: HeaderData;
   formConfig: FormConfig<T> | null;
-  secondaryFormConfig?: FormConfig<T>;
 }
 
-export function Header<T>({
-  exportData,
-  data,
-  formConfig,
-  secondaryFormConfig,
-}: Props<T>) {
+export function Header<T>({ exportData, data, formConfig }: Props<T>) {
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
       <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
@@ -44,10 +38,6 @@ export function Header<T>({
         </Button>
 
         {formConfig && <CreationForm formConfig={formConfig} />}
-
-        {secondaryFormConfig && (
-          <CreationForm formConfig={secondaryFormConfig} />
-        )}
       </div>
     </div>
   );

@@ -23,7 +23,6 @@ import {
   stockFilterDrawerData,
   tableColumns,
   stockFormConfig,
-  stockItemFormConfig,
 } from "@/constants/stock";
 import { exportOrdersAsJson } from "@/utils/shared";
 import { Stock, StockSummaryMetrics } from "@/types/stocks";
@@ -195,7 +194,6 @@ export default function Products() {
         data={headerData}
         exportData={exportData}
         formConfig={stockFormConfig}
-        secondaryFormConfig={stockItemFormConfig}
       />
 
       <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryStocks} />
