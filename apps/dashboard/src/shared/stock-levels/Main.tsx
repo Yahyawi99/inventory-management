@@ -15,6 +15,7 @@ import {
   ActiveFilters,
   SortConfig,
   Pagination,
+  FormConfig,
 } from "app-core/src/types";
 import {
   headerData,
@@ -22,10 +23,10 @@ import {
   stockStatusFilters,
   stockFilterDrawerData,
   tableColumns,
-  stockFormConfig,
+  getStockLocationFormConfig,
 } from "@/constants/stock";
 import { exportOrdersAsJson } from "@/utils/shared";
-import { Stock, StockSummaryMetrics } from "@/types/stocks";
+import { Stock, StockSummaryMetrics, SubmitData } from "@/types/stocks";
 import { buildStocksApiUrl, getStockLevelsMetrics } from "@/utils/stocks";
 
 export default function Products() {
@@ -38,6 +39,9 @@ export default function Products() {
   const [summaryStocks, setSummaryStocks] = useState<Stock[]>([]);
   const [isFetchingSummaryStocks, setIsFetchingSummaryStocks] = useState(true);
   const [cardMetrics, setCardMetrics] = useState<MetricsData[]>([]);
+
+  const [stockFormConfig, setStockFormConfig] =
+    useState<FormConfig<SubmitData> | null>(null);
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     status: "All",
@@ -187,6 +191,14 @@ export default function Products() {
       metricsData
     );
   };
+
+  // Form Config
+  useEffect(() => {
+    if (user)
+      getStockLocationFormConfig(user?.activeOrganizationId as string).then(
+        setStockFormConfig
+      );
+  }, [user]);
 
   return (
     <section className="overflow-x-hidden">

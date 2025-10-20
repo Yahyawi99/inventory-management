@@ -1,4 +1,4 @@
-import { Stock } from "@/types/stocks";
+import { Stock, SubmitData } from "@/types/stocks";
 import { FetchFormConfigData } from "@/utils/orders";
 import { getStockStatusDisplay } from "@/utils/stocks";
 import { Button, Input } from "app-core/src/components";
@@ -241,7 +241,12 @@ export async function getStockLocationFormConfig(
     onSubmit: async (
       data: SubmitData
     ): Promise<{ ok: boolean; message: string }> => {
-      // Validate at least one stock item exists
+      if (!data.name) {
+        return {
+          ok: false,
+          message: "Please fill out all required fields!",
+        };
+      }
       if (!data.stockItems || data.stockItems.length === 0) {
         return {
           ok: false,
@@ -249,7 +254,6 @@ export async function getStockLocationFormConfig(
         };
       }
 
-      // Validate all stock items have required fields
       const invalidItems = data.stockItems.filter(
         (item) => !item.productId || item.quantity < 0
       );
@@ -261,7 +265,6 @@ export async function getStockLocationFormConfig(
         };
       }
 
-      // Check for duplicate products
       const productIds = data.stockItems.map((item) => item.productId);
       const duplicates = productIds.filter(
         (id, index) => productIds.indexOf(id) !== index
@@ -274,16 +277,14 @@ export async function getStockLocationFormConfig(
         };
       }
 
-      // Calculate total items across all products
       const totalItems = data.stockItems.reduce(
         (sum: number, item: any) => sum + parseInt(item.quantity),
         0
       );
 
-      // Transform data to match Stock schema
       const stockLocationData = {
         name: data.name,
-        location: data.locationDetail || null,
+        location: data.location || null,
         organizationId: organizationId,
         stockItems: data.stockItems.map((item: any) => ({
           productId: item.productId,
@@ -296,7 +297,7 @@ export async function getStockLocationFormConfig(
         // await createStockLocation(stockLocationData);
         return {
           ok: true,
-          message: `Stock location "${data.name}" created with ${data.stockItems.length} product(s) and ${totalItems} total units`,
+          message: `Stock location "${data.name}" created.`,
         };
       } catch (error) {
         console.error("Error creating stock location:", error);

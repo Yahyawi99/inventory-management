@@ -18,3 +18,12 @@ export interface StockSummaryMetrics {
   totalInventoryValue: number;
   totalInventoryValueChange: number | undefined;
 }
+
+export interface SubmitData {
+  name: string;
+  location: string | null;
+  stockItems: {
+    productId: string;
+    quantity: number;
+  }[];
+}

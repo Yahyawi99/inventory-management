@@ -162,7 +162,7 @@ export const renderField = (
           </div>
 
           {/* Total Amount Display */}
-          {items.length > 0 && (
+          {commonInputProps.id === "orderLines" && items.length > 0 && (
             <div className="bg-sidebar text-white p-4 rounded-lg">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-semibold">Total Amount:</span>
