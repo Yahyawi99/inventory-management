@@ -145,32 +145,34 @@ export const OrderRepository = {
     } = data;
 
     try {
-      const order = await Prisma.order.create({
-        data: {
-          userId,
-          organizationId: orgId,
-          orderType,
-          customerId,
-          supplierId,
-          orderDate,
-          orderNumber,
-          status,
-          totalAmount: Number(totalAmount),
-        },
-      });
-
-      orderLines.forEach(async (ol) => {
-        await Prisma.orderLine.create({
+      return await Prisma.$transaction(async (tx) => {
+        const order = await tx.order.create({
           data: {
-            orderId: order.id,
-            productId: ol.productId,
-            quantity: Number(ol.quantity),
-            unitPrice: Number(ol.unitPrice),
+            userId,
+            organizationId: orgId,
+            orderType,
+            customerId,
+            supplierId,
+            orderDate,
+            orderNumber,
+            status,
+            totalAmount: Number(totalAmount),
           },
         });
-      });
 
-      return order;
+        const orderLineData = orderLines.map((ol) => ({
+          orderId: order.id,
+          productId: ol.productId,
+          quantity: Number(ol.quantity),
+          unitPrice: Number(ol.unitPrice),
+        }));
+
+        await tx.orderLine.createMany({
+          data: orderLineData,
+        });
+
+        return order;
+      });
     } catch (error) {
       console.log("Failed to create an Order: ", error);
       throw error;
