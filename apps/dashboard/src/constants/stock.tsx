@@ -255,7 +255,7 @@ export async function getStockLocationFormConfig(
       }
 
       const invalidItems = data.stockItems.filter(
-        (item) => !item.productId || item.quantity < 0
+        (item) => !item.productId || Number(item.quantity) < 0
       );
 
       if (invalidItems.length > 0) {
@@ -276,11 +276,6 @@ export async function getStockLocationFormConfig(
           message: "Cannot add the same product multiple times to one location",
         };
       }
-
-      const totalItems = data.stockItems.reduce(
-        (sum: number, item: any) => sum + parseInt(item.quantity),
-        0
-      );
 
       const stockLocationData = {
         name: data.name,

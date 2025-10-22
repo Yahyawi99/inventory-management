@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { StockRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { SubmitData } from "@/types/stocks";
 
 type StockStatus = "Available" | "Low" | "Empty";
 interface Filters {
@@ -63,6 +64,43 @@ export async function GET(req: NextRequest) {
     console.log("Error while fetching organization's stocks ", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  const body: SubmitData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+  const userId = data?.session?.userId as string;
+
+  if (!userId || !orgId) {
+    return NextResponse.json(
+      { error: "User and Organization id are required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const response = await StockRepository.create(orgId, body);
+
+    return NextResponse.json(
+      {
+        message: "success",
+        stock: response,
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

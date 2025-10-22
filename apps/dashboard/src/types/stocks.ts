@@ -24,6 +24,6 @@ export interface SubmitData {
   location: string | null;
   stockItems: {
     productId: string;
-    quantity: number;
+    quantity: string;
   }[];
 }

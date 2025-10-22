@@ -132,7 +132,11 @@ export const OrderRepository = {
     }
   },
 
-  async create(orgId: string, userId: string, data: SubmitData) {
+  async create(
+    orgId: string,
+    userId: string,
+    data: SubmitData
+  ): Promise<Order | null> {
     const {
       orderType,
       customerId,

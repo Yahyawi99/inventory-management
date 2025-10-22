@@ -13,6 +13,15 @@ interface SortConfig {
   direction: "desc" | "asc";
 }
 
+interface SubmitData {
+  name: string;
+  location: string | null;
+  stockItems: {
+    productId: string;
+    quantity: string;
+  }[];
+}
+
 export const StockRepository = {
   async findMany(
     orgId: string,
@@ -173,6 +182,34 @@ export const StockRepository = {
     } catch (e) {
       console.log("Error while fetching order " + id);
       console.log(e);
+    }
+  },
+
+  async create(orgId: string, data: SubmitData): Promise<Stock | null> {
+    try {
+      return await Prisma.$transaction(async (tx) => {
+        const stock = await tx.stock.create({
+          data: {
+            organizationId: orgId,
+            name: data.name,
+            location: data.location || null,
+          },
+        });
+
+        const stockItemsData = data.stockItems.map((ol) => ({
+          stockId: stock.id,
+          organizationId: orgId,
+          productId: ol.productId,
+          quantity: Number(ol.quantity),
+        }));
+
+        await tx.stockItem.createMany({ data: stockItemsData });
+
+        return stock;
+      });
+    } catch (e) {
+      console.log("Failed to create stock location: ", e);
+      throw e;
     }
   },
 };
