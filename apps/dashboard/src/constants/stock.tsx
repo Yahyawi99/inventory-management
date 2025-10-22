@@ -288,8 +288,22 @@ export async function getStockLocationFormConfig(
       };
 
       try {
-        console.log("Submitting stock location:", stockLocationData);
-        // await createStockLocation(stockLocationData);
+        const response = await fetch("/api/inventory/stocks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(stockLocationData),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
         return {
           ok: true,
           message: `Stock location "${data.name}" created.`,
