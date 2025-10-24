@@ -102,7 +102,7 @@ export default function EditRecordDialog<T>({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
+        <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle className="text-2xl font-bold">
             Edit {formConfig.entityName}
           </DialogTitle>
@@ -157,7 +157,7 @@ export default function EditRecordDialog<T>({
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-4 border-t flex-shrink-0 bg-white dark:bg-gray-900">
+        <div className="px-6 pb-6 pt-4 border-t  bg-white dark:bg-gray-900">
           {message && (
             <Alert
               variant={!message.ok ? "destructive" : "default"}

@@ -5,11 +5,11 @@ import { Button } from "..";
 import { Pencil, Trash2 } from "lucide-react";
 import EditRecordDialog from "./EditRecordDialog";
 import DeleteRecordDialog from "./DeleteRecordDialog";
-import { FormConfig } from "../../types";
+import { Data, FormConfig } from "../../types";
 
 interface RecordActionsProps<T> {
   formConfig: FormConfig<T>;
-  record: any;
+  record: Data;
   onSuccess?: () => void;
 }
 
@@ -62,7 +62,6 @@ export function RecordActions<T>({
         onOpenChange={setIsDeleteDialogOpen}
         formConfig={formConfig}
         record={record}
-        onSuccess={handleSuccess}
       />
     </div>
   );

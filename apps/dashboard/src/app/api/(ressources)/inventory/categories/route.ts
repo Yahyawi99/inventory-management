@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 import { categoryRepository } from "@services/repositories";
 import { ProductStatus } from "@/types/products";
-import { SubmitData } from "@/types/categories";
+import { SubmitData, deleteData } from "@/types/categories";
 
 interface Filters {
   status?: ProductStatus;
@@ -120,5 +120,35 @@ export async function POST(req: NextRequest) {
         { error: "Internal Server Error" },
         { status: 500 }
       );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const body: deleteData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+  try {
+    const response = await categoryRepository.delete(orgId, body.recordId);
+
+    return NextResponse.json(
+      { message: "Category deleted successfully!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

@@ -48,6 +48,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Submit
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setMessage(null);
@@ -86,7 +87,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center space-x-1 px-4 py-2 bg-sidebar hover:bg-transparent text-white font-semibold rounded-md shadow cursor-pointer border-1 border-transparent hover:border-sidebar hover:text-sidebar">
+        <Button className="flex items-center space-x-1 px-4 py-2 bg-sidebar hover:bg-transparent text-white font-semibold rounded-md shadow cursor-pointer border border-transparent hover:border-sidebar hover:text-sidebar">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -107,7 +108,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
+        <DialogHeader className="px-6 pt-6 pb-4 shrink-0">
           <DialogTitle className="text-2xl font-bold">
             {formConfig.title}
           </DialogTitle>
@@ -160,7 +161,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-4 border-t flex-shrink-0 bg-white">
+        <div className="px-6 pb-6 pt-4 border-t  bg-white">
           {message && (
             <Alert
               variant={!message.ok ? "destructive" : "default"}

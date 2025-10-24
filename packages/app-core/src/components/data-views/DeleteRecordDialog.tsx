@@ -13,14 +13,13 @@ import {
   AlertDescription,
 } from "..";
 import { AlertCircle, Check, Loader2, Trash2 } from "lucide-react";
-import { FormConfig } from "@/src/types";
+import { Data, FormConfig } from "@/src/types";
 
 interface DeleteDialogProps<T> {
   formConfig: FormConfig<T>;
-  record: any;
+  record: Data;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
 }
 
 export default function DeleteRecordDialog<T>({
@@ -28,7 +27,6 @@ export default function DeleteRecordDialog<T>({
   record,
   isOpen,
   onOpenChange,
-  onSuccess,
 }: DeleteDialogProps<T>) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [message, setMessage] = useState<{
@@ -46,7 +44,6 @@ export default function DeleteRecordDialog<T>({
 
   const handleDelete = async () => {
     if (!formConfig.onDelete) {
-      console.error("onDelete function is not defined in formConfig.");
       setMessage({
         ok: false,
         message: "Delete functionality is not configured.",
@@ -58,24 +55,37 @@ export default function DeleteRecordDialog<T>({
     setMessage(null);
 
     try {
-      const result = await formConfig.onDelete(record.id);
-      setMessage(result);
+      console.log(record);
+      const response = await formConfig.onDelete(
+        (record.id || record._id) as string
+      );
 
-      if (result.ok) {
-        setTimeout(() => {
-          onOpenChange(false);
-          onSuccess?.();
-        }, 1500);
+      if (!response.ok) {
+        return alert(response);
       }
+
+      alert(response);
     } catch (error) {
-      console.error("Delete failed:", error);
-      setMessage({
-        ok: false,
-        message: "An unexpected error occurred. Please try again.",
-      });
+      alert(
+        error instanceof Error
+          ? { ok: false, message: error.message }
+          : { ok: false, message: "Failed to delete record!" }
+      );
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const alert = (data: { ok: boolean; message: string }) => {
+    setMessage(data);
+
+    setTimeout(
+      () => {
+        if (data.ok) window.location.reload();
+        setMessage(null);
+      },
+      data.ok ? 1000 : 3000
+    );
   };
 
   return (

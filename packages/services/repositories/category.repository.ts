@@ -190,4 +190,17 @@ export const categoryRepository = {
       return null;
     }
   },
+
+  async delete(orgId: string, categoryId: string): Promise<Category | null> {
+    try {
+      const category = await Prisma.category.delete({
+        where: { organizationId: orgId, id: categoryId },
+      });
+
+      return category;
+    } catch (error) {
+      console.log("Failed to delete category: ", error);
+      throw error;
+    }
+  },
 };
