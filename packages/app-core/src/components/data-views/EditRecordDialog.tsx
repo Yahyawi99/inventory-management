@@ -1,117 +1,115 @@
 "use client";
 
-import { useState } from "react";
-import { FormConfig, FormField } from "../../types";
-import { renderField } from "../../utils/renderField";
+import { useState, useEffect } from "react";
 import {
-  Alert,
-  AlertDescription,
-  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  Button,
   Label,
+  Alert,
+  AlertDescription,
 } from "..";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
+import { FormConfig, FormField } from "../../types";
+import { renderField } from "../../utils/renderField";
 
-interface CreationFormProps<T> {
+interface EditDialogProps<T> {
   formConfig: FormConfig<T>;
+  record: any;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
-export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
-  const initialData = formConfig.fields.reduce((acc: any, field: any) => {
-    acc[field.name] =
-      field.defaultValue ?? (field.type === "checkbox" ? false : "");
-    return acc;
-  }, {});
-
+export default function EditRecordDialog<T>({
+  formConfig,
+  record,
+  isOpen,
+  onOpenChange,
+  onSuccess,
+}: EditDialogProps<T>) {
+  const [formData, setFormData] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{
     ok: boolean;
     message: string;
   } | null>(null);
-  const [formData, setFormData] = useState(initialData);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Group fields by layout area
-  const groupedFields = formConfig.fields.reduce((acc: any, field: any) => {
+  useEffect(() => {
+    if (record && isOpen) {
+      const initialData: any = {};
+      formConfig.fields.forEach((field) => {
+        if (field.type === "repeater") {
+          initialData[field.name] = record[field.name] ||
+            field.defaultValue || [{}];
+        } else {
+          initialData[field.name] =
+            record[field.name] ?? field.defaultValue ?? "";
+        }
+      });
+      setFormData(initialData);
+      setMessage(null);
+    }
+  }, [record, isOpen, formConfig.fields]);
+
+  const groupedFields = formConfig.fields.reduce((acc, field) => {
     const area = field.gridArea || "1";
-    acc[area] = acc[area] || [];
+    if (!acc[area]) acc[area] = [];
     acc[area].push(field);
     return acc;
-  }, {});
+  }, {} as Record<string, FormField[]>);
 
   const handleChange = (name: string, value: any) => {
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async () => {
+  const handleUpdate = async () => {
     setIsSubmitting(true);
     setMessage(null);
 
     try {
-      const response = await formConfig.onSubmit(formData);
+      const result = await formConfig.onSubmit({
+        ...formData,
+        id: record.id,
+      });
 
-      if (!response.ok) {
-        return alert(response);
+      setMessage(result);
+
+      if (result.ok) {
+        setTimeout(() => {
+          onOpenChange(false);
+          setMessage(null);
+          onSuccess?.();
+        }, 1500);
       }
-
-      alert(response);
     } catch (error) {
-      alert(
-        error instanceof Error
-          ? { ok: false, message: error.message }
-          : { ok: false, message: "Failed to submit form data!" }
-      );
+      console.error("Update failed:", error);
+      setMessage({
+        ok: false,
+        message: "An unexpected error occurred. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const alert = (data: { ok: boolean; message: string }) => {
-    setMessage(data);
-
-    setTimeout(
-      () => {
-        if (data.ok) window.location.reload();
-        setMessage(null);
-      },
-      data.ok ? 1000 : 3000
-    );
-  };
-
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <Button className="flex items-center space-x-1 px-4 py-2 bg-sidebar hover:bg-transparent text-white font-semibold rounded-md shadow cursor-pointer border-1 border-transparent hover:border-sidebar hover:text-sidebar">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-plus"
-          >
-            <path d="M12 5v14" />
-            <path d="M5 12h14" />
-          </svg>
-          <span>{formConfig.title}</span>
-        </Button>
-      </DialogTrigger>
-
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
           <DialogTitle className="text-2xl font-bold">
-            {formConfig.title}
+            Edit {formConfig.entityName}
           </DialogTitle>
-          <DialogDescription>{formConfig.description}</DialogDescription>
+          <DialogDescription>
+            Make changes to the {formConfig.entityName.toLowerCase()} details
+            below.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="px-6 pb-6 overflow-y-auto flex-1">
@@ -131,7 +129,6 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
                     const shouldShow =
                       !field.dependsOn ||
                       formData[field.dependsOn.field] === field.dependsOn.value;
-
                     if (!shouldShow) return null;
 
                     if (field.type === "repeater") {
@@ -160,37 +157,44 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-4 border-t flex-shrink-0 bg-white">
+        <div className="px-6 pb-6 pt-4 border-t flex-shrink-0 bg-white dark:bg-gray-900">
           {message && (
             <Alert
               variant={!message.ok ? "destructive" : "default"}
               className="mb-4"
             >
               {!message.ok ? (
-                <AlertCircle className="w-4 h-4 text-red-500" />
+                <AlertCircle className="w-4 h-4" />
               ) : (
-                <Check className="w-4 h-4 stroke-green-500" />
+                <Check className="w-4 h-4 text-green-600" />
               )}
-              <AlertDescription className={`${message.ok && "text-green-500"}`}>
+              <AlertDescription className={`${message.ok && "text-green-600"}`}>
                 {message.message}
               </AlertDescription>
             </Alert>
           )}
-
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
             <Button
               type="button"
-              onClick={handleSubmit}
+              variant="outline"
+              onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
-              className="w-full sm:w-auto bg-sidebar hover:bg-sidebar hover:opacity-75"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleUpdate}
+              disabled={isSubmitting}
+              className="bg-sidebar hover:bg-sidebar/90"
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
+                  Saving...
                 </>
               ) : (
-                `Create ${formConfig.entityName}`
+                "Save Changes"
               )}
             </Button>
           </div>

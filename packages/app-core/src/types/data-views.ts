@@ -136,4 +136,5 @@ export interface FormConfig<T> {
   entityName: string;
   fields: FormField[];
   onSubmit: (data: T) => Promise<{ ok: boolean; message: string }>;
+  onDelete?: (id: string) => Promise<{ ok: boolean; message: string }>; //make it required later
 }

@@ -33,6 +33,7 @@ export * from "./data-views/OrderBy";
 export * from "./data-views/DataControls";
 export * from "./data-views/TableView";
 export * from "./data-views/DataTable";
+export * from "./data-views/RecordActions";
 
 export * from "./skeletons/Cards";
 export * from "./skeletons/Table";
