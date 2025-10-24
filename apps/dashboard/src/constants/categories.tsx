@@ -211,7 +211,7 @@ export const CategoryFormConfig: FormConfig<SubmitData> = {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(recordId),
+        body: JSON.stringify({ recordId }),
       });
 
       if (!response.ok) {
@@ -225,7 +225,7 @@ export const CategoryFormConfig: FormConfig<SubmitData> = {
 
       return {
         ok: true,
-        message: "Category " + recordId + "deleted successfully.",
+        message: "Category deleted successfully.",
       };
     } catch (error) {
       return {

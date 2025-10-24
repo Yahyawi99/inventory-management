@@ -57,7 +57,7 @@ export default function DeleteRecordDialog<T>({
     try {
       console.log(record);
       const response = await formConfig.onDelete(
-        (record.id || record._id) as string
+        (record.id ? record.id : record._id) as string
       );
 
       if (!response.ok) {

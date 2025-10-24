@@ -138,14 +138,21 @@ export async function DELETE(req: NextRequest) {
       { status: 401 }
     );
   }
+
   try {
-    const response = await categoryRepository.delete(orgId, body.recordId);
+    await categoryRepository.delete(orgId, body.recordId);
 
     return NextResponse.json(
       { message: "Category deleted successfully!" },
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof Error && error.message.includes("CategoryToProduct"))
+      return NextResponse.json(
+        { error: "Cannot delete category: it still has related products." },
+        { status: 500 }
+      );
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
