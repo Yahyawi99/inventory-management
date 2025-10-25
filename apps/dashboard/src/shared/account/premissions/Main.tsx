@@ -8,9 +8,8 @@ import {
   DataTable,
   TableView,
 } from "app-core/src/components";
-import { createTableColumns } from "@/constants/users";
+import { tableColumns } from "@/constants/users";
 import { Pagination } from "app-core/src/types";
-import UsersHeader from "./Header";
 import DeleteModal from "./DeleteModal";
 import { User } from "@/types/users";
 
@@ -28,8 +27,6 @@ export default function UsersCard({ children }: UsersCardProps) {
     page: 1,
     totalPages: null,
   });
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<User>();
   const [error, setError] = useState<string | null>("");
 
   // Table Users
@@ -72,21 +69,6 @@ export default function UsersCard({ children }: UsersCardProps) {
     }
   }, [isAuthLoading, fetchTableUsers]);
 
-  // Handler to delete a user
-  const onTrashClick = (user: any) => {
-    setUserToDelete(user);
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleDeleteUser = () => {};
-
-  // Handler to update a user's role
-  const handleRoleChange = (id: string, newRole: string) => {};
-
-  const tableColumns = createTableColumns({
-    handleRoleChange: handleRoleChange,
-    onTrashClick: onTrashClick,
-  });
   return (
     <>
       {children ? (
@@ -121,13 +103,6 @@ export default function UsersCard({ children }: UsersCardProps) {
           </TableView>
         </>
       )}
-
-      {/* Delete Modal */}
-      <DeleteModal
-        isDeleteModalOpen={isDeleteModalOpen}
-        setIsDeleteModalOpen={setIsDeleteModalOpen}
-        handleDeleteUser={handleDeleteUser}
-      />
     </>
   );
 }

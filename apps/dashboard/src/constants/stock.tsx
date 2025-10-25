@@ -316,5 +316,10 @@ export async function getStockLocationFormConfig(
         };
       }
     },
+    onDelete: async (
+      recordId: string
+    ): Promise<{ ok: boolean; message: string }> => {
+      return { ok: true, message: "string" };
+    },
   };
 }

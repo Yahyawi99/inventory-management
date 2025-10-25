@@ -2,19 +2,19 @@ import { Monitor, Smartphone, SmartphoneIcon, Tablet } from "lucide-react";
 
 export const getRoleBadgeColor = (role: string): string => {
   switch (role) {
-    case "Super_Admin":
+    case "owner":
       return "bg-indigo-100 text-indigo-700";
-    case "Admin":
+    case "admin":
       return "bg-purple-100 text-purple-700";
-    case "Manager":
+    case "manager":
       return "bg-teal-100 text-teal-700";
-    case "Analyst":
+    case "analyst":
       return "bg-green-100 text-green-700";
-    case "Contributor":
+    case "contributor":
       return "bg-orange-100 text-orange-700";
     case "Employee":
       return "bg-sky-100 text-sky-700";
-    case "Intern":
+    case "intern":
       return "bg-pink-100 text-pink-700";
     default:
       return "bg-gray-100 text-gray-700";

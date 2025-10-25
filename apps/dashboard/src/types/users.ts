@@ -1,3 +1,4 @@
+import { UserStatus } from "@database/generated/prisma";
 import { InvitationStatus } from "better-auth/plugins";
 
 export interface User {
@@ -14,6 +15,7 @@ export interface User {
     address: string;
   };
   memberRole: string;
+  status: UserStatus;
   memberSince: string;
 }
 
@@ -77,4 +79,19 @@ export interface Session {
     updatedAt: Date;
     image?: string | null | undefined;
   };
+}
+
+export interface SubmitData {
+  id?: string;
+  name: string;
+  email: string;
+  password?: string;
+  image?: string;
+  role?: string;
+  status: UserStatus;
+  emailVerified?: boolean;
+  twoFactorEnabled?: boolean;
+  banned?: boolean;
+  banReason?: string;
+  banExpires?: string;
 }
