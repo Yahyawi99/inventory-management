@@ -24,7 +24,7 @@ import {
   getProductFilterDrawerData,
   productSortableFields,
   productCategoryFilters,
-  tableColumns,
+  getTableColumns,
   getProductFormConfig,
 } from "@/constants/products";
 import { buildProductsApiUrl } from "@/utils/products";
@@ -236,7 +236,12 @@ export default function Products() {
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Product> data={tableProducts} columns={tableColumns} />
+        {productFormConfig && (
+          <DataTable<Product>
+            data={tableProducts}
+            columns={getTableColumns(productFormConfig)}
+          />
+        )}
       </TableView>
     </section>
   );
