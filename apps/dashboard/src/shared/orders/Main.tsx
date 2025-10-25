@@ -17,7 +17,7 @@ import {
   OrderFilterDrawerData,
   OrderSortableFields,
   orderStatusFilters,
-  tableColumns,
+  getTableColumns,
   headerData,
   getOrderFormConfig,
 } from "@/constants/orders";
@@ -256,7 +256,12 @@ export default function OrdersPage({ type }: OrdersPageProps) {
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Order> data={tableOrders} columns={tableColumns} />
+        {orderFormConfig && (
+          <DataTable<Order>
+            data={tableOrders}
+            columns={getTableColumns(orderFormConfig)}
+          />
+        )}
       </TableView>
     </section>
   );
