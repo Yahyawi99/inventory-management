@@ -22,14 +22,14 @@ import {
   stockSortableFields,
   stockStatusFilters,
   stockFilterDrawerData,
-  tableColumns,
+  getTableColumns,
   getStockLocationFormConfig,
 } from "@/constants/stock";
 import { exportOrdersAsJson } from "@/utils/shared";
 import { Stock, StockSummaryMetrics, SubmitData } from "@/types/stocks";
 import { buildStocksApiUrl, getStockLevelsMetrics } from "@/utils/stocks";
 
-export default function Products() {
+export default function StockLevels() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
 
@@ -228,7 +228,12 @@ export default function Products() {
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Stock> data={tableStocks} columns={tableColumns} />
+        {stockFormConfig && (
+          <DataTable<Stock>
+            data={tableStocks}
+            columns={getTableColumns(stockFormConfig)}
+          />
+        )}
       </TableView>
     </section>
   );
