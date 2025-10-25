@@ -12,127 +12,6 @@ import {
   SortableField,
 } from "app-core/src/types";
 
-// =======
-export const tableColumns: Column<Invoice>[] = [
-  {
-    key: "checkbox",
-    header: (
-      <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
-    ),
-    render: (order) => (
-      <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
-    ),
-    headClass: "w-[50px] px-4 py-3",
-    cellClass: "text-center px-4 py-3",
-  },
-  {
-    key: "invoiceNumber",
-    header: "Invoice",
-    render: (invoice) => (
-      <span className="font-medium text-xs text-gray-900">
-        {invoice.invoiceNumber || "N/A"}
-      </span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center font-medium text-xs text-gray-900",
-  },
-  {
-    key: "invoiceDate",
-    header: "Date",
-    render: (invoice) => (
-      <span>
-        {new Date(invoice.invoiceDate.$date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })}
-      </span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center text-gray-700",
-  },
-  {
-    key: "dueDate",
-    header: "Due Date",
-    render: (invoice) => (
-      <span className="font-medium text-gray-800">
-        {new Date(invoice.dueDate.$date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })}
-      </span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center text-gray-700",
-  },
-
-  {
-    key: "status",
-    header: "Status",
-    render: (invoice) => {
-      const statusDisplay = getInvoiceStatusDisplay(invoice.status);
-      return (
-        <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
-        >
-          {statusDisplay.text}
-        </span>
-      );
-    },
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center",
-  },
-  {
-    key: "orderType",
-    header: "Transaction Type",
-    render: (invoice) => {
-      const type = invoice.order.orderType;
-      return (
-        <p
-          className={`text-xs bg-gray-100 w-[80px] font-semibold rounded-full capitalize py-1 mx-auto`}
-        >
-          {type.toLowerCase()}
-        </p>
-      );
-    },
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center  text-gray-700",
-  },
-  {
-    key: "items",
-    header: "Items",
-    render: (invoice) => (
-      <span>{getTotalOrderLineQuantity(invoice.order.orderLines)}</span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center text-gray-700",
-  },
-  {
-    key: "totalAmount",
-    header: "Total",
-    render: (invoice) => (
-      <span className="font-medium text-gray-900">
-        ${invoice.totalAmount.toFixed(2)}
-      </span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center font-medium text-gray-900",
-  },
-  //  {
-  //     key: "actions",
-  //     header: "Action",
-  //     render: (category) => (
-  //       <RecordActions<SubmitData>
-  //         record={category}
-  //         formConfig={null}
-  //       />
-  //     ),
-  //     headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
-  //     cellClass: "text-center px-4 py-3",
-  //   },
-];
-
 export const InvoiceFilterDrawerData: FilterDrawerData = {
   header: {
     title: "Filter Invoices",
@@ -178,6 +57,7 @@ export const headerData: HeaderData = {
   buttonTxt: "Create Invoice",
 };
 
+// =======
 // Form config
 export async function getInvoiceFormConfig(
   organizationId: string
@@ -340,4 +220,126 @@ export async function getInvoiceFormConfig(
       return { ok: true, message: "string" };
     },
   };
+}
+
+// =======
+// Table
+export function getTableColumns(
+  formConfig: FormConfig<SubmitData>
+): Column<Invoice>[] {
+  return [
+    {
+      key: "checkbox",
+      header: (
+        <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
+      ),
+      render: () => (
+        <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
+      ),
+      headClass: "w-[50px] px-4 py-3",
+      cellClass: "text-center px-4 py-3",
+    },
+    {
+      key: "invoiceNumber",
+      header: "Invoice",
+      render: (invoice) => (
+        <span className="font-medium text-xs text-gray-900">
+          {invoice.invoiceNumber || "N/A"}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center font-medium text-xs text-gray-900",
+    },
+    {
+      key: "invoiceDate",
+      header: "Date",
+      render: (invoice) => (
+        <span>
+          {new Date(invoice.invoiceDate.$date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center text-gray-700",
+    },
+    {
+      key: "dueDate",
+      header: "Due Date",
+      render: (invoice) => (
+        <span className="font-medium text-gray-800">
+          {new Date(invoice.dueDate.$date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center text-gray-700",
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (invoice) => {
+        const statusDisplay = getInvoiceStatusDisplay(invoice.status);
+        return (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
+          >
+            {statusDisplay.text}
+          </span>
+        );
+      },
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center",
+    },
+    {
+      key: "orderType",
+      header: "Transaction Type",
+      render: (invoice) => {
+        const type = invoice.order.orderType;
+        return (
+          <p
+            className={`text-xs bg-gray-100 w-[80px] font-semibold rounded-full capitalize py-1 mx-auto`}
+          >
+            {type.toLowerCase()}
+          </p>
+        );
+      },
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center  text-gray-700",
+    },
+    {
+      key: "items",
+      header: "Items",
+      render: (invoice) => (
+        <span>{getTotalOrderLineQuantity(invoice.order.orderLines)}</span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center text-gray-700",
+    },
+    {
+      key: "totalAmount",
+      header: "Total",
+      render: (invoice) => (
+        <span className="font-medium text-gray-900">
+          ${invoice.totalAmount.toFixed(2)}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center font-medium text-gray-900",
+    },
+    {
+      key: "actions",
+      header: "Action",
+      render: (category) => (
+        <RecordActions<SubmitData> record={category} formConfig={formConfig} />
+      ),
+      headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center px-4 py-3",
+    },
+  ];
 }

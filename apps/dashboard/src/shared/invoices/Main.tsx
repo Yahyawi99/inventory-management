@@ -18,7 +18,7 @@ import {
   InvoiceFilterDrawerData,
   InvoiceSortableFields,
   InvoiceStatusFilters,
-  tableColumns,
+  getTableColumns,
   headerData,
   getInvoiceFormConfig,
 } from "@/constants/invoices";
@@ -245,7 +245,12 @@ export default function InvoicesPage() {
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Invoice> data={tableInvoices} columns={tableColumns} />
+        {invoiceFormConfig && (
+          <DataTable<Invoice>
+            data={tableInvoices}
+            columns={getTableColumns(invoiceFormConfig)}
+          />
+        )}
       </TableView>
     </section>
   );
