@@ -201,4 +201,26 @@ export const InvoiceRepository = {
       throw error;
     }
   },
+
+  async delete(
+    orgId: string,
+    userId: string,
+    invoiceId: string
+  ): Promise<Invoice | null> {
+    try {
+      const existing = await Prisma.invoice.findFirst({
+        where: { id: invoiceId, organizationId: orgId, userId },
+      });
+
+      if (!existing) {
+        return null;
+      }
+
+      const deleted = await Prisma.invoice.delete({ where: { id: invoiceId } });
+      return deleted;
+    } catch (error) {
+      console.log("Failed to delete invoice: ", error);
+      throw error;
+    }
+  },
 };

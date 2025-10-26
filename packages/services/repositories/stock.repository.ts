@@ -212,4 +212,20 @@ export const StockRepository = {
       throw e;
     }
   },
+
+  async delete(orgId: string, stockId: string): Promise<Stock | null> {
+    try {
+      const existing = await Prisma.stock.findFirst({
+        where: { id: stockId, organizationId: orgId },
+      });
+
+      if (!existing) return null;
+
+      const deleted = await Prisma.stock.delete({ where: { id: stockId } });
+      return deleted;
+    } catch (e) {
+      console.log("Failed to delete stock: ", e);
+      throw e;
+    }
+  },
 };

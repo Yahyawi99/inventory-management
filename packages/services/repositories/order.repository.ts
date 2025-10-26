@@ -182,4 +182,24 @@ export const OrderRepository = {
       throw error;
     }
   },
+
+  async delete(
+    orgId: string,
+    userId: string,
+    orderId: string
+  ): Promise<Order | null> {
+    try {
+      const existing = await Prisma.order.findFirst({
+        where: { id: orderId, organizationId: orgId, userId },
+      });
+
+      if (!existing) return null;
+
+      const deleted = await Prisma.order.delete({ where: { id: orderId } });
+      return deleted as Order;
+    } catch (error) {
+      console.log("Failed to delete order: ", error);
+      throw error;
+    }
+  },
 };

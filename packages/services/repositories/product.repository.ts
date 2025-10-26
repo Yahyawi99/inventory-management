@@ -181,7 +181,6 @@ export const ProductRepository = {
     }
   },
 
-  // add infinity to categories
   async Create(orgId: string, data: SubmitData): Promise<Product | null> {
     try {
       const product = await Prisma.product.create({
@@ -194,6 +193,22 @@ export const ProductRepository = {
       return product;
     } catch (error) {
       console.log("Error while creating a new Product: ", error);
+      throw error;
+    }
+  },
+
+  async delete(orgId: string, productId: string): Promise<Product | null> {
+    try {
+      const existing = await Prisma.product.findFirst({
+        where: { id: productId, organizationId: orgId },
+      });
+
+      if (!existing) return null;
+
+      const deleted = await Prisma.product.delete({ where: { id: productId } });
+      return deleted;
+    } catch (error) {
+      console.log("Failed to delete product: ", error);
       throw error;
     }
   },

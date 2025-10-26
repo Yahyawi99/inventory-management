@@ -193,11 +193,18 @@ export const categoryRepository = {
 
   async delete(orgId: string, categoryId: string): Promise<Category | null> {
     try {
-      const category = await Prisma.category.delete({
-        where: { organizationId: orgId, id: categoryId },
+      const existing = await Prisma.category.findFirst({
+        where: { id: categoryId, organizationId: orgId },
       });
 
-      return category;
+      if (!existing) {
+        return null;
+      }
+
+      const deleted = await Prisma.category.delete({
+        where: { id: categoryId },
+      });
+      return deleted;
     } catch (error) {
       console.log("Failed to delete category: ", error);
       throw error;
