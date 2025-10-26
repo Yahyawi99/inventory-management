@@ -126,9 +126,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT
-export async function PUT(req: NextRequest) {}
-
 // DELETE
 export async function DELETE(req: NextRequest) {
   const body: deleteData = await req.json();

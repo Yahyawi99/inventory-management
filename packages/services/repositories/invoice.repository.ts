@@ -1,3 +1,4 @@
+import OrganizationInfo from "@/shared/company-profile/OrganizationInfo";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
 import {
@@ -186,12 +187,38 @@ export const InvoiceRepository = {
 
   async create(orgId: string, userId: string, data: SubmitData) {
     try {
-      const invoice = await Prisma.invoice.create({
-        data: {
-          organizationId: orgId,
-          userId,
-          ...data,
+      const invoice = await Prisma.invoice.upsert({
+        where: {
+          organizationId_invoiceNumber: {
+            organizationId: orgId,
+            invoiceNumber: data.invoiceNumber,
+          },
+        },
+        create: {
+          organization: {
+            connect: { id: orgId },
+          },
+          user: {
+            connect: { id: userId },
+          },
+          invoiceNumber: data.invoiceNumber,
+          invoiceDate: data.invoiceDate,
+          dueDate: data.dueDate,
+          status: data.status,
           totalAmount: Number(data.totalAmount),
+          order: {
+            connect: {
+              id: data.orderId,
+            },
+          },
+        },
+        update: {
+          invoiceNumber: data.invoiceNumber,
+          invoiceDate: data.invoiceDate,
+          dueDate: data.dueDate,
+          status: data.status,
+          totalAmount: Number(data.totalAmount),
+          orderId: data.orderId,
         },
       });
 

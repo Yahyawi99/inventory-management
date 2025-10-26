@@ -241,11 +241,14 @@ export const renderField = (
       );
 
     case "date":
+      const date = formData[field.name]?.$date
+        ? formData[field.name].$date
+        : formData[field.name];
       return (
         <Input
           type="date"
           {...commonInputProps}
-          value={formData[field.name]}
+          value={new Date(date).toLocaleDateString("en-CA")}
           onChange={(e) => handleChange(field.name, e.target.value)}
         />
       );

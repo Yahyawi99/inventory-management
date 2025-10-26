@@ -37,8 +37,8 @@ export interface ActiveFilters {
 
 export interface SubmitData {
   invoiceNumber: string;
-  invoiceDate: Date;
-  dueDate: Date;
+  invoiceDate: { $date: string };
+  dueDate: { $date: string };
   totalAmount: number;
   status: InvoiceStatus;
   orderId: string;

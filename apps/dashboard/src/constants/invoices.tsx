@@ -147,7 +147,6 @@ export async function getInvoiceFormConfig(
         status,
         orderId,
       } = data;
-
       if (
         !invoiceNumber ||
         !invoiceDate ||
@@ -162,7 +161,7 @@ export async function getInvoiceFormConfig(
         };
       }
 
-      if (new Date(invoiceDate) > new Date(dueDate)) {
+      if (new Date(invoiceDate.$date) > new Date(dueDate.$date)) {
         return {
           ok: false,
           message: "Invoice date cannot be after the due date",
@@ -178,8 +177,8 @@ export async function getInvoiceFormConfig(
 
       const invoiceData = {
         invoiceNumber: invoiceNumber,
-        invoiceDate: new Date(invoiceDate),
-        dueDate: new Date(dueDate),
+        invoiceDate: new Date(invoiceDate.$date),
+        dueDate: new Date(dueDate.$date),
         totalAmount,
         status: status,
         orderId: orderId,
