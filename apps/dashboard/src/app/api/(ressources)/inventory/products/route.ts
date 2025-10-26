@@ -3,6 +3,7 @@ import { ProductRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { ProductStatus, SubmitData } from "@/types/products";
+import { deleteData } from "@/types/shared";
 
 interface Filters {
   status?: ProductStatus;
@@ -129,5 +130,44 @@ export async function POST(req: NextRequest) {
         },
         { status: 500 }
       );
+  }
+}
+
+// DELETE
+export async function DELETE(req: NextRequest) {
+  const body: deleteData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    await ProductRepository.delete(orgId, body.recordId);
+
+    return NextResponse.json(
+      { message: "Product deleted successfully!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("ProductToStockItem"))
+      return NextResponse.json(
+        {
+          error: "Cannot delete Product: it still has associated stock items.",
+        },
+        { status: 500 }
+      );
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
