@@ -116,11 +116,11 @@ export async function POST(req: NextRequest) {
         { error: "Category name already exist!" },
         { status: 500 }
       );
-    else
-      return NextResponse.json(
-        { error: "Internal Server Error" },
-        { status: 500 }
-      );
+
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 

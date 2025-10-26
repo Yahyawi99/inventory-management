@@ -8,6 +8,7 @@ import {
   OrderType,
   SubmitData,
 } from "@/types/orders";
+import { deleteData } from "@/types/shared";
 
 interface Filters {
   status?: OrderStatus[];
@@ -86,6 +87,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// POST
 export async function POST(req: NextRequest) {
   const body: SubmitData = await req.json();
 
@@ -123,6 +125,44 @@ export async function POST(req: NextRequest) {
       {
         status: 500,
       }
+    );
+  }
+}
+
+// DELETE
+export async function DELETE(req: NextRequest) {
+  const body: deleteData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+  const userId = data?.session?.userId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization and user id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    await OrderRepository.delete(orgId, userId, body.recordId);
+
+    return NextResponse.json(
+      { message: "Order deleted successfully!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("OrderToOrderLine"))
+      return NextResponse.json(
+        { error: "Cannot delete Order: it still has related order items." },
+        { status: 500 }
+      );
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
 }
