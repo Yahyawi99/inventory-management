@@ -12,7 +12,7 @@ import {
   Alert,
   AlertDescription,
 } from "..";
-import { AlertCircle, Check, Loader2 } from "lucide-react";
+import { AlertCircle, Check, FileDiff, Loader2 } from "lucide-react";
 import { FormConfig, FormField } from "../../types";
 import { renderField } from "../../utils/renderField";
 

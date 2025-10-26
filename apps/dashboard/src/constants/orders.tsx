@@ -407,7 +407,7 @@ export async function getOrderFormConfig(
     entityName: "Order",
     fields: [
       {
-        name: "type",
+        name: "orderType",
         label: "Order Type",
         type: orderType ? "text" : "select",
         required: true,

@@ -150,8 +150,23 @@ export const OrderRepository = {
 
     try {
       return await Prisma.$transaction(async (tx) => {
-        const order = await tx.order.create({
-          data: {
+        const order = await tx.order.upsert({
+          where: {
+            organizationId_orderNumber: {
+              orderNumber,
+              organizationId: orgId,
+            },
+          },
+          update: {
+            userId,
+            orderType,
+            customerId,
+            supplierId,
+            orderDate,
+            status,
+            totalAmount: Number(totalAmount),
+          },
+          create: {
             userId,
             organizationId: orgId,
             orderType,
@@ -170,6 +185,10 @@ export const OrderRepository = {
           quantity: Number(ol.quantity),
           unitPrice: Number(ol.unitPrice),
         }));
+
+        await tx.orderLine.deleteMany({
+          where: { orderId: order.id },
+        });
 
         await tx.orderLine.createMany({
           data: orderLineData,

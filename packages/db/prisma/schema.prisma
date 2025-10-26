@@ -384,6 +384,7 @@ model Order {
 
   orderLines OrderLine[]
 
+  @@unique([organizationId, orderNumber])
   @@index([organizationId])
   @@index([userId])
   @@index([customerId])
