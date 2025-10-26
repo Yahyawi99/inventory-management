@@ -176,11 +176,16 @@ export const categoryRepository = {
     description: string
   ): Promise<Category | null> {
     try {
-      const category = await Prisma.category.create({
-        data: {
+      const category = await Prisma.category.upsert({
+        where: { organizationId_name: { organizationId: orgId, name } },
+        create: {
           organizationId: orgId,
           name,
-          description: description ? description : "",
+          description,
+        },
+        update: {
+          name,
+          description,
         },
       });
 

@@ -11,6 +11,7 @@ interface Filters {
   search?: string;
 }
 
+// GET
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
@@ -72,6 +73,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// POST
 export async function POST(req: NextRequest) {
   const body: SubmitData = await req.json();
 
@@ -123,6 +125,9 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+// PUT
+export async function PUT(req: NextRequest) {}
 
 // DELETE
 export async function DELETE(req: NextRequest) {

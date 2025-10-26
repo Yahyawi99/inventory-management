@@ -74,29 +74,40 @@ export default function EditRecordDialog<T>({
     setMessage(null);
 
     try {
-      const result = await formConfig.onSubmit({
+      const response = await formConfig.onSubmit({
         ...formData,
-        id: record.id,
       });
 
-      setMessage(result);
-
-      if (result.ok) {
-        setTimeout(() => {
-          onOpenChange(false);
-          setMessage(null);
-          onSuccess?.();
-        }, 1500);
+      if (!response.ok) {
+        return alert(response);
       }
+
+      alert({
+        ok: true,
+        message: formConfig.entityName + " updated successfully",
+      });
     } catch (error) {
       console.error("Update failed:", error);
-      setMessage({
-        ok: false,
-        message: "An unexpected error occurred. Please try again.",
-      });
+      alert(
+        error instanceof Error
+          ? { ok: false, message: error.message }
+          : { ok: false, message: "Failed to update the record!" }
+      );
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const alert = (data: { ok: boolean; message: string }) => {
+    setMessage(data);
+
+    setTimeout(
+      () => {
+        if (data.ok) window.location.reload();
+        setMessage(null);
+      },
+      data.ok ? 1000 : 3000
+    );
   };
 
   return (
