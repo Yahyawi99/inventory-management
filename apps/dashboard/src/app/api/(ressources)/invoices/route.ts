@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { OrderType } from "@/types/orders";
 import { InvoiceStatus } from "@database/generated/prisma";
 import { SubmitData } from "@/types/invoices";
+import { deleteData } from "@/types/shared";
 
 interface Filters {
   status?: InvoiceStatus[];
@@ -119,6 +120,39 @@ export async function POST(req: NextRequest) {
       {
         error: "Internal server error",
       },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE
+export async function DELETE(req: NextRequest) {
+  const body: deleteData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+  const userId = data?.session?.userId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization and user id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    await InvoiceRepository.delete(orgId, userId, body.recordId);
+
+    return NextResponse.json(
+      { message: "Invoice deleted successfully!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

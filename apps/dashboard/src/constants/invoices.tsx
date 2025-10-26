@@ -217,7 +217,41 @@ export async function getInvoiceFormConfig(
     onDelete: async (
       recordId: string
     ): Promise<{ ok: boolean; message: string }> => {
-      return { ok: true, message: "string" };
+      if (!recordId) {
+        return {
+          ok: false,
+          message: "Invoice id are required!",
+        };
+      }
+
+      try {
+        const response = await fetch("/api/invoices", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ recordId }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: "Invoice deleted successfully.",
+        };
+      } catch (error) {
+        return {
+          ok: false,
+          message: "Failed to delete record!",
+        };
+      }
     },
   };
 }

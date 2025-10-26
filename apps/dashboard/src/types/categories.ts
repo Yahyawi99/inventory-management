@@ -13,7 +13,3 @@ export interface SubmitData {
   name: string;
   description: string;
 }
-
-export interface deleteData {
-  recordId: string;
-}

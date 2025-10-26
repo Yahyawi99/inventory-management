@@ -3,7 +3,8 @@ import { headers } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 import { categoryRepository } from "@services/repositories";
 import { ProductStatus } from "@/types/products";
-import { SubmitData, deleteData } from "@/types/categories";
+import { SubmitData } from "@/types/categories";
+import { deleteData } from "@/types/shared";
 
 interface Filters {
   status?: ProductStatus;
@@ -123,6 +124,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// DELETE
 export async function DELETE(req: NextRequest) {
   const body: deleteData = await req.json();
 

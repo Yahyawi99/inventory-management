@@ -230,7 +230,7 @@ export const CategoryFormConfig: FormConfig<SubmitData> = {
     } catch (error) {
       return {
         ok: false,
-        message: "Organization and record id are required!",
+        message: "Failed to delete record!",
       };
     }
   },
