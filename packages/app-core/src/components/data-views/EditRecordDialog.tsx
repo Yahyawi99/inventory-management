@@ -12,13 +12,13 @@ import {
   Alert,
   AlertDescription,
 } from "..";
-import { AlertCircle, Check, FileDiff, Loader2 } from "lucide-react";
-import { FormConfig, FormField } from "../../types";
+import { AlertCircle, Check, Loader2 } from "lucide-react";
+import { Data, FormConfig, FormField } from "../../types";
 import { renderField } from "../../utils/renderField";
 
 interface EditDialogProps<T> {
   formConfig: FormConfig<T>;
-  record: any;
+  record: Data;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void;
@@ -74,9 +74,12 @@ export default function EditRecordDialog<T>({
     setMessage(null);
 
     try {
-      const response = await formConfig.onSubmit({
-        ...formData,
-      });
+      const response = await formConfig.onUpdate(
+        (record.id || record._id) as string,
+        {
+          ...formData,
+        }
+      );
 
       if (!response.ok) {
         return alert(response);

@@ -195,6 +195,52 @@ export const CategoryFormConfig: FormConfig<SubmitData> = {
       };
     }
   },
+  onUpdate: async (
+    id: string,
+    data: SubmitData
+  ): Promise<{ ok: boolean; message: string }> => {
+    if (!data.name) {
+      return { ok: false, message: "Category name is required!" };
+    }
+
+    if (!id) {
+      return { ok: false, message: "Category id is required!" };
+    }
+
+    try {
+      const response = await fetch("/api/inventory/categories", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          name: data.name,
+          description: data.description,
+        }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        return {
+          ok: false,
+          message: error,
+        };
+      }
+
+      return {
+        ok: true,
+        message: "Category updated successfully.",
+      };
+    } catch (error) {
+      console.log("Failed to update Category");
+      return {
+        ok: false,
+        message:
+          error instanceof Error ? error.message : "Failed to update Category",
+      };
+    }
+  },
   onDelete: async (
     recordId: string
   ): Promise<{ ok: boolean; message: string }> => {

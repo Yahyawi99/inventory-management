@@ -143,6 +143,8 @@ export async function PUT(req: NextRequest) {
     );
   }
 
+  console.log(body);
+
   try {
     const res = await categoryRepository.update(
       orgId,
