@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 import { categoryRepository } from "@services/repositories";
 import { ProductStatus } from "@/types/products";
-import { SubmitData } from "@/types/categories";
+import { SubmitData, UpdateData } from "@/types/categories";
 import { deleteData } from "@/types/shared";
 
 interface Filters {
@@ -107,6 +107,60 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.log(
       "Error while creating category ",
+      error instanceof Error && error.message
+    );
+
+    if (
+      error instanceof Error &&
+      error.message.includes("Category_organizationId_name_key")
+    )
+      return NextResponse.json(
+        { error: "Category name already exist!" },
+        { status: 500 }
+      );
+
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT
+export async function PUT(req: NextRequest) {
+  const body: UpdateData = await req.json();
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const res = await categoryRepository.update(
+      orgId,
+      body.id,
+      body.name,
+      body.description
+    );
+
+    return NextResponse.json(
+      {
+        message: "success",
+        category: res,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(
+      "Error while updating category ",
       error instanceof Error && error.message
     );
 

@@ -13,3 +13,7 @@ export interface SubmitData {
   name: string;
   description: string;
 }
+
+export interface UpdateData extends SubmitData {
+  id: string;
+}

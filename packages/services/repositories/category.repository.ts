@@ -176,14 +176,9 @@ export const categoryRepository = {
     description: string
   ): Promise<Category | null> {
     try {
-      const category = await Prisma.category.upsert({
-        where: { organizationId_name: { organizationId: orgId, name } },
-        create: {
+      const category = await Prisma.category.create({
+        data: {
           organizationId: orgId,
-          name,
-          description,
-        },
-        update: {
           name,
           description,
         },
@@ -192,6 +187,28 @@ export const categoryRepository = {
       return category;
     } catch (error) {
       console.log("Something went wrong during category creation!", error);
+      return null;
+    }
+  },
+
+  async update(
+    orgId: string,
+    categoryId: string,
+    name: string,
+    description: string
+  ): Promise<Category | null> {
+    try {
+      const category = await Prisma.category.update({
+        where: { organizationId: orgId, id: categoryId },
+        data: {
+          name,
+          description,
+        },
+      });
+
+      return category;
+    } catch (error) {
+      console.log("Something went wrong during category update!", error);
       return null;
     }
   },
