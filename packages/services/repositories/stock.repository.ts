@@ -213,6 +213,43 @@ export const StockRepository = {
     }
   },
 
+  async update(
+    orgId: string,
+    stockId: string,
+    data: SubmitData
+  ): Promise<Stock | null> {
+    try {
+      return await Prisma.$transaction(async (tx) => {
+        const stock = await tx.stock.update({
+          where: { organizationId: orgId, id: stockId },
+          data: {
+            organizationId: orgId,
+            name: data.name,
+            location: data.location || null,
+          },
+        });
+
+        const stockItemsData = data.stockItems.map((ol) => ({
+          stockId: stock.id,
+          organizationId: orgId,
+          productId: ol.productId,
+          quantity: Number(ol.quantity),
+        }));
+
+        await tx.stockItem.deleteMany({
+          where: { stockId },
+        });
+
+        await tx.stockItem.createMany({ data: stockItemsData });
+
+        return stock;
+      });
+    } catch (error) {
+      console.log("Something went wrong during stock update!", error);
+      throw null;
+    }
+  },
+
   async delete(orgId: string, stockId: string): Promise<Stock | null> {
     try {
       const existing = await Prisma.stock.findFirst({

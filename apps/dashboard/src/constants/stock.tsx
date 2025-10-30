@@ -270,6 +270,90 @@ export async function getStockLocationFormConfig(
         };
       }
     },
+    onUpdate: async (
+      id: string,
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      if (!data.name) {
+        return {
+          ok: false,
+          message: "Please fill out all required fields!",
+        };
+      }
+
+      if (!data.stockItems || data.stockItems.length === 0) {
+        return {
+          ok: false,
+          message: "Stock location must have at least one stock item",
+        };
+      }
+
+      if (!id) {
+        return { ok: false, message: "Stock id is required!" };
+      }
+
+      const invalidItems = data.stockItems.filter(
+        (item) => !item.productId || Number(item.quantity) < 0
+      );
+
+      if (invalidItems.length > 0) {
+        return {
+          ok: false,
+          message: "All stock items must have a product and valid quantity",
+        };
+      }
+
+      const productIds = data.stockItems.map((item) => item.productId);
+      const duplicates = productIds.filter(
+        (id, index) => productIds.indexOf(id) !== index
+      );
+
+      if (duplicates.length > 0) {
+        return {
+          ok: false,
+          message: "Cannot add the same product multiple times to one location",
+        };
+      }
+
+      const stockLocationData = {
+        name: data.name,
+        location: data.location || null,
+        organizationId: organizationId,
+        stockItems: data.stockItems.map((item: any) => ({
+          productId: item.productId,
+          quantity: parseInt(item.quantity),
+        })),
+      };
+
+      try {
+        const response = await fetch(`/api/inventory/stocks/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(stockLocationData),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: `Stock location "${data.name}" updated.`,
+        };
+      } catch (error) {
+        console.error("Error updating stock location:", error);
+        return {
+          ok: false,
+          message: "Failed to update stock location. Please try again.",
+        };
+      }
+    },
     onDelete: async (
       recordId: string
     ): Promise<{ ok: boolean; message: string }> => {

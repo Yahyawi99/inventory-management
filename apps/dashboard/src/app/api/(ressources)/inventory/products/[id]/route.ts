@@ -36,7 +36,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error while updating a new Product", error);
+    console.log("Error while updating a Product", error);
 
     if (
       error instanceof Error &&
