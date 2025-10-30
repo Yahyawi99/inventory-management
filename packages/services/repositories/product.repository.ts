@@ -197,6 +197,26 @@ export const ProductRepository = {
     }
   },
 
+  async update(
+    orgId: string,
+    productId: string,
+    data: SubmitData
+  ): Promise<Product | null> {
+    try {
+      const product = await Prisma.product.update({
+        where: { organizationId: orgId, id: productId },
+        data: {
+          ...data,
+        },
+      });
+
+      return product;
+    } catch (error) {
+      console.log("Something went wrong during category update!", error);
+      throw null;
+    }
+  },
+
   async delete(orgId: string, productId: string): Promise<Product | null> {
     try {
       const existing = await Prisma.product.findFirst({

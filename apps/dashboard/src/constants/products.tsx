@@ -171,6 +171,60 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
         };
       }
     },
+    onUpdate: async (
+      id: string,
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      const { name, description, sku, barcode, price, categoryId } = data;
+
+      if (!name || !sku || !price || !price || !categoryId) {
+        return {
+          ok: false,
+          message: "Please fill out all the required fields!",
+        };
+      }
+
+      if (!id) {
+        return { ok: false, message: "Product id is required!" };
+      }
+
+      try {
+        const response = await fetch(`/api/inventory/products/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            description: description ? description : "",
+            sku,
+            barcode: barcode ? barcode : "",
+            price,
+            categoryId,
+          }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: "Product updated successfully.",
+        };
+      } catch (error) {
+        console.log("Failed to update Product");
+        return {
+          ok: false,
+          message:
+            error instanceof Error ? error.message : "Failed to update Product",
+        };
+      }
+    },
     onDelete: async (
       recordId: string
     ): Promise<{ ok: boolean; message: string }> => {

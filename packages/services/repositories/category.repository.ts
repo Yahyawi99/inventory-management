@@ -209,7 +209,7 @@ export const categoryRepository = {
       return category;
     } catch (error) {
       console.log("Something went wrong during category update!", error);
-      return null;
+      throw null;
     }
   },
 
