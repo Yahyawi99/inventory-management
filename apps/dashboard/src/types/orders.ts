@@ -1,7 +1,6 @@
 import {
   OrderStatus,
   OrderType,
-  OrderLine,
   CustomerType,
 } from "@database/generated/prisma/client";
 
@@ -22,6 +21,16 @@ export interface Order {
   orderLines: OrderLine[];
   customer?: { name: string; email: string } | null;
   supplier?: { name: string; email: string } | null;
+}
+
+export interface OrderLine {
+  _id: string;
+  quantity: number;
+  unitPrice: number;
+  productId: string;
+  createdAt: { $date: Date };
+  updatedAt: { $date: Date };
+  orderId: string;
 }
 
 export interface ActiveFilters {

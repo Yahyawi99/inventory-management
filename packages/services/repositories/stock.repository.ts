@@ -89,6 +89,7 @@ export const StockRepository = {
           updatedAt: { $first: "$updatedAt" },
           totalValue: { $sum: "$itemValue" },
           totalQuantity: { $first: "$totalQuantity" },
+          stockItems: { $push: "$stockItems" },
         },
       },
     ];

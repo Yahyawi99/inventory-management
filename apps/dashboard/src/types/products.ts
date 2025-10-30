@@ -1,3 +1,7 @@
+import { Category } from "./categories";
+import { OrderLine } from "./orders";
+import { StockItem } from "./stocks";
+
 export interface Product {
   _id: string;
   name: string;
@@ -13,35 +17,6 @@ export interface Product {
   stockItems: StockItem[];
   orderLines: OrderLine[];
   totalStockQuantity: number;
-}
-
-export interface Category {
-  _id: string;
-  name: string;
-  description: string | null;
-  createdAt: { $date: Date };
-  updatedAt: { $date: Date };
-  organizationId: string;
-}
-
-export interface StockItem {
-  _id: string;
-  quantity: number;
-  createdAt: { $date: Date };
-  updatedAt: { $date: Date };
-  organizationId: string;
-  productId: string;
-  stockId: string;
-}
-
-export interface OrderLine {
-  _id: string;
-  quantity: number;
-  unitPrice: number;
-  productId: string;
-  createdAt: { $date: Date };
-  updatedAt: { $date: Date };
-  orderId: string;
 }
 
 export interface ProductsSummaryMetrics {

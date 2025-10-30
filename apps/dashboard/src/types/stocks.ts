@@ -4,8 +4,18 @@ export interface Stock {
   location: string | null;
   totalValue: number;
   totalQuantity: number;
+  stockItems: StockItem;
   createdAt: { $date: Date };
   updatedAt: { $date: Date };
+}
+export interface StockItem {
+  _id: string;
+  quantity: number;
+  createdAt: { $date: Date };
+  updatedAt: { $date: Date };
+  organizationId: string;
+  productId: string;
+  stockId: string;
 }
 
 export interface StockSummaryMetrics {
