@@ -208,13 +208,12 @@ export const CategoryFormConfig: FormConfig<SubmitData> = {
     }
 
     try {
-      const response = await fetch("/api/inventory/categories", {
+      const response = await fetch(`/api/inventory/categories/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id,
           name: data.name,
           description: data.description,
         }),
