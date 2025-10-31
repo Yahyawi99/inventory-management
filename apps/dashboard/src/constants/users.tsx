@@ -231,7 +231,8 @@ export const UserFormConfig: FormConfig<SubmitData> = {
       },
     },
   ],
-  onSubmit: async (
+  onUpdate: async (
+    id: string,
     data: SubmitData
   ): Promise<{ ok: boolean; message: string }> => {
     return { ok: true, message: "string" };
@@ -239,7 +240,40 @@ export const UserFormConfig: FormConfig<SubmitData> = {
   onDelete: async (
     recordId: string
   ): Promise<{ ok: boolean; message: string }> => {
-    return { ok: true, message: "string" };
+    if (!recordId) {
+      return {
+        ok: false,
+        message: "User id is required!",
+      };
+    }
+
+    try {
+      const response = await fetch(`/api/user/${recordId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+
+        return {
+          ok: false,
+          message: error,
+        };
+      }
+
+      return {
+        ok: true,
+        message: "User deleted successfully.",
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        message: "Failed to delete user!",
+      };
+    }
   },
 };
 

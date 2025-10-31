@@ -1,5 +1,5 @@
 import Prisma from "database";
-import { Prisma as P } from "database/generated/prisma/client";
+import { Prisma as P, User } from "database/generated/prisma/client";
 
 // Format stats
 const formatCurrency = (value: number | null | undefined): string => {
@@ -402,6 +402,28 @@ export const UserRepository = {
       return sortedActivities;
     } catch (error) {
       console.error("Error fetching recent activities:", error);
+      throw error;
+    }
+  },
+
+  async delete(orgId: string, memberId: string) {
+    try {
+      return Prisma.$transaction(async (tx) => {
+        const member = await Prisma.member.delete({
+          where: {
+            id: memberId,
+            organizationId: orgId,
+          },
+        });
+
+        const user = await Prisma.user.delete({
+          where: { id: member.userId },
+        });
+
+        return user;
+      });
+    } catch (error) {
+      console.log("Error while deleting a user: ", error);
       throw error;
     }
   },

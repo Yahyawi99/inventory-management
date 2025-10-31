@@ -135,7 +135,7 @@ export interface FormConfig<T> {
   description: string;
   entityName: string;
   fields: FormField[];
-  onSubmit: (data: T) => Promise<{ ok: boolean; message: string }>;
+  onSubmit?: (data: T) => Promise<{ ok: boolean; message: string }>;
   onUpdate: (id: string, data: T) => Promise<{ ok: boolean; message: string }>;
   onDelete: (id: string) => Promise<{ ok: boolean; message: string }>;
 }
