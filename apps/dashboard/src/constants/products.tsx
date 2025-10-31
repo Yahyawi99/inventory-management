@@ -236,12 +236,11 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       }
 
       try {
-        const response = await fetch("/api/inventory/products", {
+        const response = await fetch(`/api/inventory/products/${recordId}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ recordId }),
         });
 
         if (!response.ok) {

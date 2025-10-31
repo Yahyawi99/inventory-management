@@ -365,12 +365,11 @@ export async function getStockLocationFormConfig(
       }
 
       try {
-        const response = await fetch("/api/inventory/stocks", {
+        const response = await fetch(`/api/inventory/stocks/${recordId}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ recordId }),
         });
 
         if (!response.ok) {

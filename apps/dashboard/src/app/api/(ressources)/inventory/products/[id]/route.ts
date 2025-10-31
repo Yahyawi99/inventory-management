@@ -63,3 +63,45 @@ export async function PUT(
       );
   }
 }
+
+// DELETE
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const orgId = data?.session?.activeOrganizationId as string;
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: "Organization id is required, check your session!" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    await ProductRepository.delete(orgId, id);
+
+    return NextResponse.json(
+      { message: "Product deleted successfully!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("ProductToStockItem"))
+      return NextResponse.json(
+        {
+          error: "Cannot delete Product: it still has associated stock items.",
+        },
+        { status: 500 }
+      );
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
