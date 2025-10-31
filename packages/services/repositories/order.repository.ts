@@ -150,28 +150,63 @@ export const OrderRepository = {
 
     try {
       return await Prisma.$transaction(async (tx) => {
-        const order = await tx.order.upsert({
-          where: {
-            organizationId_orderNumber: {
-              orderNumber,
-              organizationId: orgId,
-            },
-          },
-          update: {
-            userId,
-            orderType,
-            customerId,
-            supplierId,
-            orderDate,
-            status,
-            totalAmount: Number(totalAmount),
-          },
-          create: {
+        const order = await tx.order.create({
+          data: {
             userId,
             organizationId: orgId,
             orderType,
-            customerId,
-            supplierId,
+            customerId: customerId || null,
+            supplierId: supplierId || null,
+            orderDate,
+            orderNumber,
+            status,
+            totalAmount: Number(totalAmount),
+          },
+        });
+
+        const orderLineData = orderLines.map((ol) => ({
+          orderId: order.id,
+          productId: ol.productId,
+          quantity: Number(ol.quantity),
+          unitPrice: Number(ol.unitPrice),
+        }));
+
+        await tx.orderLine.createMany({
+          data: orderLineData,
+        });
+
+        return order;
+      });
+    } catch (error) {
+      console.log("Failed to create an Order: ", error);
+      throw error;
+    }
+  },
+
+  async update(
+    orgId: string,
+    orderId: string,
+    data: SubmitData
+  ): Promise<Order | null> {
+    const {
+      orderType,
+      customerId,
+      supplierId,
+      orderDate,
+      orderNumber,
+      status,
+      totalAmount,
+      orderLines,
+    } = data;
+
+    try {
+      return Prisma.$transaction(async (tx) => {
+        const order = await tx.order.update({
+          where: { organizationId: orgId, id: orderId },
+          data: {
+            orderType,
+            customerId: customerId || null,
+            supplierId: supplierId || null,
             orderDate,
             orderNumber,
             status,
@@ -197,8 +232,8 @@ export const OrderRepository = {
         return order;
       });
     } catch (error) {
-      console.log("Failed to create an Order: ", error);
-      throw error;
+      console.log("Something went wrong during order update!", error);
+      throw null;
     }
   },
 

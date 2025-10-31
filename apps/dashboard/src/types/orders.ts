@@ -24,12 +24,12 @@ export interface Order {
 }
 
 export interface OrderLine {
-  _id: string;
+  id: string;
   quantity: number;
   unitPrice: number;
   productId: string;
-  createdAt: { $date: Date };
-  updatedAt: { $date: Date };
+  createdAt: Date;
+  updatedAt: Date;
   orderId: string;
 }
 

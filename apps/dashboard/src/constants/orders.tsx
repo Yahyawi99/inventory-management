@@ -604,6 +604,107 @@ export async function getOrderFormConfig(
         };
       }
     },
+    onUpdate: async (
+      id: string,
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      const {
+        orderType,
+        customerId,
+        supplierId,
+        orderDate,
+        orderNumber,
+        status,
+        orderLines,
+      } = data;
+
+      if (!id) {
+        return {
+          ok: false,
+          message: "Order id is required!",
+        };
+      }
+
+      const totalAmount = orderLines
+        .reduce(
+          (
+            sum: number,
+            ol: {
+              productId: string;
+              quantity: number;
+              unitPrice: number;
+            }
+          ) => {
+            const quantity = ol.quantity || 0;
+            const unitPrice = ol.unitPrice || 0;
+            return sum + quantity * unitPrice;
+          },
+          0
+        )
+        .toFixed(2);
+
+      if (!orderType || !orderDate || !orderNumber || !status) {
+        return { ok: false, message: "Please fill in the required fields!" };
+      }
+
+      if (!orderLines.length) {
+        return { ok: false, message: "You must have at least one orderLine!" };
+      } else {
+        const invalidLines = orderLines.filter(
+          (line) => !line.productId || !line.quantity || !line.unitPrice
+        );
+
+        if (invalidLines.length > 0) {
+          return {
+            ok: false,
+            message:
+              "All order lines must have a product, valid quantity, and price",
+          };
+        }
+      }
+
+      if (!customerId && !supplierId) {
+        return {
+          ok: false,
+          message: "Please provide either customerId or supplierId",
+        };
+      }
+
+      try {
+        const response = await fetch(`/api/orders/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...data,
+            orderDate: new Date(data.orderDate),
+            totalAmount,
+          }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error.message,
+          };
+        }
+
+        return {
+          ok: true,
+          message: "Order updated Successfully",
+        };
+      } catch (error) {
+        return {
+          ok: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to update an Order!",
+        };
+      }
+    },
     onDelete: async (
       recordId: string
     ): Promise<{ ok: boolean; message: string }> => {
