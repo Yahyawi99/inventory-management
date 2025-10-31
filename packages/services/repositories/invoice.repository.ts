@@ -187,32 +187,10 @@ export const InvoiceRepository = {
 
   async create(orgId: string, userId: string, data: SubmitData) {
     try {
-      const invoice = await Prisma.invoice.upsert({
-        where: {
-          organizationId_invoiceNumber: {
-            organizationId: orgId,
-            invoiceNumber: data.invoiceNumber,
-          },
-        },
-        create: {
-          organization: {
-            connect: { id: orgId },
-          },
-          user: {
-            connect: { id: userId },
-          },
-          invoiceNumber: data.invoiceNumber,
-          invoiceDate: data.invoiceDate,
-          dueDate: data.dueDate,
-          status: data.status,
-          totalAmount: Number(data.totalAmount),
-          order: {
-            connect: {
-              id: data.orderId,
-            },
-          },
-        },
-        update: {
+      const invoice = await Prisma.invoice.create({
+        data: {
+          organizationId: orgId,
+          userId,
           invoiceNumber: data.invoiceNumber,
           invoiceDate: data.invoiceDate,
           dueDate: data.dueDate,
@@ -225,6 +203,27 @@ export const InvoiceRepository = {
       return invoice;
     } catch (error) {
       console.log("Failed to create invoice ", error);
+      throw error;
+    }
+  },
+
+  async update(orgId: string, id: string, data: SubmitData) {
+    try {
+      const invoice = await Prisma.invoice.update({
+        where: { organizationId: orgId, id },
+        data: {
+          invoiceNumber: data.invoiceNumber,
+          invoiceDate: data.invoiceDate,
+          dueDate: data.dueDate,
+          status: data.status,
+          totalAmount: Number(data.totalAmount),
+          orderId: data.orderId,
+        },
+      });
+
+      return invoice;
+    } catch (error) {
+      console.log("Failed to update invoice ", error);
       throw error;
     }
   },

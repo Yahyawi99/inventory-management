@@ -213,6 +213,92 @@ export async function getInvoiceFormConfig(
         };
       }
     },
+    onUpdate: async (
+      id: string,
+      data: SubmitData
+    ): Promise<{ ok: boolean; message: string }> => {
+      const {
+        invoiceNumber,
+        invoiceDate,
+        dueDate,
+        totalAmount,
+        status,
+        orderId,
+      } = data;
+
+      if (!id) {
+        return {
+          ok: false,
+          message: "Invoice id is required!",
+        };
+      }
+
+      if (
+        !invoiceNumber ||
+        !invoiceDate ||
+        !dueDate ||
+        !totalAmount ||
+        !status ||
+        !orderId
+      ) {
+        return {
+          ok: false,
+          message: "Please fill in all required field!",
+        };
+      }
+
+      if (new Date(invoiceDate.$date) > new Date(dueDate.$date)) {
+        return {
+          ok: false,
+          message: "Invoice date cannot be after the due date",
+        };
+      }
+
+      if (totalAmount <= 0) {
+        return {
+          ok: false,
+          message: "Total amount must be greater than zero",
+        };
+      }
+
+      const invoiceData = {
+        invoiceNumber: invoiceNumber,
+        invoiceDate: new Date(invoiceDate.$date),
+        dueDate: new Date(dueDate.$date),
+        totalAmount,
+        status: status,
+        orderId: orderId,
+      };
+
+      try {
+        const response = await fetch(`/api/invoices/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(invoiceData),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: `Invoice ${invoiceNumber} updated successfully`,
+        };
+      } catch (error) {
+        console.error("Error updating invoice:", error);
+        return {
+          ok: false,
+          message: "Failed to update invoice. Please try again.",
+        };
+      }
+    },
     onDelete: async (
       recordId: string
     ): Promise<{ ok: boolean; message: string }> => {

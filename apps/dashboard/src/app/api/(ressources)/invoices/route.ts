@@ -4,7 +4,6 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { OrderType } from "@/types/orders";
 import { InvoiceStatus } from "@database/generated/prisma";
-import { SubmitData } from "@/types/invoices";
 import { deleteData } from "@/types/shared";
 
 interface Filters {
@@ -81,7 +80,7 @@ export async function GET(req: NextRequest) {
 
 // POST
 export async function POST(req: NextRequest) {
-  const body: SubmitData = await req.json();
+  const body = await req.json();
 
   const data = await auth.api.getSession({
     headers: await headers(),
