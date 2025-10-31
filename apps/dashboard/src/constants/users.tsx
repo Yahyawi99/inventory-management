@@ -141,7 +141,7 @@ export const UserFormConfig: FormConfig<SubmitData> = {
       gridArea: "1",
     },
     {
-      name: "role",
+      name: "memberRole",
       label: "User Role",
       type: "select",
       required: true,
