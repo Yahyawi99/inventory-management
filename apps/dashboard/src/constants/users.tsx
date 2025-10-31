@@ -1,30 +1,18 @@
-import {
-  Button,
-  Input,
-  RecordActions,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "app-core/src/components";
+import { Input, RecordActions } from "app-core/src/components";
 import {
   Badge,
   Briefcase,
   CheckCircle,
   DollarSign,
-  Edit,
   Mail,
   Package,
   ShoppingCart,
-  Trash2,
   TrendingUp,
   UserIcon,
 } from "lucide-react";
 import { getRoleBadgeColor } from "@/utils/users";
 import { SubmitData, User } from "@/types/users";
 import { Column, FormConfig } from "app-core/src/types";
-import { boolean } from "better-auth/*";
 
 export const roles = [
   { value: "owner", label: "Owner" },
@@ -156,13 +144,14 @@ export const UserFormConfig: FormConfig<SubmitData> = {
       name: "role",
       label: "User Role",
       type: "select",
-      required: false,
+      required: true,
       options: [
-        { id: "ADMIN", name: "Administrator" },
-        { id: "MANAGER", name: "Manager" },
-        { id: "EMPLOYEE", name: "Employee" },
-        { id: "VIEWER", name: "Viewer" },
-        { id: "INTERN", name: "Intern" },
+        { id: "admin", name: "Administrator" },
+        { id: "manager", name: "Manager" },
+        { id: "employee", name: "Employee" },
+        { id: "viewer", name: "Viewer" },
+        { id: "contributor", name: "Contributor" },
+        { id: "intern", name: "Intern" },
       ],
       gridArea: "1/2",
       defaultValue: "EMPLOYEE",
@@ -218,24 +207,56 @@ export const UserFormConfig: FormConfig<SubmitData> = {
         value: true,
       },
     },
-    {
-      name: "banExpires",
-      label: "Ban Expiry Date",
-      type: "date",
-      required: false,
-      placeholder: "When the ban expires",
-      gridArea: "1/2",
-      dependsOn: {
-        field: "banned",
-        value: true,
-      },
-    },
   ],
   onUpdate: async (
     id: string,
     data: SubmitData
   ): Promise<{ ok: boolean; message: string }> => {
-    return { ok: true, message: "string" };
+    if (
+      !data.name ||
+      !data.email ||
+      !data.role ||
+      !data.status ||
+      !data.image
+    ) {
+      return { ok: false, message: "PLease, fill out all required fields!" };
+    }
+
+    if (!id) {
+      return { ok: false, message: "User id is required!" };
+    }
+
+    try {
+      const response = await fetch(`/api/user/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+        }),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        return {
+          ok: false,
+          message: error,
+        };
+      }
+
+      return {
+        ok: true,
+        message: "User updated successfully.",
+      };
+    } catch (error) {
+      console.log("Failed to update User");
+      return {
+        ok: false,
+        message:
+          error instanceof Error ? error.message : "Failed to update User",
+      };
+    }
   },
   onDelete: async (
     recordId: string

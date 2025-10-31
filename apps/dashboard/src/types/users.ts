@@ -82,16 +82,12 @@ export interface Session {
 }
 
 export interface SubmitData {
-  id?: string;
   name: string;
   email: string;
-  password?: string;
-  image?: string;
-  role?: string;
+  image: string;
+  role: string;
   status: UserStatus;
-  emailVerified?: boolean;
-  twoFactorEnabled?: boolean;
-  banned?: boolean;
-  banReason?: string;
-  banExpires?: string;
+  emailVerified: boolean;
+  banned: boolean;
+  banReason: string;
 }

@@ -1,5 +1,9 @@
 import Prisma from "database";
-import { Prisma as P, User } from "database/generated/prisma/client";
+import {
+  Prisma as P,
+  User,
+  UserStatus,
+} from "database/generated/prisma/client";
 
 // Format stats
 const formatCurrency = (value: number | null | undefined): string => {
@@ -13,15 +17,22 @@ const formatCurrency = (value: number | null | undefined): string => {
   return `$${value}`;
 };
 
-type Entity<T = Record<string, any>> = {
-  [K in keyof T]: T[K];
-};
-
 interface Activity {
   action: string;
   time: Date;
   type: string;
   entity: string;
+}
+
+interface SubmitData {
+  name: string;
+  email: string;
+  role: string;
+  status: UserStatus;
+  image: string;
+  emailVerified: boolean;
+  banned: boolean;
+  banReason: string;
 }
 
 // Repository
@@ -406,7 +417,7 @@ export const UserRepository = {
     }
   },
 
-  async delete(orgId: string, memberId: string) {
+  async delete(orgId: string, memberId: string): Promise<User | null> {
     try {
       return Prisma.$transaction(async (tx) => {
         const member = await Prisma.member.delete({
@@ -424,6 +435,42 @@ export const UserRepository = {
       });
     } catch (error) {
       console.log("Error while deleting a user: ", error);
+      throw error;
+    }
+  },
+
+  async update(
+    orgId: string,
+    memberId: string,
+    data: SubmitData
+  ): Promise<User | null> {
+    const { role, image, emailVerified, banned, banReason } = data;
+
+    console.log(data);
+    try {
+      return await Prisma.$transaction(async (tx) => {
+        const member = await Prisma.member.update({
+          where: { id: memberId, organizationId: orgId },
+          data: {
+            role,
+          },
+        });
+
+        const user = await Prisma.user.update({
+          where: { id: member?.userId },
+          data: {
+            ...data,
+            image: image || null,
+            emailVerified,
+            banned,
+            banReason: banReason || null,
+          },
+        });
+
+        return user;
+      });
+    } catch (error) {
+      console.log("Failed to update a user: ", error);
       throw error;
     }
   },

@@ -93,7 +93,6 @@ model User {
   role             String?
   banned           Boolean?   @default(false)
   banReason        String?
-  banExpires       DateTime?
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
