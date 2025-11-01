@@ -15,7 +15,6 @@ import { SubmitData, User } from "@/types/users";
 import { Column, FormConfig } from "app-core/src/types";
 
 export const roles = [
-  { value: "owner", label: "Owner" },
   { value: "admin", label: "Admin" },
   { value: "member", label: "Member" },
   { value: "manager", label: "Manager" },

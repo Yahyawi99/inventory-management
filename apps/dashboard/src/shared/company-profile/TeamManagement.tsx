@@ -29,23 +29,6 @@ import {
 } from "lucide-react";
 import { UserRoles } from "@/types/users";
 
-// export const pendingInvitations = [
-//   {
-//     id: 101,
-//     email: "alex.doe@example.com",
-//     role: "Editor",
-//     invitedAt: "2024-09-23",
-//     expiresAt: "2024-09-24",
-//   },
-//   {
-//     id: 102,
-//     email: "jessica.k@example.com",
-//     role: "Viewer",
-//     invitedAt: "2024-09-28",
-//     expiresAt: "2024-09-29",
-//   },
-// ];
-
 export default function TeamManagement() {
   const [recentMembers, setRecentMembers] = useState<Member[] | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -117,13 +100,6 @@ export default function TeamManagement() {
     }
   };
 
-  const handleRetry = () => {
-    fetchRecentUsers();
-  };
-  const handleInvitaionRetry = () => {
-    fetchInvitations();
-  };
-
   const resendInvitation = async (email: string, userRole: string) => {
     await authClient.organization.inviteMember({
       email,
@@ -135,6 +111,8 @@ export default function TeamManagement() {
     await authClient.organization.cancelInvitation({
       invitationId: id,
     });
+
+    fetchInvitations();
   };
 
   useEffect(() => {
@@ -230,7 +208,7 @@ export default function TeamManagement() {
               Failed to Load recent team members
             </p>
             <p className="text-gray-500 text-sm mb-4">{error}</p>
-            <Button onClick={handleRetry} variant="outline">
+            <Button onClick={() => fetchRecentUsers()} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
             </Button>
@@ -279,7 +257,7 @@ export default function TeamManagement() {
               Failed to Load pending invitations
             </p>
             <p className="text-amber-500 text-sm mb-2">{error}</p>
-            <Button onClick={handleInvitaionRetry} variant="outline">
+            <Button onClick={() => fetchInvitations()} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
             </Button>
