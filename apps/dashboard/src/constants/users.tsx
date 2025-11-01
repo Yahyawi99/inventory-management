@@ -28,17 +28,6 @@ export const roles = [
 // Table
 export const tableColumns: Column<User>[] = [
   {
-    key: "checkbox",
-    header: (
-      <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
-    ),
-    render: () => (
-      <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
-    ),
-    headClass: "w-[50px] px-4 py-3",
-    cellClass: "text-center px-4 py-3",
-  },
-  {
     key: "name",
     header: (
       <div className="flex justify-center items-center space-x-2">
@@ -147,10 +136,12 @@ export const UserFormConfig: FormConfig<SubmitData> = {
       required: true,
       options: [
         { id: "admin", name: "Administrator" },
+        { id: "analyst", name: "Analyst" },
         { id: "manager", name: "Manager" },
+        { id: "member", name: "Member" },
+        { id: "contributor", name: "Contributor" },
         { id: "employee", name: "Employee" },
         { id: "viewer", name: "Viewer" },
-        { id: "contributor", name: "Contributor" },
         { id: "intern", name: "Intern" },
       ],
       gridArea: "1/2",

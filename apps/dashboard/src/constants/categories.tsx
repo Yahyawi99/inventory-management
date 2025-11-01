@@ -45,17 +45,6 @@ export const categoryCategoryFilters = {
 // Table Data
 export const tableColumns: Column<Category>[] = [
   {
-    key: "checkbox",
-    header: (
-      <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
-    ),
-    render: () => (
-      <Input type="checkbox" className="h-4 w-4 rounded-sm border-gray-300" />
-    ),
-    headClass: "w-[50px] px-4 py-3",
-    cellClass: "text-center px-4 py-3",
-  },
-  {
     key: "name",
     header: "Category Name",
     render: (category) => (
