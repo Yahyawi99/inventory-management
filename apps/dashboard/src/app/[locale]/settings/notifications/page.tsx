@@ -1,4 +1,4 @@
-import Main from "@/shared/account/settings/Notifications";
+import Main from "@/shared/notifications/Notifications";
 import Header from "@/layouts/main/header";
 
 export default function Page() {
