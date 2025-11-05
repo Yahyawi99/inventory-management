@@ -117,7 +117,7 @@ const Footer = ({ user }: { user: User | null }) => {
           />
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
+        <DropdownMenuContent className="bg-card">
           <DropdownMenuLabel className="font-black">
             My Account
           </DropdownMenuLabel>

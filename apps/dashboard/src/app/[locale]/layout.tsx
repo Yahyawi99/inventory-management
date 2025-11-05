@@ -1,5 +1,5 @@
 import MainLayout from "@/layouts/main/layout";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, ThemeProvider } from "@/context";
 
 export default function HomeLayout({
   children,
@@ -8,7 +8,9 @@ export default function HomeLayout({
 }) {
   return (
     <AuthProvider>
-      <MainLayout>{children}</MainLayout>;
+      <ThemeProvider>
+        <MainLayout>{children}</MainLayout>;
+      </ThemeProvider>
     </AuthProvider>
   );
 }
