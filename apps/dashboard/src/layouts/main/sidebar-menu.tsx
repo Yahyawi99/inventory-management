@@ -24,10 +24,13 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
   return (
     <SidebarMenu>
       {subMenuItems.length ? (
-        <Collapsible className="group mb-3 text-(--border)" defaultOpen={false}>
+        <Collapsible
+          className="group mb-3 text-(--border) dark:text-foreground"
+          defaultOpen={false}
+        >
           <SidebarMenuItem key={id}>
             <CollapsibleTrigger
-              className="data-[state=open]:hover:text-(--ring) hover:text-(--ring) data-[state=open]:active:text-(--ring) data-[state=closed]:active:text-(--ring)"
+              className="data-[state=open]:hover:text-(--ring) hover:text-(--ring) data-[state=open]:active:text-(--ring) data-[state=closed]:active:text-(--ring) cursor-pointer"
               asChild
             >
               <SidebarMenuButton className="flex justify-between hover:!bg-transparent focus:!bg-transparent active:!bg-transparent hover:text-(--ring)">
@@ -50,7 +53,7 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
                   return (
                     <SidebarMenuSubItem key={subId}>
                       <SidebarMenuSubButton
-                        className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent  text-(--border) decoration-3 hover:underline hover:text-(--border) "
+                        className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent  text-(--border) decoration-3 hover:underline hover:text-(--border) dark:text-muted-foreground"
                         asChild
                       >
                         <Link href={href!}>
@@ -67,10 +70,10 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
       ) : (
         <SidebarMenuItem
           key={id}
-          className="mb-3 px-2 text-(--border) hover:text-(--ring)"
+          className="mb-3 px-2 dark:text-foreground text-(--border) hover:!text-(--ring)"
         >
-          <FontAwesomeIcon icon={icon} className="mr-2" />
-          <Link href={href as string}>
+          <FontAwesomeIcon icon={icon} className="mr-2 text-inherit" />
+          <Link href={href as string} className="text-inherit">
             <span className="text-[1.25rem] font-bold">{name}</span>
           </Link>
         </SidebarMenuItem>

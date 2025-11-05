@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, useTheme } from "@/context";
 import { User } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import { MenuItems } from "./sidebar-menu-items";
@@ -29,6 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function MainSidebar() {
   const { user } = useAuth();
+  const { theme } = useTheme();
 
   return (
     <Sidebar>
@@ -47,7 +48,7 @@ export default function MainSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <Footer user={user} />
+        <Footer user={user} theme={theme} />
       </SidebarFooter>
     </Sidebar>
   );
@@ -79,7 +80,7 @@ const Header = () => {
   );
 };
 
-const Footer = ({ user }: { user: User | null }) => {
+const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
   const router = useRouter();
 
   const onLogOutHandler = async () => {
@@ -117,7 +118,11 @@ const Footer = ({ user }: { user: User | null }) => {
           />
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="bg-card">
+        <DropdownMenuContent
+          className={`text-foreground ${
+            theme === "dark" && "bg-[#151a26] text-[#ebeef5]"
+          }`}
+        >
           <DropdownMenuLabel className="font-black">
             My Account
           </DropdownMenuLabel>
@@ -125,41 +130,58 @@ const Footer = ({ user }: { user: User | null }) => {
           <DropdownMenuSeparator />
 
           <Link href={"/en/account"}>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className={`cursor-pointer ${
+                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+              }`}
+            >
               Account
             </DropdownMenuItem>
           </Link>
+
           <Link href={"/en/account/activity"}>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className={`cursor-pointer ${
+                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+              }`}
+            >
               My Activity
             </DropdownMenuItem>
           </Link>
 
-          <DropdownMenuSeparator />
-
           <Link href={"/en/account/billing"}>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className={`cursor-pointer ${
+                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+              }`}
+            >
               Billing & Subscriptions
             </DropdownMenuItem>
           </Link>
           <Link href={"/en/account/premissions"}>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className={`cursor-pointer ${
+                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+              }`}
+            >
               Users & Permissions
             </DropdownMenuItem>
           </Link>
 
-          <DropdownMenuSeparator />
-
           <Link href={"/en/account/settings"}>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className={`cursor-pointer ${
+                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+              }`}
+            >
               Settings
             </DropdownMenuItem>
           </Link>
 
-          <DropdownMenuSeparator />
-
           <DropdownMenuItem
-            className="cursor-pointer"
+            className={`cursor-pointer ${
+              theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+            }`}
             onClick={onLogOutHandler}
           >
             Log Out
