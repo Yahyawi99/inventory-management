@@ -75,19 +75,19 @@ export function FilterDrawer({
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 p-0 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+          className="h-8 w-8 p-0 rounded-md border border-gray-300 text-foreground hover:bg-gray-100 transition-colors duration-200"
         >
           <Filter className="h-5 w-5" />
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="focus:outline-none">
+      <DrawerContent className="focus:outline-none bg-background">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className="text-2xl font-bold text-gray-900">
+            <DrawerTitle className="text-2xl font-bold text-foreground">
               {data?.header.title}
             </DrawerTitle>
-            <DrawerDescription className="text-gray-500">
+            <DrawerDescription className="text-muted-foreground">
               {data?.header.desc}
             </DrawerDescription>
           </DrawerHeader>
@@ -101,7 +101,7 @@ export function FilterDrawer({
                       <div>
                         <Label
                           htmlFor={`${filterKey}-filter`}
-                          className="text-base font-semibold text-gray-700 mb-2 block"
+                          className="text-base font-semibold text-muted-foreground mb-2 block"
                         >
                           {filterConfig.name}
                         </Label>
@@ -114,12 +114,12 @@ export function FilterDrawer({
                         >
                           <SelectTrigger
                             id={`${filterKey}-filter`}
-                            className="w-full"
+                            className="w-full text-foreground"
                           >
                             <SelectValue placeholder={`Select ${filterKey}`} />
                           </SelectTrigger>
 
-                          <SelectContent>
+                          <SelectContent className="bg-card">
                             {Array.isArray(filterConfig.options) &&
                               filterConfig.options.map(
                                 ({
@@ -139,8 +139,6 @@ export function FilterDrawer({
                           </SelectContent>
                         </Select>
                       </div>
-
-                      <Separator className="bg-gray-200" />
                     </div>
                   );
                 }
@@ -152,7 +150,7 @@ export function FilterDrawer({
               <Button
                 variant="outline"
                 onClick={onClearFilters}
-                className="w-1/2 mr-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                className="w-1/2 mr-2 border-border text-foreground hover:bg-muted-foreground transition-colors duration-200"
               >
                 Clear Filters
               </Button>

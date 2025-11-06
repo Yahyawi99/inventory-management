@@ -68,9 +68,9 @@ export function PagePagination({
             variant="ghost"
             onClick={() => onPageChange(safeCurrentPage - 1)}
             disabled={safeCurrentPage <= 1}
-            className="px-2"
+            className="mx-1 px-0"
           >
-            <PaginationPrevious href="#" />
+            <PaginationPrevious />
           </Button>
         </PaginationItem>
 
@@ -78,9 +78,7 @@ export function PagePagination({
         {pageNumbers[0] > 1 && (
           <>
             <PaginationItem>
-              <PaginationLink href="#" onClick={() => onPageChange(1)}>
-                1
-              </PaginationLink>
+              <PaginationLink onClick={() => onPageChange(1)}>1</PaginationLink>
             </PaginationItem>
             {pageNumbers[0] > 2 && (
               <PaginationItem>
@@ -94,9 +92,13 @@ export function PagePagination({
         {pageNumbers.map((page) => (
           <PaginationItem key={page}>
             <PaginationLink
-              href="#"
               isActive={page === safeCurrentPage}
               onClick={() => onPageChange(page)}
+              className={`${
+                page === safeCurrentPage
+                  ? "pointer-events-none"
+                  : "cursor-pointer"
+              }`}
             >
               {page}
             </PaginationLink>
@@ -112,7 +114,7 @@ export function PagePagination({
               </PaginationItem>
             )}
             <PaginationItem>
-              <PaginationLink href="#" onClick={() => onPageChange(totalPages)}>
+              <PaginationLink onClick={() => onPageChange(totalPages)}>
                 {totalPages}
               </PaginationLink>
             </PaginationItem>
@@ -124,9 +126,9 @@ export function PagePagination({
             variant="ghost"
             onClick={() => onPageChange(safeCurrentPage + 1)}
             disabled={safeCurrentPage >= totalPages}
-            className="px-2"
+            className="mx-1 px-0"
           >
-            <PaginationNext href="#" />
+            <PaginationNext />
           </Button>
         </PaginationItem>
       </PaginationContent>

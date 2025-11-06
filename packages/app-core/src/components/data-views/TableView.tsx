@@ -19,11 +19,11 @@ export function TableView({
   children,
 }: DataTableProps) {
   return (
-    <Card className="w-full mx-auto rounded-lg shadow-lg border border-gray-200">
+    <Card className="w-full mx-auto rounded-lg shadow-lg border border-border">
       <CardContent className="p-0">
         {!isFetchingData ? (
           data.length === 0 ? (
-            <div className="text-center text-gray-500 py-10">
+            <div className="text-center text-muted-foreground py-10">
               <p>No records found for this organization.</p>
             </div>
           ) : (

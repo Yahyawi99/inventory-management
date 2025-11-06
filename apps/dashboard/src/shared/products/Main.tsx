@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, useTheme } from "@/context";
 import { useRouter } from "next/navigation";
 import { Product, ProductsSummaryMetrics, SubmitData } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
@@ -37,6 +37,7 @@ const headerData = {
 
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
+  const { theme } = useTheme();
   const router = useRouter();
 
   const [tableProducts, setTableProducts] = useState<Product[]>([]);

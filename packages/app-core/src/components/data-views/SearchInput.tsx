@@ -9,13 +9,13 @@ interface Props {
 export function SearchInput({ searchQuery, onSearchChange }: Props) {
   return (
     <div className="relative flex items-center w-full max-w-xs">
-      <Search className="absolute left-3 h-5 w-5 text-gray-400" />
+      <Search className="absolute left-3 h-5 w-5 text-muted-foreground" />
       <Input
         type="text"
         placeholder="Search..."
         value={searchQuery}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:ring-purple-500 focus:border-purple-500 shadow-sm transition-all duration-200"
+        className="pl-10 pr-4 py-2 rounded-md border border-border focus:ring-purple-500 focus:border-purple-500 shadow-sm transition-all duration-200"
       />
     </div>
   );

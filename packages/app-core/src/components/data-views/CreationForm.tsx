@@ -54,6 +54,11 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
     setMessage(null);
 
     try {
+      if (!formConfig.onSubmit) {
+        alert({ ok: false, message: "No submit handler provided." });
+        return;
+      }
+
       const response = await formConfig.onSubmit(formData);
 
       if (!response.ok) {
@@ -107,12 +112,14 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
+      <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden bg-background text-foreground border-border">
         <DialogHeader className="px-6 pt-6 pb-4 shrink-0">
           <DialogTitle className="text-2xl font-bold">
             {formConfig.title}
           </DialogTitle>
-          <DialogDescription>{formConfig.description}</DialogDescription>
+          <DialogDescription className="text-muted-foreground">
+            {formConfig.description}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="px-6 pb-6 overflow-y-auto flex-1">
@@ -161,7 +168,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-4 border-t  bg-white">
+        <div className="px-6 pb-6 pt-4 border-t">
           {message && (
             <Alert
               variant={!message.ok ? "destructive" : "default"}

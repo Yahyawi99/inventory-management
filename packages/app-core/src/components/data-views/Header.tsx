@@ -11,11 +11,11 @@ interface Props<T> {
 export function Header<T>({ exportData, data, formConfig }: Props<T>) {
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
-      <h1 className="text-3xl font-bold text-gray-900">{data.title}</h1>
+      <h1 className="text-3xl font-bold text-foreground">{data.title}</h1>
       <div className="flex items-center space-x-3">
         <Button
           variant="outline"
-          className="flex items-center space-x-1 border-gray-300 text-gray-700 hover:bg-gray-100"
+          className="flex items-center space-x-1 border-border text-muted-foreground hover:bg-foreground"
           onClick={exportData}
         >
           <svg

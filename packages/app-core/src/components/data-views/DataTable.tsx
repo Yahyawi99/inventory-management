@@ -17,11 +17,14 @@ interface ordersProps<T extends Data> {
 export function DataTable<T extends Data>({ data, columns }: ordersProps<T>) {
   return (
     <Table>
-      <TableHeader className="bg-gray-100">
-        <TableRow className="border-b border-gray-200">
+      <TableHeader className="bg-muted">
+        <TableRow className="border-b border-border">
           {columns.map((column) => {
             return (
-              <TableHead key={column.key} className={column.headClass}>
+              <TableHead
+                key={column.key}
+                className={`${column.headClass} text-muted-foreground`}
+              >
                 {column.header}
               </TableHead>
             );
@@ -34,7 +37,7 @@ export function DataTable<T extends Data>({ data, columns }: ordersProps<T>) {
           return (
             <TableRow
               key={row.id || row._id}
-              className="border-b border-gray-100 hover:bg-gray-50"
+              className="border-b border-border hover:bg-gray-50 dark:hover:bg-border"
             >
               {columns.map((column) => {
                 return (

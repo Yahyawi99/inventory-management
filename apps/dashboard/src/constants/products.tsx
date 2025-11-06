@@ -277,7 +277,7 @@ export function getTableColumns(
       key: "name",
       header: "Product Name",
       render: (product) => (
-        <span className="font-medium text-gray-900">{product.name}</span>
+        <span className="font-medium text-foreground">{product.name}</span>
       ),
       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center font-medium text-gray-900",
@@ -285,7 +285,9 @@ export function getTableColumns(
     {
       key: "sku",
       header: "SKU",
-      render: (product) => <span className="text-gray-700">{product.sku}</span>,
+      render: (product) => (
+        <span className="text-muted-foreground">{product.sku}</span>
+      ),
       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center text-gray-700",
     },
@@ -293,7 +295,7 @@ export function getTableColumns(
       key: "category",
       header: "Category",
       render: (product) => (
-        <span className="text-gray-700">
+        <span className="text-muted-foreground">
           {product.category ? product.category.name : "N/A"}
         </span>
       ),
@@ -304,7 +306,7 @@ export function getTableColumns(
       key: "price",
       header: "Price",
       render: (product) => (
-        <span className="font-medium text-gray-900">
+        <span className="font-medium text-foreground">
           ${product.price.toFixed(2)}
         </span>
       ),
@@ -312,7 +314,7 @@ export function getTableColumns(
       cellClass: "text-center font-medium text-gray-900",
     },
     {
-      key: "stockStatus", // Custom key for derived status
+      key: "stockStatus",
       header: "Stock Status",
       render: (product) => {
         const statusDisplay = getProductStockStatusDisplay(product.stockItems);
@@ -328,10 +330,10 @@ export function getTableColumns(
       cellClass: "text-center",
     },
     {
-      key: "totalStock", // Custom key for total stock quantity
+      key: "totalStock",
       header: "Total Stock",
       render: (product) => (
-        <span className="text-gray-700">
+        <span className="text-muted-foreground">
           {getTotalProductStockQuantity(product.stockItems)}
         </span>
       ),

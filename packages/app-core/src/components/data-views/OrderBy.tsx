@@ -38,7 +38,7 @@ export function OrderByDropdown({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="h-8 w-8 p-0 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+          className="h-8 w-8 p-0 rounded-md border border-gray-300 text-foreground hover:bg-gray-100 transition-colors duration-200"
         >
           {/* Display current sort icon, or default if no sort */}
           {currentSort.field && currentSort.direction === "asc" ? (

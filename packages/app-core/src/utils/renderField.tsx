@@ -192,7 +192,7 @@ export const renderField = (
           <SelectTrigger className="w-full">
             <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-card">
             {field.options?.map((option) => {
               return (
                 <SelectItem key={option.id} value={option.id}>

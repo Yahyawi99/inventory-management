@@ -61,7 +61,7 @@ export function DataControls({
 
   return (
     <div className="flex items-center justify-between my-4">
-      <div className="flex space-x-2 bg-white p-1 rounded-full">
+      <div className="flex space-x-2 bg-card shadow-accent p-1 border border-border rounded-full">
         {filterOptions.values.map((value) => {
           return (
             <Button
@@ -74,7 +74,7 @@ export function DataControls({
               className={`text-sm rounded-full px-4 cursor-pointer ${
                 activeFilters[filterOptions.field] === value
                   ? "bg-sidebar text-white hover:bg-sidebar"
-                  : "text-gray-700 hover:bg-gray-100"
+                  : "text-muted-foreground hover:bg-gray-100"
               }`}
               onClick={() =>
                 setActiveFilters({
