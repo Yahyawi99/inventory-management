@@ -13,12 +13,12 @@ export default function AuthOptionsSelector({
   onSelectOption,
 }: AuthOptionsSelectorProps) {
   return (
-    <div className="mb-8 p-4 border border-gray-200 rounded-md bg-gray-50">
-      <h3 className="text-lg font-semibold mb-2 text-gray-800">
+    <div className="mb-8 p-4 border border-border rounded-md bg-background">
+      <h3 className="text-lg font-semibold mb-2 text-muted-foreground">
         Authentication Options
       </h3>
 
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-sm text-muted-foreground mb-4">
         Choose your preferred method. Email & Password registration is always
         available.
       </p>

@@ -157,10 +157,10 @@ export default function SignUpForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto rounded-lg shadow-lg">
       <CardHeader className="text-center pb-4">
-        <CardTitle className="text-3xl font-bold text-gray-800">
+        <CardTitle className="text-3xl font-bold text-foreground">
           Join WF
         </CardTitle>
-        <CardDescription className="text-gray-600">
+        <CardDescription className="text-muted-foreground">
           Register your organization to start managing your inventory
           efficiently. You'll need to verify your email address after
           registration.
@@ -176,13 +176,13 @@ export default function SignUpForm() {
 
         {/* Organization Information Section */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">
+          <h3 className="text-lg font-semibold mb-4 text-foreground">
             Company Information
           </h3>
           <form className="grid gap-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="org-name" className="text-gray-700">
+                <Label htmlFor="org-name" className="text-muted-foreground">
                   Company Name *
                 </Label>
                 <Input
@@ -191,11 +191,11 @@ export default function SignUpForm() {
                   required
                   value={orgName}
                   onChange={(e) => setOrgName(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="short-name" className="text-gray-700">
+                <Label htmlFor="short-name" className="text-muted-foreground">
                   Short Name
                 </Label>
                 <Input
@@ -203,12 +203,12 @@ export default function SignUpForm() {
                   placeholder="e.g. MCI (used for organization slug)"
                   value={shortName}
                   onChange={(e) => setShortName(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                 />
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="description" className="text-gray-700">
+              <Label htmlFor="description" className="text-muted-foreground">
                 Description *
               </Label>
               <Textarea
@@ -217,12 +217,12 @@ export default function SignUpForm() {
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="min-h-[80px] border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                className="min-h-[80px] border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="org-email" className="text-gray-700">
+                <Label htmlFor="org-email" className="text-muted-foreground">
                   Company Email *
                 </Label>
                 <Input
@@ -232,11 +232,11 @@ export default function SignUpForm() {
                   required
                   value={orgEmail}
                   onChange={(e) => setOrgEmail(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="website" className="text-gray-700">
+                <Label htmlFor="website" className="text-muted-foreground">
                   Website
                 </Label>
                 <Input
@@ -245,7 +245,7 @@ export default function SignUpForm() {
                   placeholder="https://mycompany.org"
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
-                  className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                  className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                 />
               </div>
             </div>
@@ -255,13 +255,13 @@ export default function SignUpForm() {
         {/* Admin Account Section */}
         {selectedAuthOption === "Email" && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+            <h3 className="text-lg font-semibold mb-4 text-foreground">
               Admin Account
             </h3>
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="your-name" className="text-gray-700">
+                  <Label htmlFor="your-name" className="text-muted-foreground">
                     Your Name *
                   </Label>
                   <Input
@@ -270,11 +270,11 @@ export default function SignUpForm() {
                     required
                     value={yourName}
                     onChange={(e) => setYourName(e.target.value)}
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                    className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="your-email" className="text-gray-700">
+                  <Label htmlFor="your-email" className="text-muted-foreground">
                     Your Email * (verification required)
                   </Label>
                   <Input
@@ -284,14 +284,14 @@ export default function SignUpForm() {
                     required
                     value={yourEmail}
                     onChange={(e) => setYourEmail(e.target.value)}
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                    className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-gray-700">
+                  <Label htmlFor="password" className="text-muted-foreground">
                     Password *
                   </Label>
                   <Input
@@ -302,11 +302,14 @@ export default function SignUpForm() {
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                    className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="confirm-password" className="text-gray-700">
+                  <Label
+                    htmlFor="confirm-password"
+                    className="text-muted-foreground"
+                  >
                     Confirm Password *
                   </Label>
                   <Input
@@ -316,7 +319,7 @@ export default function SignUpForm() {
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md"
+                    className="border-border focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
                   />
                 </div>
               </div>
@@ -341,13 +344,13 @@ export default function SignUpForm() {
             : "Create Account & Send Verification"}
         </Button>
 
-        <div className="text-center text-xs text-gray-500 bg-gray-50 p-3 rounded-md">
+        <div className="text-center text-xs text-muted-foreground bg-border p-3 rounded-md">
           After registration, you'll receive a verification email with a 6-digit
           code. Please check your inbox and verify your email to complete the
           setup.
         </div>
 
-        <div className="text-center text-sm text-gray-700">
+        <div className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <a
             href="sign-in"
@@ -356,7 +359,7 @@ export default function SignUpForm() {
             Sign In
           </a>
         </div>
-        <div className="text-center text-sm text-gray-500 mt-2">
+        <div className="text-center text-sm text-muted-foreground mt-2">
           <a
             href="/"
             className="hover:underline flex items-center justify-center space-x-1"

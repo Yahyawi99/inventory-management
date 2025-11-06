@@ -1,5 +1,5 @@
-import Main from "@/shared/account/premissions/Main";
-import MainHeader from "@/shared/account/premissions/Header";
+import Main from "@/components/shared/account/premissions/Main";
+import MainHeader from "@/components/shared/account/premissions/Header";
 
 export default function Page() {
   return (

@@ -1,4 +1,4 @@
-import Activity from "@/shared/account/activity";
+import Activity from "@/components/shared/account/activity";
 import Header from "@/layouts/main/header";
 
 export default function Page() {

@@ -98,10 +98,10 @@ export default function SignInForm() {
   return (
     <Card className="w-[400px] mx-auto rounded-lg shadow-lg">
       <CardHeader className="text-center pb-4">
-        <CardTitle className="text-2xl font-semibold text-gray-800">
+        <CardTitle className="text-2xl font-semibold text-foreground">
           Welcome Back
         </CardTitle>
-        <CardDescription className="text-gray-600">
+        <CardDescription className="text-muted-foreground">
           Sign in to your WareFlow account
         </CardDescription>
       </CardHeader>
@@ -109,7 +109,7 @@ export default function SignInForm() {
       <CardContent className="grid gap-6 px-6">
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email" className="text-gray-700">
+            <Label htmlFor="email" className="text-muted-foreground">
               Email
             </Label>
             <Input
@@ -119,12 +119,12 @@ export default function SignInForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-gray-300 h-10 focus:border-red-500 focus:ring-red-500 rounded-md"
+              className="border-border h-10 focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
             />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="password" className="text-gray-700">
+            <Label htmlFor="password" className="text-muted-foreground">
               Password
             </Label>
             <Input
@@ -134,7 +134,7 @@ export default function SignInForm() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border-gray-300 h-10 focus:border-red-500 focus:ring-red-500 rounded-md"
+              className="border-border h-10 focus:border-red-500 focus:ring-red-500 rounded-md placeholder:opacity-25"
             />
           </div>
 
@@ -157,7 +157,7 @@ export default function SignInForm() {
       </CardContent>
 
       <CardFooter className="flex flex-col gap-4 px-6 pt-4 pb-6">
-        <div className="text-center text-sm text-gray-700">
+        <div className="text-center text-sm text-muted-foreground">
           Don't have an account?{" "}
           <a
             href="sign-up"
@@ -167,7 +167,7 @@ export default function SignInForm() {
           </a>
         </div>
 
-        <div className="text-center text-sm text-gray-700">
+        <div className="text-center text-sm text-muted-foreground">
           <a
             href="/auth/forgot-password"
             className="text-sidebar hover:underline font-medium"
@@ -177,7 +177,7 @@ export default function SignInForm() {
         </div>
 
         {/* Go back to landing page */}
-        <div className="text-center text-sm text-gray-500 mt-2">
+        <div className="text-center text-sm text-muted-foreground mt-2">
           <a
             href="/"
             className="hover:underline flex items-center justify-center space-x-1"

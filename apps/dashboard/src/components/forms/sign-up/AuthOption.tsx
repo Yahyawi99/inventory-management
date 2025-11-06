@@ -8,12 +8,12 @@ export default function AuthOption({
 }: AuthOptionProps) {
   return (
     <Button
-      key={option.type} // Use a unique key for list items
+      key={option.type}
       variant={selectedOption === option.type ? "default" : "outline"}
       className={`flex items-center justify-center space-x-2 text-sm sm:text-base py-2 px-2 sm:px-4 cursor-pointer ${
         selectedOption === option.type
           ? "bg-sidebar text-white hover:bg-sidebar hover:opacity-80"
-          : "border-gray-300 hover:bg-gray-100"
+          : "border-border hover:bg-gray-100"
       }`}
       onClick={() => onSelectOption(option.type)}
     >

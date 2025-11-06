@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { OrderType } from "@database/generated/prisma";
-import Main from "@/shared/orders/Main";
+import Main from "@/components/shared/orders/Main";
 import Header from "@/layouts/main/header";
 
 export default function Page() {

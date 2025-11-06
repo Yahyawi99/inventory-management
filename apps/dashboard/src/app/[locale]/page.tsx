@@ -4,10 +4,10 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 // sections
-import Cards from "@/shared/Dashboard/Cards";
-import Charts from "@/shared/Dashboard/Charts";
-import RecentActivity from "@/shared/Dashboard/activity";
-import Action from "@/shared/Dashboard/ActionBtns";
+import Cards from "@/components/shared/Dashboard/Cards";
+import Charts from "@/components/shared/Dashboard/Charts";
+import RecentActivity from "@/components/shared/Dashboard/activity";
+import Action from "@/components/shared/Dashboard/ActionBtns";
 import Header from "@/layouts/main/header";
 
 export default function Dashboard() {

@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { UserSettings, User } from "@/types/users";
 import { useAuth } from "@/context/AuthContext";
-import SettingsNavigation from "@/shared/account/settings/SettingsNavigation";
-import ProfileSection from "@/shared/account/settings/ProfileSection";
-import SecuritySection from "@/shared/account/settings/SecuritySection";
-import PreferencesSection from "@/shared/account/settings/PreferencesSection";
-import DataPrivacySection from "@/shared/account/settings/DataPrivacySection";
+import SettingsNavigation from "@/components/shared/account/settings/SettingsNavigation";
+import ProfileSection from "@/components/shared/account/settings/ProfileSection";
+import SecuritySection from "@/components/shared/account/settings/SecuritySection";
+import PreferencesSection from "@/components/shared/account/settings/PreferencesSection";
+import DataPrivacySection from "@/components/shared/account/settings/DataPrivacySection";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
