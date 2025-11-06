@@ -72,10 +72,10 @@ export const renderField = (
               return (
                 <div
                   key={index}
-                  className="border rounded-lg p-4 bg-gray-50 space-y-3"
+                  className="border rounded-lg p-4 bg-card space-y-3"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">
+                    <span className="text-sm font-medium text-muted-foreground">
                       Line {index + 1}
                     </span>
                     {items.length > (field.minItems || 1) && (

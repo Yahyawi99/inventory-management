@@ -48,7 +48,7 @@ export const tableColumns: Column<Category>[] = [
     key: "name",
     header: "Category Name",
     render: (category) => (
-      <span className="font-medium text-gray-900">{category.name}</span>
+      <span className="font-medium text-foreground">{category.name}</span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center font-medium text-gray-900",
@@ -57,7 +57,7 @@ export const tableColumns: Column<Category>[] = [
     key: "createdAt",
     header: "Created On",
     render: (category) => (
-      <span className="text-gray-700">
+      <span className="text-muted-foreground">
         {new Date(category.createdAt.$date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
@@ -72,7 +72,7 @@ export const tableColumns: Column<Category>[] = [
     key: "productCount",
     header: "Products",
     render: (category) => (
-      <span className="text-gray-700">{category.productCount}</span>
+      <span className="text-muted-foreground">{category.productCount}</span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
@@ -82,7 +82,9 @@ export const tableColumns: Column<Category>[] = [
     key: "totalStock",
     header: "Total Stock",
     render: (category) => (
-      <span className="text-gray-700">{category.totalStockQuantity}</span>
+      <span className="text-muted-foreground">
+        {category.totalStockQuantity}
+      </span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
