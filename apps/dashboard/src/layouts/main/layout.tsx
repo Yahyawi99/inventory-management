@@ -14,8 +14,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Sidebar />
         </div>
 
-        <div className="w-full px-3 overflow-x-hidden bg-background text-foreground">
-          <div>{children}</div>
+        <div className="h-[100vh] w-full px-3 bg-background overflow-x-hidden text-foreground pb-5">
+          {children}
         </div>
       </main>
     </SidebarProvider>

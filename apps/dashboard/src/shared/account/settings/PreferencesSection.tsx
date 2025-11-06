@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTheme } from "@/context";
 import {
   Button,
   Card,
@@ -24,8 +25,9 @@ interface PreferencesSectionProps {
 export default function PreferencesSection({
   isLoading,
 }: PreferencesSectionProps) {
+  const { theme, setTheme } = useTheme();
   const [preferences, setPreferences] = useState({
-    theme: "system",
+    theme,
     language: "en",
     dateFormat: "MM/dd/yyyy",
     currency: "USD",
@@ -47,9 +49,10 @@ export default function PreferencesSection({
               <Label htmlFor="theme">Theme</Label>
               <Select
                 value={preferences.theme}
-                onValueChange={(value) =>
-                  setPreferences((prev) => ({ ...prev, theme: value }))
-                }
+                onValueChange={(value) => {
+                  setTheme(value);
+                  setPreferences((prev) => ({ ...prev, theme: value }));
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select theme" />

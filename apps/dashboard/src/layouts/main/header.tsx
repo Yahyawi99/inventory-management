@@ -20,9 +20,9 @@ export default function Header() {
   const { user } = useAuth();
 
   return (
-    <header className="flex items-center justify-between p-5 my-5 bg-(--card) shadow-md shadow-gray-300 rounded-(--radius)">
+    <header className="flex items-center justify-between p-5 my-5 bg-(--card) shadow-md shadow-accent rounded-(--radius)">
       <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={faHandPeace} className="text-(--chart-4)" />
+        <FontAwesomeIcon icon={faHandPeace} className="text-yellow-400" />
         <h1>
           Hello,{" "}
           <span className={`${BebasNeue.className} underline decoration-2`}>

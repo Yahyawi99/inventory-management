@@ -91,18 +91,18 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
           return (
             <Card
               key={title}
-              className="p-4 flex flex-col justify-between border-gray-200"
+              className="p-4 flex flex-col justify-between border-border shadow-accent"
             >
-              <CardTitle className="text-sm font-medium text-gray-600">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 {title}
               </CardTitle>
               <CardContent className="p-0 flex items-end justify-between mt-2">
                 <div>
-                  <p className="text-3xl font-bold text-gray-900">{value}</p>
+                  <p className="text-3xl font-bold text-foreground">{value}</p>
                   {change !== undefined ? (
                     renderChangeDisplay(change)
                   ) : (
-                    <p className="text-gray-600">_</p>
+                    <p className="text-muted-foreground">_</p>
                   )}
                 </div>
               </CardContent>

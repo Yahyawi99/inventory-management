@@ -67,7 +67,7 @@ export default function Chart() {
   }, [fetchData]);
 
   return (
-    <Card className="flex-1">
+    <Card className="flex-1 shadow-accent">
       <CardHeader>
         <CardTitle>Top Selling Products</CardTitle>
         <CardDescription>

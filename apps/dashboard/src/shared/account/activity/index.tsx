@@ -143,11 +143,11 @@ export default function RecentActivity() {
 
   return (
     <>
-      <Card>
+      <Card className="shadow-accent">
         <CardContent>
           <div className="space-y-4">
             {isFetchingUserActivity && (
-              <div className="flex items-center justify-center py-10 text-gray-500">
+              <div className="flex items-center justify-center py-10 text-muted-foreground">
                 <Loader2 className="w-6 h-6 animate-spin mr-2" />
                 Loading activities...
               </div>
@@ -163,19 +163,19 @@ export default function RecentActivity() {
             {visibleActivities?.map((activity, index) => (
               <div
                 key={index}
-                className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 py-3 border-b border-gray-100 last:border-b-0"
+                className="flex flex-col sm:flex-row sm:items-start sm:space-x-3 py-3 border-b border-border last:border-b-0"
               >
                 <div className="mt-1 flex-shrink-0">
                   {getActivityIcon(activity.type)}
                 </div>
 
                 <div className="flex-1 min-w-0 mt-2 sm:mt-0">
-                  <p className="text-sm text-gray-900 break-words">
+                  <p className="text-sm text-foreground break-words">
                     {activity.action}
                   </p>
                   <div className="flex flex-wrap items-center mt-1 space-x-2">
-                    <div className="flex items-center text-xs text-gray-500">
-                      <Clock className="w-3 h-3 text-gray-400 mr-1" />
+                    <div className="flex items-center text-xs text-muted-foreground">
+                      <Clock className="w-3 h-3 text-muted-foreground mr-1" />
                       {formatTimeAgo(activity.time)}
                     </div>
                     <Badge variant="outline" className="text-xs mt-1 sm:mt-0">

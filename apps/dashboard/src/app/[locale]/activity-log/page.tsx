@@ -6,9 +6,9 @@ export default function Page() {
     <>
       <Header />
 
-      <div className="mb-4 mt-6">
-        <h1 className="text-3xl font-semibold text-gray-800">Activity Log</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">
+      <div className="mb-4 mt-10">
+        <h1 className="text-3xl font-semibold text-foreground">Activity Log</h1>
+        <p className="text-muted-foreground mt-1 text-sm sm:text-base">
           Your recent actions in the inventory management system
         </p>
       </div>

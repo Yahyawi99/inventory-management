@@ -67,7 +67,7 @@ export default function Chart() {
     });
   }, [chartData]);
   return (
-    <Card className="flex flex-col flex-1">
+    <Card className="flex flex-col flex-1 shadow-accent">
       <CardHeader className="items-center pb-0">
         <CardTitle>Inventory Value Distribution</CardTitle>
         <CardDescription>

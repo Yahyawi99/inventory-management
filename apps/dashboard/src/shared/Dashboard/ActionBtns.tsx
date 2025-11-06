@@ -33,7 +33,7 @@ const btnsData: Btn[] = [
 
 export default function Action() {
   return (
-    <div className="mb-5">
+    <div>
       <h2 className="text-xl font-semibold mb-3">Quick Actions</h2>
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2">
@@ -47,7 +47,7 @@ export default function Action() {
 
 const Btn = ({ data }: { data: Btn }) => {
   return (
-    <button className="min-w-[250px] max-w-full flex justify-center items-center gap-2 bg-(--sidebar) text-(--border) py-[15px] cursor-pointer border-[2px] border-transparent rounded-(--radius) hover:bg-transparent hover:text-(--sidebar) hover:border-(--sidebar)">
+    <button className="min-w-[250px] max-w-full flex justify-center items-center gap-2 bg-(--sidebar) text-white py-[15px] cursor-pointer border-[2px] border-transparent rounded-(--radius) hover:bg-transparent hover:text-(--sidebar) hover:border-(--sidebar)">
       <FontAwesomeIcon icon={data.icon} />
       <p className="pt-[5px]">{data.label}</p>
     </button>

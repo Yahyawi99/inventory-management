@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={JosefinSans.className}>
-      <body className="text-[1.1rem] bg-gray-50">{children}</body>
+    <html lang="en" className={`overflow-hidden ${JosefinSans.className}`}>
+      <body className="text-[1.1rem]">{children}</body>
     </html>
   );
 }

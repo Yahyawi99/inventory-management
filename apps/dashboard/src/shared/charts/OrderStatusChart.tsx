@@ -65,7 +65,7 @@ export default function Chart() {
   }, [chartData]);
 
   return (
-    <Card className="flex flex-1 flex-col">
+    <Card className="flex flex-1 flex-col shadow-accent">
       <CardHeader className="items-center pb-0">
         <CardTitle>Order Status Distribution</CardTitle>
         <CardDescription>
