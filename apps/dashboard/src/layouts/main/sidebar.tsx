@@ -56,7 +56,7 @@ export default function MainSidebar() {
 
 const Header = () => {
   return (
-    <div className="flex justify-between items-center pt-1 pb-0 mb-5 border-b-2">
+    <div className="flex justify-between items-center pt-1 pb-0 mb-5 border-white border-b-2">
       <div className="flex items-center">
         <Image
           src={"/assets/icons/logo.png"}
@@ -65,15 +65,12 @@ const Header = () => {
           alt="WareFlow-logo"
         />
 
-        <h1 className="text-3xl text-(--color-secondary) h-[35px]">WareFlow</h1>
+        <h1 className="text-3xl text-white h-[35px]">WareFlow</h1>
       </div>
 
       <div>
         <SidebarTrigger className="cursor-pointer mt-[10px]">
-          <FontAwesomeIcon
-            icon={faClose}
-            className="text-(--color-secondary)"
-          />
+          <FontAwesomeIcon icon={faClose} className="text-white" />
         </SidebarTrigger>
       </div>
     </div>

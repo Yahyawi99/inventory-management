@@ -7,10 +7,10 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthProvider>
-      <ThemeProvider>
+    <ThemeProvider>
+      <AuthProvider>
         <MainLayout>{children}</MainLayout>;
-      </ThemeProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

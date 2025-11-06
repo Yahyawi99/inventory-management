@@ -235,7 +235,6 @@ export default function TeamManagement() {
       )}
 
       {/* Pending Invitations */}
-
       {isLoading && (
         <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
           <CardHeader className="border-amber-300">
@@ -297,7 +296,7 @@ export default function TeamManagement() {
                         <Mail className="w-5 h-5 text-amber-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-foreground">
+                        <p className="font-medium text-black/80">
                           {invitation.email}
                         </p>
                         <p className="text-sm text-muted-foreground">
@@ -315,7 +314,7 @@ export default function TeamManagement() {
                         }
                         variant="outline"
                         size="sm"
-                        className="md:flex"
+                        className="md:flex text-black"
                       >
                         Resend
                       </Button>
@@ -323,7 +322,7 @@ export default function TeamManagement() {
                         onClick={() => cancelInvitation(invitation.id)}
                         variant="ghost"
                         size="sm"
-                        className="text-red-600 hover:bg-red-50"
+                        className="text-red-600 hover:bg-transparent dark:hover:bg-transparent hover:text-red-600/50 dark:hover:text-red-600/50"
                       >
                         Cancel
                       </Button>
