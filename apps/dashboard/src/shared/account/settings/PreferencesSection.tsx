@@ -50,8 +50,8 @@ export default function PreferencesSection({
               <Select
                 value={preferences.theme}
                 onValueChange={(value) => {
-                  setTheme(value);
                   setPreferences((prev) => ({ ...prev, theme: value }));
+                  setTheme(value);
                 }}
               >
                 <SelectTrigger>

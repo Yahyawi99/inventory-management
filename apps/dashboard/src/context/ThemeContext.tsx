@@ -1,6 +1,7 @@
 "use client";
 
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
+import { getBrowserTheme } from "@/utils/getBrowserTheme";
 
 interface ThemeContextType {
   theme: string;
@@ -10,7 +11,36 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        setTheme(storedTheme);
+      } else {
+        if (getBrowserTheme() === "dark") {
+          setTheme("dark");
+        } else {
+          setTheme("light");
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", theme);
+
+      if (theme === "system") {
+        if (getBrowserTheme() === "dark") {
+          setTheme("dark");
+        } else {
+          setTheme("light");
+        }
+      }
+    }
+  }, [theme]);
 
   return (
     <ThemeContext.Provider
