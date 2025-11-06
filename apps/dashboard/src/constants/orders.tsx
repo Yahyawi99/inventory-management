@@ -69,7 +69,7 @@ export function getTableColumns(
       key: "orderNumber",
       header: "Order",
       render: (order) => (
-        <span className="font-medium text-xs text-gray-900">
+        <span className="font-medium text-xs text-foreground">
           {order.orderNumber || "N/A"}
         </span>
       ),
@@ -134,7 +134,7 @@ export function getTableColumns(
       key: "totalAmount",
       header: "Total",
       render: (order) => (
-        <span className="font-medium text-gray-900">
+        <span className="font-medium text-foreground">
           ${order.totalAmount.toFixed(2)}
         </span>
       ),

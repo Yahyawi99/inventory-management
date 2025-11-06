@@ -41,7 +41,10 @@ export function DataTable<T extends Data>({ data, columns }: ordersProps<T>) {
             >
               {columns.map((column) => {
                 return (
-                  <TableCell key={column.key} className={column.cellClass}>
+                  <TableCell
+                    key={column.key}
+                    className={`${column.cellClass} text-muted-foreground`}
+                  >
                     {column.render(row)}
                   </TableCell>
                 );

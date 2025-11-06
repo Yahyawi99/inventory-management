@@ -54,7 +54,7 @@ export function getTableColumns(
       key: "name",
       header: "Name",
       render: (stock) => (
-        <span className="font-medium text-gray-900">{stock.name}</span>
+        <span className="font-medium text-foreground">{stock.name}</span>
       ),
       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center font-medium text-gray-900",
@@ -63,7 +63,7 @@ export function getTableColumns(
       key: "location",
       header: "Location",
       render: (stock) => (
-        <span className="text-gray-700">
+        <span className="text-muted-foreground">
           {stock.location ? stock.location : "N/A"}
         </span>
       ),
@@ -74,7 +74,9 @@ export function getTableColumns(
       key: "value",
       header: "Total Value",
       render: (stock) => (
-        <span className="text-gray-700">${stock.totalValue.toFixed(2)}</span>
+        <span className="text-muted-foreground">
+          ${stock.totalValue.toFixed(2)}
+        </span>
       ),
       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center text-gray-700",
@@ -83,13 +85,15 @@ export function getTableColumns(
       key: "quantity",
       header: "Total Quantity",
       render: (stock) => (
-        <span className="font-medium text-gray-900">{stock.totalQuantity}</span>
+        <span className="font-medium text-foreground">
+          {stock.totalQuantity}
+        </span>
       ),
       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center font-medium text-gray-900",
     },
     {
-      key: "stockStatus", // Custom key for derived status
+      key: "stockStatus",
       header: "Status",
       render: (stock) => {
         const statusDisplay = getStockStatusDisplay(stock.totalQuantity);

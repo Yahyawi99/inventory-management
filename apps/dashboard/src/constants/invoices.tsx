@@ -351,7 +351,7 @@ export function getTableColumns(
       key: "invoiceNumber",
       header: "Invoice",
       render: (invoice) => (
-        <span className="font-medium text-xs text-gray-900">
+        <span className="font-medium text-xs text-foreground">
           {invoice.invoiceNumber || "N/A"}
         </span>
       ),
@@ -377,7 +377,7 @@ export function getTableColumns(
       key: "dueDate",
       header: "Due Date",
       render: (invoice) => (
-        <span className="font-medium text-gray-800">
+        <span className="font-medium text-muted-foreground">
           {new Date(invoice.dueDate.$date).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
@@ -411,7 +411,7 @@ export function getTableColumns(
         const type = invoice.order.orderType;
         return (
           <p
-            className={`text-xs bg-gray-100 w-[80px] font-semibold rounded-full capitalize py-1 mx-auto`}
+            className={`text-xs bg-border border border-muted-foreground w-[80px] font-semibold rounded-full capitalize py-1 mx-auto`}
           >
             {type.toLowerCase()}
           </p>
@@ -433,7 +433,7 @@ export function getTableColumns(
       key: "totalAmount",
       header: "Total",
       render: (invoice) => (
-        <span className="font-medium text-gray-900">
+        <span className="font-medium text-foreground">
           ${invoice.totalAmount.toFixed(2)}
         </span>
       ),
