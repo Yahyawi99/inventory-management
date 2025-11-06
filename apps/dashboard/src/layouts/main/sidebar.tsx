@@ -101,10 +101,10 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
           width={100}
           height={100}
           alt="user-avatar"
-          className="w-[50px] h-[50px] rounded-3xl"
+          className="w-[50px] h-[50px] rounded-3xl border-2 border-border"
         />
 
-        <div className="text-[.9rem] text-[#1B3B6F] font-bold">
+        <div className="text-[.8rem] text-background font-bold">
           <p>{user?.name}</p>
           <p>{user?.email}</p>
         </div>
@@ -114,25 +114,27 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
         <DropdownMenuTrigger className="cursor-pointer outline-none">
           <FontAwesomeIcon
             icon={faEllipsisV}
-            className="text-(--ring) cursor-pointer px-3"
+            className="text-white cursor-pointer px-3"
           />
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className={`text-foreground ${
-            theme === "dark" && "bg-[#151a26] text-[#ebeef5]"
+          className={`${
+            theme === "dark" && "bg-[#151a26] text-[#ebeef5] border-[#262e3d]"
           }`}
         >
           <DropdownMenuLabel className="font-black">
             My Account
           </DropdownMenuLabel>
 
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator
+            className={`${theme === "dark" && "bg-[#262e3d]"}`}
+          />
 
           <Link href={"/en/account"}>
             <DropdownMenuItem
               className={`cursor-pointer ${
-                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+                theme === "dark" && "focus:bg-[#262e3d] focus:text-[#ebeef5]"
               }`}
             >
               Account
@@ -142,7 +144,7 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
           <Link href={"/en/account/activity"}>
             <DropdownMenuItem
               className={`cursor-pointer ${
-                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+                theme === "dark" && "focus:bg-[#262e3d] focus:text-[#ebeef5]"
               }`}
             >
               My Activity
@@ -152,7 +154,7 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
           <Link href={"/en/account/billing"}>
             <DropdownMenuItem
               className={`cursor-pointer ${
-                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+                theme === "dark" && "focus:bg-[#262e3d] focus:text-[#ebeef5]"
               }`}
             >
               Billing & Subscriptions
@@ -161,7 +163,7 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
           <Link href={"/en/account/premissions"}>
             <DropdownMenuItem
               className={`cursor-pointer ${
-                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+                theme === "dark" && "focus:bg-[#262e3d] focus:text-[#ebeef5]"
               }`}
             >
               Users & Permissions
@@ -171,7 +173,7 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
           <Link href={"/en/account/settings"}>
             <DropdownMenuItem
               className={`cursor-pointer ${
-                theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+                theme === "dark" && "focus:bg-[#262e3d] focus:text-[#ebeef5]"
               }`}
             >
               Settings
@@ -180,7 +182,7 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
 
           <DropdownMenuItem
             className={`cursor-pointer ${
-              theme === "dark" && "focus:bg-[#4b82ff] focus:text-[#ebeef5]"
+              theme === "dark" && "focus:bg-[#262e3d] focus:text-[#ebeef5]"
             }`}
             onClick={onLogOutHandler}
           >
