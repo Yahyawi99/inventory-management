@@ -11,7 +11,7 @@ import QuickActions from "@/shared/company-profile/QuickActions";
 
 export default function CompanyProfilePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <h1 className="text-3xl font-bold mb-1">Company Profile</h1>
         <p className="mb-6">
@@ -20,7 +20,7 @@ export default function CompanyProfilePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <Tabs defaultValue="info" className="lg:col-span-2 space-y-6">
-            <TabsList className="grid grid-cols-3 w-full max-w-3xl">
+            <TabsList className="grid grid-cols-3 w-full max-w-3xl bg-card border border-border shadow-md shadow-accent">
               <TabsTrigger className="cursor-pointer" value="info">
                 Info
               </TabsTrigger>

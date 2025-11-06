@@ -128,10 +128,10 @@ export default function TeamManagement() {
   }, [isAuthenticated, isAuthLoading, user]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       {/* Team Members */}
       {!error && !isFetching && (
-        <Card>
+        <Card className="shadow-md shadow-accent">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -158,7 +158,7 @@ export default function TeamManagement() {
                   return (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 border rounded-xl hover:bg-blue-50/50 transition-colors"
+                      className="flex items-center justify-between p-3 border rounded-xl hover:bg-blue-50/50 dark:hover:bg-border transition-colors cursor-pointer"
                     >
                       <div className="flex items-center space-x-3">
                         <Avatar className="w-10 h-10">
@@ -167,28 +167,32 @@ export default function TeamManagement() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-foreground">
                             {user.name}
                           </p>
-                          <p className="text-sm text-gray-500">{user.email}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {user.email}
+                          </p>
                         </div>
                       </div>
+
                       <div className="flex items-center space-x-3">
                         <Badge className={getRoleBadgeVariant(member.role)}>
-                          {user.role}
+                          {member.role}
                         </Badge>
-                        <p className="text-xs text-gray-500 hidden sm:block">
+
+                        <p className="text-xs text-muted-foreground hidden sm:block">
                           Joined: {formatDate(member.createdAt)}
                         </p>
                         <Button variant="ghost" size="sm">
-                          <ChevronRight className="w-4 h-4 text-gray-400" />
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
                         </Button>
                       </div>
                     </div>
                   );
                 })
               ) : (
-                <p className="text-gray-500 text-[16px] text-center mt-3">
+                <p className="text-muted-foreground text-[16px] text-center mt-3">
                   No Recent Members Found!
                 </p>
               )}
@@ -198,16 +202,16 @@ export default function TeamManagement() {
       )}
 
       {error && (
-        <Card className="mb-2 text-[14px]">
+        <Card className="mb-2 text-[14px] shadow-md shadow-accent">
           <CardHeader>
             <CardTitle>Recent Team Members</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-8">
             <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-            <p className="text-gray-700 font-medium mb-2">
+            <p className="text-muted-foreground font-medium mb-2">
               Failed to Load recent team members
             </p>
-            <p className="text-gray-500 text-sm mb-4">{error}</p>
+            <p className="text-muted-foreground text-sm mb-4">{error}</p>
             <Button onClick={() => fetchRecentUsers()} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
@@ -217,13 +221,15 @@ export default function TeamManagement() {
       )}
 
       {isFetching && (
-        <Card className="mb-2 text-[14px]">
+        <Card className="mb-2 text-[14px] shadow-md shadow-accent">
           <CardHeader>
             <CardTitle>Recent Team Members</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <RefreshCw className="w-8 h-8 text-gray-400 animate-spin mb-4" />
-            <p className="text-gray-500">Loading recent team members...</p>
+            <RefreshCw className="w-8 h-8 text-muted-foreground animate-spin mb-4" />
+            <p className="text-muted-foreground">
+              Loading recent team members...
+            </p>
           </CardContent>
         </Card>
       )}
@@ -231,7 +237,7 @@ export default function TeamManagement() {
       {/* Pending Invitations */}
 
       {isLoading && (
-        <Card className="border-amber-300 bg-amber-50">
+        <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
           <CardHeader className="border-amber-300">
             <CardTitle className="text-amber-800">
               Pending Invitations
@@ -245,7 +251,7 @@ export default function TeamManagement() {
       )}
 
       {invitationError && (
-        <Card className="border-amber-300 bg-amber-50">
+        <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
           <CardHeader className="border-amber-300">
             <CardTitle className="text-amber-800">
               Pending Invitations
@@ -269,7 +275,7 @@ export default function TeamManagement() {
         !invitationError &&
         !isLoading &&
         pendingInvitations.length > 0 && (
-          <Card className="border-amber-300 bg-amber-50">
+          <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
             <CardHeader className="border-amber-300">
               <CardTitle className="text-amber-800">
                 Pending Invitations ({pendingInvitations?.length})
@@ -291,10 +297,10 @@ export default function TeamManagement() {
                         <Mail className="w-5 h-5 text-amber-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-foreground">
                           {invitation.email}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           Expires: {formatDate(invitation.expiresAt)}
                         </p>
                       </div>

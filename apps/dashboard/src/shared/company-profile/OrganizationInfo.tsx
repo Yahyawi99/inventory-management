@@ -143,13 +143,15 @@ export default function OrganizationInfo() {
   // Loading state
   if (isFetching) {
     return (
-      <Card className="mb-2 text-[14px]">
+      <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
           <CardTitle>Organization Details</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <RefreshCw className="w-8 h-8 text-gray-400 animate-spin mb-4" />
-          <p className="text-gray-500">Loading organization details...</p>
+          <RefreshCw className="w-8 h-8 text-muted-foreground animate-spin mb-4" />
+          <p className="text-muted-foreground">
+            Loading organization details...
+          </p>
         </CardContent>
       </Card>
     );
@@ -158,16 +160,16 @@ export default function OrganizationInfo() {
   // Error state
   if (error) {
     return (
-      <Card className="mb-2 text-[14px]">
+      <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
           <CardTitle>Organization Details</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-          <p className="text-gray-700 font-medium mb-2">
+          <p className="text-muted-foreground font-medium mb-2">
             Failed to Load Organization
           </p>
-          <p className="text-gray-500 text-sm mb-4">{error}</p>
+          <p className="text-muted-foreground text-sm mb-4">{error}</p>
           <Button onClick={handleRetry} variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
@@ -180,16 +182,16 @@ export default function OrganizationInfo() {
   // No data state
   if (!orgData) {
     return (
-      <Card className="mb-2 text-[14px]">
+      <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
           <CardTitle>Organization Details</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <AlertCircle className="w-12 h-12 text-gray-400 mb-4" />
-          <p className="text-gray-700 font-medium mb-2">
+          <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
+          <p className="text-muted-foreground font-medium mb-2">
             No Organization Found
           </p>
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Organization data is not available
           </p>
         </CardContent>
@@ -198,7 +200,7 @@ export default function OrganizationInfo() {
   }
 
   return (
-    <Card className="mb-2 text-[14px]">
+    <Card className="mb-2 text-[14px] shadow-md shadow-accent">
       <CardHeader className="flex justify-between">
         <CardTitle>Organization Details</CardTitle>
         {!isEditing ? (
@@ -268,7 +270,7 @@ export default function OrganizationInfo() {
           </Avatar>
           <div>
             <h2 className=" font-semibold">{orgData?.name}</h2>
-            <p className="text-gray-500">@{orgData && orgData.slug}</p>
+            <p className="text-muted-foreground">@{orgData && orgData.slug}</p>
             <Badge variant="outline">ID: {orgData?.id}</Badge>
           </div>
           {isEditing && (
@@ -291,8 +293,8 @@ export default function OrganizationInfo() {
               />
             ) : (
               <div
-                className={`p-2 bg-gray-50 ${
-                  orgData?.name || "text-gray-500"
+                className={`p-2 bg-gray-50 dark:bg-border ${
+                  orgData?.name || "text-muted-foreground"
                 } rounded`}
               >
                 {orgData?.name || "N/A"}
@@ -309,8 +311,8 @@ export default function OrganizationInfo() {
               />
             ) : (
               <div
-                className={`p-2 text- bg-gray-50 ${
-                  orgData?.slug || "text-gray-500"
+                className={`p-2 text- bg-gray-50 dark:bg-border ${
+                  orgData?.slug || "text-muted-foreground"
                 } rounded`}
               >
                 {orgData?.slug || "N/A"}
@@ -331,11 +333,11 @@ export default function OrganizationInfo() {
               />
             ) : (
               <div
-                className={`flex items-center p-2 bg-gray-50 ${
-                  orgData?.email || "text-gray-500"
+                className={`flex items-center p-2 bg-gray-50 dark:bg-border ${
+                  orgData?.email || "text-muted-foreground"
                 } rounded`}
               >
-                <Mail className="w-4 h-4 mr-2 text-gray-400" />
+                <Mail className="w-4 h-4 mr-2 text-muted-foreground" />
                 {orgData?.email || "N/A"}
               </div>
             )}
@@ -350,11 +352,11 @@ export default function OrganizationInfo() {
               />
             ) : (
               <div
-                className={`flex items-center p-2 bg-gray-50 ${
-                  orgData?.phone || "text-gray-500"
+                className={`flex items-center p-2 bg-gray-50 dark:bg-border ${
+                  orgData?.phone || "text-muted-foreground"
                 } rounded`}
               >
-                <Phone className="w-4 h-4 mr-2 text-gray-400" />
+                <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
                 {orgData?.phone || "N/A"}
               </div>
             )}
@@ -372,11 +374,11 @@ export default function OrganizationInfo() {
             />
           ) : (
             <div
-              className={`flex p-2 bg-gray-50 ${
-                orgData?.address || "text-gray-500"
+              className={`flex p-2 bg-gray-50 dark:bg-border ${
+                orgData?.address || "text-muted-foreground"
               } rounded`}
             >
-              <MapPin className="w-4 h-4 mr-2 text-gray-400" />
+              <MapPin className="w-4 h-4 mr-2 text-muted-foreground" />
               {orgData?.address || "N/A"}
             </div>
           )}
@@ -384,11 +386,11 @@ export default function OrganizationInfo() {
 
         {/* Dates */}
         <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center text-gray-600">
+          <div className="flex items-center text-muted-foreground">
             <Calendar className="w-4 h-4 mr-2" />
             Created: {formatDate(orgData?.createdAt as Date)}
           </div>
-          <div className="flex items-center text-gray-600">
+          <div className="flex items-center text-muted-foreground">
             <Clock className="w-4 h-4 mr-2" />
             Updated: {formatDate(orgData?.updatedAt as Date)}
           </div>
