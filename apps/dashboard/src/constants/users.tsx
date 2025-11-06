@@ -34,7 +34,7 @@ export const tableColumns: Column<User>[] = [
       </div>
     ),
     render: (user: User) => (
-      <span className="flex justify-center font-medium text-gray-800">
+      <span className="flex justify-center font-medium text-foreground">
         {user.name}
       </span>
     ),
@@ -49,7 +49,7 @@ export const tableColumns: Column<User>[] = [
       </div>
     ),
     render: (user: User) => (
-      <span className="flex justify-center text-gray-600 break-words">
+      <span className="flex justify-center text-muted-foreground break-words">
         {user.email}
       </span>
     ),

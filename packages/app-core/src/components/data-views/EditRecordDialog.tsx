@@ -171,7 +171,7 @@ export default function EditRecordDialog<T>({
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-4 border-t  bg-white dark:bg-gray-900">
+        <div className="px-6 pb-6 pt-4 border-t border-border bg-background">
           {message && (
             <Alert
               variant={!message.ok ? "destructive" : "default"}
@@ -187,6 +187,7 @@ export default function EditRecordDialog<T>({
               </AlertDescription>
             </Alert>
           )}
+
           <div className="flex justify-end gap-3">
             <Button
               type="button"

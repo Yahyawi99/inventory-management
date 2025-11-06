@@ -66,7 +66,9 @@ export default function Header() {
   };
   return (
     <div className="flex justify-between items-center mb-6">
-      <h3 className="text-xl font-semibold text-gray-800">Team Members (7)</h3>
+      <h3 className="text-xl font-semibold text-foreground">
+        Team Members (7)
+      </h3>
 
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
         <DialogTrigger asChild>
