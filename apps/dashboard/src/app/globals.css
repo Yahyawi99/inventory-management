@@ -5,6 +5,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+* {
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.25s;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

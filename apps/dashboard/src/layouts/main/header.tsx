@@ -1,5 +1,6 @@
 "use client";
-import { useAuth } from "@/context/AuthContext";
+
+import { useAuth, useTheme } from "@/context";
 import { Bebas_Neue } from "next/font/google";
 import Link from "next/link";
 import {
@@ -9,6 +10,7 @@ import {
   faHandPeace,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Moon, Sun, Bell, Circle, Sliders } from "lucide-react";
 
 const BebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -18,6 +20,7 @@ const BebasNeue = Bebas_Neue({
 
 export default function Header() {
   const { user } = useAuth();
+  const { theme, setTheme } = useTheme();
 
   return (
     <header className="flex items-center justify-between p-5 my-5 bg-(--card) shadow-md shadow-accent rounded-(--radius)">
@@ -32,7 +35,20 @@ export default function Header() {
         </h1>
       </div>
 
-      <div className="flex items-center gap-[20px]">
+      <div className="flex items-center gap-[18px]">
+        <div
+          onClick={() => {
+            if (theme === "dark") setTheme("light");
+            else setTheme("dark");
+          }}
+          className="mb-2 mr-[-5px] cursor-pointer"
+        >
+          {theme === "dark" ? (
+            <Sun className="stroke-muted-foreground " />
+          ) : (
+            <Moon className="stroke-muted-foreground" />
+          )}
+        </div>
         <div className="relative">
           <FontAwesomeIcon
             icon={faBell}
