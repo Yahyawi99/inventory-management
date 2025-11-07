@@ -118,7 +118,7 @@ const Footer = ({ user, theme }: { user: User | null; theme: string }) => {
         <DropdownMenuContent
           className={`${
             theme === "dark" && "bg-[#151a26] text-[#ebeef5] border-[#262e3d]"
-          }`}
+          } duration-0`}
         >
           <DropdownMenuLabel className="font-black">
             My Account

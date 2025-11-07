@@ -6,8 +6,9 @@
 @custom-variant dark (&:is(.dark *));
 
 * {
+  transition-property: background-color, color, border-color, box-shadow;
   transition-timing-function: ease-in-out;
-  transition-duration: 0.25s;
+  transition-duration: 0.3s;
 }
 
 @theme inline {
