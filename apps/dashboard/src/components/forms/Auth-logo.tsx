@@ -4,7 +4,7 @@ export default function () {
   return (
     <div className="flex items-center">
       <Image
-        src={"/assets/icons/logo-auth.png"}
+        src={"/assets/icons/logo.png"}
         width={75}
         height={75}
         alt="WareFlow-logo"

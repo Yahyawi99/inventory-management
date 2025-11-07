@@ -4,7 +4,7 @@ export function CardsSkeleton() {
   return [...Array(4)].map((_, index) => (
     <Card
       key={index}
-      className="p-4 flex flex-col justify-between border-muted animate-pulse"
+      className="p-4 flex flex-col justify-between border-muted animate-pulse shadow-md shadow-accent"
     >
       <CardTitle className="bg-muted h-4 w-3/4 rounded-md"></CardTitle>
       <CardContent className="p-0 flex items-end justify-between mt-2">

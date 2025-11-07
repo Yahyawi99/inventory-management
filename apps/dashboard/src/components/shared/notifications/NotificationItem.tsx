@@ -13,7 +13,7 @@ export default function NotificationItem({
   return (
     <div
       className={`
-                flex items-center p-4 transition-all duration-150 rounded-lg cursor-pointer border-b border-gray-100
+                flex items-center p-4 transition-all duration-150 rounded-lg cursor-pointer border-b border-border
                 ${
                   isRead
                     ? "bg-background text-muted-foreground"
@@ -29,19 +29,19 @@ export default function NotificationItem({
       <div className="flex-grow">
         <div
           className={`text-sm ${
-            isRead ? "font-normal" : "font-medium text-gray-900"
+            isRead ? "font-normal" : "font-medium text-foreground"
           }`}
         >
           {notification.title}
         </div>
         <p
           className={`text-xs mt-1 ${
-            isRead ? "text-muted-foreground" : "text-gray-600"
+            isRead ? "text-muted-foreground" : "text-muted-foreground"
           }`}
         >
           {notification.message}
         </p>
-        <div className="flex items-center mt-1 text-xs text-gray-400">
+        <div className="flex items-center mt-1 text-xs text-muted-foreground/50">
           <Clock className="w-3 h-3 mr-1" />
           <span>{formatTime(notification.timestamp)}</span>
         </div>

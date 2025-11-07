@@ -249,7 +249,7 @@ export default function SecuritySection() {
                     key={session.id}
                     className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 transition duration-150 ease-in-out border rounded-xl ${
                       current
-                        ? "border-green-300 bg-green-50"
+                        ? "border-green-300 bg-green-50 hover:bg-green-100"
                         : "border-gray-100 bg-white hover:bg-gray-50 dark:bg-background dark:border-accent"
                     }`}
                   >

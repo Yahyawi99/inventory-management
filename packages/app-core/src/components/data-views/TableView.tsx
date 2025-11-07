@@ -19,7 +19,7 @@ export function TableView({
   children,
 }: DataTableProps) {
   return (
-    <Card className="w-full mx-auto rounded-lg shadow-lg border border-border">
+    <Card className="w-full mx-auto rounded-lg shadow-md shadow-accent border border-border">
       <CardContent className="p-0">
         {!isFetchingData ? (
           data.length === 0 ? (
