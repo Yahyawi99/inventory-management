@@ -36,7 +36,7 @@ export default function PreferencesSection({
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="shadow-md shadow-accent">
         <CardHeader>
           <CardTitle>Display Preferences</CardTitle>
           <CardDescription>

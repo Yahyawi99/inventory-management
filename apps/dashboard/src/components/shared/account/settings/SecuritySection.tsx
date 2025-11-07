@@ -122,7 +122,7 @@ export default function SecuritySection() {
   return (
     <div className="space-y-6">
       {/* Password Section */}
-      <Card>
+      <Card className="shadow-md shadow-accent">
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
           <CardDescription>
@@ -149,7 +149,7 @@ export default function SecuritySection() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-2.5 text-muted-foreground/50 hover:text-muted-foreground"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -191,11 +191,11 @@ export default function SecuritySection() {
           </div>
 
           {/* Password Requirements */}
-          <div className="p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium text-gray-900 mb-2">
+          <div className="p-3 bg-background rounded-lg">
+            <p className="text-sm font-medium text-foreground mb-2">
               Password Requirements:
             </p>
-            <ul className="text-sm text-gray-600 space-y-1">
+            <ul className="text-sm text-muted-foreground space-y-1">
               <li>• At least 8 characters long</li>
               <li>• Contains uppercase and lowercase letters</li>
               <li>• Contains at least one number</li>
@@ -249,8 +249,8 @@ export default function SecuritySection() {
                     key={session.id}
                     className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 transition duration-150 ease-in-out border rounded-xl ${
                       current
-                        ? "border-green-300 bg-green-50 shadow-md"
-                        : "border-gray-100 bg-white hover:bg-gray-50"
+                        ? "border-green-300 bg-green-50"
+                        : "border-gray-100 bg-white hover:bg-gray-50 dark:bg-background dark:border-accent"
                     }`}
                   >
                     <div className="flex items-start space-x-4 mb-3 sm:mb-0 w-full sm:w-auto">
@@ -267,30 +267,36 @@ export default function SecuritySection() {
                       </div>
                       <div>
                         <div className="flex items-center space-x-3 flex-wrap">
-                          <p className="font-semibold text-gray-900 text-lg">
+                          <p
+                            className={`font-semibold text-lg ${
+                              current ? "text-gray-900" : "text-foreground"
+                            }`}
+                          >
                             {session.device}
                           </p>
                           {current && (
                             <Badge
-                              className="bg-white text-sidebar"
+                              className="bg-card text-muted-foreground dark:text-white"
                               variant="default"
                             >
                               Current Session
                             </Badge>
                           )}
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">
-                          <MapPin className="inline w-3 h-3 mr-1 text-gray-400" />
-                          {session.location} •{" "}
+                        <p className="text-sm text-muted mt-1">
+                          <MapPin className="inline w-3 h-3 mr-1 text-muted-foreground/60" />
+                          {session.location}
                           <span
                             className={`font-medium ${
-                              current ? "text-green-700" : "text-gray-700"
+                              current
+                                ? "text-green-700"
+                                : "text-muted-foreground"
                             }`}
                           >
-                            {session.lastActive}
+                            • {session.lastActive}
                           </span>
                         </p>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           IP Address: {session.ip}
                         </p>
                       </div>

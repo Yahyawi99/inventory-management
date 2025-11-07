@@ -1,8 +1,8 @@
-import SalesChart from "@/shared/charts/SalesCharts";
-import OrderStatusChart from "@/shared/charts/OrderStatusChart";
-import TopProductChart from "@/shared/charts/ProductsChart";
-import InventoryValueChart from "@/shared/charts/InventoryValueChart";
-import AOVChart from "@/shared/charts/AOVChart";
+import SalesChart from "@/components/shared/charts/SalesCharts";
+import OrderStatusChart from "@/components/shared/charts/OrderStatusChart";
+import TopProductChart from "@/components/shared/charts/ProductsChart";
+import InventoryValueChart from "@/components/shared/charts/InventoryValueChart";
+import AOVChart from "@/components/shared/charts/AOVChart";
 
 export default function Charts() {
   return (
@@ -20,5 +20,3 @@ export default function Charts() {
     </div>
   );
 }
-
-// **************

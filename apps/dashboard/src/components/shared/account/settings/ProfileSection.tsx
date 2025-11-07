@@ -25,7 +25,6 @@ interface ProfileSectionProps {
   isFetchingUser: boolean;
 }
 
-// You can keep these for client-side validation before uploading
 const MAX_SIZE_MB = 2;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/gif"];
 
@@ -184,7 +183,7 @@ export default function ProfileSection({
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="shadow-md shadow-accent">
         <CardHeader>
           <CardTitle>Personal Information</CardTitle>
           <CardDescription>

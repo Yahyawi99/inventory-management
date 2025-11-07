@@ -40,7 +40,7 @@ export default function SettingsNavigation({
 }: SettingsNavigationProps) {
   return (
     <div className="lg:w-64 flex-shrink-0">
-      <Card>
+      <Card className="shadow-md shadow-accent">
         <CardContent className="p-2">
           <nav className="space-y-1">
             {TABS.map((tab) => {
@@ -51,14 +51,14 @@ export default function SettingsNavigation({
                   onClick={() => setActiveTab(tab.id)}
                   className={`w-full flex items-start space-x-3 px-3 py-3 text-left rounded-lg transition-colors cursor-pointer ${
                     activeTab === tab.id
-                      ? "bg-blue-50 text-blue-700 border border-blue-200"
-                      : "text-gray-700 hover:bg-gray-50"
+                      ? "bg-blue-50 text-blue-700 border border-blue-200 dark:bg-accent dark:border-sidebar dark:text-primary"
+                      : "text-muted-foreground hover:bg-blue-50 dark:hover:bg-accent"
                   }`}
                 >
                   <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div className="min-w-0">
                     <p className="font-medium text-sm">{tab.label}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-muted-foreground/50 mt-0.5">
                       {tab.description}
                     </p>
                   </div>
