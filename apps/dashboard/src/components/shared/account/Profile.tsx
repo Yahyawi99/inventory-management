@@ -30,13 +30,13 @@ export default function Profile({ userData }: { userData: TUser }) {
           <div className="mt-4 sm:mt-12 flex-1 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground pl-1">
                   {userData?.name || "Unknown User"}
                 </h2>
                 <Badge variant="secondary" className="mt-2">
                   {userData?.memberRole || "Member"}
                 </Badge>
-                <p className="text-xs sm:text-sm text-gray-500 mt-2">
+                <p className="text-xs sm:text-sm text-muted-foreground/50 mt-2">
                   Member since {formatDate(userData?.memberSince as string)}
                 </p>
               </div>
@@ -56,72 +56,75 @@ export default function Profile({ userData }: { userData: TUser }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div className="flex items-start space-x-3">
-              <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              <div>
-                <p className="text-sm text-gray-500">Email</p>
-                {userData?.email ? (
-                  <p className="font-medium text-gray-900 break-words">
-                    {userData.email}
-                  </p>
-                ) : (
-                  <p className="text-xs text-black opacity-90 mt-2 line-through">
-                    Not provided
-                  </p>
-                )}
+            <div className="flex width-[100%] items-start space-x-3">
+              <Mail className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground/75">Email</p>
+                <p
+                  className={`text-[14px] py-1 px-2 bg-gray-50 dark:bg-border ${
+                    userData.email ||
+                    "text-muted-foreground opacity-90 mt-2 line-through"
+                  } rounded`}
+                >
+                  {userData.email || "N/A"}
+                </p>
               </div>
             </div>
+
             <div className="flex items-start space-x-3">
-              <Phone className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              <div>
-                <p className="text-sm text-gray-500">Organization Phone</p>
-                {userData?.currentOrganization?.phone ? (
-                  <p className="font-medium text-gray-900">
-                    {userData?.currentOrganization?.phone}
-                  </p>
-                ) : (
-                  <p className="text-xs text-black opacity-90 mt-2 line-through">
-                    Not provided
-                  </p>
-                )}
+              <Phone className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">
+                  Organization Phone
+                </p>
+                <p
+                  className={`text-[14px] py-1 px-2 bg-gray-50 dark:bg-border ${
+                    userData?.currentOrganization?.phone ||
+                    "text-muted-foreground opacity-90 mt-2 line-through"
+                  } rounded`}
+                >
+                  {userData?.currentOrganization?.phone || "N/A"}
+                </p>
               </div>
             </div>
+
             <div className="flex items-start space-x-3">
-              <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              <div>
-                <p className="text-sm text-gray-500">User ID</p>
-                {userData?.id ? (
-                  <p className="font-mono text-sm font-medium text-gray-900 break-words">
-                    {userData.id}
-                  </p>
-                ) : (
-                  <p className="text-xs text-black opacity-90 mt-2 line-through">
-                    Not provided
-                  </p>
-                )}
+              <User className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">User ID</p>
+                <p
+                  className={`text-[12px] py-1 px-2 bg-gray-50 dark:bg-border ${
+                    userData?.id ||
+                    "text-muted-foreground opacity-90 mt-2 line-through"
+                  } rounded`}
+                >
+                  {userData?.id || "N/A"}
+                </p>
               </div>
             </div>
           </div>
+
           <div className="space-y-4">
             <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              <div>
-                <p className="text-sm text-gray-500">Address</p>
-                {userData?.currentOrganization?.address ? (
-                  <p className="text-sm font-medium text-gray-900 break-words">
-                    {userData.currentOrganization.address}
-                  </p>
-                ) : (
-                  <p className="text-xs text-black opacity-90 mt-2 line-through">
-                    Not provided
-                  </p>
-                )}
+              <MapPin className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Address</p>
+
+                <p
+                  className={`text-[14px] py-1 px-2 bg-gray-50 dark:bg-border ${
+                    userData.currentOrganization.address ||
+                    "text-muted-foreground opacity-90 mt-2 line-through"
+                  } rounded`}
+                >
+                  {userData.currentOrganization.address || "N/A"}
+                </p>
               </div>
             </div>
+
             <div className="flex items-start space-x-3">
-              <Shield className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-muted-foreground flex-shrink-0" />
               <div>
-                <p className="text-sm text-gray-500">Two-Factor Auth</p>
+                <p className="text-sm text-muted-foreground">Two-Factor Auth</p>
                 <Badge
                   variant={
                     userData?.twoFactorEnabled ? "default" : "destructive"

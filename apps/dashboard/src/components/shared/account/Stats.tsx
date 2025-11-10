@@ -77,9 +77,9 @@ export default function StatsGrid() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">
                       {loading ? (
-                        <p className="inline-block h-8 w-10 bg-gray-200 rounded animate-pulse"></p>
+                        <p className="inline-block h-8 w-10 bg-gray-200 dark:bg-muted rounded animate-pulse"></p>
                       ) : (
                         <p>
                           {" "}
@@ -87,7 +87,9 @@ export default function StatsGrid() {
                         </p>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
+                    <p className="text-xs text-muted-foreground/60 mt-1">
+                      {stat.label}
+                    </p>
                   </div>
 
                   <div

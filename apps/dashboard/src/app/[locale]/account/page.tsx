@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { User as TUser } from "@/types/users";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "app-core/src/components";
-import RightColumn from "@/shared/account/Actions";
-import Profile from "@/shared/account/Profile";
-import StatsGrid from "@/shared/account/Stats";
+import RightColumn from "@/components/shared/account/Actions";
+import Profile from "@/components/shared/account/Profile";
+import StatsGrid from "@/components/shared/account/Stats";
 
 export default function Page() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -65,16 +65,16 @@ export default function Page() {
     <div className="min-h-screen ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 text-center sm:text-left">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
             My Account
           </h1>
-          <p className="text-gray-600 mt-2 text-sm sm:text-base">
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
             Your profile and account information
           </p>
         </div>
 
         {isFetchingUserData && (
-          <div className="flex items-center justify-center py-10 text-gray-500">
+          <div className="flex items-center justify-center py-10 text-muted-foreground/60">
             <Loader2 className="w-6 h-6 animate-spin mr-2" />
             Loading profile...
           </div>

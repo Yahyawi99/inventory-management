@@ -4,10 +4,10 @@ import {
   TabsTrigger,
   TabsContent,
 } from "app-core/src/components";
-import OrganizationInfo from "@/shared/company-profile/OrganizationInfo";
-import TeamManagement from "@/shared/company-profile/TeamManagement";
-import OverviewMetrics from "@/shared/company-profile/OverviewMetrics";
-import QuickActions from "@/shared/company-profile/QuickActions";
+import OrganizationInfo from "@/components/shared/company-profile/OrganizationInfo";
+import TeamManagement from "@/components/shared/company-profile/TeamManagement";
+import OverviewMetrics from "@/components/shared/company-profile/OverviewMetrics";
+import QuickActions from "@/components/shared/company-profile/QuickActions";
 
 export default function CompanyProfilePage() {
   return (
