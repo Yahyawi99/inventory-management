@@ -1,12 +1,6 @@
-import BillingDetails from "@/shared/account/billing/Details";
-import InvoiceHistory from "@/shared/account/billing/InvoiceHistory";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Separator,
-} from "app-core/src/components";
+import BillingDetails from "@/components/shared/account/billing/Details";
+import InvoiceHistory from "@/components/shared/account/billing/InvoiceHistory";
+import { Card, Separator } from "app-core/src/components";
 
 const mockBillingData = {
   currentPlan: "Pro Plan",
@@ -59,10 +53,10 @@ export default function Page() {
     <div className="min-h-screen ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 text-center sm:text-left">
-          <h1 className="flex items-center text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="flex items-center text-2xl sm:text-3xl font-bold text-foreground">
             Billing & Subscriptions
           </h1>
-          <p className="text-gray-600 mt-2 text-sm sm:text-base">
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">
             Manage your plan, update payment details, and view your invoice
             history.{" "}
           </p>
