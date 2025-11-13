@@ -1,0 +1,16 @@
+{
+  "HomePage": {
+    "title": "Welcome to our platform",
+    "description": "Build your SaaS product with confidence"
+  },
+  "Navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "settings": "Settings"
+  },
+  "Common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}

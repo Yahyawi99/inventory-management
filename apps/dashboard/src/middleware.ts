@@ -1,6 +1,8 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
   // Security headers to prevent various attacks
@@ -47,6 +49,9 @@ export async function middleware(request: NextRequest) {
   return addSecurityHeaders(response);
 }
 
+export default createMiddleware(routing);
+
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|api/auth/*|auth/*).*)"],
+  // matcher: ["/((?!_next|favicon.ico|api/auth/*|auth/*).*)"],
+  matcher: "/((?!api|trpc|_next|_vercel|api/auth/*|auth/*|.*\\..*).*)",
 };
