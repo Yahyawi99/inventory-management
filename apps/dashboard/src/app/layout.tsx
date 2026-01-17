@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Josefin_Sans } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
 import "@/config/fontawesome";
 import "./globals.css";
 
 const JosefinSans = Josefin_Sans({
   subsets: ["latin"],
-  weight: "400", // Optional: adjust as needed
+  weight: "400",
   display: "swap",
 });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`overflow-hidden ${JosefinSans.className}`}>
-      <body className="text-[1.1rem]">{children}</body>
+      <body className="text-[1.1rem]">
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }
