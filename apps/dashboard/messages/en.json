@@ -1,16 +1,72 @@
 {
-  "HomePage": {
-    "title": "Welcome to our platform",
-    "description": "Build your SaaS product with confidence"
+  "dashboard": {
+    "welcome": "Welcome",
+    "cards": {
+      "title": "All Expenses",
+      "period": "last week",
+      "card-1": {
+        "title": "Total Sales Revenue (Paid)"
+      },
+      "card-2": {
+        "title": "Outstanding Receivables"
+      },
+      "card-3": {
+        "title": "Revenue Loss (Voided)"
+      },
+      "card-4": {
+        "title": "Gross Sales Volume"
+      }
+    },
+    "charts": {
+      "chart-1": {
+        "title": "Sales Trend",
+        "revenue": {
+          "desc": "showing the historical performance of sales by Revenue"
+        },
+        "orders": {
+          "desc": "showing the historical performance of sales by Orders"
+        }
+      },
+      "chart-2": {
+        "title": "Average Order Value",
+        "desc": "Tracks the average amount customers spend per order over time."
+      },
+      "chart-3": {
+        "title": "Inventory Value Distribution",
+        "desc": "Shows how your total inventory value is spread across different product categories."
+      },
+      "chart-4": {
+        "title": "Order Status Distribution",
+        "desc": "Overview of the current state of all active orders"
+      }
+    },
+    "actions": {
+      "action-1": {
+        "title": "Add New Product"
+      },
+      "action-2": {
+        "title": "Create Sales Order"
+      },
+      "action-3": {
+        "title": "Create Purchase Order"
+      },
+      "action-4": {
+        "title": "View Low Stock"
+      },
+      "action-5": {
+        "title": "Generate report"
+      }
+    }
   },
-  "Navigation": {
-    "home": "Home",
-    "dashboard": "Dashboard",
-    "settings": "Settings"
+  "header": {
+    "welcome": "Hello"
   },
-  "Common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete"
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "inventory": {
+    "products": "Products",
+    "categories": "Categories"
   }
 }

@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { buildInvoicesApiUrl } from "@/utils/invoices";
 import { MetricsData } from "app-core/src/types";
 import { calculateExpensesFinancialMetrics } from "@/utils/dashboard";
@@ -7,6 +10,7 @@ import { SummaryCards } from "app-core/src/components";
 export default function Cards() {
   const [loading, setLoading] = useState(true);
   const [dashboardMetrics, setDashboardMetrics] = useState<MetricsData[]>([]);
+  const t = useTranslations("dashboard");
 
   // Expenses
   const fetchExpensesMetrics = async () => {
@@ -19,13 +23,14 @@ export default function Cards() {
           field: "invoiceDate",
           direction: "desc",
         },
-        { page: 1, pageSize: Infinity }
+        { page: 1, pageSize: Infinity },
       );
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(
-          response.statusText || "Something went wrong, please try again later!"
+          response.statusText ||
+            "Something went wrong, please try again later!",
         );
       }
 
@@ -67,9 +72,13 @@ export default function Cards() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-3">All Expenses</h2>
+      <h2 className="text-xl font-semibold mb-3">{t("cards.title")}</h2>
 
-      <SummaryCards data={dashboardMetrics} isLoading={loading} />
+      <SummaryCards
+        data={dashboardMetrics}
+        isLoading={loading}
+        // t={t}
+      />
     </div>
   );
 }

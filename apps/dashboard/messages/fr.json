@@ -1,1 +1,72 @@
-{}
+{
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "cards": {
+      "title": "Toutes les dépenses",
+      "period": "la semaine dernière",
+      "card-1": {
+        "title": "Chiffre d'affaires total (Payé)"
+      },
+      "card-2": {
+        "title": "Créances clients"
+      },
+      "card-3": {
+        "title": "Perte de revenus (Annulé)"
+      },
+      "card-4": {
+        "title": "Volume brut des ventes"
+      }
+    },
+    "charts": {
+      "chart-1": {
+        "title": "Tendance des ventes",
+        "revenue": {
+          "desc": "montrant la performance historique des ventes par revenu"
+        },
+        "orders": {
+          "desc": "montrant la performance historique des ventes par commandes"
+        }
+      },
+      "chart-2": {
+        "title": "Panier moyen",
+        "desc": "Suit le montant moyen dépensé par les clients par commande au fil du temps."
+      },
+      "chart-3": {
+        "title": "Distribution de la valeur des stocks",
+        "desc": "Indique comment la valeur totale de votre inventaire est répartie entre les différentes catégories de produits."
+      },
+      "chart-4": {
+        "title": "Répartition du statut des commandes",
+        "desc": "Aperçu de l'état actuel de toutes les commandes actives"
+      }
+    },
+    "actions": {
+      "action-1": {
+        "title": "Ajouter un nouveau produit"
+      },
+      "action-2": {
+        "title": "Créer un bon de commande client"
+      },
+      "action-3": {
+        "title": "Créer un bon de commande fournisseur"
+      },
+      "action-4": {
+        "title": "Voir le stock faible"
+      },
+      "action-5": {
+        "title": "Générer un rapport"
+      }
+    }
+  },
+  "header": {
+    "welcome": "Bonjour"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire"
+  },
+  "inventory": {
+    "products": "Produits",
+    "categories": "Catégories"
+  }
+}

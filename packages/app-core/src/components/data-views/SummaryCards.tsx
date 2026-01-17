@@ -1,8 +1,7 @@
-"use client";
-
 import { MetricsData } from "../../types";
 import { Card, CardContent, CardTitle } from "..";
 import { CardsSkeleton } from "..";
+import { useTranslations } from "next-intl";
 
 interface SummaryCardsProps {
   data: MetricsData[];
@@ -10,6 +9,8 @@ interface SummaryCardsProps {
 }
 
 export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
+  const t = useTranslations("dashboard");
+
   const renderChangeDisplay = (change: number) => {
     const isPositive = change > 0;
     const isNegative = change < 0;
@@ -17,8 +18,8 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
     const textColorClass = isPositive
       ? "text-green-500"
       : isNegative
-      ? "text-red-500"
-      : "text-gray-500";
+        ? "text-red-500"
+        : "text-gray-500";
 
     const arrowIcon = isPositive ? (
       <svg
@@ -77,8 +78,7 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
       >
         {arrowIcon}
         <span className="mx-1">{formattedChange}</span>
-        <span className="ml-1 text-gray-500">last week</span>{" "}
-        {/* Clear phrasing */}
+        <span className="ml-1 text-gray-500">{t("cards.period")}</span>{" "}
       </div>
     );
   };
@@ -86,7 +86,7 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
       {!isLoading ? (
-        data.map((metric) => {
+        data.map((metric, index) => {
           const { title, value, change } = metric;
           return (
             <Card
@@ -94,7 +94,7 @@ export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
               className="p-4 flex flex-col justify-between border-border shadow-accent"
             >
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                {title}
+                {t(`cards.card-${index + 1}.title`)}
               </CardTitle>
               <CardContent className="p-0 flex items-end justify-between mt-2">
                 <div>

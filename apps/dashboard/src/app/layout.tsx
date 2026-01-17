@@ -4,7 +4,7 @@ import "@/config/fontawesome";
 import "./globals.css";
 
 const JosefinSans = Josefin_Sans({
-  subsets: ["latin"],
+  subsets: ["latin-ext"],
   weight: "400",
   display: "swap",
 });
