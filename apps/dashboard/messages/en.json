@@ -1,72 +1,72 @@
 {
   "dashboard": {
-    "welcome": "Welcome",
+    "welcome": "Overview",
     "cards": {
-      "title": "All Expenses",
-      "period": "last week",
+      "title": "Financial Summary",
+      "period": "last 7 days",
       "card-1": {
-        "title": "Total Sales Revenue (Paid)"
+        "title": "Net Revenue"
       },
       "card-2": {
-        "title": "Outstanding Receivables"
+        "title": "Pending Receivables"
       },
       "card-3": {
-        "title": "Revenue Loss (Voided)"
+        "title": "Voided Totals"
       },
       "card-4": {
-        "title": "Gross Sales Volume"
+        "title": "Gross Sales"
       }
     },
     "charts": {
       "chart-1": {
-        "title": "Sales Trend",
+        "title": "Sales Performance",
         "revenue": {
-          "desc": "showing the historical performance of sales by Revenue"
+          "desc": "Revenue trends over time"
         },
         "orders": {
-          "desc": "showing the historical performance of sales by Orders"
+          "desc": "Order volume breakdown"
         }
       },
       "chart-2": {
-        "title": "Average Order Value",
-        "desc": "Tracks the average amount customers spend per order over time."
+        "title": "Average Ticket Size",
+        "desc": "Average spend per customer per transaction."
       },
       "chart-3": {
-        "title": "Inventory Value Distribution",
-        "desc": "Shows how your total inventory value is spread across different product categories."
+        "title": "Stock Value by Category",
+        "desc": "Inventory valuation across product lines."
       },
       "chart-4": {
-        "title": "Order Status Distribution",
-        "desc": "Overview of the current state of all active orders"
+        "title": "Order Fulfillment",
+        "desc": "Real-time status of active orders."
       }
     },
     "actions": {
       "action-1": {
-        "title": "Add New Product"
+        "title": "Add Product"
       },
       "action-2": {
-        "title": "Create Sales Order"
+        "title": "New Sales Order"
       },
       "action-3": {
-        "title": "Create Purchase Order"
+        "title": "New Purchase Order"
       },
       "action-4": {
-        "title": "View Low Stock"
+        "title": "Restock Alerts"
       },
       "action-5": {
-        "title": "Generate report"
+        "title": "Export Report"
       }
     }
   },
   "header": {
-    "welcome": "Hello"
+    "welcome": "Welcome back"
   },
   "auth": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up"
+    "signIn": "Log In",
+    "signUp": "Create Account"
   },
   "inventory": {
-    "products": "Products",
-    "categories": "Categories"
+    "products": "Catalog",
+    "categories": "Product Groups"
   }
 }
