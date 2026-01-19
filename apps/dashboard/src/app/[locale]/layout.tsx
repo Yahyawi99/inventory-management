@@ -1,33 +1,19 @@
-import MainLayout from "@/layouts/main/layout";
-import { AuthProvider, ThemeProvider } from "@/context";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
 
-export default async function HomeLayout({
+export default function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  const { locale } = await params;
+  const { locale } = params;
 
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
-  setRequestLocale(locale);
-
-  return (
-    <AuthProvider>
-      <ThemeProvider>
-        <MainLayout>
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        </MainLayout>
-        ;
-      </ThemeProvider>
-    </AuthProvider>
-  );
+  return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
 }
