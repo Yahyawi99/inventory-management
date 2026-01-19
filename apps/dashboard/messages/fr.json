@@ -45,19 +45,19 @@
     },
     "actions": {
       "action-1": {
-        "title": "Ajouter un nouveau produit"
+        "title": "Ajouter produit"
       },
       "action-2": {
-        "title": "Créer un bon de commande client"
+        "title": "Commande client"
       },
       "action-3": {
-        "title": "Créer un bon de commande fournisseur"
+        "title": "Commande fournisseur"
       },
       "action-4": {
-        "title": "Voir le stock faible"
+        "title": "Stocks bas"
       },
       "action-5": {
-        "title": "Générer un rapport"
+        "title": "Générer rapport"
       }
     }
   },
