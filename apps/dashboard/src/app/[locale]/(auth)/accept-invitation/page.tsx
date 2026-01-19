@@ -8,9 +8,9 @@ import { Invitation } from "@/types/users";
 import { checkUserExists } from "@/lib/actions/checkUserExists";
 import { getInvitation } from "@/lib/actions/getInvitation";
 import InvitationForm from "@/components/forms/accept-invitation/invitation-form";
-import Error from "@/shared/invitation/Error";
-import Loading from "@/shared/invitation/Loading";
-import Success from "@/shared/invitation/Success";
+import Error from "@/components/shared/invitation/Error";
+import Loading from "@/components/shared/invitation/Loading";
+import Success from "@/components/shared/invitation/Success";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -74,7 +74,7 @@ export default function Page() {
           acceptInvitationDirectly();
         } else if (sessionData) {
           setError(
-            "Please log out and use the invitation link again, or sign in with the invited email address."
+            "Please log out and use the invitation link again, or sign in with the invited email address.",
           );
           setStep("error");
         } else {
@@ -83,7 +83,7 @@ export default function Page() {
       }
     } catch (err) {
       setError(
-        "Failed to load invitation. The link may be expired or invalid."
+        "Failed to load invitation. The link may be expired or invalid.",
       );
       setStep("error");
     } finally {
@@ -144,7 +144,7 @@ export default function Page() {
       if (signUpResult.error) {
         if (signUpResult.error.message?.includes("already exists")) {
           setError(
-            "An account with this email already exists. Please sign in instead."
+            "An account with this email already exists. Please sign in instead.",
           );
           return;
         } else {
@@ -160,7 +160,7 @@ export default function Page() {
 
       if (acceptResult.error) {
         setError(
-          `Account created successfully, but failed to join organization: ${acceptResult.error.message}`
+          `Account created successfully, but failed to join organization: ${acceptResult.error.message}`,
         );
         return;
       }

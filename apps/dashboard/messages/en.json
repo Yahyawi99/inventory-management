@@ -1,4 +1,7 @@
 {
+  "header": {
+    "welcome": "Welcome back"
+  },
   "dashboard": {
     "welcome": "Overview",
     "cards": {
@@ -57,9 +60,6 @@
         "title": "Export Report"
       }
     }
-  },
-  "header": {
-    "welcome": "Welcome back"
   },
   "auth": {
     "appName": "WareFlow",

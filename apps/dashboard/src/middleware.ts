@@ -5,6 +5,14 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
+export const PUBLIC_AUTH_ROUTES = [
+  "/sign-in",
+  "/sign-up",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+  "/accept-invitation",
+];
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set("X-Content-Type-Options", "nosniff");
@@ -24,7 +32,13 @@ export async function middleware(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  if (pathname.match(/^\/(en|fr|ar)/)) {
+  const pathnameWithoutLocale = pathname.replace(/^\/(en|fr|ar)/, "");
+
+  const isAuthPage = PUBLIC_AUTH_ROUTES.some((route) =>
+    pathnameWithoutLocale.startsWith(route),
+  );
+
+  if (isAuthPage) {
     return addSecurityHeaders(response);
   }
 
