@@ -1,4 +1,7 @@
 {
+  "header": {
+    "welcome": "Bonjour"
+  },
   "dashboard": {
     "welcome": "Bienvenue",
     "cards": {
@@ -57,9 +60,6 @@
         "title": "Générer un rapport"
       }
     }
-  },
-  "header": {
-    "welcome": "Bonjour"
   },
   "auth": {
     "signIn": "Se connecter",

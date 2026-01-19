@@ -29,7 +29,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function Chart() {
+export default function Chart({
+  title,
+  desc,
+}: {
+  title: string;
+  desc: string;
+}) {
   const [chartData, setChartData] = useState<
     {
       status: string;
@@ -44,7 +50,7 @@ export default function Chart() {
 
       if (response.status !== 200) {
         throw new Error(
-          response.statusText || "Failed to fetch Order Status chart data."
+          response.statusText || "Failed to fetch Order Status chart data.",
         );
       }
 

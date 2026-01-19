@@ -23,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const PREVIOUS_MONTH = new Date(
-  Date.now() - 30 * 24 * 3600 * 1000
+  Date.now() - 30 * 24 * 3600 * 1000,
 ).toLocaleDateString("en-US", {
   month: "long",
 });
@@ -34,7 +34,13 @@ const CURRENT_YEAR = new Date().toLocaleDateString("en-US", {
   year: "numeric",
 });
 
-export default function Chart() {
+export default function Chart({
+  title,
+  desc,
+}: {
+  title: string;
+  desc: string;
+}) {
   const [chartData, setChartData] = useState<
     {
       productName: string;
@@ -50,7 +56,7 @@ export default function Chart() {
       if (response.status !== 200) {
         throw new Error(
           response.statusText ||
-            "Failed to fetch top selling Products chart data."
+            "Failed to fetch top selling Products chart data.",
         );
       }
 

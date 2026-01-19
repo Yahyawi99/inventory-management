@@ -16,7 +16,13 @@ import {
 } from "app-core/src/components";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export default function Chart() {
+export default function Chart({
+  title,
+  desc,
+}: {
+  title: string;
+  desc: string;
+}) {
   const [chartData, setChartData] = useState<
     {
       category: string;
@@ -37,7 +43,7 @@ export default function Chart() {
 
       if (response.status !== 200) {
         throw new Error(
-          response.statusText || "Failed to fetch inventory chart data."
+          response.statusText || "Failed to fetch inventory chart data.",
         );
       }
 

@@ -25,7 +25,15 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function Chart() {
+export default function Chart({
+  title,
+  revenueDesc,
+  ordersDesc,
+}: {
+  title: string;
+  revenueDesc: string;
+  ordersDesc: string;
+}) {
   const [activeChart, setActiveChart] =
     useState<keyof typeof chartConfig>("revenue");
   const [chartData, setChartData] = useState<
@@ -42,7 +50,7 @@ export default function Chart() {
 
       if (response.status !== 200) {
         throw new Error(
-          response.statusText || "Failed to fetch sales chart data."
+          response.statusText || "Failed to fetch sales chart data.",
         );
       }
 
@@ -63,17 +71,22 @@ export default function Chart() {
       revenue: chartData.reduce((acc, curr) => acc + curr.revenue, 0),
       orderCount: chartData.reduce((acc, curr) => acc + curr.orderCount, 0),
     }),
-    [chartData]
+    [chartData],
   );
+
+  console.log(chartConfig[activeChart].label);
 
   return (
     <Card className="py-4 sm:py-0 shadow-accent">
       <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pb-3 sm:pb-0">
-          <CardTitle>Sales Trend</CardTitle>
+          <CardTitle>{title}</CardTitle>
           <CardDescription>
-            showing the historical performance of sales by{" "}
-            <b>{chartConfig[activeChart].label}</b>
+            <b>
+              {chartConfig[activeChart].label === "Revenue"
+                ? revenueDesc
+                : ordersDesc}
+            </b>
           </CardDescription>
         </div>
         <div className="flex">
