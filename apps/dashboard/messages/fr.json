@@ -62,8 +62,91 @@
     }
   },
   "auth": {
-    "signIn": "Se connecter",
-    "signUp": "S'inscrire"
+    "appName": "WareFlow",
+    "signInPage": {
+      "header": "Ravi de vous revoir",
+      "subHeader": "Connectez-vous à votre compte WareFlow",
+      "form": {
+        "email": {
+          "label": "E-mail",
+          "placeholder": "Saisissez votre e-mail"
+        },
+        "password": {
+          "label": "Mot de passe",
+          "placeholder": "Saisissez votre mot de passe"
+        }
+      },
+      "actions": {
+        "submit": "Connexion",
+        "registerPrompt": "Pas encore de compte ?",
+        "registerLink": "Inscrire l'organisation",
+        "forgotPassword": "Mot de passe oublié ?",
+        "backToHome": "Retour à l'accueil"
+      }
+    },
+    "signUpPage": {
+      "header": "Rejoindre WF",
+      "subHeader": "Inscrivez votre organisation pour gérer votre stock efficacement. Une vérification par e-mail est requise.",
+      "sections": {
+        "authOptions": {
+          "title": "Options d'authentification",
+          "methods": ["E-mail", "Google", "Téléphone", "Code"]
+        },
+        "companyInformation": {
+          "title": "Informations entreprise",
+          "fields": {
+            "companyName": {
+              "label": "Nom de l'entreprise *",
+              "placeholder": "ex. Ma Société Inc."
+            },
+            "shortName": {
+              "label": "Nom abrégé",
+              "placeholder": "ex. MSI (utilisé pour l'URL)"
+            },
+            "description": {
+              "label": "Description *",
+              "placeholder": "Bref descriptif de vos activités"
+            },
+            "companyEmail": {
+              "label": "E-mail entreprise *",
+              "placeholder": "contact@masociete.org"
+            },
+            "website": {
+              "label": "Site web",
+              "placeholder": "https://masociete.org"
+            }
+          }
+        },
+        "adminAccount": {
+          "title": "Compte Administrateur",
+          "fields": {
+            "name": {
+              "label": "Votre nom *",
+              "placeholder": "Jean Dupont"
+            },
+            "email": {
+              "label": "Votre e-mail * (vérification requise)",
+              "placeholder": "jean.dupont@exemple.com"
+            },
+            "password": {
+              "label": "Mot de passe *",
+              "placeholder": "6 caractères minimum"
+            },
+            "confirmPassword": {
+              "label": "Confirmer le mot de passe *",
+              "placeholder": "Répétez votre mot de passe"
+            }
+          }
+        }
+      },
+      "actions": {
+        "submit": "Créer compte",
+        "infoNotice": "Après l'inscription, vous recevrez un code à 6 chiffres par e-mail pour finaliser la configuration.",
+        "signInPrompt": "Déjà un compte ?",
+        "signInLink": "Connexion",
+        "backToHome": "Retour à l'accueil"
+      }
+    }
   },
   "inventory": {
     "products": "Produits",

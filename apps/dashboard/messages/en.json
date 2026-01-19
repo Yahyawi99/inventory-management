@@ -62,8 +62,91 @@
     "welcome": "Welcome back"
   },
   "auth": {
-    "signIn": "Log In",
-    "signUp": "Create Account"
+    "appName": "WareFlow",
+    "signInPage": {
+      "header": "Welcome Back",
+      "subHeader": "Sign in to your WareFlow account",
+      "form": {
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        }
+      },
+      "actions": {
+        "submit": "Sign In",
+        "registerPrompt": "Don't have an account?",
+        "registerLink": "Register your organization",
+        "forgotPassword": "Forgot your password?",
+        "backToHome": "Back to home"
+      }
+    },
+    "signUpPage": {
+      "header": "Join WF",
+      "subHeader": "Register your organization to start managing your inventory efficiently. You'll need to verify your email address after registration.",
+      "sections": {
+        "authOptions": {
+          "title": "Authentication Options",
+          "methods": ["Email", "Google", "Phone", "Code"]
+        },
+        "companyInformation": {
+          "title": "Company Information",
+          "fields": {
+            "companyName": {
+              "label": "Company Name *",
+              "placeholder": "e.g. My Company Inc."
+            },
+            "shortName": {
+              "label": "Short Name",
+              "placeholder": "e.g. MCI (used for organization slug)"
+            },
+            "description": {
+              "label": "Description *",
+              "placeholder": "Brief description of your company's mission and operations"
+            },
+            "companyEmail": {
+              "label": "Company Email *",
+              "placeholder": "contact@mycompany.org"
+            },
+            "website": {
+              "label": "Website",
+              "placeholder": "https://mycompany.org"
+            }
+          }
+        },
+        "adminAccount": {
+          "title": "Admin Account",
+          "fields": {
+            "name": {
+              "label": "Your Name *",
+              "placeholder": "John Doe"
+            },
+            "email": {
+              "label": "Your Email * (verification required)",
+              "placeholder": "john.doe@example.com"
+            },
+            "password": {
+              "label": "Password *",
+              "placeholder": "Minimum 6 characters"
+            },
+            "confirmPassword": {
+              "label": "Confirm Password *",
+              "placeholder": "Repeat your password"
+            }
+          }
+        }
+      },
+      "actions": {
+        "submit": "Create Account & Send Verification",
+        "infoNotice": "After registration, you'll receive a verification email with a 6-digit code. Please check your inbox and verify your email to complete the setup.",
+        "signInPrompt": "Already have an account?",
+        "signInLink": "Sign In",
+        "backToHome": "Back to home"
+      }
+    }
   },
   "inventory": {
     "products": "Catalog",

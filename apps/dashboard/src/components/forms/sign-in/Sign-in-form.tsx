@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Button } from "app-core/src/components";
@@ -22,6 +23,7 @@ export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const t = useTranslations("auth.signInPage");
 
   const router = useRouter();
 
@@ -52,7 +54,7 @@ export default function SignInForm() {
             // Send verification OTP if the email is not verified
             if (ctx.data?.user && !ctx.data.user.emailVerified) {
               setSuccessMessage(
-                "Sign in successful! Redirecting to email verification..."
+                "Sign in successful! Redirecting to email verification...",
               );
 
               try {
@@ -64,7 +66,7 @@ export default function SignInForm() {
                 console.warn("Failed to send OTP:", otpError);
               } finally {
                 router.push(
-                  `/auth/verify-email?email=${encodeURIComponent(email)}`
+                  `/auth/verify-email?email=${encodeURIComponent(email)}`,
                 );
                 return;
               }
@@ -85,7 +87,7 @@ export default function SignInForm() {
             setSuccessMessage("Sign in successful! Redirecting...");
             router.push("/en");
           },
-        }
+        },
       );
     } catch (err: any) {
       console.error("Sign in error:", err);
@@ -99,10 +101,10 @@ export default function SignInForm() {
     <Card className="w-[400px] mx-auto rounded-lg shadow-lg">
       <CardHeader className="text-center pb-4">
         <CardTitle className="text-2xl font-semibold text-foreground">
-          Welcome Back
+          {t("header")}
         </CardTitle>
         <CardDescription className="text-muted-foreground">
-          Sign in to your WareFlow account
+          {t("subHeader")}
         </CardDescription>
       </CardHeader>
 
