@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Filter } from "lucide-react";
 import {
   Button,
@@ -23,18 +24,21 @@ import {
 import { FilterDrawerData, ActiveFilters } from "../../types/data-views";
 
 interface FilterDrawerProps {
+  page: string;
   data: FilterDrawerData | null;
   activeFilters: ActiveFilters;
   setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
 }
 
 export function FilterDrawer({
+  page,
   data,
   activeFilters,
   setActiveFilters,
 }: FilterDrawerProps) {
   const [drawerFilters, setDrawerFilters] =
     useState<ActiveFilters>(activeFilters);
+  const t = useTranslations(page);
 
   useEffect(() => {
     setDrawerFilters(activeFilters);
@@ -85,10 +89,10 @@ export function FilterDrawer({
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle className="text-2xl font-bold text-foreground">
-              {data?.header.title}
+              {t("filter_drawer.title")}
             </DrawerTitle>
             <DrawerDescription className="text-muted-foreground">
-              {data?.header.desc}
+              {t("filter_drawer.subtitle")}
             </DrawerDescription>
           </DrawerHeader>
 
@@ -134,14 +138,14 @@ export function FilterDrawer({
                                       {optionLabel}
                                     </SelectItem>
                                   );
-                                }
+                                },
                               )}
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                   );
-                }
+                },
               )}
           </div>
 

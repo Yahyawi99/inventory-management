@@ -100,6 +100,7 @@ export function DataControls({
         />
 
         <FilterDrawer
+          page={page}
           activeFilters={activeFilters}
           setActiveFilters={setActiveFilters}
           data={DrawerData}
