@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button, FilterDrawer, SearchInput, OrderByDropdown } from "..";
 import {
   FilterDrawerData,
@@ -11,6 +12,7 @@ import {
 } from "../../types";
 
 interface DataControlsProps {
+  page: string;
   activeFilters: ActiveFilters;
   activeOrderBy: SortConfig;
   setActiveFilters: React.Dispatch<React.SetStateAction<ActiveFilters>>;
@@ -22,6 +24,7 @@ interface DataControlsProps {
 }
 
 export function DataControls({
+  page,
   activeFilters,
   setActiveFilters,
   activeOrderBy,
@@ -32,6 +35,7 @@ export function DataControls({
   filterOptions,
 }: DataControlsProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const t = useTranslations(page);
 
   useEffect(() => {
     setPagination((prev) => ({ ...prev, page: 1 }));
@@ -62,7 +66,7 @@ export function DataControls({
   return (
     <div className="flex items-center justify-between my-4">
       <div className="flex space-x-2 bg-card shadow-accent p-1 border border-border rounded-full">
-        {filterOptions.values.map((value) => {
+        {filterOptions.values.map((value, i) => {
           return (
             <Button
               key={value}
@@ -83,7 +87,7 @@ export function DataControls({
                 })
               }
             >
-              {value}
+              {t(`filters.filter-${i + 1}`)}
             </Button>
           );
         })}

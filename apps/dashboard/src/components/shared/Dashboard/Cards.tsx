@@ -75,9 +75,9 @@ export default function Cards() {
       <h2 className="text-xl font-semibold mb-3">{t("cards.title")}</h2>
 
       <SummaryCards
+        page="dashboard"
         data={dashboardMetrics}
         isLoading={loading}
-        // t={t}
       />
     </div>
   );

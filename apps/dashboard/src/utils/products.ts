@@ -1,12 +1,12 @@
 import { ProductsSummaryMetrics, Product } from "@/types/products";
 import { Category } from "@/types/categories";
 import { getDateRangesForComparison } from "@/utils/dateHelpers";
-import { StockItem } from "@/types/products";
+import { StockItem } from "@/types/stocks";
 import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";
 import { calculatePercentageChange } from "./shared";
 
 export const getProductSummaryMetrics = (
-  allProducts: Product[]
+  allProducts: Product[],
 ): ProductsSummaryMetrics => {
   const productsCopy = [...allProducts];
 
@@ -23,7 +23,7 @@ export const getProductSummaryMetrics = (
   const previousPeriodProducts = productsCopy.filter(
     (product) =>
       new Date(product.createdAt.$date) >= new Date(previousPeriod.startDate) &&
-      new Date(product.createdAt.$date) <= new Date(previousPeriod.endDate)
+      new Date(product.createdAt.$date) <= new Date(previousPeriod.endDate),
   );
 
   // --- 1. Total Unique Products ---
@@ -34,7 +34,7 @@ export const getProductSummaryMetrics = (
   // This now uses the pre-calculated 'totalStockQuantity' field from the aggregation pipeline.
   const totalUnitsInStock = productsCopy.reduce(
     (sum, product) => sum + product.totalStockQuantity,
-    0
+    0,
   );
 
   // --- 3. Total Units Sold (via OrderLines) ---
@@ -68,15 +68,15 @@ export const getProductSummaryMetrics = (
   // --- Calculate Changes ---
   const totalUniqueProductsChange = calculatePercentageChange(
     totalUniqueProductsCurrent,
-    totalUniqueProductsPrevious
+    totalUniqueProductsPrevious,
   );
   const totalUnitsSoldChange = calculatePercentageChange(
     totalUnitsSoldCurrent,
-    totalUnitsSoldPrevious
+    totalUnitsSoldPrevious,
   );
   const totalSalesRevenueChange = calculatePercentageChange(
     totalSalesRevenueCurrent,
-    totalSalesRevenuePrevious
+    totalSalesRevenuePrevious,
   );
 
   return {
@@ -95,7 +95,7 @@ export const getProductSummaryMetrics = (
 export const getProductStockStatusDisplay = (stockItems: StockItem[]) => {
   const totalQuantity = stockItems.reduce(
     (sum, item) => sum + item.quantity,
-    0
+    0,
   );
 
   if (totalQuantity > 50) {
@@ -113,7 +113,7 @@ export const getTotalProductStockQuantity = (stockItems: StockItem[]) => {
 // Categories options for drawer filter
 export const buildCategoriesOptions = async () => {
   const response = await fetch(
-    `/api/inventory/categories?pageSize=${Infinity}`
+    `/api/inventory/categories?pageSize=${Infinity}`,
   );
 
   if (!response.ok) {
@@ -135,7 +135,7 @@ export const buildProductsApiUrl = (
   base: string,
   activeFilters: ActiveFilters,
   activeOrderBy: SortConfig,
-  pagination: Pagination
+  pagination: Pagination,
 ): string => {
   const queryParams = new URLSearchParams();
 

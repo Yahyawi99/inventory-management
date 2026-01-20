@@ -4,12 +4,13 @@ import { CardsSkeleton } from "..";
 import { useTranslations } from "next-intl";
 
 interface SummaryCardsProps {
+  page: string;
   data: MetricsData[];
   isLoading: boolean;
 }
 
-export function SummaryCards({ data, isLoading }: SummaryCardsProps) {
-  const t = useTranslations("dashboard");
+export function SummaryCards({ page, data, isLoading }: SummaryCardsProps) {
+  const t = useTranslations(page);
 
   const renderChangeDisplay = (change: number) => {
     const isPositive = change > 0;

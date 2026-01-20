@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useAuth, useTheme } from "@/context";
+import { useAuth } from "@/context";
 import { useRouter } from "next/navigation";
 import { Product, ProductsSummaryMetrics, SubmitData } from "@/types/products";
 import { getProductSummaryMetrics } from "@/utils/products";
@@ -30,14 +30,8 @@ import {
 import { buildProductsApiUrl } from "@/utils/products";
 import { exportOrdersAsJson } from "@/utils/shared";
 
-const headerData = {
-  title: "Products",
-  buttonTxt: "Create Product",
-};
-
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
-  const { theme } = useTheme();
   const router = useRouter();
 
   const [tableProducts, setTableProducts] = useState<Product[]>([]);
@@ -86,14 +80,14 @@ export default function Products() {
         "/api/inventory/products",
         activeFilters,
         activeOrderBy,
-        pagination
+        pagination,
       );
 
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(
-          response.statusText || "Failed to fetch table orders from API."
+          response.statusText || "Failed to fetch table orders from API.",
         );
       }
 
@@ -105,7 +99,7 @@ export default function Products() {
       console.error("Error fetching table orders:", err);
       setError(
         err.message ||
-          "An unexpected error occurred while fetching table orders."
+          "An unexpected error occurred while fetching table orders.",
       );
     } finally {
       setIsFetchingTableProducts(false);
@@ -122,7 +116,7 @@ export default function Products() {
   // Summary cards Data
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
-      router.replace(`/auth/sign-in`);
+      router.replace(`/en/sign-in`);
       return;
     }
 
@@ -140,7 +134,7 @@ export default function Products() {
 
         if (!response.ok) {
           throw new Error(
-            response.statusText || "Failed to fetch products from API."
+            response.statusText || "Failed to fetch products from API.",
           );
         }
 
@@ -150,7 +144,8 @@ export default function Products() {
       } catch (err: any) {
         console.error("Error fetching products:", err);
         setError(
-          err.message || "An unexpected error occurred while fetching products."
+          err.message ||
+            "An unexpected error occurred while fetching products.",
         );
       } finally {
         setIsFetchingSummaryProducts(false);
@@ -198,7 +193,7 @@ export default function Products() {
         filter: activeFilters,
         orderBy: activeOrderBy,
       },
-      metricsData
+      metricsData,
     );
   };
 
@@ -211,15 +206,16 @@ export default function Products() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header
-        data={headerData}
-        exportData={exportData}
-        formConfig={productFormConfig}
+      <Header exportData={exportData} formConfig={productFormConfig} />
+
+      <SummaryCards
+        page="inventory.products_page"
+        data={cardMetrics}
+        isLoading={isFetchingSummaryProducts}
       />
 
-      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryProducts} />
-
       <DataControls
+        page="inventory.products_page"
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}

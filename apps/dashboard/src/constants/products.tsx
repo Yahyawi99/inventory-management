@@ -123,7 +123,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       },
     ],
     onSubmit: async (
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
       const { name, description, sku, barcode, price, categoryId } = data;
 
@@ -173,7 +173,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
     },
     onUpdate: async (
       id: string,
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
       const { name, description, sku, barcode, price, categoryId } = data;
 
@@ -226,7 +226,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       }
     },
     onDelete: async (
-      recordId: string
+      recordId: string,
     ): Promise<{ ok: boolean; message: string }> => {
       if (!recordId) {
         return {
@@ -270,7 +270,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
 
 // --- Product-Specific Table Columns ---
 export function getTableColumns(
-  formConfig: FormConfig<SubmitData>
+  formConfig: FormConfig<SubmitData>,
 ): Column<Product>[] {
   return [
     {

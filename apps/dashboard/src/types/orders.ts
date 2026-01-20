@@ -28,8 +28,8 @@ export interface OrderLine {
   quantity: number;
   unitPrice: number;
   productId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: { $date: Date };
+  updatedAt: { $date: Date };
   orderId: string;
 }
 

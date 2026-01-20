@@ -1,21 +1,23 @@
-import { FormConfig, HeaderData } from "../../types";
+import { useTranslations } from "next-intl";
+import { FormConfig } from "../../types";
 import CreationForm from "./CreationForm";
 import { Button } from "..";
 
 interface Props<T> {
   exportData: () => void;
-  data: HeaderData;
   formConfig: FormConfig<T> | null;
 }
 
-export function Header<T>({ exportData, data, formConfig }: Props<T>) {
+export function Header<T>({ exportData, formConfig }: Props<T>) {
+  const t = useTranslations("inventory.products_page");
+
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
-      <h1 className="text-3xl font-bold text-foreground">{data.title}</h1>
+      <h1 className="text-3xl font-bold text-foreground">{t("title")}</h1>
       <div className="flex items-center space-x-3">
         <Button
           variant="outline"
-          className="flex items-center space-x-1 border-border text-muted-foreground hover:bg-foreground"
+          className="flex items-center space-x-1 border-border text-muted-foreground hover:bg-foreground hover:text-white"
           onClick={exportData}
         >
           <svg
@@ -34,7 +36,7 @@ export function Header<T>({ exportData, data, formConfig }: Props<T>) {
             <polyline points="17 8 12 3 7 8" />
             <line x1="12" x2="12" y1="3" y2="15" />
           </svg>
-          <span>Export</span>
+          <span>{t("actions.export")}</span>
         </Button>
 
         {formConfig && <CreationForm formConfig={formConfig} />}

@@ -183,22 +183,44 @@
     "products_page": {
       "title": "المنتجات",
       "actions": {
-        "export": "تصدير",
+        "export": "استخراج البيانات",
         "add_new": "إضافة منتج جديد"
       },
-      "stats": {
-        "net_revenue": "صافي الإيرادات",
-        "pending_receivables": "المستحقات المعلقة",
-        "voided_totals": "إجمالي الملغاة",
-        "gross_sales": "إجمالي المبيعات",
-        "last_days": "آخر ٧ أيام"
+      "cards": {
+        "period": "آخر 7 أيام",
+        "card-1": {
+          "title": "صافي الإيرادات"
+        },
+        "card-2": {
+          "title": "المستحقات المعلقة"
+        },
+        "card-3": {
+          "title": "إجمالي الملغاة"
+        },
+        "card-4": {
+          "title": "إجمالي المبيعات"
+        }
       },
       "filters": {
-        "all": "الكل",
-        "in_stock": "متوفر",
-        "low_stock": "مخزون منخفض",
-        "out_of_stock": "نفذت الكمية",
-        "search_placeholder": "بحث..."
+        "filter-1": "الكل",
+        "filter-2": "متوفر",
+        "filter-3": "مخزون منخفض",
+        "filter-4": "نفذت الكمية"
+      },
+      "filter_drawer": {
+        "title": "تصفية المنتجات",
+        "subtitle": "تحسين قائمة المنتجات الخاصة بك",
+        "fields": {
+          "stock_status": "حالة مخزون المنتج",
+          "category": "فئة المنتج"
+        },
+        "placeholders": {
+          "all_products": "جميع المنتجات"
+        },
+        "buttons": {
+          "clear": "مسح الفلاتر",
+          "apply": "تطبيق الفلاتر"
+        }
       },
       "table": {
         "product_name": "اسم المنتج",
@@ -208,6 +230,31 @@
         "stock_status": "حالة المخزون",
         "total_stock": "إجمالي المخزون",
         "action": "الإجراء"
+      },
+      "product_form": {
+        "title_add": "إضافة منتج جديد",
+        "title_edit": "تعديل المنتج",
+        "description": "أدخل تفاصيل المنتج الجديد.",
+        "fields": {
+          "name": "اسم المنتج",
+          "sku": "رمز SKU",
+          "price": "السعر ($)",
+          "barcode": "الباركود (EAN)",
+          "category": "الفئة",
+          "product_description": "الوصف"
+        },
+        "placeholders": {
+          "name": "سماعة لاسلكية X20",
+          "product_description": "وصف مفصل للمنتج..."
+        },
+        "messages": {
+          "required_error": "يرجى ملء جميع الحقول المطلوبة!",
+          "id_required": "معرف المنتج مطلوب!",
+          "create_success": "تم إنشاء المنتج بنجاح.",
+          "update_success": "تم تحديث المنتج بنجاح.",
+          "delete_success": "تم حذف المنتج بنجاح.",
+          "generic_error": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+        }
       }
     },
     "categories": "مجموعات المنتجات"

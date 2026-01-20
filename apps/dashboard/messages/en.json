@@ -3,7 +3,6 @@
     "welcome": "Welcome back"
   },
   "dashboard": {
-    "welcome": "Overview",
     "cards": {
       "title": "Financial Summary",
       "period": "last 7 days",
@@ -186,19 +185,41 @@
         "export": "Export",
         "add_new": "Add New Product"
       },
-      "stats": {
-        "net_revenue": "Net Revenue",
-        "pending_receivables": "Pending Receivables",
-        "voided_totals": "Voided Totals",
-        "gross_sales": "Gross Sales",
-        "last_days": "last 7 days"
+      "cards": {
+        "period": "last 7 days",
+        "card-1": {
+          "title": "Net Revenue"
+        },
+        "card-2": {
+          "title": "Pending Receivables"
+        },
+        "card-3": {
+          "title": "Voided Totals"
+        },
+        "card-4": {
+          "title": "Gross Sales"
+        }
       },
       "filters": {
-        "all": "All",
-        "in_stock": "In Stock",
-        "low_stock": "Low Stock",
-        "out_of_stock": "Out of Stock",
-        "search_placeholder": "Search..."
+        "filter-1": "All",
+        "filter-2": "In Stock",
+        "filter-3": "Low Stock",
+        "filter-4": "Out of Stock"
+      },
+      "filter_drawer": {
+        "title": "Filter Products",
+        "subtitle": "Refine your Product list",
+        "fields": {
+          "stock_status": "Product's Stock Status",
+          "category": "Product Category"
+        },
+        "placeholders": {
+          "all_products": "All Products"
+        },
+        "buttons": {
+          "clear": "Clear Filters",
+          "apply": "Apply Filters"
+        }
       },
       "table": {
         "product_name": "Product Name",
@@ -208,6 +229,34 @@
         "stock_status": "Stock Status",
         "total_stock": "Total Stock",
         "action": "Action"
+      },
+      "product_form": {
+        "title_add": "Add New Product",
+        "title_edit": "Edit Product",
+        "description": "Fill in the details for the product.",
+        "fields": {
+          "name": "Product Name",
+          "sku": "SKU",
+          "price": "Price ($)",
+          "barcode": "Barcode (EAN)",
+          "category": "Category",
+          "product_description": "Description"
+        },
+        "placeholders": {
+          "name": "Wireless Headset X20",
+          "sku": "WHX20-BLK",
+          "price": "199.99",
+          "barcode": "123456789012",
+          "product_description": "Detailed product description..."
+        },
+        "messages": {
+          "required_error": "Please fill out all the required fields!",
+          "id_required": "Product ID is required!",
+          "create_success": "Product created successfully.",
+          "update_success": "Product updated successfully.",
+          "delete_success": "Product deleted successfully.",
+          "generic_error": "An error occurred. Please try again."
+        }
       }
     },
     "categories": "Product Groups"
