@@ -22,25 +22,28 @@
     },
     "charts": {
       "chart-1": {
-        "title": "Tendance des ventes",
+        "title": "Performance des ventes",
         "revenue": {
-          "desc": "montrant la performance historique des ventes par revenu"
+          "desc": "Tendances des revenus au fil du temps"
         },
         "orders": {
-          "desc": "montrant la performance historique des ventes par commandes"
+          "desc": "Répartition du volume des commandes"
         }
       },
       "chart-2": {
-        "title": "Panier moyen",
+        "title": "Valeur moyenne des commandes",
         "desc": "Suit le montant moyen dépensé par les clients par commande au fil du temps."
       },
       "chart-3": {
-        "title": "Distribution de la valeur des stocks",
-        "desc": "Indique comment la valeur totale de votre inventaire est répartie entre les différentes catégories de produits."
+        "title": "Produits les plus vendus"
       },
       "chart-4": {
+        "title": "Répartition de la valeur des stocks",
+        "desc": "Affiche comment la valeur totale de votre inventaire est répartie entre les différentes catégories de produits."
+      },
+      "chart-5": {
         "title": "Répartition du statut des commandes",
-        "desc": "Aperçu de l'état actuel de toutes les commandes actives"
+        "desc": "Aperçu de l'état actuel de toutes les commandes actives."
       }
     },
     "actions": {

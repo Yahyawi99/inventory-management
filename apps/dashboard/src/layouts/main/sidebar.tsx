@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import { authClient } from "@/lib/auth-client";
 import { useAuth, useTheme } from "@/context";
 import { User } from "@/types/auth";
@@ -30,9 +31,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function MainSidebar() {
   const { user } = useAuth();
   const { theme } = useTheme();
+  const locale = useLocale();
 
   return (
-    <Sidebar>
+    <Sidebar side={locale === "ar" ? "right" : "left"}>
       <SidebarHeader>
         <Header />
       </SidebarHeader>

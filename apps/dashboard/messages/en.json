@@ -31,16 +31,19 @@
         }
       },
       "chart-2": {
-        "title": "Average Ticket Size",
-        "desc": "Average spend per customer per transaction."
+        "title": "Average Order Value",
+        "desc": "Tracks the average amount customers spend per order over time."
       },
       "chart-3": {
-        "title": "Stock Value by Category",
-        "desc": "Inventory valuation across product lines."
+        "title": "Top Selling Products"
       },
       "chart-4": {
-        "title": "Order Fulfillment",
-        "desc": "Real-time status of active orders."
+        "title": "Inventory Value Distribution",
+        "desc": "Shows how your total inventory value is spread across different product categories."
+      },
+      "chart-5": {
+        "title": "Order Status Distribution",
+        "desc": "Overview of the current state of all active orders."
       }
     },
     "actions": {

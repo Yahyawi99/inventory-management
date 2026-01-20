@@ -1,6 +1,5 @@
 "use client";
 
-import { faker } from "@faker-js/faker/locale/af_ZA";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -34,13 +33,7 @@ const CURRENT_YEAR = new Date().toLocaleDateString("en-US", {
   year: "numeric",
 });
 
-export default function Chart({
-  title,
-  desc,
-}: {
-  title: string;
-  desc: string;
-}) {
+export default function Chart({ title }: { title: string }) {
   const [chartData, setChartData] = useState<
     {
       productName: string;
@@ -75,7 +68,7 @@ export default function Chart({
   return (
     <Card className="flex-1 shadow-accent">
       <CardHeader>
-        <CardTitle>Top Selling Products</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>
           {PREVIOUS_MONTH} - {CURRENT_MONTH} {CURRENT_YEAR}
         </CardDescription>

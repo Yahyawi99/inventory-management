@@ -60,10 +60,8 @@ export default function Chart({
   return (
     <Card className="flex-1 shadow-accent">
       <CardHeader>
-        <CardTitle>Average Order Value</CardTitle>
-        <CardDescription>
-          Tracks the average amount customers spend per order over time.
-        </CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
 
       <CardContent>

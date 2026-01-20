@@ -73,10 +73,8 @@ export default function Chart({
   return (
     <Card className="flex flex-1 flex-col shadow-accent">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Order Status Distribution</CardTitle>
-        <CardDescription>
-          Overview of the current state of all active orders
-        </CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">

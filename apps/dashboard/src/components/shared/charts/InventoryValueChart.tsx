@@ -73,11 +73,8 @@ export default function Chart({
   return (
     <Card className="flex flex-col flex-1 shadow-accent">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Inventory Value Distribution</CardTitle>
-        <CardDescription>
-          Shows how your total inventory value is spread across different
-          product categories.
-        </CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 pb-0">

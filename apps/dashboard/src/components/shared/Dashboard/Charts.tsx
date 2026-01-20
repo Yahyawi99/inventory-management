@@ -18,22 +18,19 @@ export default function Charts() {
 
       <div className="flex gap-5">
         <AOVChart
-          title={t("charts.chart-1.title")}
-          desc={t("charts.chart-1.revenue.desc")}
+          title={t("charts.chart-2.title")}
+          desc={t("charts.chart-2.desc")}
         />
-        <TopProductChart
-          title={t("charts.chart-1.title")}
-          desc={t("charts.chart-1.revenue.desc")}
-        />
+        <TopProductChart title={t("charts.chart-3.title")} />
       </div>
       <div className="flex gap-5">
         <InventoryValueChart
-          title={t("charts.chart-1.title")}
-          desc={t("charts.chart-1.revenue.desc")}
+          title={t("charts.chart-4.title")}
+          desc={t("charts.chart-4.desc")}
         />
         <OrderStatusChart
-          title={t("charts.chart-1.title")}
-          desc={t("charts.chart-1.revenue.desc")}
+          title={t("charts.chart-5.title")}
+          desc={t("charts.chart-5.desc")}
         />
       </div>
     </div>

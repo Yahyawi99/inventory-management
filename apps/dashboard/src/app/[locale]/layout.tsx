@@ -15,5 +15,9 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
+  return (
+    <NextIntlClientProvider>
+      <div dir={locale === "ar" ? "rtl" : "ltr"}>{children}</div>
+    </NextIntlClientProvider>
+  );
 }

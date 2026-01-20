@@ -16,14 +16,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-
-  console.log(locale);
   return (
     <html lang="en" className={`overflow-hidden ${JosefinSans.className}`}>
       <body className="text-[1.1rem]">{children}</body>
