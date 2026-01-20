@@ -78,6 +78,7 @@
       },
       "actions": {
         "submit": "Connexion",
+        "submitting": "en cours...",
         "registerPrompt": "Pas encore de compte ?",
         "registerLink": "Inscrire l'organisation",
         "forgotPassword": "Mot de passe oublié ?",

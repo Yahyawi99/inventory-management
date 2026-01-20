@@ -112,12 +112,12 @@ export default function SignInForm() {
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email" className="text-muted-foreground">
-              Email
+              {t("form.email.label")}
             </Label>
             <Input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder={t("form.email.placeholder")}
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -127,12 +127,12 @@ export default function SignInForm() {
 
           <div className="grid gap-2">
             <Label htmlFor="password" className="text-muted-foreground">
-              Password
+              {t("form.password.label")}
             </Label>
             <Input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder={t("form.password.placeholder")}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -153,28 +153,28 @@ export default function SignInForm() {
             type="submit"
             disabled={isLoading}
           >
-            {isLoading ? "Signing In..." : "Sign In"}
+            {isLoading ? t("actions.submitting") : t("actions.submit")}
           </Button>
         </form>
       </CardContent>
 
       <CardFooter className="flex flex-col gap-4 px-6 pt-4 pb-6">
         <div className="text-center text-sm text-muted-foreground">
-          Don't have an account?{" "}
+          {t("actions.registerPrompt")}{" "}
           <a
             href="sign-up"
             className="text-sidebar hover:underline font-semibold"
           >
-            Register your organization
+            {t("actions.registerLink")}
           </a>
         </div>
 
         <div className="text-center text-sm text-muted-foreground">
           <a
-            href="/auth/forgot-password"
+            href="/en/forgot-password"
             className="text-sidebar hover:underline font-medium"
           >
-            Forgot your password?
+            {t("actions.forgotPassword")}
           </a>
         </div>
 
@@ -199,7 +199,7 @@ export default function SignInForm() {
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
-            <span>Back to home</span>
+            <span> {t("actions.backToHome")}</span>
           </a>
         </div>
       </CardFooter>

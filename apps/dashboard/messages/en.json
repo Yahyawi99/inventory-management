@@ -78,6 +78,7 @@
       },
       "actions": {
         "submit": "Sign In",
+        "submitting": "Signing In...",
         "registerPrompt": "Don't have an account?",
         "registerLink": "Register your organization",
         "forgotPassword": "Forgot your password?",
