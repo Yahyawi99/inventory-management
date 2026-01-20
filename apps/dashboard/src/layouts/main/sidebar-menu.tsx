@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -19,7 +20,9 @@ import Link from "next/link";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function MySidebarMenu({ item }: { item: MenuItemType }) {
-  const { id, name, icon, href, subMenuItems } = item; // destructure icon
+  const { id, name, icon, href, subMenuItems } = item;
+  const t = useTranslations("sidebar");
+  const locale = useLocale();
 
   return (
     <SidebarMenu>
@@ -31,9 +34,9 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
               asChild
             >
               <SidebarMenuButton className="flex justify-between hover:!bg-transparent focus:!bg-transparent active:!bg-transparent ">
-                <div>
-                  <FontAwesomeIcon icon={icon} className="text-inherit mr-2" />
-                  <span className="text-[1.25rem] font-bold ">{name}</span>
+                <div className="flex gap-2 items-center ">
+                  <FontAwesomeIcon icon={icon} className="text-inherit" />
+                  <span className="text-[1.25rem] font-bold ">{t(name)}</span>
                 </div>
 
                 <FontAwesomeIcon
@@ -53,8 +56,8 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
                         className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent decoration-3 hover:underline dark:text-white text-white hover:text-white"
                         asChild
                       >
-                        <Link href={href!}>
-                          <span className="text-[1rem]">{subItemName}</span>
+                        <Link href={`/${locale}` + href}>
+                          <span className="text-[1rem]">{t(subItemName)}</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -67,11 +70,11 @@ export default function MySidebarMenu({ item }: { item: MenuItemType }) {
       ) : (
         <SidebarMenuItem
           key={id}
-          className="mb-3 px-2 dark:text-foreground text-(--border) hover:!text-primary"
+          className="flex gap-2 items-center mb-3 px-2 dark:text-foreground text-(--border) hover:!text-primary"
         >
-          <FontAwesomeIcon icon={icon} className="mr-2 text-inherit" />
-          <Link href={href as string} className="text-inherit">
-            <span className="text-[1.25rem] font-bold">{name}</span>
+          <FontAwesomeIcon icon={icon} className="text-inherit" />
+          <Link href={`/${locale}` + href} className="text-inherit">
+            <span className="text-[1.25rem] font-bold">{t(name)}</span>
           </Link>
         </SidebarMenuItem>
       )}

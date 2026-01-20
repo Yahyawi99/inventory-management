@@ -58,8 +58,11 @@ export default function MainSidebar() {
 
 const Header = () => {
   return (
-    <div className="flex justify-between items-center pt-1 pb-0 mb-5 border-white border-b-2">
-      <div className="flex items-center">
+    <div
+      dir="ltr"
+      className="flex justify-between items-center pt-1 pb-0 mb-5 border-white border-b-2"
+    >
+      <div className="flex items-center justify-end">
         <Image
           src={"/assets/icons/logo.png"}
           width={75}

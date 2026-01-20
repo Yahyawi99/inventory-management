@@ -1,23 +1,23 @@
 export const routes = {
-  dashboard: "/en",
+  dashboard: "",
   inventory: {
-    products: "/en/inventory/products",
-    categories: "/en/inventory/categories",
-    stockLevels: "/en/inventory/stock-levels",
+    products: "/inventory/products",
+    categories: "/inventory/categories",
+    stockLevels: "/inventory/stock-levels",
   },
   orders: {
-    all: "/en/orders",
-    purchase: "/en/orders/purchase",
-    sale: "/en/orders/sale",
-    invoices: "/en/invoices",
+    all: "/orders",
+    purchase: "/orders/purchase",
+    sale: "/orders/sale",
+    invoices: "/invoices",
   },
   usersRoles: {
-    manageUsers: "/en/users-roles/manage-users",
-    rolesPermissions: "/en/users-roles/roles-permissions",
+    manageUsers: "/users-roles/manage-users",
+    rolesPermissions: "/users-roles/roles-permissions",
   },
   settings: {
-    companyProfile: "/en/settings/company-profile",
-    notifications: "/en/settings/notifications",
+    companyProfile: "/settings/company-profile",
+    notifications: "/settings/notifications",
   },
-  activityLog: "/en/activity-log",
+  activityLog: "/activity-log",
 };

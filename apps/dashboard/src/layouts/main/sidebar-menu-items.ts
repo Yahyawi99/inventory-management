@@ -3,7 +3,6 @@ import {
   faBoxesStacked,
   faFileInvoice,
   faUsers,
-  faChartLine,
   faGear,
   faScroll,
 } from "@fortawesome/free-solid-svg-icons";
@@ -13,98 +12,97 @@ import { MenuItemType } from "@/types/sidebar";
 export const MenuItems: MenuItemType[] = [
   {
     id: "dashboard",
-    name: "Dashboard",
+    name: "dashboard",
     href: routes.dashboard,
     icon: faChartSimple,
     subMenuItems: [],
   },
   {
     id: "inventory",
-    name: "Inventory",
+    name: "inventory.title",
     icon: faBoxesStacked,
     subMenuItems: [
       {
         id: "inventory-products-sub",
-        name: "Products",
+        name: "inventory.products",
         href: routes.inventory.products,
       },
       {
         id: "inventory-categories-sub",
-        name: "Categories",
+        name: "inventory.categories",
         href: routes.inventory.categories,
       },
       {
         id: "inventory-stock-levels-sub",
-        name: "Stock Levels",
+        name: "inventory.stock_levels",
         href: routes.inventory.stockLevels,
       },
     ],
   },
   {
     id: "orders",
-    name: "Orders", // Display name
+    name: "orders.title",
     icon: faFileInvoice,
     subMenuItems: [
       {
-        id: "orders-all-sub", // Unique ID for sub-item
-        name: "All Orders",
+        id: "orders-all-sub",
+        name: "orders.all_orders",
         href: routes.orders.all,
       },
       {
-        id: "orders-purchase-sub", // Unique ID for sub-item
-        name: "Purchase Orders",
+        id: "orders-purchase-sub",
+        name: "orders.purchase_orders",
         href: routes.orders.purchase,
       },
       {
-        id: "orders-sale-sub", // Unique ID for sub-item
-        name: "Sale Orders",
+        id: "orders-sale-sub",
+        name: "orders.sale_orders",
         href: routes.orders.sale,
       },
       {
-        id: "orders-invoices-sub", // Unique ID for sub-item
-        name: "Invoices",
+        id: "orders-invoices-sub",
+        name: "orders.invoices",
         href: routes.orders.invoices,
       },
     ],
   },
   {
     id: "users-roles",
-    name: "Users & Roles",
+    name: "users_roles.title",
     icon: faUsers,
     subMenuItems: [
       {
         id: "users-roles-manage-sub",
-        name: "Manage Users",
+        name: "users_roles.manage_users",
         href: routes.usersRoles.manageUsers,
       },
       {
         id: "users-roles-permissions-sub",
-        name: "Roles & Permissions",
+        name: "users_roles.roles_permissions",
         href: routes.usersRoles.rolesPermissions,
       },
     ],
   },
-
   {
     id: "activity-log",
-    name: "Activity Log", // Display name
+    name: "activity_log",
     href: routes.activityLog,
     icon: faScroll,
-    subMenuItems: [], // Empty array as it has no sub-items
+    subMenuItems: [],
   },
   {
     id: "settings",
-    name: "Settings",
+    name: "settings.title",
     icon: faGear,
     subMenuItems: [
       {
         id: "settings-company-profile-sub",
-        name: "Company Profile",
+        name: "settings.company_profile",
         href: routes.settings.companyProfile,
       },
       {
         id: "settings-notifications-sub",
-        name: "Notifications",
+        name: "settings.notifications",
         href: routes.settings.notifications,
       },
     ],
