@@ -49,8 +49,6 @@ export default function Chart({
 
       const data = await response.json();
 
-      console.log(data.chartData.length);
-
       setChartData(data.chartData);
     } catch (err: any) {
       console.error("Error fetching inventory chart data:", err);

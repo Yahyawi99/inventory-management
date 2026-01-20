@@ -74,8 +74,6 @@ export default function Chart({
     [chartData],
   );
 
-  console.log(chartConfig[activeChart].label);
-
   return (
     <Card className="py-4 sm:py-0 shadow-accent">
       <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">

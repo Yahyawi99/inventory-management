@@ -16,7 +16,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
-      return router.replace(`/auth/sign-in`);
+      return router.replace(`/en/sign-in`);
     }
   }, [isAuthenticated, isAuthLoading]);
 
