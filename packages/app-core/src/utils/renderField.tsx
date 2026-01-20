@@ -1,3 +1,4 @@
+import type { useTranslations } from "next-intl";
 import {
   Input,
   Select,
@@ -11,15 +12,18 @@ import {
 } from "../components";
 import { FormField } from "../types";
 
+type Translator = ReturnType<typeof useTranslations>;
+
 export const renderField = (
   field: FormField,
   formData: any,
-  handleChange: any
+  handleChange: any,
+  t: Translator,
 ) => {
   const commonInputProps = {
     id: field.name,
     name: field.name,
-    placeholder: field.placeholder,
+    placeholder: t(field.placeholder as string),
     required: field.required,
   };
 
@@ -85,7 +89,7 @@ export const renderField = (
                         size="sm"
                         onClick={() => {
                           const newItems = items.filter(
-                            (_: any, i: number) => i !== index
+                            (_: any, i: number) => i !== index,
                           );
                           handleChange(field.name, newItems);
                         }}
@@ -142,7 +146,8 @@ export const renderField = (
                                 [subField.name]: value,
                               };
                               handleChange(field.name, newItems);
-                            }
+                            },
+                            t,
                           )}
                         </div>
                       );
@@ -190,7 +195,7 @@ export const renderField = (
           required={field.required}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
+            <SelectValue placeholder={`${t(field.label.toLowerCase())}`} />
           </SelectTrigger>
           <SelectContent className="bg-card">
             {field.options?.map((option) => {

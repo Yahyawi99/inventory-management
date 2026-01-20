@@ -240,7 +240,7 @@
           "sku": "رمز SKU",
           "price": "السعر ($)",
           "barcode": "الباركود (EAN)",
-          "category": "الفئة",
+          "category": "اختر الفئة",
           "product_description": "الوصف"
         },
         "actions": {
@@ -255,6 +255,9 @@
         },
         "placeholders": {
           "name": "سماعة لاسلكية X20",
+          "sku": "WHX20-BLK",
+          "price": "199.99",
+          "barcode": "KRDIQOI1KG",
           "product_description": "وصف مفصل للمنتج..."
         },
         "messages": {

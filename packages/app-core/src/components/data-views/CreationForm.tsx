@@ -156,7 +156,7 @@ export default function CreationForm<T>({
                     if (field.type === "repeater") {
                       return (
                         <div key={field.name} className="col-span-full">
-                          {renderField(field, formData, handleChange)}
+                          {renderField(field, formData, handleChange, t)}
                         </div>
                       );
                     }
@@ -169,7 +169,7 @@ export default function CreationForm<T>({
                             <span className="text-red-500">*</span>
                           )}
                         </Label>
-                        {renderField(field, formData, handleChange)}
+                        {renderField(field, formData, handleChange, t)}
                       </div>
                     );
                   })}

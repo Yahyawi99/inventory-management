@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +39,8 @@ export default function EditRecordDialog<T>({
     message: string;
   } | null>(null);
 
+  const t = useTranslations("");
+
   useEffect(() => {
     if (record && isOpen) {
       const initialData: any = {};
@@ -55,12 +58,15 @@ export default function EditRecordDialog<T>({
     }
   }, [record, isOpen, formConfig.fields]);
 
-  const groupedFields = formConfig.fields.reduce((acc, field) => {
-    const area = field.gridArea || "1";
-    if (!acc[area]) acc[area] = [];
-    acc[area].push(field);
-    return acc;
-  }, {} as Record<string, FormField[]>);
+  const groupedFields = formConfig.fields.reduce(
+    (acc, field) => {
+      const area = field.gridArea || "1";
+      if (!acc[area]) acc[area] = [];
+      acc[area].push(field);
+      return acc;
+    },
+    {} as Record<string, FormField[]>,
+  );
 
   const handleChange = (name: string, value: any) => {
     setFormData((prev: any) => ({
@@ -78,7 +84,7 @@ export default function EditRecordDialog<T>({
         (record.id || record._id) as string,
         {
           ...formData,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -94,7 +100,7 @@ export default function EditRecordDialog<T>({
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: "Failed to update the record!" }
+          : { ok: false, message: "Failed to update the record!" },
       );
     } finally {
       setIsSubmitting(false);
@@ -109,7 +115,7 @@ export default function EditRecordDialog<T>({
         if (data.ok) window.location.reload();
         setMessage(null);
       },
-      data.ok ? 1000 : 3000
+      data.ok ? 1000 : 3000,
     );
   };
 
@@ -148,7 +154,7 @@ export default function EditRecordDialog<T>({
                     if (field.type === "repeater") {
                       return (
                         <div key={field.name} className="col-span-full">
-                          {renderField(field, formData, handleChange)}
+                          {renderField(field, formData, handleChange, t)}
                         </div>
                       );
                     }
@@ -161,7 +167,7 @@ export default function EditRecordDialog<T>({
                             <span className="text-red-500">*</span>
                           )}
                         </Label>
-                        {renderField(field, formData, handleChange)}
+                        {renderField(field, formData, handleChange, t)}
                       </div>
                     );
                   })}
