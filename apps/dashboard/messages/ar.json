@@ -64,6 +64,33 @@
       }
     }
   },
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "inventory": {
+      "title": "المخزون",
+      "products": "المنتجات",
+      "categories": "الفئات",
+      "stock_levels": "مستويات المخزون"
+    },
+    "orders": {
+      "title": "الطلبات",
+      "all_orders": "كافة الطلبات",
+      "purchase_orders": "طلبات الشراء",
+      "sale_orders": "طلبات البيع",
+      "invoices": "الفواتير"
+    },
+    "users_roles": {
+      "title": "المستخدمين والأدوار",
+      "manage_users": "إدارة المستخدمين",
+      "roles_permissions": "الأدوار والصلاحيات"
+    },
+    "activity_log": "سجل النشاطات",
+    "settings": {
+      "title": "الإعدادات",
+      "company_profile": "ملف الشركة",
+      "notifications": "الإشعارات"
+    }
+  },
   "auth": {
     "appName": "WareFlow",
     "signInPage": {

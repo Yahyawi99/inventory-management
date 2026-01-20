@@ -64,6 +64,33 @@
       }
     }
   },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "inventory": {
+      "title": "Inventory",
+      "products": "Products",
+      "categories": "Categories",
+      "stock_levels": "Stock Levels"
+    },
+    "orders": {
+      "title": "Orders",
+      "all_orders": "All Orders",
+      "purchase_orders": "Purchase Orders",
+      "sale_orders": "Sale Orders",
+      "invoices": "Invoices"
+    },
+    "users_roles": {
+      "title": "Users & Roles",
+      "manage_users": "Manage Users",
+      "roles_permissions": "Roles & Permissions"
+    },
+    "activity_log": "Activity Log",
+    "settings": {
+      "title": "Settings",
+      "company_profile": "Company Profile",
+      "notifications": "Notifications"
+    }
+  },
   "auth": {
     "appName": "WareFlow",
     "signInPage": {
