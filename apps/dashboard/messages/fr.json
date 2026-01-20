@@ -180,7 +180,36 @@
     }
   },
   "inventory": {
-    "products": "Produits",
+    "products_page": {
+      "title": "Produits",
+      "actions": {
+        "export": "Exporter",
+        "add_new": "Ajouter un nouveau produit"
+      },
+      "stats": {
+        "net_revenue": "Chiffre d'affaires net",
+        "pending_receivables": "Créances en attente",
+        "voided_totals": "Totaux annulés",
+        "gross_sales": "Ventes brutes",
+        "last_days": "7 derniers jours"
+      },
+      "filters": {
+        "all": "Tous",
+        "in_stock": "En stock",
+        "low_stock": "Stock faible",
+        "out_of_stock": "Rupture de stock",
+        "search_placeholder": "Rechercher..."
+      },
+      "table": {
+        "product_name": "Nom du produit",
+        "sku": "SKU",
+        "category": "Catégorie",
+        "price": "Prix",
+        "stock_status": "État du stock",
+        "total_stock": "Stock total",
+        "action": "Action"
+      }
+    },
     "categories": "Catégories"
   }
 }

@@ -180,7 +180,36 @@
     }
   },
   "inventory": {
-    "products": "Catalog",
+    "products_page": {
+      "title": "Products",
+      "actions": {
+        "export": "Export",
+        "add_new": "Add New Product"
+      },
+      "stats": {
+        "net_revenue": "Net Revenue",
+        "pending_receivables": "Pending Receivables",
+        "voided_totals": "Voided Totals",
+        "gross_sales": "Gross Sales",
+        "last_days": "last 7 days"
+      },
+      "filters": {
+        "all": "All",
+        "in_stock": "In Stock",
+        "low_stock": "Low Stock",
+        "out_of_stock": "Out of Stock",
+        "search_placeholder": "Search..."
+      },
+      "table": {
+        "product_name": "Product Name",
+        "sku": "SKU",
+        "category": "Category",
+        "price": "Price",
+        "stock_status": "Stock Status",
+        "total_stock": "Total Stock",
+        "action": "Action"
+      }
+    },
     "categories": "Product Groups"
   }
 }

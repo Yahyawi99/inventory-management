@@ -180,7 +180,36 @@
     }
   },
   "inventory": {
-    "products": "الكتالوج",
+    "products_page": {
+      "title": "المنتجات",
+      "actions": {
+        "export": "تصدير",
+        "add_new": "إضافة منتج جديد"
+      },
+      "stats": {
+        "net_revenue": "صافي الإيرادات",
+        "pending_receivables": "المستحقات المعلقة",
+        "voided_totals": "إجمالي الملغاة",
+        "gross_sales": "إجمالي المبيعات",
+        "last_days": "آخر ٧ أيام"
+      },
+      "filters": {
+        "all": "الكل",
+        "in_stock": "متوفر",
+        "low_stock": "مخزون منخفض",
+        "out_of_stock": "نفذت الكمية",
+        "search_placeholder": "بحث..."
+      },
+      "table": {
+        "product_name": "اسم المنتج",
+        "sku": "وحدة حفظ المخزون (SKU)",
+        "category": "الفئة",
+        "price": "السعر",
+        "stock_status": "حالة المخزون",
+        "total_stock": "إجمالي المخزون",
+        "action": "الإجراء"
+      }
+    },
     "categories": "مجموعات المنتجات"
   }
 }
