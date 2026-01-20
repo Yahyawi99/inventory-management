@@ -206,7 +206,11 @@ export default function Products() {
 
   return (
     <section className="overflow-x-hidden">
-      <Header exportData={exportData} formConfig={productFormConfig} />
+      <Header
+        page="inventory.products_page"
+        exportData={exportData}
+        formConfig={productFormConfig}
+      />
 
       <SummaryCards
         page="inventory.products_page"

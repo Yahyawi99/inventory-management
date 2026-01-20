@@ -243,6 +243,16 @@
           "category": "Catégorie",
           "product_description": "Description"
         },
+        "actions": {
+          "create": "Créer le produit",
+          "save_changes": "Enregistrer les modifications",
+          "cancel": "Annuler"
+        },
+        "status": {
+          "creating": "Création en cours...",
+          "updating": "Mise à jour en cours...",
+          "deleting": "Suppression en cours..."
+        },
         "placeholders": {
           "name": "Casque sans fil X20",
           "sku": "WHX20-NOIR",

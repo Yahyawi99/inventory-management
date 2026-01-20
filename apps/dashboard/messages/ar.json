@@ -243,6 +243,16 @@
           "category": "الفئة",
           "product_description": "الوصف"
         },
+        "actions": {
+          "create": "إنشاء المنتج",
+          "save_changes": "حفظ التغييرات",
+          "cancel": "إلغاء"
+        },
+        "status": {
+          "creating": "جاري الإنشاء...",
+          "updating": "جاري التحديث...",
+          "deleting": "جاري الحذف..."
+        },
         "placeholders": {
           "name": "سماعة لاسلكية X20",
           "product_description": "وصف مفصل للمنتج..."

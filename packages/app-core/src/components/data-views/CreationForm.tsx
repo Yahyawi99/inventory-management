@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { FormConfig, FormField } from "../../types";
 import { renderField } from "../../utils/renderField";
 import {
@@ -18,15 +19,22 @@ import {
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 
 interface CreationFormProps<T> {
+  page: string;
   formConfig: FormConfig<T>;
 }
 
-export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
+export default function CreationForm<T>({
+  page,
+  formConfig,
+}: CreationFormProps<T>) {
   const initialData = formConfig.fields.reduce((acc: any, field: any) => {
     acc[field.name] =
       field.defaultValue ?? (field.type === "checkbox" ? false : "");
     return acc;
   }, {});
+
+  const t = useTranslations(page);
+  const locale = useLocale();
 
   const [message, setMessage] = useState<{
     ok: boolean;
@@ -70,7 +78,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: "Failed to submit form data!" }
+          : { ok: false, message: "Failed to submit form data!" },
       );
     } finally {
       setIsSubmitting(false);
@@ -85,7 +93,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
         if (data.ok) window.location.reload();
         setMessage(null);
       },
-      data.ok ? 1000 : 3000
+      data.ok ? 1000 : 3000,
     );
   };
 
@@ -108,17 +116,20 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
             <path d="M12 5v14" />
             <path d="M5 12h14" />
           </svg>
-          <span>{formConfig.title}</span>
+          <span>{t(formConfig.title)}</span>
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden bg-background text-foreground border-border">
-        <DialogHeader className="px-6 pt-6 pb-4 shrink-0">
+      <DialogContent
+        dir={locale === "ar" ? "rtl" : "ltr"}
+        className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden bg-background text-foreground border-border"
+      >
+        <DialogHeader className="w-fit px-6 pt-6 pb-4 mt-5 shrink-0">
           <DialogTitle className="text-2xl font-bold">
-            {formConfig.title}
+            {t(formConfig.title)}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            {formConfig.description}
+            {t(formConfig.description)}
           </DialogDescription>
         </DialogHeader>
 
@@ -153,7 +164,7 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
                     return (
                       <div key={field.name} className="space-y-1.5">
                         <Label htmlFor={field.name}>
-                          {field.label}{" "}
+                          {t(field.label)}{" "}
                           {field.required && (
                             <span className="text-red-500">*</span>
                           )}
@@ -185,7 +196,9 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
             </Alert>
           )}
 
-          <div className="flex justify-end">
+          <div
+            className={`flex ${locale === "ar" ? "justify-start" : "justify-end"}`}
+          >
             <Button
               type="button"
               onClick={handleSubmit}
@@ -195,10 +208,10 @@ export default function CreationForm<T>({ formConfig }: CreationFormProps<T>) {
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
+                  {t("product_form.status.creating")}
                 </>
               ) : (
-                `Create ${formConfig.entityName}`
+                t("product_form.actions.create")
               )}
             </Button>
           </div>

@@ -4,11 +4,12 @@ import CreationForm from "./CreationForm";
 import { Button } from "..";
 
 interface Props<T> {
+  page: string;
   exportData: () => void;
   formConfig: FormConfig<T> | null;
 }
 
-export function Header<T>({ exportData, formConfig }: Props<T>) {
+export function Header<T>({ page, exportData, formConfig }: Props<T>) {
   const t = useTranslations("inventory.products_page");
 
   return (
@@ -39,7 +40,7 @@ export function Header<T>({ exportData, formConfig }: Props<T>) {
           <span>{t("actions.export")}</span>
         </Button>
 
-        {formConfig && <CreationForm formConfig={formConfig} />}
+        {formConfig && <CreationForm page={page} formConfig={formConfig} />}
       </div>
     </div>
   );

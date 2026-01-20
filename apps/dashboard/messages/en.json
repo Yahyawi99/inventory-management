@@ -242,6 +242,16 @@
           "category": "Category",
           "product_description": "Description"
         },
+        "actions": {
+          "create": "Create Product",
+          "save_changes": "Save Changes",
+          "cancel": "Cancel"
+        },
+        "status": {
+          "creating": "Creating...",
+          "updating": "Updating...",
+          "deleting": "Deleting..."
+        },
         "placeholders": {
           "name": "Wireless Headset X20",
           "sku": "WHX20-BLK",
