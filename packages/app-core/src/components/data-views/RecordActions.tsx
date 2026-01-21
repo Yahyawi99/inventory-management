@@ -8,12 +8,14 @@ import DeleteRecordDialog from "./DeleteRecordDialog";
 import { Data, FormConfig } from "../../types";
 
 interface RecordActionsProps<T> {
+  page: string;
   formConfig: FormConfig<T>;
   record: Data;
   onSuccess?: () => void;
 }
 
 export function RecordActions<T>({
+  page,
   formConfig,
   record,
   onSuccess,
@@ -62,6 +64,7 @@ export function RecordActions<T>({
         onOpenChange={setIsDeleteDialogOpen}
         formConfig={formConfig}
         record={record}
+        page={page}
       />
     </div>
   );

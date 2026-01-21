@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,7 @@ import { AlertCircle, Check, Loader2, Trash2 } from "lucide-react";
 import { Data, FormConfig } from "@/src/types";
 
 interface DeleteDialogProps<T> {
+  page: string;
   formConfig: FormConfig<T>;
   record: Data;
   isOpen: boolean;
@@ -23,6 +25,7 @@ interface DeleteDialogProps<T> {
 }
 
 export default function DeleteRecordDialog<T>({
+  page,
   formConfig,
   record,
   isOpen,
@@ -33,6 +36,8 @@ export default function DeleteRecordDialog<T>({
     ok: boolean;
     message: string;
   } | null>(null);
+  const t = useTranslations(page);
+  const locale = useLocale();
 
   useEffect(() => {
     if (!isOpen) {
@@ -56,7 +61,7 @@ export default function DeleteRecordDialog<T>({
 
     try {
       const response = await formConfig.onDelete(
-        (record.id ? record.id : record._id) as string
+        (record.id ? record.id : record._id) as string,
       );
 
       if (!response.ok) {
@@ -68,7 +73,7 @@ export default function DeleteRecordDialog<T>({
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: "Failed to delete record!" }
+          : { ok: false, message: "Failed to delete record!" },
       );
     } finally {
       setIsDeleting(false);
@@ -83,21 +88,23 @@ export default function DeleteRecordDialog<T>({
         if (data.ok) window.location.reload();
         setMessage(null);
       },
-      data.ok ? 1000 : 3000
+      data.ok ? 1000 : 3000,
     );
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[450px] rounded-2xl">
+      <DialogContent
+        dir={locale === "ar" ? "rtl" : "ltr"}
+        className="sm:max-w-[400px] rounded-2xl"
+      >
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+          <DialogTitle className="text-2xl font-bold flex items-center gap-2 mt-5">
             <Trash2 className="w-6 h-6 text-red-600" />
-            Delete {formConfig.entityName}
+            {t("title")}
           </DialogTitle>
-          <DialogDescription className="pt-2">
-            Are you sure you want to delete this{" "}
-            {formConfig.entityName.toLowerCase()}? This action cannot be undone.
+          <DialogDescription className="pt-2 text-right">
+            {t("desc")}
           </DialogDescription>
         </DialogHeader>
 
@@ -126,7 +133,7 @@ export default function DeleteRecordDialog<T>({
             onClick={() => onOpenChange(false)}
             disabled={isDeleting}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             type="button"
@@ -137,10 +144,10 @@ export default function DeleteRecordDialog<T>({
             {isDeleting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Deleting...
+                {t("Deleting")}
               </>
             ) : (
-              `Yes, Delete ${formConfig.entityName}`
+              t("delete")
             )}
           </Button>
         </DialogFooter>

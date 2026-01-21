@@ -255,7 +255,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
   };
 }
 
-// /=========================================
+// =========================================
 
 // --- Product-Specific Table Columns ---
 export function getTableColumns(
@@ -333,7 +333,11 @@ export function getTableColumns(
       key: "actions",
       header: "Action",
       render: (product: Product) => (
-        <RecordActions<SubmitData> record={product} formConfig={formConfig} />
+        <RecordActions<SubmitData>
+          page="inventory.products_page.record_delete"
+          record={product}
+          formConfig={formConfig}
+        />
       ),
       headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center px-4 py-3",

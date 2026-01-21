@@ -267,6 +267,13 @@
           "delete_success": "Product deleted successfully.",
           "generic_error": "An error occurred. Please try again."
         }
+      },
+      "record_delete": {
+        "title": "Delete Product",
+        "desc": "Are you sure you want to delete this product? This action cannot be undone.",
+        "cancel": "Cancel",
+        "delete": "Yes, delete product",
+        "deleting": "Deleting..."
       }
     },
     "categories": "Product Groups"

@@ -268,6 +268,13 @@
           "delete_success": "Produit supprimé avec succès.",
           "generic_error": "Une erreur est survenue. Veuillez réessayer."
         }
+      },
+      "record_delete": {
+        "title": "Supprimer le produit",
+        "desc": "Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.",
+        "cancel": "Annuler",
+        "delete": "Oui, supprimer le produit",
+        "deleting": "Suppression en cours..."
       }
     },
     "categories": "Catégories"
