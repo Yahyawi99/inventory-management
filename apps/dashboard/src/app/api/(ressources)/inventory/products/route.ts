@@ -3,7 +3,6 @@ import { ProductRepository } from "@services/repositories";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { ProductStatus, SubmitData } from "@/types/products";
-import { deleteData } from "@/types/shared";
 
 interface Filters {
   status?: ProductStatus;
@@ -34,7 +33,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   if (!userId || !orgId) {
     return NextResponse.json(
       { error: "User and Organization id are required, check your session!" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -65,13 +64,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
         products: response?.products,
         totalPages: response?.totalPages,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.log("Error while fetching organization's products ", error);
     return NextResponse.json(
       { error: "Internal Server Error :" + error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -90,7 +89,7 @@ export async function POST(req: NextRequest) {
   if (!orgId) {
     return NextResponse.json(
       { error: "Organization id is required, check your session!" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -102,7 +101,7 @@ export async function POST(req: NextRequest) {
         message: "success",
         product: response,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.log("Error while creating a new Product", error);
@@ -113,7 +112,7 @@ export async function POST(req: NextRequest) {
     )
       return NextResponse.json(
         { error: "Product SKU already exist!" },
-        { status: 500 }
+        { status: 500 },
       );
     else if (
       error instanceof Error &&
@@ -121,14 +120,14 @@ export async function POST(req: NextRequest) {
     )
       return NextResponse.json(
         { error: "Product BARCODE already exist!" },
-        { status: 500 }
+        { status: 500 },
       );
     else
       return NextResponse.json(
         {
           error: "Internal Server Error",
         },
-        { status: 500 }
+        { status: 500 },
       );
   }
 }

@@ -144,7 +144,7 @@ export default function DeleteRecordDialog<T>({
             {isDeleting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t("Deleting")}
+                {t("deleting")}
               </>
             ) : (
               t("delete")

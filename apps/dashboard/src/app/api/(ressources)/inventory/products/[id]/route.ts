@@ -3,11 +3,12 @@ import { headers } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 import { ProductRepository } from "@services/repositories";
 import { SubmitData } from "@/types/products";
+import { translateErrorMessage } from "@/lib/ai/translate";
 
 // PUT
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const body: SubmitData = await req.json();
   const { id } = params;
@@ -21,7 +22,7 @@ export async function PUT(
   if (!orgId) {
     return NextResponse.json(
       { error: "Organization id is required, check your session!" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -33,7 +34,7 @@ export async function PUT(
         message: "success",
         category: res,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.log("Error while updating a Product", error);
@@ -44,7 +45,7 @@ export async function PUT(
     )
       return NextResponse.json(
         { error: "Product SKU already exist!" },
-        { status: 500 }
+        { status: 500 },
       );
     else if (
       error instanceof Error &&
@@ -52,14 +53,14 @@ export async function PUT(
     )
       return NextResponse.json(
         { error: "Product BARCODE already exist!" },
-        { status: 500 }
+        { status: 500 },
       );
     else
       return NextResponse.json(
         {
           error: "Internal Server Error",
         },
-        { status: 500 }
+        { status: 500 },
       );
   }
 }
@@ -67,9 +68,11 @@ export async function PUT(
 // DELETE
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+
+  const locale = req.cookies.get("NEXT_LOCALE")?.value || "en";
 
   const data = await auth.api.getSession({
     headers: await headers(),
@@ -80,7 +83,7 @@ export async function DELETE(
   if (!orgId) {
     return NextResponse.json(
       { error: "Organization id is required, check your session!" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -88,20 +91,28 @@ export async function DELETE(
     await ProductRepository.delete(orgId, id);
 
     return NextResponse.json(
-      { message: "Product deleted successfully!" },
-      { status: 200 }
+      {
+        message: await translateErrorMessage(
+          "Product deleted successfully!",
+          locale,
+        ),
+      },
+      { status: 200 },
     );
   } catch (error) {
     if (error instanceof Error && error.message.includes("ProductToStockItem"))
       return NextResponse.json(
         {
-          error: "Cannot delete Product: it still has associated stock items.",
+          error: await translateErrorMessage(
+            "Cannot delete Product: it still has associated stock items.",
+            locale,
+          ),
         },
-        { status: 500 }
+        { status: 500 },
       );
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: await translateErrorMessage("Internal server error", locale) },
+      { status: 500 },
     );
   }
 }
