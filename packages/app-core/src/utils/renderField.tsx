@@ -12,18 +12,15 @@ import {
 } from "../components";
 import { FormField } from "../types";
 
-type Translator = ReturnType<typeof useTranslations>;
-
 export const renderField = (
   field: FormField,
   formData: any,
   handleChange: any,
-  t: Translator,
 ) => {
   const commonInputProps = {
     id: field.name,
     name: field.name,
-    placeholder: t(field.placeholder as string),
+    placeholder: field.placeholder,
     required: field.required,
   };
 
@@ -147,7 +144,6 @@ export const renderField = (
                               };
                               handleChange(field.name, newItems);
                             },
-                            t,
                           )}
                         </div>
                       );
@@ -195,7 +191,7 @@ export const renderField = (
           required={field.required}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={`${t(field.label.toLowerCase())}`} />
+            <SelectValue placeholder={field.label} />
           </SelectTrigger>
           <SelectContent className="bg-card">
             {field.options?.map((option) => {

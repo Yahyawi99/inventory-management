@@ -4,12 +4,13 @@ import {
   getProductStockStatusDisplay,
   getTotalProductStockQuantity,
 } from "@/utils/products";
-import { Input, Button, RecordActions } from "app-core/src/components";
+import { RecordActions } from "app-core/src/components";
 import {
   Column,
   SortableField,
   FilterDrawerData,
   FormConfig,
+  Translator,
 } from "app-core/src/types";
 
 export async function getProductFilterDrawerData(): Promise<FilterDrawerData> {
@@ -58,7 +59,9 @@ export const headerData = {
 // ===================
 // Creation Form
 
-export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
+export async function getProductFormConfig(
+  t: Translator,
+): Promise<FormConfig<SubmitData>> {
   const categoryOptions = await buildCategoriesOptions();
   const formattedCategories = categoryOptions
     .filter((ele) => ele.id)
@@ -67,46 +70,46 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
     }) as { id: string; name: string }[];
 
   return {
-    title: "product_form.title_add",
-    description: "product_form.description",
+    title: t("product_form.title_add"),
+    description: t("product_form.description"),
     entityName: "Product",
     fields: [
       {
         name: "name",
-        label: "product_form.fields.name",
+        label: t("product_form.fields.name"),
         type: "text",
         required: true,
-        placeholder: "product_form.placeholders.name",
+        placeholder: t("product_form.placeholders.name"),
         gridArea: "1",
       },
       {
         name: "sku",
-        label: "product_form.fields.sku",
+        label: t("product_form.fields.sku"),
         type: "text",
         required: true,
-        placeholder: "product_form.placeholders.sku",
+        placeholder: t("product_form.placeholders.sku"),
         gridArea: "1/2",
       },
       {
         name: "price",
-        label: "product_form.fields.price",
+        label: t("product_form.fields.price"),
         type: "number",
         required: true,
-        placeholder: "product_form.placeholders.price",
+        placeholder: t("product_form.placeholders.price"),
         gridArea: "1/2",
         step: 0.01,
       },
       {
         name: "barcode",
-        label: "product_form.fields.barcode",
+        label: t("product_form.fields.barcode"),
         type: "text",
         required: false,
-        placeholder: "product_form.placeholders.barcode",
+        placeholder: t("product_form.placeholders.barcode"),
         gridArea: "1/2",
       },
       {
         name: "categoryId",
-        label: "product_form.fields.category",
+        label: t("product_form.fields.category"),
         type: "select",
         required: true,
         options: formattedCategories,
@@ -114,10 +117,10 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       },
       {
         name: "description",
-        label: "product_form.fields.product_description",
+        label: t("product_form.fields.product_description"),
         type: "textarea",
         required: false,
-        placeholder: "product_form.placeholders.product_description",
+        placeholder: t("product_form.placeholders.product_description"),
         gridArea: "1",
         rows: 4,
       },
@@ -128,7 +131,10 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       const { name, description, sku, barcode, price, categoryId } = data;
 
       if (!name || !sku || !price || !price || !categoryId) {
-        return { ok: false, message: "product_form.messages.required_error" };
+        return {
+          ok: false,
+          message: t("product_form.messages.required_error"),
+        };
       }
 
       try {
@@ -155,7 +161,10 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
           };
         }
 
-        return { ok: true, message: "product_form.messages.create_success" };
+        return {
+          ok: true,
+          message: t("product_form.messages.create_success"),
+        };
       } catch (error) {
         console.log("Failed to create Product");
         return {
@@ -163,7 +172,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
           message:
             error instanceof Error
               ? error.message
-              : "product_form.messages.create_error",
+              : t("product_form.messages.create_error"),
         };
       }
     },
@@ -174,11 +183,14 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       const { name, description, sku, barcode, price, categoryId } = data;
 
       if (!name || !sku || !price || !price || !categoryId) {
-        return { ok: false, message: "product_form.messages.required_error" };
+        return {
+          ok: false,
+          message: t("product_form.messages.required_error"),
+        };
       }
 
       if (!id) {
-        return { ok: false, message: "product_form.messages.id_required" };
+        return { ok: false, message: t("product_form.messages.id_required") };
       }
 
       try {
@@ -205,7 +217,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
           };
         }
 
-        return { ok: true, message: "product_form.messages.update_success" };
+        return { ok: true, message: t("product_form.messages.update_success") };
       } catch (error) {
         console.log("Failed to update Product");
         return {
@@ -213,7 +225,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
           message:
             error instanceof Error
               ? error.message
-              : "product_form.messages.update_error",
+              : t("product_form.messages.update_error"),
         };
       }
     },
@@ -223,7 +235,7 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
       if (!recordId) {
         return {
           ok: false,
-          message: "Product id are required!",
+          message: t("product_form.messages.id_required"),
         };
       }
 
@@ -244,11 +256,11 @@ export async function getProductFormConfig(): Promise<FormConfig<SubmitData>> {
           };
         }
 
-        return { ok: true, message: "product_form.messages.delete_success" };
+        return { ok: true, message: t("product_form.messages.delete_success") };
       } catch (error) {
         return {
           ok: false,
-          message: "product_form.messages.delete_error",
+          message: t("product_form.messages.delete_error"),
         };
       }
     },

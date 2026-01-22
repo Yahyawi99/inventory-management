@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/context";
 import { useRouter } from "next/navigation";
 import { Product, ProductsSummaryMetrics, SubmitData } from "@/types/products";
@@ -33,6 +34,8 @@ import { exportOrdersAsJson } from "@/utils/shared";
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("inventory.products_page");
 
   const [tableProducts, setTableProducts] = useState<Product[]>([]);
   const [isFetchingTableProducts, setIsFetchingTableProducts] = useState(true);
@@ -201,7 +204,7 @@ export default function Products() {
   // fetch categories
   useEffect(() => {
     getProductFilterDrawerData().then(setProductFilterDrawerData);
-    getProductFormConfig().then(setProductFormConfig);
+    getProductFormConfig(t).then(setProductFormConfig);
   }, []);
 
   return (

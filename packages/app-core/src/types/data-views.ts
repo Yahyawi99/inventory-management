@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 export interface HeaderData {
   title: string;
   buttonTxt: string;
@@ -139,3 +141,5 @@ export interface FormConfig<T> {
   onUpdate: (id: string, data: T) => Promise<{ ok: boolean; message: string }>;
   onDelete: (id: string) => Promise<{ ok: boolean; message: string }>;
 }
+
+export type Translator = ReturnType<typeof useTranslations>;

@@ -263,8 +263,10 @@
           "required_error": "Please fill out all the required fields!",
           "id_required": "Product ID is required!",
           "create_success": "Product created successfully.",
+          "create_error": "Product creation failed!",
           "update_success": "Product updated successfully.",
           "delete_success": "Product deleted successfully.",
+          "delete_error": "Product deletion failed!",
           "generic_error": "An error occurred. Please try again."
         }
       },

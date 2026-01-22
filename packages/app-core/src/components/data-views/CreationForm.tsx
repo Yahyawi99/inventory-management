@@ -116,7 +116,7 @@ export default function CreationForm<T>({
             <path d="M12 5v14" />
             <path d="M5 12h14" />
           </svg>
-          <span>{t(formConfig.title)}</span>
+          <span>{formConfig.title}</span>
         </Button>
       </DialogTrigger>
 
@@ -126,10 +126,10 @@ export default function CreationForm<T>({
       >
         <DialogHeader className="w-fit px-6 pt-6 pb-4 mt-5 shrink-0">
           <DialogTitle className="text-2xl font-bold">
-            {t(formConfig.title)}
+            {formConfig.title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            {t(formConfig.description)}
+            {formConfig.description}
           </DialogDescription>
         </DialogHeader>
 
@@ -156,7 +156,7 @@ export default function CreationForm<T>({
                     if (field.type === "repeater") {
                       return (
                         <div key={field.name} className="col-span-full">
-                          {renderField(field, formData, handleChange, t)}
+                          {renderField(field, formData, handleChange)}
                         </div>
                       );
                     }
@@ -164,12 +164,12 @@ export default function CreationForm<T>({
                     return (
                       <div key={field.name} className="space-y-1.5">
                         <Label htmlFor={field.name}>
-                          {t(field.label)}{" "}
+                          {field.label}{" "}
                           {field.required && (
                             <span className="text-red-500">*</span>
                           )}
                         </Label>
-                        {renderField(field, formData, handleChange, t)}
+                        {renderField(field, formData, handleChange)}
                       </div>
                     );
                   })}
