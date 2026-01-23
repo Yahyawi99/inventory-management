@@ -54,10 +54,10 @@ export async function getProductFilterDrawerData(
 }
 
 export const productSortableFields: SortableField[] = [
-  { title: "Name", field: "name", direction: "desc" },
-  { title: "Date", field: "createdAt", direction: "desc" },
-  { title: "Price", field: "price", direction: "desc" },
-  { title: "Total Stock", field: "stock", direction: "desc" },
+  { title: "sortable_fields.field-1", field: "name", direction: "desc" },
+  { title: "sortable_fields.field-2", field: "createdAt", direction: "desc" },
+  { title: "sortable_fields.field-3", field: "price", direction: "desc" },
+  { title: "sortable_fields.field-4", field: "stock", direction: "desc" },
 ];
 
 export const productCategoryFilters = {

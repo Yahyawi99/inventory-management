@@ -225,6 +225,12 @@
           }
         }
       },
+      "sortable_fields": {
+        "field-1": "Nom",
+        "field-2": "Date",
+        "field-3": "Prix",
+        "field-4": "Stock total"
+      },
       "table": {
         "product_name": "Nom du produit",
         "sku": "SKU",

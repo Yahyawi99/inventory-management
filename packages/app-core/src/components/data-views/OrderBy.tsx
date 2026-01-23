@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import {
   Button,
   DropdownMenu,
@@ -14,12 +15,14 @@ import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import { SortConfig, SortableField } from "../../types";
 
 interface Props {
+  page: string;
   currentSort: SortConfig;
   onSortChange: (field: string, direction: "asc" | "desc") => void;
   sortableFields: SortableField[];
 }
 
 export function OrderByDropdown({
+  page,
   currentSort,
   onSortChange,
   sortableFields,
@@ -33,6 +36,8 @@ export function OrderByDropdown({
     onSortChange(field, newDirection);
   };
 
+  const t = useTranslations(page);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,7 +45,6 @@ export function OrderByDropdown({
           variant="outline"
           className="h-8 w-8 p-0 rounded-md border border-gray-300 text-foreground hover:bg-gray-100 transition-colors duration-200"
         >
-          {/* Display current sort icon, or default if no sort */}
           {currentSort.field && currentSort.direction === "asc" ? (
             <ArrowUpWideNarrow className="h-5 w-5" />
           ) : currentSort.field && currentSort.direction === "desc" ? (
@@ -61,7 +65,7 @@ export function OrderByDropdown({
               key={title}
               onClick={() => handleSortItemClick(field)}
             >
-              {title}
+              {t(title)}
               {currentSort.field === field &&
                 (currentSort.direction === "asc" ? (
                   <ArrowUpWideNarrow className="ml-2 h-4 w-4" />

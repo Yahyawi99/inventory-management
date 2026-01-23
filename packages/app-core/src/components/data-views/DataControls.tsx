@@ -107,6 +107,7 @@ export function DataControls({
         />
 
         <OrderByDropdown
+          page={page}
           currentSort={activeOrderBy}
           onSortChange={onSortChange}
           sortableFields={sortableFields}

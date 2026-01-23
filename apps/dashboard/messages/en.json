@@ -224,6 +224,12 @@
           }
         }
       },
+      "sortable_fields": {
+        "field-1": "Name",
+        "field-2": "Date",
+        "field-3": "Price",
+        "field-4": "Total Stock"
+      },
       "table": {
         "product_name": "Product Name",
         "sku": "SKU",
