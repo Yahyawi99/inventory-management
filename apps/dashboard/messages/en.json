@@ -210,15 +210,12 @@
         "title": "Filter Products",
         "subtitle": "Refine your Product list",
         "fields": {
-          "stock_status": "Product's Stock Status",
-          "category": "Product Category"
-        },
-        "placeholders": {
-          "all_products": "All Products"
-        },
-        "buttons": {
-          "clear": "Clear Filters",
-          "apply": "Apply Filters"
+          "field-1": {
+            "title": "Product's Stock Status"
+          },
+          "field-2": {
+            "title": "Product Category"
+          }
         }
       },
       "table": {
@@ -278,6 +275,6 @@
         "deleting": "Deleting..."
       }
     },
-    "categories": "Product Groups"
+    "categories": {}
   }
 }

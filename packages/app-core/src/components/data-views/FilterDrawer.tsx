@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Filter } from "lucide-react";
 import {
   Button,
@@ -38,7 +38,9 @@ export function FilterDrawer({
 }: FilterDrawerProps) {
   const [drawerFilters, setDrawerFilters] =
     useState<ActiveFilters>(activeFilters);
+
   const t = useTranslations(page);
+  const locale = useLocale();
 
   useEffect(() => {
     setDrawerFilters(activeFilters);
@@ -156,7 +158,11 @@ export function FilterDrawer({
                 onClick={onClearFilters}
                 className="w-1/2 mr-2 border-border text-foreground hover:bg-muted-foreground transition-colors duration-200"
               >
-                Clear Filters
+                {locale === "en"
+                  ? "Clear Filters"
+                  : locale === "fr"
+                    ? "Effacer les filtres"
+                    : "مسح الفلاتر"}
               </Button>
             </DrawerClose>
 
@@ -165,7 +171,11 @@ export function FilterDrawer({
                 onClick={onApplyFilters}
                 className="w-1/2 ml-2 bg-sidebar border-2 border-transparent hover:bg-transparent hover:border-sidebar hover:text-sidebar text-white font-semibold shadow transition-colors duration-200"
               >
-                Apply Filters
+                {locale === "en"
+                  ? "Apply Filters"
+                  : locale === "fr"
+                    ? "Appliquer les filtres"
+                    : "تطبيق الفلاتر"}
               </Button>
             </DrawerClose>
           </DrawerFooter>
