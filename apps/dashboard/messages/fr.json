@@ -243,7 +243,8 @@
       "product_form": {
         "title_add": "Ajouter un nouveau produit",
         "title_edit": "Modifier le produit",
-        "description": "Remplissez les détails du produit.",
+        "description_add": "Remplissez les détails du produit.",
+        "description_edit": "Mettez à jour les détails et les informations du produit ci-dessous.",
         "fields": {
           "name": "Nom du produit",
           "sku": "SKU",
@@ -254,7 +255,9 @@
         },
         "actions": {
           "create": "Créer le produit",
+          "creating": "Création en cours...",
           "save_changes": "Enregistrer les modifications",
+          "saving": "Enregistrement en cours...",
           "cancel": "Annuler"
         },
         "status": {

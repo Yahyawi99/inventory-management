@@ -101,10 +101,10 @@ export default function DeleteRecordDialog<T>({
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2 mt-5">
             <Trash2 className="w-6 h-6 text-red-600" />
-            {t("title")}
+            {t("record_delete.title")}
           </DialogTitle>
           <DialogDescription className="pt-2 text-right">
-            {t("desc")}
+            {t("record_delete.desc")}
           </DialogDescription>
         </DialogHeader>
 
@@ -133,7 +133,7 @@ export default function DeleteRecordDialog<T>({
             onClick={() => onOpenChange(false)}
             disabled={isDeleting}
           >
-            {t("cancel")}
+            {t("record_delete.cancel")}
           </Button>
           <Button
             type="button"
@@ -144,10 +144,10 @@ export default function DeleteRecordDialog<T>({
             {isDeleting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t("deleting")}
+                {t("record_delete.deleting")}
               </>
             ) : (
-              t("delete")
+              t("record_delete.delete")
             )}
           </Button>
         </DialogFooter>

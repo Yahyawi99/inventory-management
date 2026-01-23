@@ -243,7 +243,8 @@
       "product_form": {
         "title_add": "إضافة منتج جديد",
         "title_edit": "تعديل المنتج",
-        "description": "أدخل تفاصيل المنتج الجديد.",
+        "description_add": "أدخل تفاصيل المنتج الجديد.",
+        "description_edit": "قم بتحديث تفاصيل المنتج والمعلومات أدناه.",
         "fields": {
           "name": "اسم المنتج",
           "sku": "رمز SKU",
@@ -253,8 +254,10 @@
           "product_description": "الوصف"
         },
         "actions": {
-          "create": "إنشاء المنتج",
+          "create": "إنشاء منتج",
+          "creating": "جاري الإنشاء...",
           "save_changes": "حفظ التغييرات",
+          "saving": "جاري الحفظ...",
           "cancel": "إلغاء"
         },
         "status": {

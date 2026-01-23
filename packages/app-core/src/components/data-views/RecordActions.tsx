@@ -43,6 +43,7 @@ export function RecordActions<T>({
       </Button>
 
       <EditRecordDialog<T>
+        page={page}
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
         formConfig={formConfig}

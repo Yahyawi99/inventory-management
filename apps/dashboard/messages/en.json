@@ -242,7 +242,8 @@
       "product_form": {
         "title_add": "Add New Product",
         "title_edit": "Edit Product",
-        "description": "Fill in the details for the product.",
+        "description_add": "Fill in the details for the product.",
+        "description_edit": "Make changes to the product details below.",
         "fields": {
           "name": "Product Name",
           "sku": "SKU",
@@ -253,7 +254,9 @@
         },
         "actions": {
           "create": "Create Product",
+          "creating": "Creating...",
           "save_changes": "Save Changes",
+          "saving": "Saving...",
           "cancel": "Cancel"
         },
         "status": {

@@ -18,6 +18,7 @@ import { Data, FormConfig, FormField } from "../../types";
 import { renderField } from "../../utils/renderField";
 
 interface EditDialogProps<T> {
+  page: string;
   formConfig: FormConfig<T>;
   record: Data;
   isOpen: boolean;
@@ -26,6 +27,7 @@ interface EditDialogProps<T> {
 }
 
 export default function EditRecordDialog<T>({
+  page,
   formConfig,
   record,
   isOpen,
@@ -39,7 +41,7 @@ export default function EditRecordDialog<T>({
     message: string;
   } | null>(null);
 
-  const t = useTranslations("");
+  const t = useTranslations(page);
 
   useEffect(() => {
     if (record && isOpen) {
@@ -124,11 +126,10 @@ export default function EditRecordDialog<T>({
       <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle className="text-2xl font-bold">
-            Edit {formConfig.entityName}
+            {t("product_form.title_edit")}
           </DialogTitle>
           <DialogDescription>
-            Make changes to the {formConfig.entityName.toLowerCase()} details
-            below.
+            {t("product_form.description_edit")}
           </DialogDescription>
         </DialogHeader>
 
@@ -154,7 +155,7 @@ export default function EditRecordDialog<T>({
                     if (field.type === "repeater") {
                       return (
                         <div key={field.name} className="col-span-full">
-                          {renderField(field, formData, handleChange, t)}
+                          {renderField(field, formData, handleChange)}
                         </div>
                       );
                     }
@@ -167,7 +168,7 @@ export default function EditRecordDialog<T>({
                             <span className="text-red-500">*</span>
                           )}
                         </Label>
-                        {renderField(field, formData, handleChange, t)}
+                        {renderField(field, formData, handleChange)}
                       </div>
                     );
                   })}
@@ -201,7 +202,7 @@ export default function EditRecordDialog<T>({
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("product_form.actions.cancel")}
             </Button>
             <Button
               type="button"
@@ -212,10 +213,10 @@ export default function EditRecordDialog<T>({
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {t("product_form.actions.saving")}
                 </>
               ) : (
-                "Save Changes"
+                t("product_form.actions.save_changes")
               )}
             </Button>
           </div>

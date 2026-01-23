@@ -85,7 +85,7 @@ export async function getProductFormConfig(
 
   return {
     title: t("product_form.title_add"),
-    description: t("product_form.description"),
+    description: t("product_form.description_add"),
     entityName: "Product",
     fields: [
       {
@@ -361,7 +361,7 @@ export function getTableColumns(
       header: t("table.column-7"),
       render: (product: Product) => (
         <RecordActions<SubmitData>
-          page="inventory.products_page.record_delete"
+          page="inventory.products_page"
           record={product}
           formConfig={formConfig}
         />
