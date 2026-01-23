@@ -78,7 +78,7 @@ export default function CreationForm<T>({
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: "Failed to submit form data!" },
+          : { ok: false, message: t("product_form.messages.generic_error") },
       );
     } finally {
       setIsSubmitting(false);
@@ -93,7 +93,7 @@ export default function CreationForm<T>({
         if (data.ok) window.location.reload();
         setMessage(null);
       },
-      data.ok ? 1000 : 3000,
+      data.ok ? 1500 : 3000,
     );
   };
 

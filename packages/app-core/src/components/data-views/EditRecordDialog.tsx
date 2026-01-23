@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -42,6 +42,7 @@ export default function EditRecordDialog<T>({
   } | null>(null);
 
   const t = useTranslations(page);
+  const locale = useLocale();
 
   useEffect(() => {
     if (record && isOpen) {
@@ -93,16 +94,13 @@ export default function EditRecordDialog<T>({
         return alert(response);
       }
 
-      alert({
-        ok: true,
-        message: formConfig.entityName + " updated successfully",
-      });
+      alert(response);
     } catch (error) {
       console.error("Update failed:", error);
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: "Failed to update the record!" },
+          : { ok: false, message: t("product_form.messages.generic_error") },
       );
     } finally {
       setIsSubmitting(false);
@@ -117,15 +115,18 @@ export default function EditRecordDialog<T>({
         if (data.ok) window.location.reload();
         setMessage(null);
       },
-      data.ok ? 1000 : 3000,
+      data.ok ? 1500 : 3000,
     );
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4">
-          <DialogTitle className="text-2xl font-bold">
+      <DialogContent
+        dir={locale === "ar" ? "rtl" : "ltr"}
+        className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden"
+      >
+        <DialogHeader className="w-fit px-6 pt-6 pb-4 mt-5">
+          <DialogTitle className="w-fit text-2xl font-bold">
             {t("product_form.title_edit")}
           </DialogTitle>
           <DialogDescription>
