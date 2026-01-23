@@ -2,7 +2,12 @@ import { ProductsSummaryMetrics, Product } from "@/types/products";
 import { Category } from "@/types/categories";
 import { getDateRangesForComparison } from "@/utils/dateHelpers";
 import { StockItem } from "@/types/stocks";
-import { ActiveFilters, Pagination, SortConfig } from "app-core/src/types";
+import {
+  ActiveFilters,
+  Pagination,
+  SortConfig,
+  Translator,
+} from "app-core/src/types";
 import { calculatePercentageChange } from "./shared";
 
 export const getProductSummaryMetrics = (
@@ -111,7 +116,7 @@ export const getTotalProductStockQuantity = (stockItems: StockItem[]) => {
 };
 
 // Categories options for drawer filter
-export const buildCategoriesOptions = async () => {
+export const buildCategoriesOptions = async (t: Translator) => {
   const response = await fetch(
     `/api/inventory/categories?pageSize=${Infinity}`,
   );
@@ -127,7 +132,10 @@ export const buildCategoriesOptions = async () => {
     return { id: _id, label: name, value: name };
   });
 
-  return [{ label: "All Products", value: "All" }, ...categoriesOptions];
+  return [
+    { label: t("filter_drawer.fields.field-1.options.label-1"), value: "All" },
+    ...categoriesOptions,
+  ];
 };
 
 // generate api URL for table products data fetching

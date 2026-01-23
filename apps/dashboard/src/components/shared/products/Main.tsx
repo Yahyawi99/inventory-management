@@ -203,7 +203,7 @@ export default function Products() {
   // =======================
   // fetch categories
   useEffect(() => {
-    getProductFilterDrawerData().then(setProductFilterDrawerData);
+    getProductFilterDrawerData(t).then(setProductFilterDrawerData);
     getProductFormConfig(t).then(setProductFormConfig);
   }, []);
 

@@ -13,8 +13,10 @@ import {
   Translator,
 } from "app-core/src/types";
 
-export async function getProductFilterDrawerData(): Promise<FilterDrawerData> {
-  const categoryOptions = await buildCategoriesOptions();
+export async function getProductFilterDrawerData(
+  t: Translator,
+): Promise<FilterDrawerData> {
+  const categoryOptions = await buildCategoriesOptions(t);
 
   return {
     header: {
@@ -23,16 +25,28 @@ export async function getProductFilterDrawerData(): Promise<FilterDrawerData> {
     },
     filterOptions: {
       status: {
-        name: "Product's Stock Status",
+        name: t("filter_drawer.fields.field-1.title"),
         options: [
-          { label: "All Products", value: "All" },
-          { label: "In Stock Products", value: "In Stock" },
-          { label: "Low Stock Products", value: "Low Stock" },
-          { label: "Out of Stock Products", value: "Out of Stock" },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-2"),
+            value: "In Stock",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-3"),
+            value: "Low Stock",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-4"),
+            value: "Out of Stock",
+          },
         ],
       },
       category: {
-        name: "Product Category",
+        name: t("filter_drawer.fields.field-1.title"),
         options: categoryOptions,
       },
     },
@@ -62,7 +76,7 @@ export const headerData = {
 export async function getProductFormConfig(
   t: Translator,
 ): Promise<FormConfig<SubmitData>> {
-  const categoryOptions = await buildCategoriesOptions();
+  const categoryOptions = await buildCategoriesOptions(t);
   const formattedCategories = categoryOptions
     .filter((ele) => ele.id)
     .map((element, i) => {

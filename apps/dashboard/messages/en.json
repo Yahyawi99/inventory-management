@@ -211,7 +211,13 @@
         "subtitle": "Refine your Product list",
         "fields": {
           "field-1": {
-            "title": "Product's Stock Status"
+            "title": "Product's Stock Status",
+            "options": {
+              "label-1": "All Products",
+              "label-2": "In Stock Products",
+              "label-3": "Low Stock Products",
+              "label-4": "Out of Stock Products"
+            }
           },
           "field-2": {
             "title": "Product Category"

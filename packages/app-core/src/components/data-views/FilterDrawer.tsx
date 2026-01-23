@@ -19,7 +19,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Separator,
 } from "..";
 import { FilterDrawerData, ActiveFilters } from "../../types/data-views";
 
