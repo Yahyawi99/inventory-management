@@ -46,7 +46,7 @@ export async function getProductFilterDrawerData(
         ],
       },
       category: {
-        name: t("filter_drawer.fields.field-1.title"),
+        name: t("filter_drawer.fields.field-2.title"),
         options: categoryOptions,
       },
     },

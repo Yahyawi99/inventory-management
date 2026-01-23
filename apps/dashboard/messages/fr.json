@@ -211,15 +211,18 @@
         "title": "Filtrer les produits",
         "subtitle": "Affinez votre liste de produits",
         "fields": {
-          "stock_status": "État du stock du produit",
-          "category": "Catégorie de produit"
-        },
-        "placeholders": {
-          "all_products": "Tous les produits"
-        },
-        "buttons": {
-          "clear": "Effacer les filtres",
-          "apply": "Appliquer les filtres"
+          "field-1": {
+            "title": "État du stock",
+            "options": {
+              "label-1": "Tous les produits",
+              "label-2": "En stock",
+              "label-3": "Stock faible",
+              "label-4": "En rupture de stock"
+            }
+          },
+          "field-2": {
+            "title": "Catégorie de produit"
+          }
         }
       },
       "table": {
