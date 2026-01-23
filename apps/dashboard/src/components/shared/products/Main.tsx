@@ -243,7 +243,7 @@ export default function Products() {
         {productFormConfig && (
           <DataTable<Product>
             data={tableProducts}
-            columns={getTableColumns(productFormConfig)}
+            columns={getTableColumns(t, productFormConfig)}
           />
         )}
       </TableView>

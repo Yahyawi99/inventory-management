@@ -285,12 +285,13 @@ export async function getProductFormConfig(
 
 // --- Product-Specific Table Columns ---
 export function getTableColumns(
+  t: Translator,
   formConfig: FormConfig<SubmitData>,
 ): Column<Product>[] {
   return [
     {
       key: "name",
-      header: "Product Name",
+      header: t("table.column-1"),
       render: (product) => (
         <span className="font-medium text-foreground">{product.name}</span>
       ),
@@ -299,7 +300,7 @@ export function getTableColumns(
     },
     {
       key: "sku",
-      header: "SKU",
+      header: t("table.column-2"),
       render: (product) => (
         <span className="text-muted-foreground">{product.sku}</span>
       ),
@@ -308,7 +309,7 @@ export function getTableColumns(
     },
     {
       key: "category",
-      header: "Category",
+      header: t("table.column-3"),
       render: (product) => (
         <span className="text-muted-foreground">
           {product.category ? product.category.name : "N/A"}
@@ -319,7 +320,7 @@ export function getTableColumns(
     },
     {
       key: "price",
-      header: "Price",
+      header: t("table.column-4"),
       render: (product) => (
         <span className="font-medium text-foreground">
           ${product.price.toFixed(2)}
@@ -330,7 +331,7 @@ export function getTableColumns(
     },
     {
       key: "stockStatus",
-      header: "Stock Status",
+      header: t("table.column-5"),
       render: (product) => {
         const statusDisplay = getProductStockStatusDisplay(product.stockItems);
         return (
@@ -346,7 +347,7 @@ export function getTableColumns(
     },
     {
       key: "totalStock",
-      header: "Total Stock",
+      header: t("table.column-6"),
       render: (product) => (
         <span className="text-muted-foreground">
           {getTotalProductStockQuantity(product.stockItems)}
@@ -357,7 +358,7 @@ export function getTableColumns(
     },
     {
       key: "actions",
-      header: "Action",
+      header: t("table.column-7"),
       render: (product: Product) => (
         <RecordActions<SubmitData>
           page="inventory.products_page.record_delete"

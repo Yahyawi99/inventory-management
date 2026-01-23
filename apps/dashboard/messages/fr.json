@@ -232,13 +232,13 @@
         "field-4": "Stock total"
       },
       "table": {
-        "product_name": "Nom du produit",
-        "sku": "SKU",
-        "category": "Catégorie",
-        "price": "Prix",
-        "stock_status": "État du stock",
-        "total_stock": "Stock total",
-        "action": "Action"
+        "column-1": "Nom du produit",
+        "column-2": "SKU",
+        "column-3": "Catégorie",
+        "column-4": "Prix",
+        "column-5": "État du stock",
+        "column-6": "Stock total",
+        "column-7": "Action"
       },
       "product_form": {
         "title_add": "Ajouter un nouveau produit",
