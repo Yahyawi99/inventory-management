@@ -1,11 +1,12 @@
 import { Category, SubmitData } from "@/types/categories";
 import { getCategoryStockStatusDisplay } from "@/utils/categories";
-import { Input, RecordActions } from "app-core/src/components";
+import { RecordActions } from "app-core/src/components";
 import {
   Column,
   FilterDrawerData,
   FormConfig,
   SortableField,
+  Translator,
 } from "app-core/src/types";
 
 export const headerData = {
@@ -32,9 +33,9 @@ export const categoriesFilterDrawerData: FilterDrawerData = {
 };
 
 export const categorySortableFields: SortableField[] = [
-  { title: "Name", field: "name", direction: "desc" },
-  { title: "Date", field: "createdAt", direction: "desc" },
-  { title: "Total Stock", field: "stock", direction: "desc" },
+  { title: "sortable_fields.field-1", field: "name", direction: "desc" },
+  { title: "sortable_fields.field-2", field: "createdAt", direction: "desc" },
+  { title: "sortable_fields.field-3", field: "stock", direction: "desc" },
 ];
 
 export const categoryCategoryFilters = {
@@ -43,7 +44,7 @@ export const categoryCategoryFilters = {
 };
 
 // Table Data
-export const tableColumns: Column<Category>[] = [
+export const getTableColumns = (t: Translator): Column<Category>[] => [
   {
     key: "name",
     header: "Category Name",
@@ -94,7 +95,7 @@ export const tableColumns: Column<Category>[] = [
     header: "Stock Status",
     render: (category) => {
       const statusDisplay = getCategoryStockStatusDisplay(
-        category.totalStockQuantity
+        category.totalStockQuantity,
       );
       return (
         <span
@@ -112,8 +113,9 @@ export const tableColumns: Column<Category>[] = [
     header: "Action",
     render: (category) => (
       <RecordActions<SubmitData>
+        page="inventory.categories_page"
         record={category}
-        formConfig={CategoryFormConfig}
+        formConfig={getCategoryFormConfig(t)}
       />
     ),
     headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
@@ -122,151 +124,167 @@ export const tableColumns: Column<Category>[] = [
 ];
 
 // --- STOCK CATEGORY FORM CONFIG ---
-export const CategoryFormConfig: FormConfig<SubmitData> = {
-  title: "Add New Category",
-  description:
-    "Create a new category for organizing stock and inventory items.",
-  entityName: "Category",
-  fields: [
-    {
-      name: "name",
-      label: "Category Name",
-      type: "text",
-      required: true,
-      placeholder: "Electronics",
-      gridArea: "1",
+export const getCategoryFormConfig = (
+  t: Translator,
+): FormConfig<SubmitData> => {
+  return {
+    title: t("record_form.title_add"),
+    description: t("record_form.description_add"),
+    entityName: "Category",
+    fields: [
+      {
+        name: "name",
+        label: t("record_form.fields.name"),
+        type: "text",
+        required: true,
+        placeholder: t("record_form.placeholders.name"),
+        gridArea: "1",
+      },
+      {
+        name: "description",
+        label: t("record_form.fields.description"),
+        type: "textarea",
+        required: false,
+        placeholder: t("record_form.placeholders.description"),
+        gridArea: "1",
+        rows: 4,
+      },
+    ],
+    onSubmit: async (
+      data: SubmitData,
+    ): Promise<{ ok: boolean; message: string }> => {
+      if (!data.name) {
+        return {
+          ok: false,
+          message: t("record_form.messages.required_error"),
+        };
+      }
+
+      try {
+        const response = await fetch("/api/inventory/categories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            description: data.description || "",
+          }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: t("record_form.messages.create_success"),
+        };
+      } catch (error) {
+        console.log("Failed to create Category");
+        return {
+          ok: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : t("record_form.messages.create_error"),
+        };
+      }
     },
-    {
-      name: "description",
-      label: "Description",
-      type: "textarea",
-      required: false,
-      placeholder: "A brief description of the items this category will hold.",
-      gridArea: "1",
-      rows: 4,
+    onUpdate: async (
+      id: string,
+      data: SubmitData,
+    ): Promise<{ ok: boolean; message: string }> => {
+      if (!data.name) {
+        return {
+          ok: false,
+          message: t("record_form.messages.required_error"),
+        };
+      }
+
+      if (!id) {
+        return {
+          ok: false,
+          message: t("record_form.messages.id_required"),
+        };
+      }
+
+      try {
+        const response = await fetch(`/api/inventory/categories/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            description: data.description || "",
+          }),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
+
+        return {
+          ok: true,
+          message: t("record_form.messages.update_success"),
+        };
+      } catch (error) {
+        console.log("Failed to update Category");
+        return {
+          ok: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : t("record_form.messages.generic_error"),
+        };
+      }
     },
-  ],
-  onSubmit: async (
-    data: SubmitData
-  ): Promise<{ ok: boolean; message: string }> => {
-    if (!data.name) {
-      return { ok: false, message: "Category name is required!" };
-    }
-
-    try {
-      const response = await fetch("/api/inventory/categories", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          description: data.description,
-        }),
-      });
-
-      if (!response.ok) {
-        const { error } = await response.json();
+    onDelete: async (
+      recordId: string,
+    ): Promise<{ ok: boolean; message: string }> => {
+      if (!recordId) {
         return {
           ok: false,
-          message: error,
+          message: t("record_form.messages.id_required"),
         };
       }
 
-      return {
-        ok: true,
-        message: "Category created successfully.",
-      };
-    } catch (error) {
-      console.log("Failed to create Category");
-      return {
-        ok: false,
-        message:
-          error instanceof Error ? error.message : "Failed to create Category",
-      };
-    }
-  },
-  onUpdate: async (
-    id: string,
-    data: SubmitData
-  ): Promise<{ ok: boolean; message: string }> => {
-    if (!data.name) {
-      return { ok: false, message: "Category name is required!" };
-    }
+      try {
+        const response = await fetch(`/api/inventory/categories/${recordId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-    if (!id) {
-      return { ok: false, message: "Category id is required!" };
-    }
+        if (!response.ok) {
+          const { error } = await response.json();
 
-    try {
-      const response = await fetch(`/api/inventory/categories/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          description: data.description,
-        }),
-      });
-
-      if (!response.ok) {
-        const { error } = await response.json();
-        return {
-          ok: false,
-          message: error,
-        };
-      }
-
-      return {
-        ok: true,
-        message: "Category updated successfully.",
-      };
-    } catch (error) {
-      console.log("Failed to update Category");
-      return {
-        ok: false,
-        message:
-          error instanceof Error ? error.message : "Failed to update Category",
-      };
-    }
-  },
-  onDelete: async (
-    recordId: string
-  ): Promise<{ ok: boolean; message: string }> => {
-    if (!recordId) {
-      return {
-        ok: false,
-        message: "Category id are required!",
-      };
-    }
-
-    try {
-      const response = await fetch(`/api/inventory/categories/${recordId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const { error } = await response.json();
+          return {
+            ok: false,
+            message: error,
+          };
+        }
 
         return {
+          ok: true,
+          message: t("record_form.messages.delete_success"),
+        };
+      } catch (error) {
+        return {
           ok: false,
-          message: error,
+          message: t("record_form.messages.delete_error"),
         };
       }
-
-      return {
-        ok: true,
-        message: "Category deleted successfully.",
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        message: "Failed to delete record!",
-      };
-    }
-  },
+    },
+  };
 };

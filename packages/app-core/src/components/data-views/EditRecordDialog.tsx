@@ -100,7 +100,7 @@ export default function EditRecordDialog<T>({
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: t("product_form.messages.generic_error") },
+          : { ok: false, message: t("record_form.messages.generic_error") },
       );
     } finally {
       setIsSubmitting(false);
@@ -127,10 +127,10 @@ export default function EditRecordDialog<T>({
       >
         <DialogHeader className="w-fit px-6 pt-6 pb-4 mt-5">
           <DialogTitle className="w-fit text-2xl font-bold">
-            {t("product_form.title_edit")}
+            {t("record_form.title_edit")}
           </DialogTitle>
           <DialogDescription>
-            {t("product_form.description_edit")}
+            {t("record_form.description_edit")}
           </DialogDescription>
         </DialogHeader>
 
@@ -203,7 +203,7 @@ export default function EditRecordDialog<T>({
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
             >
-              {t("product_form.actions.cancel")}
+              {t("record_form.actions.cancel")}
             </Button>
             <Button
               type="button"
@@ -214,10 +214,10 @@ export default function EditRecordDialog<T>({
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("product_form.actions.saving")}
+                  {t("record_form.actions.saving")}
                 </>
               ) : (
-                t("product_form.actions.save_changes")
+                t("record_form.actions.save_changes")
               )}
             </Button>
           </div>

@@ -127,7 +127,7 @@
           "title": "معلومات الشركة",
           "fields": {
             "companyName": {
-              "label": "اسم الشركة *",
+              "label": "اسم الشركة",
               "placeholder": "مثال: My Company Inc."
             },
             "shortName": {
@@ -135,11 +135,11 @@
               "placeholder": "مثال: MCI (يُستخدم كمعرّف للمؤسسة)"
             },
             "description": {
-              "label": "الوصف *",
+              "label": "الوصف",
               "placeholder": "وصف مختصر لمهمة الشركة وأنشطتها"
             },
             "companyEmail": {
-              "label": "بريد الشركة الإلكتروني *",
+              "label": "بريد الشركة الإلكتروني",
               "placeholder": "contact@mycompany.org"
             },
             "website": {
@@ -152,19 +152,19 @@
           "title": "حساب المدير",
           "fields": {
             "name": {
-              "label": "اسمك *",
+              "label": "اسمك",
               "placeholder": "John Doe"
             },
             "email": {
-              "label": "بريدك الإلكتروني * (يتطلب التحقق)",
+              "label": "بريدك الإلكتروني (يتطلب التحقق)",
               "placeholder": "john.doe@example.com"
             },
             "password": {
-              "label": "كلمة المرور *",
+              "label": "كلمة المرور",
               "placeholder": "6 أحرف على الأقل"
             },
             "confirmPassword": {
-              "label": "تأكيد كلمة المرور *",
+              "label": "تأكيد كلمة المرور",
               "placeholder": "أعد إدخال كلمة المرور"
             }
           }
@@ -289,6 +289,93 @@
         "deleting": "جاري الحذف..."
       }
     },
-    "categories": "مجموعات المنتجات"
+    "categories_page": {
+      "title": "الفئات",
+      "actions": {
+        "export": "تصدير",
+        "add_new": "إضافة فئة جديدة"
+      },
+      "filters": {
+        "filter-1": "الكل",
+        "filter-2": "متوفرة",
+        "filter-3": "مخزون منخفض",
+        "filter-4": "نفدت الكمية"
+      },
+      "filter_drawer": {
+        "title": "تصفية الفئات",
+        "subtitle": "تحسين قائمة الفئات الخاصة بك",
+        "fields": {
+          "field-1": {
+            "title": "حالة مخزون الفئة",
+            "options": {
+              "label-1": "جميع الفئات",
+              "label-2": "متوفرة",
+              "label-3": "مخزون منخفض",
+              "label-4": "نفدت الكمية"
+            }
+          }
+        },
+        "actions": {
+          "apply": "تطبيق الفلاتر",
+          "clear": "مسح الفلاتر"
+        }
+      },
+      "sortable_fields": {
+        "field-1": "الاسم",
+        "field-2": "التاريخ",
+        "field-3": "إجمالي المخزون"
+      },
+      "table": {
+        "column-1": "اسم الفئة",
+        "column-2": "تاريخ الإنشاء",
+        "column-3": "المنتجات",
+        "column-4": "إجمالي المخزون",
+        "column-5": "حالة المخزون",
+        "column-6": "الإجراء"
+      },
+      "record_form": {
+        "title_add": "إضافة فئة جديدة",
+        "title_edit": "تعديل الفئة",
+        "description_add": "أنشئ فئة جديدة لتنظيم عناصر المخزون.",
+        "description_edit": "تحديث تفاصيل الفئة والمعلومات أدناه.",
+        "fields": {
+          "name": "اسم الفئة",
+          "description": "الوصف"
+        },
+        "actions": {
+          "create": "إنشاء الفئة",
+          "creating": "جاري الإنشاء...",
+          "save_changes": "حفظ التغييرات",
+          "saving": "جاري الحفظ...",
+          "cancel": "إلغاء"
+        },
+        "status": {
+          "creating": "جاري الإنشاء...",
+          "updating": "جاري التحديث...",
+          "deleting": "جاري الحذف..."
+        },
+        "placeholders": {
+          "name": "إلكترونيات",
+          "description": "وصف موجز للفئة..."
+        },
+        "messages": {
+          "required_error": "يرجى ملء جميع الحقول المطلوبة!",
+          "id_required": "معرف الفئة مطلوب!",
+          "create_success": "تم إنشاء الفئة بنجاح.",
+          "create_error": "فشل في إنشاء الفئة.",
+          "update_success": "تم تحديث الفئة بنجاح.",
+          "delete_success": "تم حذف الفئة بنجاح.",
+          "delete_error": "فشل في حذف الفئة.",
+          "generic_error": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+        }
+      },
+      "record_delete": {
+        "title": "حذف الفئة",
+        "desc": "هل أنت متأكد أنك تريد حذف هذه الفئة؟ لا يمكن التراجع عن هذا الإجراء.",
+        "cancel": "إلغاء",
+        "delete": "نعم، احذف الفئة",
+        "deleting": "جاري الحذف..."
+      }
+    }
   }
 }

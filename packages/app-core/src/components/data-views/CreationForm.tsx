@@ -78,7 +78,7 @@ export default function CreationForm<T>({
       alert(
         error instanceof Error
           ? { ok: false, message: error.message }
-          : { ok: false, message: t("product_form.messages.generic_error") },
+          : { ok: false, message: t("record_form.messages.generic_error") },
       );
     } finally {
       setIsSubmitting(false);
@@ -208,10 +208,10 @@ export default function CreationForm<T>({
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("product_form.status.creating")}
+                  {t("record_form.status.creating")}
                 </>
               ) : (
-                t("product_form.actions.create")
+                t("record_form.actions.create")
               )}
             </Button>
           </div>

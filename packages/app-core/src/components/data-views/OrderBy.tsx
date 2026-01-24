@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Button,
   DropdownMenu,
@@ -37,6 +37,7 @@ export function OrderByDropdown({
   };
 
   const t = useTranslations(page);
+  const locale = useLocale();
 
   return (
     <DropdownMenu>
@@ -56,7 +57,13 @@ export function OrderByDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>Sort By</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {locale === "en"
+            ? "Sort By"
+            : locale === "fr"
+              ? "Trier par"
+              : "الترتيب حسب"}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {sortableFields.map((sortableField) => {
           const { title, field } = sortableField;

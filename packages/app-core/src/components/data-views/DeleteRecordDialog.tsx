@@ -103,7 +103,7 @@ export default function DeleteRecordDialog<T>({
             <Trash2 className="w-6 h-6 text-red-600" />
             {t("record_delete.title")}
           </DialogTitle>
-          <DialogDescription className="pt-2 text-right">
+          <DialogDescription className="pt-2 w-fit">
             {t("record_delete.desc")}
           </DialogDescription>
         </DialogHeader>

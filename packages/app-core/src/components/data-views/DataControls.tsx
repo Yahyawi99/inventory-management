@@ -35,6 +35,7 @@ export function DataControls({
   filterOptions,
 }: DataControlsProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
+
   const t = useTranslations(page);
 
   useEffect(() => {

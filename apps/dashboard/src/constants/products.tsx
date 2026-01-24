@@ -84,46 +84,46 @@ export async function getProductFormConfig(
     }) as { id: string; name: string }[];
 
   return {
-    title: t("product_form.title_add"),
-    description: t("product_form.description_add"),
+    title: t("record_form.title_add"),
+    description: t("record_form.description_add"),
     entityName: "Product",
     fields: [
       {
         name: "name",
-        label: t("product_form.fields.name"),
+        label: t("record_form.fields.name"),
         type: "text",
         required: true,
-        placeholder: t("product_form.placeholders.name"),
+        placeholder: t("record_form.placeholders.name"),
         gridArea: "1",
       },
       {
         name: "sku",
-        label: t("product_form.fields.sku"),
+        label: t("record_form.fields.sku"),
         type: "text",
         required: true,
-        placeholder: t("product_form.placeholders.sku"),
+        placeholder: t("record_form.placeholders.sku"),
         gridArea: "1/2",
       },
       {
         name: "price",
-        label: t("product_form.fields.price"),
+        label: t("record_form.fields.price"),
         type: "number",
         required: true,
-        placeholder: t("product_form.placeholders.price"),
+        placeholder: t("record_form.placeholders.price"),
         gridArea: "1/2",
         step: 0.01,
       },
       {
         name: "barcode",
-        label: t("product_form.fields.barcode"),
+        label: t("record_form.fields.barcode"),
         type: "text",
         required: false,
-        placeholder: t("product_form.placeholders.barcode"),
+        placeholder: t("record_form.placeholders.barcode"),
         gridArea: "1/2",
       },
       {
         name: "categoryId",
-        label: t("product_form.fields.category"),
+        label: t("record_form.fields.category"),
         type: "select",
         required: true,
         options: formattedCategories,
@@ -131,10 +131,10 @@ export async function getProductFormConfig(
       },
       {
         name: "description",
-        label: t("product_form.fields.product_description"),
+        label: t("record_form.fields.product_description"),
         type: "textarea",
         required: false,
-        placeholder: t("product_form.placeholders.product_description"),
+        placeholder: t("record_form.placeholders.product_description"),
         gridArea: "1",
         rows: 4,
       },
@@ -147,7 +147,7 @@ export async function getProductFormConfig(
       if (!name || !sku || !price || !price || !categoryId) {
         return {
           ok: false,
-          message: t("product_form.messages.required_error"),
+          message: t("record_form.messages.required_error"),
         };
       }
 
@@ -177,7 +177,7 @@ export async function getProductFormConfig(
 
         return {
           ok: true,
-          message: t("product_form.messages.create_success"),
+          message: t("record_form.messages.create_success"),
         };
       } catch (error) {
         console.log("Failed to create Product");
@@ -186,7 +186,7 @@ export async function getProductFormConfig(
           message:
             error instanceof Error
               ? error.message
-              : t("product_form.messages.create_error"),
+              : t("record_form.messages.create_error"),
         };
       }
     },
@@ -199,12 +199,12 @@ export async function getProductFormConfig(
       if (!name || !sku || !price || !price || !categoryId) {
         return {
           ok: false,
-          message: t("product_form.messages.required_error"),
+          message: t("record_form.messages.required_error"),
         };
       }
 
       if (!id) {
-        return { ok: false, message: t("product_form.messages.id_required") };
+        return { ok: false, message: t("record_form.messages.id_required") };
       }
 
       try {
@@ -231,7 +231,7 @@ export async function getProductFormConfig(
           };
         }
 
-        return { ok: true, message: t("product_form.messages.update_success") };
+        return { ok: true, message: t("record_form.messages.update_success") };
       } catch (error) {
         console.log("Failed to update Product");
         return {
@@ -239,7 +239,7 @@ export async function getProductFormConfig(
           message:
             error instanceof Error
               ? error.message
-              : t("product_form.messages.update_error"),
+              : t("record_form.messages.update_error"),
         };
       }
     },
@@ -249,7 +249,7 @@ export async function getProductFormConfig(
       if (!recordId) {
         return {
           ok: false,
-          message: t("product_form.messages.id_required"),
+          message: t("record_form.messages.id_required"),
         };
       }
 
@@ -270,11 +270,11 @@ export async function getProductFormConfig(
           };
         }
 
-        return { ok: true, message: t("product_form.messages.delete_success") };
+        return { ok: true, message: t("record_form.messages.delete_success") };
       } catch (error) {
         return {
           ok: false,
-          message: t("product_form.messages.delete_error"),
+          message: t("record_form.messages.delete_error"),
         };
       }
     },

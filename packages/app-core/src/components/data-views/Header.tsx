@@ -10,7 +10,7 @@ interface Props<T> {
 }
 
 export function Header<T>({ page, exportData, formConfig }: Props<T>) {
-  const t = useTranslations("inventory.products_page");
+  const t = useTranslations(page);
 
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">

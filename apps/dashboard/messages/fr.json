@@ -127,7 +127,7 @@
           "title": "Informations entreprise",
           "fields": {
             "companyName": {
-              "label": "Nom de l'entreprise *",
+              "label": "Nom de l'entreprise",
               "placeholder": "ex. Ma Société Inc."
             },
             "shortName": {
@@ -135,11 +135,11 @@
               "placeholder": "ex. MSI (utilisé pour l'URL)"
             },
             "description": {
-              "label": "Description *",
+              "label": "Description",
               "placeholder": "Bref descriptif de vos activités"
             },
             "companyEmail": {
-              "label": "E-mail entreprise *",
+              "label": "E-mail entreprise",
               "placeholder": "contact@masociete.org"
             },
             "website": {
@@ -152,19 +152,19 @@
           "title": "Compte Administrateur",
           "fields": {
             "name": {
-              "label": "Votre nom *",
+              "label": "Votre nom",
               "placeholder": "Jean Dupont"
             },
             "email": {
-              "label": "Votre e-mail * (vérification requise)",
+              "label": "Votre e-mail (vérification requise)",
               "placeholder": "jean.dupont@exemple.com"
             },
             "password": {
-              "label": "Mot de passe *",
+              "label": "Mot de passe",
               "placeholder": "6 caractères minimum"
             },
             "confirmPassword": {
-              "label": "Confirmer le mot de passe *",
+              "label": "Confirmer le mot de passe",
               "placeholder": "Répétez votre mot de passe"
             }
           }
@@ -291,6 +291,93 @@
         "deleting": "Suppression en cours..."
       }
     },
-    "categories": "Catégories"
+    "categories_page": {
+      "title": "Catégories",
+      "actions": {
+        "export": "Exporter",
+        "add_new": "Ajouter une catégorie"
+      },
+      "filters": {
+        "filter-1": "Tout",
+        "filter-2": "En stock",
+        "filter-3": "Stock faible",
+        "filter-4": "En rupture de stock"
+      },
+      "filter_drawer": {
+        "title": "Filtrer les catégories",
+        "subtitle": "Affinez votre liste de catégories",
+        "fields": {
+          "field-1": {
+            "title": "État du stock de la catégorie",
+            "options": {
+              "label-1": "Toutes les catégories",
+              "label-2": "En stock",
+              "label-3": "Stock faible",
+              "label-4": "En rupture de stock"
+            }
+          }
+        },
+        "actions": {
+          "apply": "Appliquer les filtres",
+          "clear": "Effacer les filtres"
+        }
+      },
+      "sortable_fields": {
+        "field-1": "Nom",
+        "field-2": "Date",
+        "field-3": "Stock total"
+      },
+      "table": {
+        "column-1": "Nom de la catégorie",
+        "column-2": "Créé le",
+        "column-3": "Produits",
+        "column-4": "Stock total",
+        "column-5": "État du stock",
+        "column-6": "Action"
+      },
+      "record_form": {
+        "title_add": "Ajouter une catégorie",
+        "title_edit": "Modifier la catégorie",
+        "description_add": "Créez une nouvelle catégorie pour organiser les articles.",
+        "description_edit": "Mettez à jour les détails de la catégorie.",
+        "fields": {
+          "name": "Nom de la catégorie",
+          "description": "Description"
+        },
+        "actions": {
+          "create": "Créer la catégorie",
+          "creating": "Création...",
+          "save_changes": "Enregistrer",
+          "saving": "Enregistrement...",
+          "cancel": "Annuler"
+        },
+        "status": {
+          "creating": "Création en cours...",
+          "updating": "Mise à jour en cours...",
+          "deleting": "Suppression en cours..."
+        },
+        "placeholders": {
+          "name": "Électronique",
+          "description": "Une brève description..."
+        },
+        "messages": {
+          "required_error": "Veuillez remplir tous les champs obligatoires !",
+          "id_required": "L'ID de la catégorie est requis !",
+          "create_success": "Catégorie créée avec succès.",
+          "create_error": "Échec de la création.",
+          "update_success": "Catégorie mise à jour avec succès.",
+          "delete_success": "Catégorie supprimée avec succès.",
+          "delete_error": "Échec de la suppression.",
+          "generic_error": "Une erreur est survenue. Veuillez réessayer."
+        }
+      },
+      "record_delete": {
+        "title": "Supprimer la catégorie",
+        "desc": "Voulez-vous vraiment supprimer cette catégorie ? Cette action est irréversible.",
+        "cancel": "Annuler",
+        "delete": "Oui, supprimer la catégorie",
+        "deleting": "Suppression..."
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import {
@@ -11,12 +12,11 @@ import {
 } from "app-core/src/components";
 import { ActiveFilters, SortConfig, Pagination } from "app-core/src/types";
 import {
-  headerData,
-  tableColumns,
+  getTableColumns,
   categoriesFilterDrawerData,
   categorySortableFields,
   categoryCategoryFilters,
-  CategoryFormConfig,
+  getCategoryFormConfig,
 } from "@/constants/categories";
 import { buildCategoriesApiUrl } from "@/utils/categories";
 import { exportOrdersAsJson } from "@/utils/shared";
@@ -25,6 +25,8 @@ import { Category } from "@/types/categories";
 export default function Products() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("inventory.categories_page");
 
   const [tableCategories, setTableCategories] = useState<Category[]>([]);
   const [isFetchingTableCategories, setIsFetchingTableCategories] =
@@ -64,14 +66,14 @@ export default function Products() {
         "/api/inventory/categories",
         activeFilters,
         activeOrderBy,
-        pagination
+        pagination,
       );
 
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(
-          response.statusText || "Failed to fetch table orders from API."
+          response.statusText || "Failed to fetch table orders from API.",
         );
       }
 
@@ -83,7 +85,7 @@ export default function Products() {
       console.error("Error fetching table orders:", err);
       setError(
         err.message ||
-          "An unexpected error occurred while fetching table orders."
+          "An unexpected error occurred while fetching table orders.",
       );
     } finally {
       setIsFetchingTableCategories(false);
@@ -108,12 +110,13 @@ export default function Products() {
   return (
     <section className="overflow-x-hidden">
       <Header
-        data={headerData}
+        page="inventory.categories_page"
         exportData={exportData}
-        formConfig={CategoryFormConfig}
+        formConfig={getCategoryFormConfig(t)}
       />
 
       <DataControls
+        page="inventory.categories_page"
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
@@ -131,7 +134,10 @@ export default function Products() {
         totalPages={pagination?.totalPages ? pagination.totalPages : 0}
         setPagination={setPagination}
       >
-        <DataTable<Category> data={tableCategories} columns={tableColumns} />
+        <DataTable<Category>
+          data={tableCategories}
+          columns={getTableColumns(t)}
+        />
       </TableView>
     </section>
   );
