@@ -13,7 +13,7 @@ import {
 import { ActiveFilters, SortConfig, Pagination } from "app-core/src/types";
 import {
   getTableColumns,
-  categoriesFilterDrawerData,
+  getCategoriesFilterDrawerData,
   categorySortableFields,
   categoryCategoryFilters,
   getCategoryFormConfig,
@@ -122,7 +122,7 @@ export default function Products() {
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
-        DrawerData={categoriesFilterDrawerData}
+        DrawerData={getCategoriesFilterDrawerData(t)}
         sortableFields={categorySortableFields}
         filterOptions={categoryCategoryFilters}
       />

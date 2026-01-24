@@ -196,7 +196,9 @@ export default function EditRecordDialog<T>({
             </Alert>
           )}
 
-          <div className="flex justify-end gap-3">
+          <div
+            className={`flex gap-3 ${locale === "ar" ? "justify-start" : "justify-end"}`}
+          >
             <Button
               type="button"
               variant="outline"

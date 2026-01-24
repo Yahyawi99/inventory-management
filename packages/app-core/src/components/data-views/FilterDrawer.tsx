@@ -86,13 +86,16 @@ export function FilterDrawer({
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="focus:outline-none bg-background">
+      <DrawerContent
+        dir={locale === "ar" ? "rtl" : "ltr"}
+        className="focus:outline-none bg-background"
+      >
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className="text-2xl font-bold text-foreground">
+            <DrawerTitle className="w-fit text-2xl font-bold text-foreground">
               {t("filter_drawer.title")}
             </DrawerTitle>
-            <DrawerDescription className="text-muted-foreground">
+            <DrawerDescription className="w-fit text-muted-foreground">
               {t("filter_drawer.subtitle")}
             </DrawerDescription>
           </DrawerHeader>
@@ -112,6 +115,7 @@ export function FilterDrawer({
                         </Label>
 
                         <Select
+                          dir={locale === "ar" ? "rtl" : "ltr"}
                           value={drawerFilters[filterKey]}
                           onValueChange={(selectedValue) => {
                             handleSelectChange(filterKey, selectedValue);

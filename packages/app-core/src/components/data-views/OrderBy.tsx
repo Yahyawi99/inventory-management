@@ -40,7 +40,7 @@ export function OrderByDropdown({
   const locale = useLocale();
 
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={locale === "ar" ? "rtl" : "ltr"}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -56,7 +56,10 @@ export function OrderByDropdown({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent
+        align={locale === "ar" ? "start" : "end"}
+        className="w-56"
+      >
         <DropdownMenuLabel>
           {locale === "en"
             ? "Sort By"

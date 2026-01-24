@@ -14,22 +14,38 @@ export const headerData = {
   buttonTxt: "Create Category",
 };
 
-export const categoriesFilterDrawerData: FilterDrawerData = {
-  header: {
-    title: "Filter Categories",
-    desc: "Refine your Category list",
-  },
-  filterOptions: {
-    status: {
-      name: "Category's Stock Status",
-      options: [
-        { label: "All Categories", value: "All" },
-        { label: "In Stock Categories", value: "In Stock" },
-        { label: "Low Stock Categories", value: "Low Stock" },
-        { label: "Out of Stock Categories", value: "Out of Stock" },
-      ],
+export const getCategoriesFilterDrawerData = (
+  t: Translator,
+): FilterDrawerData => {
+  return {
+    header: {
+      title: "Filter Categories",
+      desc: "Refine your Category list",
     },
-  },
+    filterOptions: {
+      status: {
+        name: t("filter_drawer.fields.field-1.title"),
+        options: [
+          {
+            label: t("filter_drawer.fields.field-1.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-2"),
+            value: "In Stock",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-3"),
+            value: "Low Stock",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-4"),
+            value: "Out of Stock",
+          },
+        ],
+      },
+    },
+  };
 };
 
 export const categorySortableFields: SortableField[] = [
@@ -47,7 +63,7 @@ export const categoryCategoryFilters = {
 export const getTableColumns = (t: Translator): Column<Category>[] => [
   {
     key: "name",
-    header: "Category Name",
+    header: t("table.column-1"),
     render: (category) => (
       <span className="font-medium text-foreground">{category.name}</span>
     ),
@@ -56,10 +72,10 @@ export const getTableColumns = (t: Translator): Column<Category>[] => [
   },
   {
     key: "createdAt",
-    header: "Created On",
+    header: t("table.column-2"),
     render: (category) => (
       <span className="text-muted-foreground">
-        {new Date(category.createdAt.$date).toLocaleDateString("en-US", {
+        {new Date(category.createdAt.$date).toLocaleDateString(undefined, {
           month: "short",
           day: "numeric",
           year: "numeric",
@@ -71,17 +87,16 @@ export const getTableColumns = (t: Translator): Column<Category>[] => [
   },
   {
     key: "productCount",
-    header: "Products",
+    header: t("table.column-3"),
     render: (category) => (
       <span className="text-muted-foreground">{category.productCount}</span>
     ),
     headClass: "px-4 py-3 text-gray-700 font-medium text-center",
     cellClass: "text-center text-gray-700",
   },
-
   {
     key: "totalStock",
-    header: "Total Stock",
+    header: t("table.column-4"),
     render: (category) => (
       <span className="text-muted-foreground">
         {category.totalStockQuantity}
@@ -92,7 +107,7 @@ export const getTableColumns = (t: Translator): Column<Category>[] => [
   },
   {
     key: "stockStatus",
-    header: "Stock Status",
+    header: t("table.column-5"),
     render: (category) => {
       const statusDisplay = getCategoryStockStatusDisplay(
         category.totalStockQuantity,
@@ -110,7 +125,7 @@ export const getTableColumns = (t: Translator): Column<Category>[] => [
   },
   {
     key: "actions",
-    header: "Action",
+    header: t("table.column-6"),
     render: (category) => (
       <RecordActions<SubmitData>
         page="inventory.categories_page"
