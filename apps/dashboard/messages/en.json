@@ -2,6 +2,10 @@
   "header": {
     "welcome": "Welcome back"
   },
+  "pagination": {
+    "next": "Next",
+    "prev": "Previous"
+  },
   "dashboard": {
     "cards": {
       "title": "Financial Summary",

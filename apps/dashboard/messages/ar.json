@@ -2,6 +2,10 @@
   "header": {
     "welcome": "مرحبًا بعودتك"
   },
+  "pagination": {
+    "next": "السابق",
+    "prev": "التالي"
+  },
   "dashboard": {
     "welcome": "نظرة عامة",
     "cards": {
@@ -240,7 +244,7 @@
         "column-6": "إجمالي المخزون",
         "column-7": "الإجراء"
       },
-      "product_form": {
+      "record_form": {
         "title_add": "إضافة منتج جديد",
         "title_edit": "تعديل المنتج",
         "description_add": "أدخل تفاصيل المنتج الجديد.",
