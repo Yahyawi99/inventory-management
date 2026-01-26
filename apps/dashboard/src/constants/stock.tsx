@@ -44,15 +44,15 @@ export const getStockFilterDrawerData = (t: Translator): FilterDrawerData => {
           },
           {
             label: t("filter_drawer.fields.field-1.options.label-2"),
-            value: "available",
+            value: "Available",
           },
           {
             label: t("filter_drawer.fields.field-1.options.label-3"),
-            value: "low",
+            value: "Low",
           },
           {
             label: t("filter_drawer.fields.field-1.options.label-4"),
-            value: "empty",
+            value: "Empty",
           },
         ],
       },

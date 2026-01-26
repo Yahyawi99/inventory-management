@@ -382,6 +382,112 @@
         "delete": "Oui, supprimer la catégorie",
         "deleting": "Suppression..."
       }
+    },
+    "stocks_page": {
+      "title": "Emplacements de Stock",
+      "actions": {
+        "export": "Exporter",
+        "add_new": "Nouvel emplacement"
+      },
+      "cards": {
+        "card-1": {
+          "title": "Total des Produits"
+        },
+        "card-2": {
+          "title": "Emplacements de Stock"
+        },
+        "card-3": {
+          "title": "Quantité Totale en Stock"
+        },
+        "card-4": {
+          "title": "Valeur Totale du Stock"
+        }
+      },
+      "filters": {
+        "filter-1": "Tout",
+        "filter-2": "Disponible",
+        "filter-3": "Stock Faible",
+        "filter-4": "Vide"
+      },
+      "filter_drawer": {
+        "title": "Filtrer les Stocks",
+        "subtitle": "Affinez votre liste de stocks",
+        "fields": {
+          "field-1": {
+            "title": "État du Stock",
+            "options": {
+              "label-1": "Tous les Emplacements",
+              "label-2": "Disponible",
+              "label-3": "Stock Faible",
+              "label-4": "Vide"
+            }
+          }
+        },
+        "actions": {
+          "apply": "Appliquer les Filtres",
+          "clear": "Effacer les Filtres"
+        }
+      },
+      "sortable_fields": {
+        "field-1": "Nom",
+        "field-2": "Date",
+        "field-3": "Valeur Totale",
+        "field-4": "Quantité Totale"
+      },
+      "table": {
+        "column-1": "Nom de l'Emplacement",
+        "column-2": "Lieu Physique",
+        "column-3": "Valeur Totale",
+        "column-4": "Quantité Totale",
+        "column-5": "État",
+        "column-6": "Action"
+      },
+      "record_form": {
+        "title_add": "Ajouter un Nouvel Emplacement",
+        "title_edit": "Modifier l'Emplacement",
+        "description_add": "Créez un nouvel emplacement de stockage et initialisez les quantités de produits.",
+        "description_edit": "Mettez à jour les détails de l'emplacement et les niveaux de stock actuels.",
+        "fields": {
+          "name": "Nom de l'Emplacement",
+          "location_detail": "Adresse Physique/Détails",
+          "stock_items": "Articles en Stock",
+          "product": "Produit",
+          "quantity": "Quantité Initiale"
+        },
+        "actions": {
+          "create": "Créer l'Emplacement",
+          "creating": "Création...",
+          "save_changes": "Enregistrer",
+          "saving": "Enregistrement...",
+          "cancel": "Annuler"
+        },
+        "status": {
+          "creating": "Création...",
+          "updating": "Mise à jour...",
+          "deleting": "Suppression..."
+        },
+        "placeholders": {
+          "name": "Entrepôt Allée 5, Bac B",
+          "location_detail": "Troisième étage, section Nord"
+        },
+        "messages": {
+          "required_error": "Veuillez remplir tous les champs obligatoires !",
+          "id_required": "L'ID du stock est requis !",
+          "create_success": "Emplacement créé avec succès.",
+          "create_error": "Échec de la création de l'emplacement.",
+          "update_success": "Emplacement mis à jour avec succès.",
+          "delete_success": "Emplacement supprimé avec succès.",
+          "delete_error": "Échec de la suppression de l'emplacement.",
+          "generic_error": "Une erreur est survenue. Veuillez réessayer."
+        }
+      },
+      "record_delete": {
+        "title": "Supprimer l'Emplacement",
+        "desc": "Êtes-vous sûr de vouloir supprimer cet emplacement ? Tous les enregistrements associés seront supprimés.",
+        "cancel": "Annuler",
+        "delete": "Oui, supprimer l'emplacement",
+        "deleting": "Suppression..."
+      }
     }
   }
 }
