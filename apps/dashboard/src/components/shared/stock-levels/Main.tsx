@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import {
@@ -21,7 +22,7 @@ import {
   headerData,
   stockSortableFields,
   stockStatusFilters,
-  stockFilterDrawerData,
+  getStockFilterDrawerData,
   getTableColumns,
   getStockLocationFormConfig,
 } from "@/constants/stock";
@@ -32,6 +33,8 @@ import { buildStocksApiUrl, getStockLevelsMetrics } from "@/utils/stocks";
 export default function StockLevels() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("inventory.stocks_page");
 
   const [tableStocks, setTableStocks] = useState<Stock[]>([]);
   const [isFetchingTableStocks, setIsFetchingTableStocks] = useState(true);
@@ -75,14 +78,14 @@ export default function StockLevels() {
         "/api/inventory/stocks",
         activeFilters,
         activeOrderBy,
-        pagination
+        pagination,
       );
 
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(
-          response.statusText || "Failed to fetch table orders from API."
+          response.statusText || "Failed to fetch table orders from API.",
         );
       }
 
@@ -94,7 +97,7 @@ export default function StockLevels() {
       console.error("Error fetching table orders:", err);
       setError(
         err.message ||
-          "An unexpected error occurred while fetching table orders."
+          "An unexpected error occurred while fetching table orders.",
       );
     } finally {
       setIsFetchingTableStocks(false);
@@ -129,7 +132,7 @@ export default function StockLevels() {
 
         if (!response.ok) {
           throw new Error(
-            response.statusText || "Failed to fetch products from API."
+            response.statusText || "Failed to fetch products from API.",
           );
         }
 
@@ -139,7 +142,7 @@ export default function StockLevels() {
       } catch (err: any) {
         console.error("Error fetching stocks:", err);
         setError(
-          err.message || "An unexpected error occurred while fetching stocks."
+          err.message || "An unexpected error occurred while fetching stocks.",
         );
       } finally {
         setIsFetchingSummaryStocks(false);
@@ -163,20 +166,19 @@ export default function StockLevels() {
         change: metricsData.totalProductsChange,
       },
       {
+        title: "Total Stock Locations",
+        value: metricsData.totalStockLocations,
+        change: metricsData.totalStockLocationsChange,
+      },
+      {
         title: "Total Stock Quantity:",
         value: metricsData.totalStockQuantity,
         change: metricsData.totalStockQuantityChange,
       },
-
       {
         title: "Total Inventory Value",
         value: "$" + metricsData.totalInventoryValue.toFixed(2),
         change: metricsData.totalInventoryValueChange,
-      },
-      {
-        title: "Total Stock Locations",
-        value: metricsData.totalStockLocations,
-        change: metricsData.totalStockLocationsChange,
       },
     ]);
   }, [summaryStocks]);
@@ -188,35 +190,40 @@ export default function StockLevels() {
         filter: activeFilters,
         orderBy: activeOrderBy,
       },
-      metricsData
+      metricsData,
     );
   };
 
   // Form Config
   useEffect(() => {
     if (user)
-      getStockLocationFormConfig(user?.activeOrganizationId as string).then(
-        setStockFormConfig
+      getStockLocationFormConfig(t, user?.activeOrganizationId as string).then(
+        setStockFormConfig,
       );
   }, [user]);
 
   return (
     <section className="overflow-x-hidden">
       <Header
-        data={headerData}
+        page="inventory.stocks_page"
         exportData={exportData}
         formConfig={stockFormConfig}
       />
 
-      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryStocks} />
+      <SummaryCards
+        page="inventory.stocks_page"
+        data={cardMetrics}
+        isLoading={isFetchingSummaryStocks}
+      />
 
       <DataControls
+        page="inventory.stocks_page"
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
-        DrawerData={stockFilterDrawerData}
+        DrawerData={getStockFilterDrawerData(t)}
         sortableFields={stockSortableFields}
         filterOptions={stockStatusFilters}
       />
@@ -231,7 +238,7 @@ export default function StockLevels() {
         {stockFormConfig && (
           <DataTable<Stock>
             data={tableStocks}
-            columns={getTableColumns(stockFormConfig)}
+            columns={getTableColumns(t, stockFormConfig)}
           />
         )}
       </TableView>

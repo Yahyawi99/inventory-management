@@ -1,13 +1,14 @@
 import { Stock, SubmitData } from "@/types/stocks";
 import { FetchFormConfigData } from "@/utils/orders";
 import { getStockStatusDisplay } from "@/utils/stocks";
-import { Button, Input, RecordActions } from "app-core/src/components";
+import { RecordActions } from "app-core/src/components";
 import {
   Column,
   FilterDrawerData,
   FormConfig,
   HeaderData,
   SortableField,
+  Translator,
 } from "app-core/src/types";
 
 export const headerData: HeaderData = {
@@ -16,10 +17,10 @@ export const headerData: HeaderData = {
 };
 
 export const stockSortableFields: SortableField[] = [
-  { title: "Name", field: "name", direction: "desc" },
-  { title: "Date", field: "createdAt", direction: "desc" },
-  { title: "Value", field: "value", direction: "desc" },
-  { title: "Quantity", field: "quantity", direction: "desc" },
+  { title: "sortable_fields.field-1", field: "name", direction: "desc" },
+  { title: "sortable_fields.field-2", field: "createdAt", direction: "desc" },
+  { title: "sortable_fields.field-3", field: "value", direction: "desc" },
+  { title: "sortable_fields.field-4", field: "quantity", direction: "desc" },
 ];
 
 export const stockStatusFilters = {
@@ -27,103 +28,119 @@ export const stockStatusFilters = {
   values: ["All", "Available", "Low", "Empty"],
 };
 
-export const stockFilterDrawerData: FilterDrawerData = {
-  header: {
-    title: "Filter Stocks",
-    desc: "Refine your Stock list",
-  },
-  filterOptions: {
-    status: {
-      name: "Stock's Status",
-      options: [
-        { label: "All", value: "All" },
-        { label: "Available", value: "available" },
-        { label: "Low", value: "low" },
-        { label: "Empty", value: "empty" },
-      ],
+export const getStockFilterDrawerData = (t: Translator): FilterDrawerData => {
+  return {
+    header: {
+      title: t("filter_drawer.title"),
+      desc: t("filter_drawer.subtitle"),
     },
-  },
+    filterOptions: {
+      status: {
+        name: t("filter_drawer.fields.field-1.title"),
+        options: [
+          {
+            label: t("filter_drawer.fields.field-1.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-2"),
+            value: "available",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-3"),
+            value: "low",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-4"),
+            value: "empty",
+          },
+        ],
+      },
+    },
+  };
 };
 
-// --- Product-Specific Table Columns ---
-export function getTableColumns(
-  formConfig: FormConfig<SubmitData>
-): Column<Stock>[] {
-  return [
-    {
-      key: "name",
-      header: "Name",
-      render: (stock) => (
-        <span className="font-medium text-foreground">{stock.name}</span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center font-medium text-gray-900",
-    },
-    {
-      key: "location",
-      header: "Location",
-      render: (stock) => (
-        <span className="text-muted-foreground">
-          {stock.location ? stock.location : "N/A"}
+// --- STOCK TABLE COLUMNS ---
+export const getTableColumns = (
+  t: Translator,
+  formConfig: FormConfig<SubmitData>,
+): Column<Stock>[] => [
+  {
+    key: "name",
+    header: t("table.column-1"),
+    render: (stock) => (
+      <span className="font-medium text-foreground">{stock.name}</span>
+    ),
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center font-medium text-gray-900",
+  },
+  {
+    key: "location",
+    header: t("table.column-2"),
+    render: (stock) => (
+      <span className="text-muted-foreground">
+        {stock.location ? stock.location : "N/A"}
+      </span>
+    ),
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center text-gray-700",
+  },
+  {
+    key: "value",
+    header: t("table.column-3"),
+    render: (stock) => (
+      <span className="text-muted-foreground">
+        ${stock.totalValue.toFixed(2)}
+      </span>
+    ),
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center text-gray-700",
+  },
+  {
+    key: "quantity",
+    header: t("table.column-4"),
+    render: (stock) => (
+      <span className="font-medium text-foreground">{stock.totalQuantity}</span>
+    ),
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center font-medium text-gray-900",
+  },
+  {
+    key: "stockStatus",
+    header: t("table.column-5"),
+    render: (stock) => {
+      const statusDisplay = getStockStatusDisplay(stock.totalQuantity);
+      return (
+        <span
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
+        >
+          {statusDisplay.text}
         </span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center text-gray-700",
+      );
     },
-    {
-      key: "value",
-      header: "Total Value",
-      render: (stock) => (
-        <span className="text-muted-foreground">
-          ${stock.totalValue.toFixed(2)}
-        </span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center text-gray-700",
-    },
-    {
-      key: "quantity",
-      header: "Total Quantity",
-      render: (stock) => (
-        <span className="font-medium text-foreground">
-          {stock.totalQuantity}
-        </span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center font-medium text-gray-900",
-    },
-    {
-      key: "stockStatus",
-      header: "Status",
-      render: (stock) => {
-        const statusDisplay = getStockStatusDisplay(stock.totalQuantity);
-        return (
-          <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
-          >
-            {statusDisplay.text}
-          </span>
-        );
-      },
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center",
-    },
-    {
-      key: "actions",
-      header: "Action",
-      render: (stock: Stock) => (
-        <RecordActions<SubmitData> record={stock} formConfig={formConfig} />
-      ),
-      headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center px-4 py-3",
-    },
-  ];
-}
+    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center",
+  },
+  {
+    key: "actions",
+    header: t("table.column-6"),
+    render: (stock: Stock) => (
+      <RecordActions<SubmitData>
+        page="inventory.stocks_page"
+        record={stock}
+        formConfig={formConfig}
+      />
+    ),
+    headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
+    cellClass: "text-center px-4 py-3",
+  },
+];
 
 // --- STOCK LOCATION FORM CONFIG ---
-export async function getStockLocationFormConfig(
-  organizationId: string
-): Promise<FormConfig<SubmitData>> {
+export const getStockLocationFormConfig = async (
+  t: Translator,
+  organizationId: string,
+): Promise<FormConfig<SubmitData>> => {
   const data = await FetchFormConfigData(organizationId);
 
   const { products } = data;
@@ -134,30 +151,29 @@ export async function getStockLocationFormConfig(
   }));
 
   return {
-    title: "Add New Stock Location",
-    description:
-      "Create a new storage location and initialize inventory quantities for products.",
+    title: t("record_form.title_add"),
+    description: t("record_form.description_add"),
     entityName: "Stock Location",
     fields: [
       {
         name: "name",
-        label: "Location Name",
+        label: t("record_form.fields.name"),
         type: "text",
         required: true,
-        placeholder: "Warehouse Aisle 5, Bin B",
+        placeholder: t("record_form.placeholders.name"),
         gridArea: "1/2",
       },
       {
         name: "locationDetail",
-        label: "Physical Address/Details",
+        label: t("record_form.fields.location_detail"),
         type: "text",
         required: false,
-        placeholder: "Third floor, North section",
+        placeholder: t("record_form.placeholders.location_detail"),
         gridArea: "1/2",
       },
       {
         name: "stockItems",
-        label: "Stock Items",
+        label: t("record_form.fields.stock_items"),
         type: "repeater",
         required: true,
         gridArea: "1",
@@ -166,7 +182,7 @@ export async function getStockLocationFormConfig(
         fields: [
           {
             name: "productId",
-            label: "Product",
+            label: t("record_form.fields.product"),
             type: "select",
             required: true,
             options: productOptions,
@@ -174,7 +190,7 @@ export async function getStockLocationFormConfig(
           },
           {
             name: "quantity",
-            label: "Initial Quantity",
+            label: t("record_form.fields.quantity"),
             type: "number",
             required: true,
             defaultValue: 0,
@@ -186,204 +202,99 @@ export async function getStockLocationFormConfig(
       },
     ],
     onSubmit: async (
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
-      if (!data.name) {
-        return {
-          ok: false,
-          message: "Please fill out all required fields!",
-        };
-      }
-      if (!data.stockItems || data.stockItems.length === 0) {
-        return {
-          ok: false,
-          message: "Stock location must have at least one stock item",
-        };
+      if (!data.name || !data.stockItems?.length) {
+        return { ok: false, message: t("record_form.messages.required_error") };
       }
 
       const invalidItems = data.stockItems.filter(
-        (item) => !item.productId || Number(item.quantity) < 0
+        (item) => !item.productId || Number(item.quantity) < 0,
       );
 
       if (invalidItems.length > 0) {
-        return {
-          ok: false,
-          message: "All stock items must have a product and valid quantity",
-        };
+        return { ok: false, message: t("record_form.messages.generic_error") };
       }
-
-      const productIds = data.stockItems.map((item) => item.productId);
-      const duplicates = productIds.filter(
-        (id, index) => productIds.indexOf(id) !== index
-      );
-
-      if (duplicates.length > 0) {
-        return {
-          ok: false,
-          message: "Cannot add the same product multiple times to one location",
-        };
-      }
-
-      const stockLocationData = {
-        name: data.name,
-        location: data.location || null,
-        organizationId: organizationId,
-        stockItems: data.stockItems.map((item: any) => ({
-          productId: item.productId,
-          quantity: parseInt(item.quantity),
-        })),
-      };
 
       try {
         const response = await fetch("/api/inventory/stocks", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(stockLocationData),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: data.name,
+            location: data.location || null,
+            organizationId,
+            stockItems: data.stockItems.map((item: any) => ({
+              productId: item.productId,
+              quantity: parseInt(item.quantity),
+            })),
+          }),
         });
 
         if (!response.ok) {
           const { error } = await response.json();
-          return {
-            ok: false,
-            message: error,
-          };
+          return { ok: false, message: error };
         }
 
-        return {
-          ok: true,
-          message: `Stock location "${data.name}" created.`,
-        };
+        return { ok: true, message: t("record_form.messages.create_success") };
       } catch (error) {
-        console.error("Error creating stock location:", error);
-        return {
-          ok: false,
-          message: "Failed to create stock location. Please try again.",
-        };
+        return { ok: false, message: t("record_form.messages.create_error") };
       }
     },
     onUpdate: async (
       id: string,
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
-      if (!data.name) {
-        return {
-          ok: false,
-          message: "Please fill out all required fields!",
-        };
+      if (!data.name || !id) {
+        return { ok: false, message: t("record_form.messages.required_error") };
       }
-
-      if (!data.stockItems || data.stockItems.length === 0) {
-        return {
-          ok: false,
-          message: "Stock location must have at least one stock item",
-        };
-      }
-
-      if (!id) {
-        return { ok: false, message: "Stock id is required!" };
-      }
-
-      const invalidItems = data.stockItems.filter(
-        (item) => !item.productId || Number(item.quantity) < 0
-      );
-
-      if (invalidItems.length > 0) {
-        return {
-          ok: false,
-          message: "All stock items must have a product and valid quantity",
-        };
-      }
-
-      const productIds = data.stockItems.map((item) => item.productId);
-      const duplicates = productIds.filter(
-        (id, index) => productIds.indexOf(id) !== index
-      );
-
-      if (duplicates.length > 0) {
-        return {
-          ok: false,
-          message: "Cannot add the same product multiple times to one location",
-        };
-      }
-
-      const stockLocationData = {
-        name: data.name,
-        location: data.location || null,
-        organizationId: organizationId,
-        stockItems: data.stockItems.map((item: any) => ({
-          productId: item.productId,
-          quantity: parseInt(item.quantity),
-        })),
-      };
 
       try {
         const response = await fetch(`/api/inventory/stocks/${id}`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(stockLocationData),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: data.name,
+            location: data.location || null,
+            organizationId,
+            stockItems: data.stockItems.map((item: any) => ({
+              productId: item.productId,
+              quantity: parseInt(item.quantity),
+            })),
+          }),
         });
 
         if (!response.ok) {
           const { error } = await response.json();
-          return {
-            ok: false,
-            message: error,
-          };
+          return { ok: false, message: error };
         }
 
-        return {
-          ok: true,
-          message: `Stock location "${data.name}" updated.`,
-        };
+        return { ok: true, message: t("record_form.messages.update_success") };
       } catch (error) {
-        console.error("Error updating stock location:", error);
-        return {
-          ok: false,
-          message: "Failed to update stock location. Please try again.",
-        };
+        return { ok: false, message: t("record_form.messages.generic_error") };
       }
     },
     onDelete: async (
-      recordId: string
+      recordId: string,
     ): Promise<{ ok: boolean; message: string }> => {
-      if (!recordId) {
-        return {
-          ok: false,
-          message: "Stock id are required!",
-        };
-      }
+      if (!recordId)
+        return { ok: false, message: t("record_form.messages.id_required") };
 
       try {
         const response = await fetch(`/api/inventory/stocks/${recordId}`, {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
 
         if (!response.ok) {
           const { error } = await response.json();
-
-          return {
-            ok: false,
-            message: error,
-          };
+          return { ok: false, message: error };
         }
 
-        return {
-          ok: true,
-          message: "Stock deleted successfully.",
-        };
+        return { ok: true, message: t("record_form.messages.delete_success") };
       } catch (error) {
-        return {
-          ok: false,
-          message: "Failed to delete record!",
-        };
+        return { ok: false, message: t("record_form.messages.delete_error") };
       }
     },
   };
-}
+};
