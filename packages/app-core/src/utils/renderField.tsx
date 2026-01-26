@@ -16,6 +16,7 @@ export const renderField = (
   field: FormField,
   formData: any,
   handleChange: any,
+  locale: string = "",
 ) => {
   const commonInputProps = {
     id: field.name,
@@ -59,7 +60,11 @@ export const renderField = (
                 <path d="M12 5v14" />
                 <path d="M5 12h14" />
               </svg>
-              Add Line
+              {locale === "en"
+                ? "Add Line"
+                : locale === "fr"
+                  ? "Ajouter une ligne"
+                  : "إضافة عنصر جديد"}
             </Button>
           </div>
 
@@ -107,7 +112,13 @@ export const renderField = (
                           <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                           <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
                         </svg>
-                        <span className="ml-1">Remove</span>
+                        <span className="ml-1">
+                          {locale === "en"
+                            ? "Remove"
+                            : locale === "fr"
+                              ? "Retirer"
+                              : "حذف"}
+                        </span>
                       </Button>
                     )}
                   </div>
@@ -153,7 +164,12 @@ export const renderField = (
                   {subtotal > 0 && (
                     <div className="text-right pt-2 border-t">
                       <span className="text-sm font-semibold">
-                        Subtotal: ${subtotal.toFixed(2)}
+                        {locale === "en"
+                          ? "Subtotal"
+                          : locale === "fr"
+                            ? "Sous-total"
+                            : "المجموع الجزئي"}
+                        : ${subtotal.toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -166,7 +182,13 @@ export const renderField = (
           {commonInputProps.id === "orderLines" && items.length > 0 && (
             <div className="bg-sidebar text-white p-4 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold">Total Amount:</span>
+                <span className="text-lg font-semibold">
+                  {locale === "en"
+                    ? "Total Amount: "
+                    : locale === "fr"
+                      ? "Montant total: "
+                      : "المبلغ الإجمالي: "}
+                </span>
                 <span className="text-2xl font-bold">
                   $
                   {items

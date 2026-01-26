@@ -124,11 +124,11 @@ export default function CreationForm<T>({
         dir={locale === "ar" ? "rtl" : "ltr"}
         className="sm:max-w-[700px] rounded-2xl p-0 max-h-[90vh] flex flex-col overflow-hidden bg-background text-foreground border-border"
       >
-        <DialogHeader className="w-fit px-6 pt-6 pb-4 mt-5 shrink-0">
-          <DialogTitle className="text-2xl font-bold">
+        <DialogHeader className="px-6 pt-6 pb-4 mt-5 shrink-0">
+          <DialogTitle className="w-fit text-2xl font-bold">
             {formConfig.title}
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
+          <DialogDescription className="w-fit text-muted-foreground">
             {formConfig.description}
           </DialogDescription>
         </DialogHeader>
@@ -156,7 +156,7 @@ export default function CreationForm<T>({
                     if (field.type === "repeater") {
                       return (
                         <div key={field.name} className="col-span-full">
-                          {renderField(field, formData, handleChange)}
+                          {renderField(field, formData, handleChange, locale)}
                         </div>
                       );
                     }
