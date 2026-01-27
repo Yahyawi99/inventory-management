@@ -631,5 +631,132 @@
       "delete": "Oui, supprimer la commande",
       "deleting": "Suppression..."
     }
+  },
+  "invoices_page": {
+    "title": "Factures",
+    "actions": {
+      "export": "Exporter",
+      "add_new": "Créer une nouvelle facture"
+    },
+    "cards": {
+      "period": "derniers 7 jours",
+      "card-1": {
+        "title": "Total des factures"
+      },
+      "card-2": {
+        "title": "Factures payées"
+      },
+      "card-3": {
+        "title": "Factures impayées"
+      },
+      "card-4": {
+        "title": "Chiffre d'affaires total"
+      }
+    },
+    "filters": {
+      "filter-1": "Tout",
+      "filter-2": "Payée",
+      "filter-3": "En attente",
+      "filter-4": "En retard",
+      "filter-5": "Annulée"
+    },
+    "filter_drawer": {
+      "title": "Filtrer les factures",
+      "subtitle": "Affinez votre liste de factures",
+      "fields": {
+        "field-1": {
+          "title": "Statut de la commande",
+          "options": {
+            "label-1": "Tous les statuts",
+            "label-2": "En attente",
+            "label-3": "Payée",
+            "label-4": "En retard",
+            "label-5": "Annulée"
+          }
+        },
+        "field-2": {
+          "title": "Type de commande",
+          "options": {
+            "label-1": "Tous les types",
+            "label-2": "Ventes",
+            "label-3": "Achats"
+          }
+        }
+      },
+      "actions": {
+        "apply": "Appliquer les filtres",
+        "clear": "Effacer les filtres"
+      }
+    },
+    "sortable_fields": {
+      "field-1": "Numéro de facture",
+      "field-2": "Date de facture",
+      "field-3": "Montant total",
+      "field-4": "Quantité d'articles"
+    },
+    "table": {
+      "column-1": "Facture",
+      "column-2": "Date",
+      "column-3": "Date d'échéance",
+      "column-4": "Statut",
+      "column-5": "Type",
+      "column-6": "Articles",
+      "column-7": "Total",
+      "column-8": "Actions"
+    },
+    "record_form": {
+      "title_add": "Créer une nouvelle facture",
+      "title_edit": "Modifier la facture",
+      "description_add": "Remplissez les détails pour générer une nouvelle facture.",
+      "description_edit": "Mettre à jour les informations de la facture et les articles.",
+      "status_options": {
+        "pending": "En attente",
+        "paid": "Payée",
+        "overdue": "En retard",
+        "cancelled": "Annulée"
+      },
+      "fields": {
+        "order": "Commande",
+        "invoice_number": "Numéro de facture",
+        "invoice_date": "Date de facturation",
+        "due_date": "Date d'échéance",
+        "total_amount": "Montant total",
+        "status": "Statut de la facture"
+      },
+      "actions": {
+        "create": "Créer la facture",
+        "creating": "Création...",
+        "save_changes": "Enregistrer les modifications",
+        "saving": "Enregistrement...",
+        "cancel": "Annuler"
+      },
+      "status": {
+        "creating": "Création...",
+        "updating": "Mise à jour...",
+        "deleting": "Suppression..."
+      },
+      "placeholders": {
+        "order": "Sélectionner une commande",
+        "invoice_number": "FA-2024-001",
+        "due_date": "Date limite de paiement"
+      },
+      "messages": {
+        "required_error": "Veuillez remplir tous les champs obligatoires !",
+        "id_required": "L'identifiant de la facture est requis !",
+        "create_success": "Facture créée avec succès.",
+        "create_error": "Échec de la création de la facture.",
+        "update_success": "Facture mise à jour avec succès.",
+        "delete_success": "Facture supprimée avec succès.",
+        "delete_error": "Échec de la suppression de la facture.",
+        "generic_error": "Une erreur est survenue. Veuillez réessayer."
+      }
+    },
+    "record_delete": {
+      "title": "Supprimer la facture",
+      "desc": "Êtes-vous sûr de vouloir supprimer cette facture ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "delete": "Oui, supprimer la facture",
+      "deleting": "Suppression..."
+    }
   }
 }

@@ -69,7 +69,7 @@ export const getInvoiceFilterDrawerData = (t: Translator): FilterDrawerData => {
 
 export const InvoiceSortableFields: SortableField[] = [
   {
-    title: "sortable_fields.field-2",
+    title: "sortable_fields.field-1",
     field: "invoiceNumber",
     direction: "desc",
   },
