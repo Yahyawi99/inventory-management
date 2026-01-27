@@ -1,16 +1,20 @@
-import { Input, Button, RecordActions } from "app-core/src/components";
+import { RecordActions } from "app-core/src/components";
 import {
   FilterDrawerData,
   SortableField,
   Column,
   HeaderData,
   FormConfig,
+  Translator,
 } from "app-core/src/types";
 import { Order, OrderStatus, OrderType, SubmitData } from "@/types/orders";
 import { FetchFormConfigData, getOrderStatusDisplay } from "@/utils/orders";
 import { getTotalOrderLineQuantity } from "@/utils/shared";
-import { getFormConfigData } from "@/lib/actions/getFormConfigData";
-import { Product } from "@/types/products";
+
+export const headerData: HeaderData = {
+  title: "Orders",
+  buttonTxt: "Create Order",
+};
 
 export const OrderFilterDrawerData: FilterDrawerData = {
   header: {
@@ -49,122 +53,127 @@ export const OrderFilterDrawerData: FilterDrawerData = {
   },
 };
 
-export const OrderSortableFields: SortableField[] = [
-  { title: "Order Number", field: "orderNumber", direction: "desc" },
-  { title: "Order Date", field: "orderDate", direction: "desc" },
-  { title: "Total Amount", field: "totalAmount", direction: "desc" },
-  { title: "Items Quantity", field: "totalItemsQuantity", direction: "desc" },
-];
+// export const OrderSortableFields: SortableField[] = [
+//   { title: "Order Number", field: "orderNumber", direction: "desc" },
+//   { title: "Order Date", field: "orderDate", direction: "desc" },
+//   { title: "Total Amount", field: "totalAmount", direction: "desc" },
+//   { title: "Items Quantity", field: "totalItemsQuantity", direction: "desc" },
+// ];
 
 export const orderStatusFilters = {
   field: "status",
   values: ["All", "Pending", "Processing", "Fulfilled", "Cancelled"],
 };
 
-export function getTableColumns(
-  formConfig: FormConfig<SubmitData>
-): Column<Order>[] {
-  return [
-    {
-      key: "orderNumber",
-      header: "Order",
-      render: (order) => (
-        <span className="font-medium text-xs text-foreground">
-          {order.orderNumber || "N/A"}
-        </span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center font-medium text-xs text-gray-900",
-    },
-    {
-      key: "orderDate",
-      header: "Date",
-      render: (order) => (
-        <span>
-          {new Date(order.orderDate).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center text-gray-700",
-    },
-    {
-      key: "customer",
-      header: "Customer",
-      render: (order) => <span>{order.customer?.name || "N/A"}</span>,
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center text-gray-700",
-    },
-    {
-      key: "supplier",
-      header: "Supplier",
-      render: (order) => <p>{order.supplier?.name || "N/A"}</p>,
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "w-fit text-center text-gray-700",
-    },
-    {
-      key: "status",
-      header: "Status",
-      render: (order) => {
-        const statusDisplay = getOrderStatusDisplay(order.status);
-        return (
-          <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
-          >
-            {statusDisplay.text}
-          </span>
-        );
-      },
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center",
-    },
-    {
-      key: "items",
-      header: "Items",
-      render: (order) => (
-        <span>{getTotalOrderLineQuantity(order.orderLines)}</span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center text-gray-700",
-    },
-    {
-      key: "totalAmount",
-      header: "Total",
-      render: (order) => (
-        <span className="font-medium text-foreground">
-          ${order.totalAmount.toFixed(2)}
-        </span>
-      ),
-      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center font-medium text-gray-900",
-    },
-    {
-      key: "actions",
-      header: "Action",
-      render: (order: Order) => (
-        <RecordActions<SubmitData> record={order} formConfig={formConfig} />
-      ),
-      headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
-      cellClass: "text-center px-4 py-3",
-    },
-  ];
-}
+// export function getTableColumns(
+//   formConfig: FormConfig<SubmitData>,
+// ): Column<Order>[] {
+//   return [
+//     {
+//       key: "orderNumber",
+//       header: "Order",
+//       render: (order) => (
+//         <span className="font-medium text-xs text-foreground">
+//           {order.orderNumber || "N/A"}
+//         </span>
+//       ),
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center font-medium text-xs text-gray-900",
+//     },
+//     {
+//       key: "orderDate",
+//       header: "Date",
+//       render: (order) => (
+//         <span>
+//           {new Date(order.orderDate).toLocaleDateString("en-US", {
+//             month: "short",
+//             day: "numeric",
+//             year: "numeric",
+//           })}
+//         </span>
+//       ),
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center text-gray-700",
+//     },
+//     {
+//       key: "customer",
+//       header: "Customer",
+//       render: (order) => <span>{order.customer?.name || "N/A"}</span>,
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center text-gray-700",
+//     },
+//     {
+//       key: "supplier",
+//       header: "Supplier",
+//       render: (order) => <p>{order.supplier?.name || "N/A"}</p>,
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "w-fit text-center text-gray-700",
+//     },
+//     {
+//       key: "status",
+//       header: "Status",
+//       render: (order) => {
+//         const statusDisplay = getOrderStatusDisplay(order.status);
+//         return (
+//           <span
+//             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
+//           >
+//             {statusDisplay.text}
+//           </span>
+//         );
+//       },
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center",
+//     },
+//     {
+//       key: "items",
+//       header: "Items",
+//       render: (order) => (
+//         <span>{getTotalOrderLineQuantity(order.orderLines)}</span>
+//       ),
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center text-gray-700",
+//     },
+//     {
+//       key: "totalAmount",
+//       header: "Total",
+//       render: (order) => (
+//         <span className="font-medium text-foreground">
+//           ${order.totalAmount.toFixed(2)}
+//         </span>
+//       ),
+//       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center font-medium text-gray-900",
+//     },
+//     {
+//       key: "actions",
+//       header: "Action",
+//       render: (order: Order) => (
+//         <RecordActions<SubmitData>
+//           page="orders.all"
+//           record={order}
+//           formConfig={formConfig}
+//         />
+//       ),
+//       headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
+//       cellClass: "text-center px-4 py-3",
+//     },
+//   ];
+// }
 
-export const headerData: HeaderData = {
-  title: "Orders",
-  buttonTxt: "Create Order",
-};
-
-// --- ORDER FORM CONFIG ---
 // export async function getOrderFormConfig(
-//   organizationId: string
+//   organizationId: string,
+//   orderType: OrderType | null,
 // ): Promise<FormConfig<SubmitData>> {
-//   const { customers, suppliers, products } = await FetchFormConfigData(
-//     organizationId
-//   );
+//   const { customers, suppliers, products } =
+//     await FetchFormConfigData(organizationId);
+
+//   const orderOptions = !orderType
+//     ? [
+//         { id: "PURCHASE", name: "Purchase Order" },
+//         { id: "SALES", name: "Sales Order" },
+//       ]
+//     : null;
 
 //   return {
 //     title: "Create New Order",
@@ -175,12 +184,11 @@ export const headerData: HeaderData = {
 //       {
 //         name: "orderType",
 //         label: "Order Type",
-//         type: "select",
+//         type: orderType ? "text" : "select",
 //         required: true,
-//         options: [
-//           { id: "PURCHASE", name: "Purchase Order" },
-//           { id: "SALES", name: "Sales Order" },
-//         ],
+//         readOnly: orderType === "PURCHASE" || orderType === "SALES",
+//         defaultValue: orderType ? orderType : "",
+//         options: orderOptions,
 //         gridArea: "1/2",
 //       },
 //       {
@@ -279,7 +287,7 @@ export const headerData: HeaderData = {
 //       },
 //     ],
 //     onSubmit: async (
-//       data: SubmitData
+//       data: SubmitData,
 //     ): Promise<{ ok: boolean; message: string }> => {
 //       const {
 //         orderType,
@@ -299,13 +307,13 @@ export const headerData: HeaderData = {
 //               productId: string;
 //               quantity: number;
 //               unitPrice: number;
-//             }
+//             },
 //           ) => {
 //             const quantity = ol.quantity || 0;
 //             const unitPrice = ol.unitPrice || 0;
 //             return sum + quantity * unitPrice;
 //           },
-//           0
+//           0,
 //         )
 //         .toFixed(2);
 
@@ -317,7 +325,7 @@ export const headerData: HeaderData = {
 //         return { ok: false, message: "You must have at least one orderLine!" };
 //       } else {
 //         const invalidLines = orderLines.filter(
-//           (line) => !line.productId || !line.quantity || !line.unitPrice
+//           (line) => !line.productId || !line.quantity || !line.unitPrice,
 //         );
 
 //         if (invalidLines.length > 0) {
@@ -371,67 +379,300 @@ export const headerData: HeaderData = {
 //         };
 //       }
 //     },
+//     onUpdate: async (
+//       id: string,
+//       data: SubmitData,
+//     ): Promise<{ ok: boolean; message: string }> => {
+//       const {
+//         orderType,
+//         customerId,
+//         supplierId,
+//         orderDate,
+//         orderNumber,
+//         status,
+//         orderLines,
+//       } = data;
+
+//       if (!id) {
+//         return {
+//           ok: false,
+//           message: "Order id is required!",
+//         };
+//       }
+
+//       const totalAmount = orderLines
+//         .reduce(
+//           (
+//             sum: number,
+//             ol: {
+//               productId: string;
+//               quantity: number;
+//               unitPrice: number;
+//             },
+//           ) => {
+//             const quantity = ol.quantity || 0;
+//             const unitPrice = ol.unitPrice || 0;
+//             return sum + quantity * unitPrice;
+//           },
+//           0,
+//         )
+//         .toFixed(2);
+
+//       if (!orderType || !orderDate || !orderNumber || !status) {
+//         return { ok: false, message: "Please fill in the required fields!" };
+//       }
+
+//       if (!orderLines.length) {
+//         return { ok: false, message: "You must have at least one orderLine!" };
+//       } else {
+//         const invalidLines = orderLines.filter(
+//           (line) => !line.productId || !line.quantity || !line.unitPrice,
+//         );
+
+//         if (invalidLines.length > 0) {
+//           return {
+//             ok: false,
+//             message:
+//               "All order lines must have a product, valid quantity, and price",
+//           };
+//         }
+//       }
+
+//       if (!customerId && !supplierId) {
+//         return {
+//           ok: false,
+//           message: "Please provide either customerId or supplierId",
+//         };
+//       }
+
+//       try {
+//         const response = await fetch(`/api/orders/${id}`, {
+//           method: "PUT",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({
+//             ...data,
+//             orderDate: new Date(data.orderDate),
+//             totalAmount,
+//           }),
+//         });
+
+//         if (!response.ok) {
+//           const { error } = await response.json();
+//           return {
+//             ok: false,
+//             message: error.message,
+//           };
+//         }
+
+//         return {
+//           ok: true,
+//           message: "Order updated Successfully",
+//         };
+//       } catch (error) {
+//         return {
+//           ok: false,
+//           message:
+//             error instanceof Error
+//               ? error.message
+//               : "Failed to update an Order!",
+//         };
+//       }
+//     },
+//     onDelete: async (
+//       recordId: string,
+//     ): Promise<{ ok: boolean; message: string }> => {
+//       if (!recordId) {
+//         return {
+//           ok: false,
+//           message: "Order id are required!",
+//         };
+//       }
+
+//       try {
+//         const response = await fetch("/api/orders", {
+//           method: "DELETE",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({ recordId }),
+//         });
+
+//         if (!response.ok) {
+//           const { error } = await response.json();
+
+//           return {
+//             ok: false,
+//             message: error,
+//           };
+//         }
+
+//         return {
+//           ok: true,
+//           message: "order deleted successfully.",
+//         };
+//       } catch (error) {
+//         return {
+//           ok: false,
+//           message: "Failed to delete record!",
+//         };
+//       }
+//     },
 //   };
 // }
-// --- SALES ORDER FORM CONFIG ---
-export async function getOrderFormConfig(
+
+// --- ORDER TABLE COLUMNS ---
+
+export function getTableColumns(
+  t: Translator,
+  formConfig: FormConfig<SubmitData>,
+): Column<Order>[] {
+  return [
+    {
+      key: "orderNumber",
+      header: t("table.column-1"),
+      render: (order) => (
+        <span className="font-medium text-xs text-foreground">
+          {order.orderNumber || "N/A"}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center font-medium text-xs text-gray-900",
+    },
+    {
+      key: "orderDate",
+      header: t("table.column-2"),
+      render: (order) => (
+        <span>
+          {new Date(order.orderDate).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center text-gray-700",
+    },
+    {
+      key: "customer",
+      header: t("table.column-3"),
+      render: (order) => <span>{order.customer?.name || "N/A"}</span>,
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center text-gray-700",
+    },
+    {
+      key: "supplier",
+      header: t("table.column-4"),
+      render: (order) => <p>{order.supplier?.name || "N/A"}</p>,
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "w-fit text-center text-gray-700",
+    },
+    {
+      key: "status",
+      header: t("table.column-5"),
+      render: (order) => {
+        const statusDisplay = getOrderStatusDisplay(order.status);
+        return (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusDisplay.colorClass}`}
+          >
+            {statusDisplay.text}
+          </span>
+        );
+      },
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center",
+    },
+    {
+      key: "items",
+      header: t("table.column-6"),
+      render: (order) => (
+        <span>{getTotalOrderLineQuantity(order.orderLines)}</span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center text-gray-700",
+    },
+    {
+      key: "totalAmount",
+      header: t("table.column-7"),
+      render: (order) => (
+        <span className="font-medium text-foreground">
+          ${order.totalAmount.toFixed(2)}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center font-medium text-gray-900",
+    },
+    {
+      key: "actions",
+      header: t("table.column-8"),
+      render: (order: Order) => (
+        <RecordActions<SubmitData>
+          page="orders.all"
+          record={order}
+          formConfig={formConfig}
+        />
+      ),
+      headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center px-4 py-3",
+    },
+  ];
+}
+
+// --- ORDER FORM CONFIG ---
+export const getOrderFormConfig = async (
+  t: Translator,
   organizationId: string,
-  orderType: OrderType | null
-): Promise<FormConfig<SubmitData>> {
-  const { customers, suppliers, products } = await FetchFormConfigData(
-    organizationId
-  );
+  orderType: OrderType | null,
+): Promise<FormConfig<SubmitData>> => {
+  const { customers, suppliers, products } =
+    await FetchFormConfigData(organizationId);
 
   const orderOptions = !orderType
     ? [
-        { id: "PURCHASE", name: "Purchase Order" },
-        { id: "SALES", name: "Sales Order" },
+        { id: "PURCHASE", name: t("record_form.order_types.purchase") },
+        { id: "SALES", name: t("record_form.order_types.sales") },
       ]
     : null;
 
   return {
-    title: "Create New Order",
-    description:
-      "Select the order type and fill in the details for the new transaction.",
+    title: t("record_form.title_add"),
+    description: t("record_form.description_add"),
     entityName: "Order",
     fields: [
       {
         name: "orderType",
-        label: "Order Type",
+        label: t("record_form.fields.order_type"),
         type: orderType ? "text" : "select",
         required: true,
-        readOnly: orderType === "PURCHASE" || orderType === "SALES",
-        defaultValue: orderType ? orderType : "",
+        readOnly: !!orderType,
+        defaultValue: orderType || "",
         options: orderOptions,
         gridArea: "1/2",
       },
       {
         name: "customerId",
-        label: "Customer",
+        label: t("record_form.fields.customer"),
         type: "select",
         required: false,
         options: customers,
         gridArea: "1/2",
-        dependsOn: {
-          field: "orderType",
-          value: "SALES",
-        },
+        dependsOn: { field: "orderType", value: "SALES" },
       },
       {
         name: "supplierId",
-        label: "Supplier",
+        label: t("record_form.fields.supplier"),
         type: "select",
         required: false,
         options: suppliers,
         gridArea: "1/2",
-        dependsOn: {
-          field: "orderType",
-          value: "PURCHASE",
-        },
+        dependsOn: { field: "orderType", value: "PURCHASE" },
       },
       {
         name: "orderDate",
-        label: "Order Date",
+        label: t("record_form.fields.order_date"),
         type: "date",
         required: true,
         defaultValue: new Date().toISOString().split("T")[0],
@@ -439,30 +680,45 @@ export async function getOrderFormConfig(
       },
       {
         name: "orderNumber",
-        label: "Order Number",
+        label: t("record_form.fields.order_number"),
         type: "text",
         required: true,
-        placeholder: "PO-2024-001",
+        placeholder: t("record_form.placeholders.order_number"),
         gridArea: "1",
       },
       {
         name: "status",
-        label: "Order Status",
+        label: t("record_form.fields.status"),
         type: "select",
         required: true,
         defaultValue: OrderStatus.Pending,
         options: [
-          { id: OrderStatus.Pending, name: "Pending" },
-          { id: OrderStatus.Delivered, name: "Delivered" },
-          { id: OrderStatus.Processing, name: "Processing" },
-          { id: OrderStatus.Shipped, name: "Shipped" },
-          { id: OrderStatus.Cancelled, name: "Cancelled" },
+          {
+            id: OrderStatus.Pending,
+            name: t("record_form.status_options.pending"),
+          },
+          {
+            id: OrderStatus.Delivered,
+            name: t("record_form.status_options.delivered"),
+          },
+          {
+            id: OrderStatus.Processing,
+            name: t("record_form.status_options.processing"),
+          },
+          {
+            id: OrderStatus.Shipped,
+            name: t("record_form.status_options.shipped"),
+          },
+          {
+            id: OrderStatus.Cancelled,
+            name: t("record_form.status_options.cancelled"),
+          },
         ],
         gridArea: "1/2",
       },
       {
         name: "orderLines",
-        label: "Order Lines",
+        label: t("record_form.fields.order_lines"),
         type: "repeater",
         required: true,
         gridArea: "1",
@@ -471,16 +727,15 @@ export async function getOrderFormConfig(
         fields: [
           {
             name: "productId",
-            label: "Product",
+            label: t("record_form.fields.product"),
             type: "select",
             required: true,
-            defaultValue: "",
             options: products,
             gridArea: "1/3",
           },
           {
             name: "quantity",
-            label: "Quantity",
+            label: t("record_form.fields.quantity"),
             type: "number",
             required: true,
             defaultValue: 1,
@@ -489,7 +744,7 @@ export async function getOrderFormConfig(
           },
           {
             name: "unitPrice",
-            label: "Unit Price",
+            label: t("record_form.fields.unit_price"),
             type: "number",
             required: true,
             defaultValue: 0,
@@ -500,102 +755,29 @@ export async function getOrderFormConfig(
         ],
       },
     ],
-    onSubmit: async (
-      data: SubmitData
-    ): Promise<{ ok: boolean; message: string }> => {
-      const {
-        orderType,
-        customerId,
-        supplierId,
-        orderDate,
-        orderNumber,
-        status,
-        orderLines,
-      } = data;
-
-      const totalAmount = orderLines
-        .reduce(
-          (
-            sum: number,
-            ol: {
-              productId: string;
-              quantity: number;
-              unitPrice: number;
-            }
-          ) => {
-            const quantity = ol.quantity || 0;
-            const unitPrice = ol.unitPrice || 0;
-            return sum + quantity * unitPrice;
-          },
-          0
-        )
-        .toFixed(2);
-
-      if (!orderType || !orderDate || !orderNumber || !status) {
-        return { ok: false, message: "Please fill in the required fields!" };
+    onSubmit: async (data: SubmitData) => {
+      if (!data.orderNumber || !data.orderLines?.length) {
+        return { ok: false, message: t("record_form.messages.required_error") };
       }
-
-      if (!orderLines.length) {
-        return { ok: false, message: "You must have at least one orderLine!" };
-      } else {
-        const invalidLines = orderLines.filter(
-          (line) => !line.productId || !line.quantity || !line.unitPrice
-        );
-
-        if (invalidLines.length > 0) {
-          return {
-            ok: false,
-            message:
-              "All order lines must have a product, valid quantity, and price",
-          };
-        }
-      }
-
-      if (!customerId && !supplierId) {
-        return {
-          ok: false,
-          message: "Please provide either customerId or supplierId",
-        };
-      }
-
       try {
         const response = await fetch("/api/orders", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...data,
             orderDate: new Date(data.orderDate),
-            totalAmount,
           }),
         });
-
-        if (!response.ok) {
-          const { error } = await response.json();
-          return {
-            ok: false,
-            message: error.message,
-          };
-        }
-
-        return {
-          ok: true,
-          message: "Order created Successfully",
-        };
-      } catch (error) {
-        return {
-          ok: false,
-          message:
-            error instanceof Error
-              ? error.message
-              : "Failed to create an Order!",
-        };
+        if (!response.ok)
+          return { ok: false, message: (await response.json()).error };
+        return { ok: true, message: t("record_form.messages.create_success") };
+      } catch (e) {
+        return { ok: false, message: t("record_form.messages.create_error") };
       }
     },
     onUpdate: async (
       id: string,
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
       const {
         orderType,
@@ -610,7 +792,7 @@ export async function getOrderFormConfig(
       if (!id) {
         return {
           ok: false,
-          message: "Order id is required!",
+          message: t("record_form.messages.id_required"),
         };
       }
 
@@ -622,32 +804,34 @@ export async function getOrderFormConfig(
               productId: string;
               quantity: number;
               unitPrice: number;
-            }
+            },
           ) => {
             const quantity = ol.quantity || 0;
             const unitPrice = ol.unitPrice || 0;
             return sum + quantity * unitPrice;
           },
-          0
+          0,
         )
         .toFixed(2);
 
       if (!orderType || !orderDate || !orderNumber || !status) {
-        return { ok: false, message: "Please fill in the required fields!" };
+        return { ok: false, message: t("record_form.messages.required_error") };
       }
 
       if (!orderLines.length) {
-        return { ok: false, message: "You must have at least one orderLine!" };
+        return {
+          ok: false,
+          message: t("record_form.messages.no_orderLine_error"),
+        };
       } else {
         const invalidLines = orderLines.filter(
-          (line) => !line.productId || !line.quantity || !line.unitPrice
+          (line) => !line.productId || !line.quantity || !line.unitPrice,
         );
 
         if (invalidLines.length > 0) {
           return {
             ok: false,
-            message:
-              "All order lines must have a product, valid quantity, and price",
+            message: t("record_form.messages.orderLine_data_error"),
           };
         }
       }
@@ -655,7 +839,7 @@ export async function getOrderFormConfig(
       if (!customerId && !supplierId) {
         return {
           ok: false,
-          message: "Please provide either customerId or supplierId",
+          message: t("record_form.messages.customer_supplier_error"),
         };
       }
 
@@ -682,7 +866,7 @@ export async function getOrderFormConfig(
 
         return {
           ok: true,
-          message: "Order updated Successfully",
+          message: t("record_form.messages.update_success"),
         };
       } catch (error) {
         return {
@@ -690,17 +874,17 @@ export async function getOrderFormConfig(
           message:
             error instanceof Error
               ? error.message
-              : "Failed to update an Order!",
+              : t("record_form.messages.update_error"),
         };
       }
     },
     onDelete: async (
-      recordId: string
+      recordId: string,
     ): Promise<{ ok: boolean; message: string }> => {
       if (!recordId) {
         return {
           ok: false,
-          message: "Order id are required!",
+          message: t("record_form.messages.id_required"),
         };
       }
 
@@ -724,14 +908,37 @@ export async function getOrderFormConfig(
 
         return {
           ok: true,
-          message: "order deleted successfully.",
+          message: t("record_form.messages.delete_success"),
         };
       } catch (error) {
         return {
           ok: false,
-          message: "Failed to delete record!",
+          message: t("record_form.messages.delete_error"),
         };
       }
     },
   };
-}
+};
+
+export const getOrderSortableFields = (t: Translator): SortableField[] => [
+  {
+    title: t("sortable_fields.field-1"),
+    field: "orderNumber",
+    direction: "desc",
+  },
+  {
+    title: t("sortable_fields.field-2"),
+    field: "orderDate",
+    direction: "desc",
+  },
+  {
+    title: t("sortable_fields.field-3"),
+    field: "totalAmount",
+    direction: "desc",
+  },
+  {
+    title: t("sortable_fields.field-4"),
+    field: "totalItemsQuantity",
+    direction: "desc",
+  },
+];

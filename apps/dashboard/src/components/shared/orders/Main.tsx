@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { fetch } from "@services/application/orders";
@@ -15,10 +16,9 @@ import { buildOrdersApiUrl, getOrderSummaryMetrics } from "@/utils/orders";
 import { exportOrdersAsJson } from "@/utils/shared";
 import {
   OrderFilterDrawerData,
-  OrderSortableFields,
+  getOrderSortableFields,
   orderStatusFilters,
   getTableColumns,
-  headerData,
   getOrderFormConfig,
 } from "@/constants/orders";
 import {
@@ -42,6 +42,8 @@ interface OrdersPageProps {
 export default function OrdersPage({ type }: OrdersPageProps) {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("orders_page");
 
   const [summaryOrders, setSummaryOrders] = useState<Order[]>([]);
   const [isFetchingSummaryOrders, setIsFetchingSummaryOrders] = useState(true);
@@ -91,7 +93,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
 
         if (response.status !== 200) {
           throw new Error(
-            response.data.message || "Failed to fetch orders from API."
+            response.data.message || "Failed to fetch orders from API.",
           );
         }
 
@@ -101,7 +103,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
       } catch (err: any) {
         console.error("Error fetching orders:", err);
         setError(
-          err.message || "An unexpected error occurred while fetching orders."
+          err.message || "An unexpected error occurred while fetching orders.",
         );
       } finally {
         setIsFetchingSummaryOrders(false);
@@ -128,14 +130,14 @@ export default function OrdersPage({ type }: OrdersPageProps) {
         "/orders",
         activeFilters,
         activeOrderBy,
-        pagination
+        pagination,
       );
 
       const response = await fetch(apiUrl);
 
       if (response.status !== 200) {
         throw new Error(
-          response.data.message || "Failed to fetch table orders from API."
+          response.data.message || "Failed to fetch table orders from API.",
         );
       }
 
@@ -145,7 +147,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
       console.error("Error fetching table orders:", err);
       setError(
         err.message ||
-          "An unexpected error occurred while fetching table orders."
+          "An unexpected error occurred while fetching table orders.",
       );
     } finally {
       setIsFetchingTableOrders(false);
@@ -196,15 +198,15 @@ export default function OrdersPage({ type }: OrdersPageProps) {
         filter: activeFilters,
         orderBy: activeOrderBy,
       },
-      metricsData
+      metricsData,
     );
   };
 
   // FormConfic data
   useEffect(() => {
     if (user?.activeOrganizationId)
-      getOrderFormConfig(user?.activeOrganizationId as string, type).then(
-        setOrderFormConfig
+      getOrderFormConfig(t, user?.activeOrganizationId as string, type).then(
+        setOrderFormConfig,
       );
   }, [user]);
 
@@ -219,14 +221,20 @@ export default function OrdersPage({ type }: OrdersPageProps) {
   return (
     <section className="overflow-x-hidden">
       <Header
-        data={headerData}
+        page="orders_page"
         exportData={exportData}
         formConfig={orderFormConfig}
+        type={type + ""}
       />
 
-      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryOrders} />
+      <SummaryCards
+        page="orders_page"
+        data={cardMetrics}
+        isLoading={isFetchingSummaryOrders}
+      />
 
       <DataControls
+        page="orders_page"
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
@@ -245,7 +253,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
               }
             : OrderFilterDrawerData
         }
-        sortableFields={OrderSortableFields}
+        sortableFields={getOrderSortableFields(t)}
         filterOptions={orderStatusFilters}
       />
 
@@ -259,7 +267,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
         {orderFormConfig && (
           <DataTable<Order>
             data={tableOrders}
-            columns={getTableColumns(orderFormConfig)}
+            columns={getTableColumns(t, orderFormConfig)}
           />
         )}
       </TableView>

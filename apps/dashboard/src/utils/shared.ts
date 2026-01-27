@@ -1,4 +1,4 @@
-import { OrderLine } from "@database/generated/prisma";
+import { OrderLine } from "@/types/orders";
 import {
   ActiveFilters,
   Data,
@@ -15,7 +15,7 @@ export const exportOrdersAsJson = <T>(
   },
   summaryData?: SummaryCardsRawMetrics<T>,
   description?: string,
-  filename: string = "data_export"
+  filename: string = "data_export",
 ) => {
   if (!Data || Data.length === 0 || !summaryData) {
     console.warn("No data to export.");
@@ -63,7 +63,7 @@ export const exportOrdersAsJson = <T>(
 // calculate percentage
 export const calculatePercentageChange = (
   currentValue: number,
-  previousValue: number
+  previousValue: number,
 ): number => {
   if (previousValue === 0) {
     return currentValue > 0 ? 100 : 0;
@@ -79,7 +79,7 @@ export const getTotalOrderLineQuantity = (orderLines: OrderLine[]): number => {
 
   const totalQuantity = orderLines.reduce(
     (sum, line) => sum + line.quantity,
-    0
+    0,
   );
 
   return totalQuantity;
