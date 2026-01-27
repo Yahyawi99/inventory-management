@@ -490,6 +490,8 @@
     }
   },
   "orders_page": {
+    "PURCHASE": "Purchase Orders",
+    "SALES": "Sales Orders",
     "title": "Orders",
     "actions": {
       "export": "Export",
@@ -498,16 +500,16 @@
     "cards": {
       "period": "last 7 days",
       "card-1": {
-        "title": "Net Revenue"
+        "title": "Total Orders"
       },
       "card-2": {
-        "title": "Pending Receivables"
+        "title": "Order items over time"
       },
       "card-3": {
-        "title": "Voided Totals"
+        "title": "Cancelled Orders"
       },
       "card-4": {
-        "title": "Gross Sales"
+        "title": "Fulfilled Orders"
       }
     },
     "filters": {

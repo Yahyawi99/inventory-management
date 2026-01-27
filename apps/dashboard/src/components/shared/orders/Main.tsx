@@ -253,7 +253,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
               }
             : OrderFilterDrawerData
         }
-        sortableFields={getOrderSortableFields(t)}
+        sortableFields={getOrderSortableFields}
         filterOptions={orderStatusFilters}
       />
 

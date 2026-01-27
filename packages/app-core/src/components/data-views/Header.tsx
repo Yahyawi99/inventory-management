@@ -16,9 +16,7 @@ export function Header<T>({ page, exportData, formConfig, type }: Props<T>) {
   return (
     <div className="flex flex-wrap min-w-fit justify-between items-center mb-6">
       <h1 className="text-3xl font-bold text-foreground">
-        {type
-          ? type[0] + type?.slice(1)?.toLocaleLowerCase() + " " + t("title")
-          : t("title")}
+        {type === "PURCHASE" || type === "SALES" ? t(type) : t("title")}
       </h1>
       <div className="flex items-center space-x-3">
         <Button

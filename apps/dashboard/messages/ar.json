@@ -487,5 +487,134 @@
         "deleting": "جاري الحذف..."
       }
     }
+  },
+  "orders_page": {
+    "title": "الطلبات",
+    "PURCHASE": "طلبات الشراء",
+    "SALES": "طلبات البيع",
+    "actions": {
+      "export": "تصدير",
+      "add_new": "إنشاء طلب جديد"
+    },
+    "cards": {
+      "period": "آخر 7 أيام",
+      "card-1": {
+        "title": "إجمالي الطلبات"
+      },
+      "card-2": {
+        "title": "عناصر الطلبات بمرور الوقت"
+      },
+      "card-3": {
+        "title": "الطلبات الملغاة"
+      },
+      "card-4": {
+        "title": "الطلبات المنجزة"
+      }
+    },
+    "filters": {
+      "filter-1": "الكل",
+      "filter-2": "قيد الانتظار",
+      "filter-3": "قيد المعالجة",
+      "filter-4": "مكتمل",
+      "filter-5": "ملغي"
+    },
+    "filter_drawer": {
+      "title": "تصفية الطلبات",
+      "subtitle": "تحسين قائمة الطلبات الخاصة بك",
+      "fields": {
+        "field-1": {
+          "title": "حالة الطلب",
+          "options": {
+            "label-1": "جميع الحالات",
+            "label-2": "قيد الانتظار",
+            "label-3": "قيد المعالجة",
+            "label-4": "تم الشحن",
+            "label-5": "تم التوصيل",
+            "label-6": "ملغي"
+          }
+        }
+      },
+      "actions": {
+        "apply": "تطبيق الفلاتر",
+        "clear": "مسح الفلاتر"
+      }
+    },
+    "sortable_fields": {
+      "field-1": "رقم الطلب",
+      "field-2": "تاريخ الطلب",
+      "field-3": "إجمالي المبلغ",
+      "field-4": "كمية العناصر"
+    },
+    "table": {
+      "column-1": "الطلب",
+      "column-2": "التاريخ",
+      "column-3": "العميل",
+      "column-4": "المورد",
+      "column-5": "الحالة",
+      "column-6": "العناصر",
+      "column-7": "الإجمالي",
+      "column-8": "الإجراء"
+    },
+    "record_form": {
+      "title_add": "إنشاء طلب جديد",
+      "title_edit": "تعديل الطلب",
+      "description_add": "اختر نوع الطلب واملأ تفاصيل المعاملة الجديدة.",
+      "description_edit": "تحديث تفاصيل الطلب والعناصر والحالة.",
+      "order_types": {
+        "purchase": "طلب شراء",
+        "sales": "طلب بيع"
+      },
+      "status_options": {
+        "pending": "قيد الانتظار",
+        "delivered": "تم التوصيل",
+        "processing": "قيد المعالجة",
+        "shipped": "تم الشحن",
+        "cancelled": "ملغي"
+      },
+      "fields": {
+        "order_type": "نوع الطلب",
+        "customer": "العميل",
+        "supplier": "المورد",
+        "order_date": "تاريخ الطلب",
+        "order_number": "رقم الطلب",
+        "status": "حالة الطلب",
+        "order_lines": "بنود الطلب",
+        "product": "المنتج",
+        "quantity": "الكمية",
+        "unit_price": "سعر الوحدة"
+      },
+      "actions": {
+        "create": "إنشاء طلب",
+        "creating": "جاري الإنشاء...",
+        "save_changes": "حفظ التغييرات",
+        "saving": "جاري الحفظ...",
+        "cancel": "إلغاء"
+      },
+      "status": {
+        "creating": "جاري الإنشاء...",
+        "updating": "جاري التحديث...",
+        "deleting": "جاري الحذف..."
+      },
+      "placeholders": {
+        "order_number": "PO-2024-001"
+      },
+      "messages": {
+        "required_error": "يرجى ملء جميع الحقول المطلوبة!",
+        "id_required": "معرف الطلب مطلوب!",
+        "create_success": "تم إنشاء الطلب بنجاح.",
+        "create_error": "فشل في إنشاء الطلب.",
+        "update_success": "تم تحديث الطلب بنجاح.",
+        "delete_success": "تم حذف الطلب بنجاح.",
+        "delete_error": "فشل في حذف الطلب.",
+        "generic_error": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "record_delete": {
+      "title": "حذف الطلب",
+      "desc": "هل أنت متأكد أنك تريد حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.",
+      "cancel": "إلغاء",
+      "delete": "نعم، احذف الطلب",
+      "deleting": "جاري الحذف..."
+    }
   }
 }

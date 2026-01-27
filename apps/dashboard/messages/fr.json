@@ -489,5 +489,134 @@
         "deleting": "Suppression..."
       }
     }
+  },
+  "orders_page": {
+    "title": "Commandes",
+    "PURCHASE": "Bons de commande",
+    "SALES": "Commandes de vente",
+    "actions": {
+      "export": "Exporter",
+      "add_new": "Créer une Commande"
+    },
+    "cards": {
+      "period": "derniers 7 jours",
+      "card-1": {
+        "title": "Total des Commandes"
+      },
+      "card-2": {
+        "title": "Articles commandés au fil du temps"
+      },
+      "card-3": {
+        "title": "Commandes Annulées"
+      },
+      "card-4": {
+        "title": "Commandes Honorées"
+      }
+    },
+    "filters": {
+      "filter-1": "Tout",
+      "filter-2": "En attente",
+      "filter-3": "Traitement",
+      "filter-4": "Honoré",
+      "filter-5": "Annulé"
+    },
+    "filter_drawer": {
+      "title": "Filtrer les Commandes",
+      "subtitle": "Affinez votre liste de commandes",
+      "fields": {
+        "field-1": {
+          "title": "Statut de la Commande",
+          "options": {
+            "label-1": "Tous les Statuts",
+            "label-2": "En attente",
+            "label-3": "Traitement",
+            "label-4": "Expédié",
+            "label-5": "Livré",
+            "label-6": "Annulé"
+          }
+        }
+      },
+      "actions": {
+        "apply": "Appliquer les Filtres",
+        "clear": "Effacer les Filtres"
+      }
+    },
+    "sortable_fields": {
+      "field-1": "Numéro de Commande",
+      "field-2": "Date de Commande",
+      "field-3": "Montant Total",
+      "field-4": "Quantité d'Articles"
+    },
+    "table": {
+      "column-1": "Commande",
+      "column-2": "Date",
+      "column-3": "Client",
+      "column-4": "Fournisseur",
+      "column-5": "Statut",
+      "column-6": "Articles",
+      "column-7": "Total",
+      "column-8": "Action"
+    },
+    "record_form": {
+      "title_add": "Créer une Nouvelle Commande",
+      "title_edit": "Modifier la Commande",
+      "description_add": "Sélectionnez le type de commande et remplissez les détails de la nouvelle transaction.",
+      "description_edit": "Mettez à jour les détails, les articles et le statut de la commande.",
+      "order_types": {
+        "purchase": "Bon de Commande",
+        "sales": "Commande de Vente"
+      },
+      "status_options": {
+        "pending": "En attente",
+        "delivered": "Livré",
+        "processing": "Traitement",
+        "shipped": "Expédié",
+        "cancelled": "Annulé"
+      },
+      "fields": {
+        "order_type": "Type de Commande",
+        "customer": "Client",
+        "supplier": "Fournisseur",
+        "order_date": "Date de Commande",
+        "order_number": "Numéro de Commande",
+        "status": "Statut de la Commande",
+        "order_lines": "Lignes de Commande",
+        "product": "Produit",
+        "quantity": "Quantité",
+        "unit_price": "Prix Unitaire"
+      },
+      "actions": {
+        "create": "Créer la Commande",
+        "creating": "Création...",
+        "save_changes": "Enregistrer les modifications",
+        "saving": "Enregistrement...",
+        "cancel": "Annuler"
+      },
+      "status": {
+        "creating": "Création...",
+        "updating": "Mise à jour...",
+        "deleting": "Suppression..."
+      },
+      "placeholders": {
+        "order_number": "PO-2024-001"
+      },
+      "messages": {
+        "required_error": "Veuillez remplir tous les champs obligatoires !",
+        "id_required": "L'ID de la commande est requis !",
+        "create_success": "Commande créée avec succès.",
+        "create_error": "Échec de la création de la commande.",
+        "update_success": "Commande mise à jour avec succès.",
+        "delete_success": "Commande supprimée avec succès.",
+        "delete_error": "Échec de la suppression de la commande.",
+        "generic_error": "Une erreur est survenue. Veuillez réessayer."
+      }
+    },
+    "record_delete": {
+      "title": "Supprimer la Commande",
+      "desc": "Êtes-vous sûr de vouloir supprimer cette commande ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "delete": "Oui, supprimer la commande",
+      "deleting": "Suppression..."
+    }
   }
 }
