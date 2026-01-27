@@ -19,8 +19,8 @@ export const headerData: HeaderData = {
 export const getOrderFilterDrawerData = (t: Translator): FilterDrawerData => {
   return {
     header: {
-      title: "Filter Orders",
-      desc: "Refine your Order list",
+      title: t("orders_page.filter_drawer.title"),
+      desc: t("orders_page.filter_drawer.subtitle"),
     },
     filterOptions: {
       status: {

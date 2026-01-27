@@ -15,7 +15,7 @@ import {
 import { buildOrdersApiUrl, getOrderSummaryMetrics } from "@/utils/orders";
 import { exportOrdersAsJson } from "@/utils/shared";
 import {
-  OrderFilterDrawerData,
+  getOrderFilterDrawerData,
   getOrderSortableFields,
   orderStatusFilters,
   getTableColumns,
@@ -243,15 +243,17 @@ export default function OrdersPage({ type }: OrdersPageProps) {
         DrawerData={
           type
             ? {
-                header: { ...OrderFilterDrawerData.header },
+                header: { ...getOrderFilterDrawerData(t).header },
                 filterOptions: {
-                  status: { ...OrderFilterDrawerData.filterOptions.status },
+                  status: {
+                    ...getOrderFilterDrawerData(t).filterOptions.status,
+                  },
                   customerType: {
-                    ...OrderFilterDrawerData.filterOptions.customerType,
+                    ...getOrderFilterDrawerData(t).filterOptions.customerType,
                   },
                 },
               }
-            : OrderFilterDrawerData
+            : getOrderFilterDrawerData(t)
         }
         sortableFields={getOrderSortableFields}
         filterOptions={orderStatusFilters}

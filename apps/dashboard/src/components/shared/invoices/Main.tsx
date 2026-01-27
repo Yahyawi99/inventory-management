@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -15,11 +16,10 @@ import {
 } from "@/utils/invoices";
 import { exportOrdersAsJson } from "@/utils/shared";
 import {
-  InvoiceFilterDrawerData,
+  getInvoiceFilterDrawerData,
   InvoiceSortableFields,
   InvoiceStatusFilters,
   getTableColumns,
-  headerData,
   getInvoiceFormConfig,
 } from "@/constants/invoices";
 import {
@@ -39,6 +39,8 @@ import {
 export default function InvoicesPage() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("invoices_page");
 
   const [summaryInvoices, setSummaryInvoices] = useState<Invoice[]>([]);
   const [isFetchingSummaryInvoices, setIsFetchingSummaryInvoices] =
@@ -88,7 +90,7 @@ export default function InvoicesPage() {
 
         if (!response.ok) {
           throw new Error(
-            response.statusText || "Failed to fetch invoices from API."
+            response.statusText || "Failed to fetch invoices from API.",
           );
         }
 
@@ -98,7 +100,8 @@ export default function InvoicesPage() {
       } catch (err: any) {
         console.error("Error fetching invoices:", err);
         setError(
-          err.message || "An unexpected error occurred while fetching invoices."
+          err.message ||
+            "An unexpected error occurred while fetching invoices.",
         );
       } finally {
         setIsFetchingSummaryInvoices(false);
@@ -125,14 +128,14 @@ export default function InvoicesPage() {
         "/api/invoices",
         activeFilters,
         activeOrderBy,
-        pagination
+        pagination,
       );
 
       const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(
-          response.statusText || "Failed to fetch invoices from API."
+          response.statusText || "Failed to fetch invoices from API.",
         );
       }
 
@@ -147,7 +150,7 @@ export default function InvoicesPage() {
       console.error("Error fetching table invoices:", err);
       setError(
         err.message ||
-          "An unexpected error occurred while fetching table invoices."
+          "An unexpected error occurred while fetching table invoices.",
       );
     } finally {
       setIsFetchingTableInvoices(false);
@@ -198,15 +201,15 @@ export default function InvoicesPage() {
         filter: activeFilters,
         orderBy: activeOrderBy,
       },
-      metricsData
+      metricsData,
     );
   };
 
   // form config data
   useEffect(() => {
     if (user)
-      getInvoiceFormConfig(user?.activeOrganizationId as string).then(
-        setInvoiceFormConfig
+      getInvoiceFormConfig(t, user?.activeOrganizationId as string).then(
+        setInvoiceFormConfig,
       );
   }, [user]);
   if (error) {
@@ -220,20 +223,25 @@ export default function InvoicesPage() {
   return (
     <section className="overflow-x-hidden">
       <Header
-        data={headerData}
+        page="invoices_page"
         exportData={exportData}
         formConfig={invoiceFormConfig}
       />
 
-      <SummaryCards data={cardMetrics} isLoading={isFetchingSummaryInvoices} />
+      <SummaryCards
+        page="invoices_page"
+        data={cardMetrics}
+        isLoading={isFetchingSummaryInvoices}
+      />
 
       <DataControls
+        page="invoices_page"
         activeFilters={activeFilters}
         activeOrderBy={activeOrderBy}
         setActiveFilters={setActiveFilters}
         setActiveOrderBy={setActiveOrderBy}
         setPagination={setPagination}
-        DrawerData={InvoiceFilterDrawerData}
+        DrawerData={getInvoiceFilterDrawerData(t)}
         sortableFields={InvoiceSortableFields}
         filterOptions={InvoiceStatusFilters}
       />
@@ -248,7 +256,7 @@ export default function InvoicesPage() {
         {invoiceFormConfig && (
           <DataTable<Invoice>
             data={tableInvoices}
-            columns={getTableColumns(invoiceFormConfig)}
+            columns={getTableColumns(t, invoiceFormConfig)}
           />
         )}
       </TableView>

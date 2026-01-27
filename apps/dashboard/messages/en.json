@@ -632,6 +632,141 @@
     }
   },
   "invoices_page": {
-    "title": "Invoices"
+    "title": "Invoices",
+    "actions": {
+      "export": "Export",
+      "add_new": "Create New Invoice"
+    },
+    "cards": {
+      "period": "last 7 days",
+      "card-1": {
+        "title": "Total Invoices"
+      },
+      "card-2": {
+        "title": "Paid Invoices"
+      },
+      "card-3": {
+        "title": "Overdue Invoices"
+      },
+      "card-4": {
+        "title": "Total Revenue"
+      }
+    },
+    "filters": {
+      "filter-1": "All",
+      "filter-2": "Draft",
+      "filter-3": "Sent",
+      "filter-4": "Paid",
+      "filter-5": "Overdue"
+    },
+    "filter_drawer": {
+      "title": "Filter Invoices",
+      "subtitle": "Refine your invoice list",
+      "fields": {
+        "field-1": {
+          "title": "Order Status",
+          "options": {
+            "label-1": "All Statuses",
+            "label-2": "Pending",
+            "label-3": "Paid",
+            "label-4": "Overdue",
+            "label-5": "Void"
+          }
+        },
+        "field-2": {
+          "title": "Customer Type",
+          "options": {
+            "label-1": "All Customers"
+          }
+        },
+        "field-3": {
+          "title": "Order Type",
+          "options": {
+            "label-1": "All Types",
+            "label-2": "Sales",
+            "label-3": "Purchases"
+          }
+        }
+      },
+      "actions": {
+        "apply": "Apply Filters",
+        "clear": "Clear Filters"
+      }
+    },
+    "sortable_fields": {
+      "field-1": "Invoice Number",
+      "field-2": "Invoice Date",
+      "field-3": "Total Amount",
+      "field-4": "Items Quantity"
+    },
+    "table": {
+      "column-1": "Invoice",
+      "column-2": "Date",
+      "column-3": "Due Date",
+      "column-4": "Status",
+      "column-5": "Type",
+      "column-6": "Items",
+      "column-7": "Total",
+      "column-8": "Actions"
+    },
+    "record_form": {
+      "title_add": "Create New Invoice",
+      "title_edit": "Edit Invoice",
+      "description_add": "Fill in the details to generate a new invoice.",
+      "description_edit": "Update invoice information and line items.",
+      "status_options": {
+        "draft": "Draft",
+        "sent": "Sent",
+        "paid": "Paid",
+        "overdue": "Overdue",
+        "cancelled": "Cancelled"
+      },
+      "fields": {
+        "invoice_number": "Invoice Number",
+        "customer": "Customer",
+        "issue_date": "Issue Date",
+        "due_date": "Due Date",
+        "status": "Status",
+        "invoice_lines": "Invoice Items",
+        "product": "Product/Service",
+        "quantity": "Quantity",
+        "unit_price": "Unit Price",
+        "tax_rate": "Tax Rate (%)",
+        "notes": "Notes"
+      },
+      "actions": {
+        "create": "Create Invoice",
+        "creating": "Creating...",
+        "save_changes": "Save Changes",
+        "saving": "Saving...",
+        "cancel": "Cancel"
+      },
+      "status": {
+        "creating": "Creating...",
+        "updating": "Updating...",
+        "deleting": "Deleting..."
+      },
+      "placeholders": {
+        "invoice_number": "INV-2024-001",
+        "notes": "Thank you for your business!"
+      },
+      "messages": {
+        "required_error": "Please fill out all the required fields!",
+        "id_required": "Invoice ID is required!",
+        "create_success": "Invoice created successfully.",
+        "create_error": "Failed to create invoice.",
+        "update_success": "Invoice updated successfully.",
+        "delete_success": "Invoice deleted successfully.",
+        "delete_error": "Failed to delete invoice.",
+        "generic_error": "An error occurred. Please try again."
+      }
+    },
+    "record_delete": {
+      "title": "Delete Invoice",
+      "desc": "Are you sure you want to delete this invoice? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Yes, delete invoice",
+      "deleting": "Deleting..."
+    }
   }
 }
