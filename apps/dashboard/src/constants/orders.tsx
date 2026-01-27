@@ -16,41 +16,70 @@ export const headerData: HeaderData = {
   buttonTxt: "Create Order",
 };
 
-export const OrderFilterDrawerData: FilterDrawerData = {
-  header: {
-    title: "Filter Orders",
-    desc: "Refine your Order list",
-  },
-  filterOptions: {
-    status: {
-      name: "Order Status",
-      options: [
-        { label: "All Status", value: "All" },
-        { label: "Pending", value: OrderStatus.Pending },
-        { label: "Processing", value: OrderStatus.Processing },
-        { label: "Fulfilled (Shipped/Delivered)", value: "Fulfilled" },
-        { label: "Cancelled", value: OrderStatus.Cancelled },
-      ],
+export const getOrderFilterDrawerData = (t: Translator): FilterDrawerData => {
+  return {
+    header: {
+      title: "Filter Orders",
+      desc: "Refine your Order list",
     },
+    filterOptions: {
+      status: {
+        name: "Order Status",
+        options: [
+          {
+            label: t("filter_drawer.fields.field-1.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-2"),
+            value: OrderStatus.Pending,
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-3"),
+            value: OrderStatus.Processing,
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-4"),
+            value: "Fulfilled",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-5"),
+            value: OrderStatus.Cancelled,
+          },
+        ],
+      },
 
-    customerType: {
-      name: "Customer Type",
-      options: [
-        { label: "All Customers", value: "All" },
-        { label: "B2B", value: "B2B" },
-        { label: "B2c", value: "B2C" },
-      ],
-    },
+      customerType: {
+        name: "Customer Type",
+        options: [
+          {
+            label: t("filter_drawer.fields.field-2.options.label-1"),
+            value: "All",
+          },
+          { label: "B2B", value: "B2B" },
+          { label: "B2c", value: "B2C" },
+        ],
+      },
 
-    orderType: {
-      name: "Order Type",
-      options: [
-        { label: "All Types", value: "All" },
-        { label: "Sales", value: OrderType.SALES },
-        { label: "Purchase", value: OrderType.PURCHASE },
-      ],
+      orderType: {
+        name: "Order Type",
+        options: [
+          {
+            label: t("filter_drawer.fields.field-3.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-3.options.label-2"),
+            value: OrderType.SALES,
+          },
+          {
+            label: t("filter_drawer.fields.field-3.options.label-3"),
+            value: OrderType.PURCHASE,
+          },
+        ],
+      },
     },
-  },
+  };
 };
 
 export const orderStatusFilters = {

@@ -529,9 +529,22 @@
             "label-1": "All Statuses",
             "label-2": "Pending",
             "label-3": "Processing",
-            "label-4": "Shipped",
-            "label-5": "Delivered",
-            "label-6": "Cancelled"
+            "label-4": "Fulfilled",
+            "label-5": "Cancelled"
+          }
+        },
+        "field-2": {
+          "title": "Customer Type",
+          "options": {
+            "label-1": "All Customers"
+          }
+        },
+        "field-3": {
+          "title": "Order Type",
+          "options": {
+            "label-1": "All Types",
+            "label-2": "Sales",
+            "label-3": "Purchases"
           }
         }
       },
@@ -617,5 +630,8 @@
       "delete": "Yes, delete order",
       "deleting": "Deleting..."
     }
+  },
+  "invoices_page": {
+    "title": "Invoices"
   }
 }

@@ -521,24 +521,37 @@
       "filter-5": "Annulé"
     },
     "filter_drawer": {
-      "title": "Filtrer les Commandes",
+      "title": "Filtrer les commandes",
       "subtitle": "Affinez votre liste de commandes",
       "fields": {
         "field-1": {
-          "title": "Statut de la Commande",
+          "title": "Statut de la commande",
           "options": {
-            "label-1": "Tous les Statuts",
+            "label-1": "Tous les statuts",
             "label-2": "En attente",
             "label-3": "Traitement",
-            "label-4": "Expédié",
-            "label-5": "Livré",
-            "label-6": "Annulé"
+            "label-4": "Honorée",
+            "label-5": "Annulée"
+          }
+        },
+        "field-2": {
+          "title": "Type de client",
+          "options": {
+            "label-1": "Tous les clients"
+          }
+        },
+        "field-3": {
+          "title": "Type de commande",
+          "options": {
+            "label-1": "Tous les types",
+            "label-2": "Ventes",
+            "label-3": "Achats"
           }
         }
       },
       "actions": {
-        "apply": "Appliquer les Filtres",
-        "clear": "Effacer les Filtres"
+        "apply": "Appliquer les filtres",
+        "clear": "Effacer les filtres"
       }
     },
     "sortable_fields": {

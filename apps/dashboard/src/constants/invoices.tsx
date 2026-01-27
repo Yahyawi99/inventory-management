@@ -10,6 +10,7 @@ import {
   FormConfig,
   HeaderData,
   SortableField,
+  Translator,
 } from "app-core/src/types";
 
 export const InvoiceFilterDrawerData: FilterDrawerData = {
@@ -60,7 +61,7 @@ export const headerData: HeaderData = {
 // =======
 // Form config
 export async function getInvoiceFormConfig(
-  organizationId: string
+  organizationId: string,
 ): Promise<FormConfig<SubmitData>> {
   const orders = await getOrders(organizationId);
 
@@ -137,7 +138,7 @@ export async function getInvoiceFormConfig(
       },
     ],
     onSubmit: async (
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
       const {
         invoiceNumber,
@@ -215,7 +216,7 @@ export async function getInvoiceFormConfig(
     },
     onUpdate: async (
       id: string,
-      data: SubmitData
+      data: SubmitData,
     ): Promise<{ ok: boolean; message: string }> => {
       const {
         invoiceNumber,
@@ -300,7 +301,7 @@ export async function getInvoiceFormConfig(
       }
     },
     onDelete: async (
-      recordId: string
+      recordId: string,
     ): Promise<{ ok: boolean; message: string }> => {
       if (!recordId) {
         return {
@@ -344,7 +345,7 @@ export async function getInvoiceFormConfig(
 // =======
 // Table
 export function getTableColumns(
-  formConfig: FormConfig<SubmitData>
+  formConfig: FormConfig<SubmitData>,
 ): Column<Invoice>[] {
   return [
     {
@@ -444,7 +445,11 @@ export function getTableColumns(
       key: "actions",
       header: "Action",
       render: (category) => (
-        <RecordActions<SubmitData> record={category} formConfig={formConfig} />
+        <RecordActions<SubmitData>
+          page="invoices_page"
+          record={category}
+          formConfig={formConfig}
+        />
       ),
       headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center px-4 py-3",

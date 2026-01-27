@@ -1,5 +1,5 @@
-import { InvoiceStatus, OrderLine } from "@database/generated/prisma";
-import { OrderType } from "./orders";
+import { InvoiceStatus } from "@database/generated/prisma";
+import { OrderType, OrderLine } from "./orders";
 
 export interface Invoice {
   _id: string;
