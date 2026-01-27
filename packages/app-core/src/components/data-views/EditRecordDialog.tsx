@@ -156,7 +156,7 @@ export default function EditRecordDialog<T>({
                     if (field.type === "repeater") {
                       return (
                         <div key={field.name} className="col-span-full">
-                          {renderField(field, formData, handleChange)}
+                          {renderField(field, formData, handleChange, locale)}
                         </div>
                       );
                     }
