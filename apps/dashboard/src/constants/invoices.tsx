@@ -16,27 +16,51 @@ import {
 export const getInvoiceFilterDrawerData = (t: Translator): FilterDrawerData => {
   return {
     header: {
-      title: "Filter Invoices",
-      desc: "Refine your Invoice list",
+      title: t("filter_drawer.title"),
+      desc: t("filter_drawer.subtitle"),
     },
     filterOptions: {
       status: {
-        name: "Invoice Status",
+        name: t("filter_drawer.fields.field-1.title"),
         options: [
-          { label: "All Invoices", value: "All" },
-          { label: "Pending", value: InvoiceStatus.Pending },
-          { label: "Paid", value: InvoiceStatus.Paid },
-          { label: "Overdue", value: InvoiceStatus.Overdue },
-          { label: "Cancelled", value: InvoiceStatus.Void },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-2"),
+            value: InvoiceStatus.Pending,
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-3"),
+            value: InvoiceStatus.Paid,
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-4"),
+            value: InvoiceStatus.Overdue,
+          },
+          {
+            label: t("filter_drawer.fields.field-1.options.label-5"),
+            value: InvoiceStatus.Void,
+          },
         ],
       },
 
       orderType: {
-        name: "Order Type",
+        name: t("filter_drawer.fields.field-2.title"),
         options: [
-          { label: "All Types", value: "All" },
-          { label: "Sales", value: OrderType.SALES },
-          { label: "Purchase", value: OrderType.PURCHASE },
+          {
+            label: t("filter_drawer.fields.field-2.options.label-1"),
+            value: "All",
+          },
+          {
+            label: t("filter_drawer.fields.field-2.options.label-2"),
+            value: OrderType.SALES,
+          },
+          {
+            label: t("filter_drawer.fields.field-2.options.label-3"),
+            value: OrderType.PURCHASE,
+          },
         ],
       },
     },

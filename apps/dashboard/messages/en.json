@@ -654,10 +654,10 @@
     },
     "filters": {
       "filter-1": "All",
-      "filter-2": "Draft",
-      "filter-3": "Sent",
-      "filter-4": "Paid",
-      "filter-5": "Overdue"
+      "filter-2": "Paid",
+      "filter-3": "Pending",
+      "filter-4": "Overdue",
+      "filter-5": "Cancelled"
     },
     "filter_drawer": {
       "title": "Filter Invoices",
@@ -670,16 +670,10 @@
             "label-2": "Pending",
             "label-3": "Paid",
             "label-4": "Overdue",
-            "label-5": "Void"
+            "label-5": "Cancelled"
           }
         },
         "field-2": {
-          "title": "Customer Type",
-          "options": {
-            "label-1": "All Customers"
-          }
-        },
-        "field-3": {
           "title": "Order Type",
           "options": {
             "label-1": "All Types",
@@ -715,24 +709,18 @@
       "description_add": "Fill in the details to generate a new invoice.",
       "description_edit": "Update invoice information and line items.",
       "status_options": {
-        "draft": "Draft",
-        "sent": "Sent",
+        "pending": "Pending",
         "paid": "Paid",
         "overdue": "Overdue",
         "cancelled": "Cancelled"
       },
       "fields": {
-        "invoice_number": "Invoice Number",
-        "customer": "Customer",
-        "issue_date": "Issue Date",
-        "due_date": "Due Date",
-        "status": "Status",
-        "invoice_lines": "Invoice Items",
-        "product": "Product/Service",
-        "quantity": "Quantity",
-        "unit_price": "Unit Price",
-        "tax_rate": "Tax Rate (%)",
-        "notes": "Notes"
+        "order": "Commande",
+        "invoice_number": "Numéro de facture",
+        "invoice_date": "Date de facturation",
+        "due_date": "Date d'échéance",
+        "total_amount": "Montant total",
+        "status": "Statut de la facture"
       },
       "actions": {
         "create": "Create Invoice",
@@ -747,8 +735,9 @@
         "deleting": "Deleting..."
       },
       "placeholders": {
-        "invoice_number": "INV-2024-001",
-        "notes": "Thank you for your business!"
+        "order": "Sélectionner une commande",
+        "invoice_number": "FA-2024-001",
+        "due_date": "Date limite de paiement"
       },
       "messages": {
         "required_error": "Please fill out all the required fields!",

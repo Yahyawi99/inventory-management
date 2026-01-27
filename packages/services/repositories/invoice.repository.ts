@@ -1,4 +1,3 @@
-import OrganizationInfo from "@/shared/company-profile/OrganizationInfo";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import Prisma from "database";
 import {
@@ -8,7 +7,7 @@ import {
 } from "database/generated/prisma/index.js";
 
 interface Filters {
-  status?: InvoiceStatus[];
+  status?: InvoiceStatus;
   search?: string;
   orderType?: OrderType;
 }
@@ -33,7 +32,7 @@ export const InvoiceRepository = {
     userId: string,
     filters: Filters,
     orderBy: SortConfig = { field: "invoiceDate", direction: "desc" },
-    { page, pageSize }: { page: number; pageSize: number }
+    { page, pageSize }: { page: number; pageSize: number },
   ): Promise<{ totalPages: number; invoices: Invoice[] } | null> {
     // Build the pipeline
     const pipeline: InputJsonValue[] | undefined = [
@@ -231,7 +230,7 @@ export const InvoiceRepository = {
   async delete(
     orgId: string,
     userId: string,
-    invoiceId: string
+    invoiceId: string,
   ): Promise<Invoice | null> {
     try {
       const existing = await Prisma.invoice.findFirst({

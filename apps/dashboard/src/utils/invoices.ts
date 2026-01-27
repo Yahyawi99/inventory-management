@@ -26,7 +26,7 @@ const accumulateMetrics = (metrics: Metrics, invoice: Invoice) => {
 };
 
 export const getInvoiceSummaryMetrics = (
-  invoices: Invoice[]
+  invoices: Invoice[],
 ): InvoiceSummaryMetrics => {
   const { current: currentPeriodRange, previous: previousPeriodRange } =
     getDateRangesForComparison();
@@ -52,7 +52,7 @@ export const getInvoiceSummaryMetrics = (
       isDateWithinRange(
         invoiceDate,
         currentPeriodRange.startDate,
-        currentPeriodRange.endDate
+        currentPeriodRange.endDate,
       )
     ) {
       accumulateMetrics(currentPeriodMetrics, invoice);
@@ -60,7 +60,7 @@ export const getInvoiceSummaryMetrics = (
       isDateWithinRange(
         invoiceDate,
         previousPeriodRange.startDate,
-        previousPeriodRange.endDate
+        previousPeriodRange.endDate,
       )
     ) {
       accumulateMetrics(previousPeriodMetrics, invoice);
@@ -75,19 +75,19 @@ export const getInvoiceSummaryMetrics = (
 
     totalInvoicesChange: calculatePercentageChange(
       currentPeriodMetrics.totalInvoices,
-      previousPeriodMetrics.totalInvoices
+      previousPeriodMetrics.totalInvoices,
     ),
     totalPaidInvoicesChange: calculatePercentageChange(
       currentPeriodMetrics.totalPaidInvoices,
-      previousPeriodMetrics.totalPaidInvoices
+      previousPeriodMetrics.totalPaidInvoices,
     ),
     totalOverdueInvoicesChange: calculatePercentageChange(
       currentPeriodMetrics.totalOverdueInvoices,
-      previousPeriodMetrics.totalOverdueInvoices
+      previousPeriodMetrics.totalOverdueInvoices,
     ),
     totalRevenueChange: calculatePercentageChange(
       currentPeriodMetrics.totalRevenue,
-      previousPeriodMetrics.totalRevenue
+      previousPeriodMetrics.totalRevenue,
     ),
   };
 };
@@ -97,7 +97,7 @@ export const buildInvoicesApiUrl = (
   base: string,
   activeFilters: ActiveFilters,
   activeOrderBy: SortConfig,
-  pagination: Pagination
+  pagination: Pagination,
 ): string => {
   const queryParams = new URLSearchParams();
 
@@ -128,7 +128,7 @@ export const buildInvoicesApiUrl = (
 
 // status styles for the invoice table
 export const getInvoiceStatusDisplay = (
-  status: InvoiceStatus
+  status: InvoiceStatus,
 ): StatusDisplay => {
   switch (status) {
     case InvoiceStatus.Pending:
