@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { User as TUser } from "@/types/users";
@@ -13,6 +14,8 @@ import StatsGrid from "@/components/shared/account/Stats";
 export default function Page() {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("my_account_page");
 
   const [userData, setUserData] = useState<TUser | null>(null);
   const [isFetchingUserData, setIsFetchingUserData] = useState<boolean>(true);
@@ -39,18 +42,14 @@ export default function Page() {
         });
 
         if (!response.ok) {
-          throw new Error(
-            response.statusText || "Failed to fetch user profile."
-          );
+          throw new Error(response.statusText || t("messages.error-1"));
         }
 
         const { user }: { user: TUser } = await response.json();
         setUserData(user);
       } catch (err: any) {
         console.error("Error fetching user:", err);
-        setError(
-          err.message || "An unexpected error occurred while fetching profile."
-        );
+        setError(err.message || t("messages.error-2"));
       } finally {
         setIsFetchingUserData(false);
       }
@@ -66,17 +65,17 @@ export default function Page() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 text-center sm:text-left">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-            My Account
+            {t("header.title")}
           </h1>
           <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-            Your profile and account information
+            {t("header.subtitle")}
           </p>
         </div>
 
         {isFetchingUserData && (
           <div className="flex items-center justify-center py-10 text-muted-foreground/60">
             <Loader2 className="w-6 h-6 animate-spin mr-2" />
-            Loading profile...
+            {t("messages.loading")}
           </div>
         )}
 

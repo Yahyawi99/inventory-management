@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -18,6 +19,8 @@ export default function StatsGrid() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const t = useTranslations("my_account_page");
+
   const fetchStats = async () => {
     try {
       setLoading(true);
@@ -26,9 +29,7 @@ export default function StatsGrid() {
       const response = await fetch("/api/user/stats");
 
       if (!response.ok) {
-        throw new Error(
-          response.statusText || "Failed to fetch stats from API."
-        );
+        throw new Error(response.statusText || t("messages.error-3"));
       }
 
       const data = await response.json();
@@ -56,13 +57,15 @@ export default function StatsGrid() {
         <Alert variant="destructive" className="mb-4">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription className="flex items-center justify-between">
-            <span>Failed to load statistics: {error}</span>
+            <span>
+              {t("messages.error-4")}: {error}
+            </span>
             <button
               onClick={fetchStats}
               className="ml-4 inline-flex items-center gap-1 text-sm hover:underline"
             >
               <RefreshCw className="h-3 w-3" />
-              Retry
+              {t("actions.try")}
             </button>
           </AlertDescription>
         </Alert>
@@ -88,7 +91,7 @@ export default function StatsGrid() {
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground/60 mt-1">
-                      {stat.label}
+                      {t("stats.label-" + (index + 1))}
                     </p>
                   </div>
 

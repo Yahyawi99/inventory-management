@@ -858,5 +858,53 @@
         "manage": "Manage Members"
       }
     }
+  },
+  "my_account_page": {
+    "header": {
+      "title": "My Account",
+      "subtitle": "Your profile and account information"
+    },
+    "messages": {
+      "error-1": "Failed to fetch user profile.",
+      "error-2": "An unexpected error occurred while fetching profile.",
+      "error-3": "Failed to fetch stats from API.",
+      "error-4": "Failed to load statistics",
+      "loading": "Loading profile..."
+    },
+    "actions": {
+      "try": "Try again"
+    },
+    "profile_card": {
+      "verified": "Verified",
+      "member_since": "Member since {{date}}",
+      "fields": {
+        "email": "Email",
+        "address": "Address",
+        "phone": "Organization Phone",
+        "two_factor": "Two-Factor Auth",
+        "user_id": "User ID"
+      },
+      "status": {
+        "disabled": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    "sidebar": {
+      "title": "Quick Actions",
+      "subtitle": "Common inventory management tasks",
+      "actions": {
+        "manage_products": "Manage Products",
+        "view_orders": "View Orders",
+        "generate_reports": "Generate Reports",
+        "manage_suppliers": "Manage Suppliers"
+      },
+      "security_note": "Consider enabling two-factor authentication for enhanced security."
+    },
+    "stats": {
+      "label-1": "Orders Processed",
+      "label-2": "Total Sales Generated",
+      "label-3": "Total Purchases Made",
+      "label-4": "Stock Items Updated"
+    }
   }
 }
