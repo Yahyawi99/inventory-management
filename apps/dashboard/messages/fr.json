@@ -858,5 +858,53 @@
         "manage": "Gérer les membres"
       }
     }
+  },
+  "my_account_page": {
+    "header": {
+      "title": "Mon Compte",
+      "subtitle": "Votre profil et les informations de votre compte"
+    },
+    "messages": {
+      "error-1": "Échec de la récupération du profil utilisateur.",
+      "error-2": "Une erreur inattendue est survenue lors de la récupération du profil.",
+      "error-3": "Échec de la récupération des statistiques depuis l'API.",
+      "error-4": "Échec du chargement des statistiques",
+      "loading": "Chargement du profil..."
+    },
+    "actions": {
+      "try": "Réessayer"
+    },
+    "profile_card": {
+      "verified": "Vérifié",
+      "member_since": "Membre depuis le {{date}}",
+      "fields": {
+        "email": "E-mail",
+        "address": "Adresse",
+        "phone": "Téléphone de l'organisation",
+        "two_factor": "Auth. à deux facteurs",
+        "id": "ID Utilisateur"
+      },
+      "status": {
+        "disabled": "Désactivé",
+        "enabled": "Activé"
+      }
+    },
+    "sidebar": {
+      "title": "Actions Rapides",
+      "subtitle": "Tâches courantes de gestion d'inventaire",
+      "actions": {
+        "manage_products": "Gérer les produits",
+        "view_orders": "Voir les commandes",
+        "generate_reports": "Générer des rapports",
+        "manage_suppliers": "Gérer les fournisseurs"
+      },
+      "security_note": "Pensez à activer l'authentification à deux facteurs pour une sécurité renforcée."
+    },
+    "stats": {
+      "label-1": "Commandes Traitées",
+      "label-2": "Ventes Totales Générées",
+      "label-3": "Achats Totaux Effectués",
+      "label-4": "Articles en Stock Mis à Jour"
+    }
   }
 }
