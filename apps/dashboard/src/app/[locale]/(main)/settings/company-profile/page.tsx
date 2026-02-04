@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Tabs,
   TabsList,
@@ -12,6 +12,7 @@ import QuickActions from "@/components/shared/company-profile/QuickActions";
 
 export default function CompanyProfilePage() {
   const t = useTranslations("company_profile_page");
+  const locale = useLocale();
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,17 +35,17 @@ export default function CompanyProfilePage() {
             </TabsList>
 
             {/* info */}
-            <TabsContent value="info">
+            <TabsContent dir={locale === "ar" ? "rtl" : "ltr"} value="info">
               <OrganizationInfo />
             </TabsContent>
 
             {/* stats */}
-            <TabsContent value="stats">
+            <TabsContent dir={locale === "ar" ? "rtl" : "ltr"} value="stats">
               <OverviewMetrics />
             </TabsContent>
 
             {/* team */}
-            <TabsContent value="team">
+            <TabsContent dir={locale === "ar" ? "rtl" : "ltr"} value="team">
               <TeamManagement />
             </TabsContent>
           </Tabs>

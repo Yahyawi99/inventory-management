@@ -138,7 +138,9 @@ export default function TeamManagement() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>{t("recent_members.title")}</CardTitle>
+                <CardTitle className="mb-2">
+                  {t("recent_members.title")}
+                </CardTitle>
                 <CardDescription>
                   {t("recent_members.subtitle")}
                 </CardDescription>

@@ -758,5 +758,105 @@
       "delete": "Oui, supprimer la facture",
       "deleting": "Suppression..."
     }
+  },
+  "company_profile_page": {
+    "header": {
+      "title": "Profil de l'entreprise",
+      "subtitle": "Gérez les informations et les paramètres de votre organisation"
+    },
+    "tabs": {
+      "tab-1": "Infos",
+      "tab-2": "Aperçu",
+      "tab-3": "Équipe"
+    },
+    "sidebar": {
+      "title": "Actions rapides",
+      "subtitle": "Tâches courantes de l'organisation",
+      "actions": {
+        "invite_member": "Inviter un membre",
+        "add_products": "Ajouter des produits",
+        "manage_orders": "Gérer les commandes",
+        "generate_reports": "Générer des rapports"
+      }
+    },
+    "tab-1": {
+      "card_title": "Détails de l'organisation",
+      "actions": {
+        "edit": "Modifier",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "update_logo": "Charger le logo",
+        "try": "Réessayer"
+      },
+      "fields": {
+        "id": "ID",
+        "name": "Nom",
+        "slug": "Identifiant (Slug)",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "address": "Adresse"
+      },
+      "footer": {
+        "created_at": "Créé le",
+        "updated_at": "Mis à jour le"
+      },
+      "messages": {
+        "error_1": "Échec de l'enregistrement",
+        "error_2": "Échec du chargement des modifications",
+        "error_3": "Aucune organisation trouvée",
+        "error_4": "Données non disponibles",
+        "loading": "Chargement des détails..."
+      }
+    },
+    "tab-2": {
+      "card_title": "Vue d'ensemble",
+      "card_subtitle": "Mesures clés et statistiques de vos opérations.",
+      "stats": {
+        "Team_Members": "Membres de l'équipe",
+        "Products": "Produits",
+        "Active_Orders": "Commandes actives",
+        "Suppliers": "Fournisseurs",
+        "Stock_Locations": "Lieux de stockage",
+        "Customers": "Clients",
+        "No_change_this_week": "Aucun changement cette semaine",
+        "No_change_warehouses": "Aucun changement d'entrepôt"
+      },
+      "messages": {
+        "error_1": "Échec du chargement des statistiques",
+        "error_2": "Échec du chargement de l'organisation",
+        "loading": "Chargement des statistiques..."
+      },
+      "actions": {
+        "try": "Réessayer"
+      }
+    },
+    "tab-3": {
+      "recent_members": {
+        "title": "Membres récents",
+        "subtitle": "Derniers membres actifs et nouveaux membres.",
+        "joined": "Inscrit",
+        "messages": {
+          "error_1": "Échec de la récupération des membres !",
+          "error_2": "Échec du chargement de l'équipe",
+          "loading": "Chargement des membres...",
+          "empty_state": "Aucun membre récent trouvé !"
+        }
+      },
+      "pending_invitations": {
+        "title": "Invitations en attente",
+        "subtitle": "Invitations envoyées en attente d'acceptation.",
+        "expires": "Expire le",
+        "messages": {
+          "error-1": "Échec du chargement des invitations",
+          "loading": "Chargement des invitations..."
+        }
+      },
+      "actions": {
+        "try": "Réessayer",
+        "resend": "Renvoyer",
+        "cancel": "Annuler",
+        "manage": "Gérer les membres"
+      }
+    }
   }
 }
