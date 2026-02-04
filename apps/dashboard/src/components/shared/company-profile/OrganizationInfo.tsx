@@ -111,7 +111,7 @@ export default function OrganizationInfo() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save changes");
+        throw new Error(t("messages.error-1"));
       }
 
       const { organization } = await response.json();
@@ -120,7 +120,7 @@ export default function OrganizationInfo() {
     } catch (error) {
       console.error("Failed to save organization data:", error);
       setSaveError(
-        error instanceof Error ? error.message : "Failed to save changes",
+        error instanceof Error ? error.message : t("messages.error-1"),
       );
     } finally {
       setIsLoading(false);

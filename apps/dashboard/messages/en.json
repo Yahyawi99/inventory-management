@@ -796,8 +796,8 @@
         "address": "Address"
       },
       "footer": {
-        "created_at": "Created: {{date}}",
-        "updated_at": "Updated: {{date}}"
+        "created_at": "Created",
+        "updated_at": "Updated"
       },
       "messages": {
         "error_1": "Failed to save changes",
@@ -811,14 +811,22 @@
       "card_title": "Organization Overview",
       "card_subtitle": "Key metrics and statistics of your operations.",
       "stats": {
-        "team_members": "Team Members",
-        "products": "Products",
-        "active_orders": "Active Orders",
-        "suppliers": "Suppliers",
-        "stock_locations": "Stock Locations",
-        "customers": "Customers",
-        "no_change": "No change this week",
-        "no_change_warehouses": "No change warehouses"
+        "Team_Members": "Team Members",
+        "Products": "Products",
+        "Active_Orders": "Active Orders",
+        "Suppliers": "Suppliers",
+        "Stock_Locations": "Stock Locations",
+        "Customers": "Customers",
+        "No_change_this_week": "No change this week",
+        "No_change_warehouses": "No change warehouses"
+      },
+      "messages": {
+        "error_1": "Failed to load organization stats",
+        "error_2": "Failed to Load Organization",
+        "loading": "Loading organization stats..."
+      },
+      "actions": {
+        "try": "Try again"
       }
     },
     "tab-3": {

@@ -51,11 +51,7 @@ export default function OverviewMetrics() {
       setOrgStats(data);
     } catch (error) {
       console.error("Failed to fetch organization stats:", error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to load organization stats",
-      );
+      setError(error instanceof Error ? error.message : t("messages.error-1"));
     } finally {
       setIsFetching(false);
     }
@@ -81,11 +77,11 @@ export default function OverviewMetrics() {
     return (
       <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Organization Overview</CardTitle>
+          <CardTitle>{t("card_title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <RefreshCw className="w-8 h-8 text-muted-foreground animate-spin mb-4" />
-          <p className="text-muted-foreground">Loading organization stats...</p>
+          <p className="text-muted-foreground">{t("messages.loading")}</p>
         </CardContent>
       </Card>
     );
@@ -96,17 +92,17 @@ export default function OverviewMetrics() {
     return (
       <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Organization Details</CardTitle>
+          <CardTitle>{t("card_title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
           <p className="text-muted-foreground font-medium mb-2">
-            Failed to Load Organization
+            {t("messages.error-2")}
           </p>
           <p className="text-muted-foreground text-sm mb-4">{error}</p>
           <Button onClick={handleRetry} variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
-            Try Again
+            {t("actions.try")}
           </Button>
         </CardContent>
       </Card>
@@ -116,10 +112,8 @@ export default function OverviewMetrics() {
   return (
     <Card className="shadow-md shadow-accent">
       <CardHeader>
-        <CardTitle>Organization Overview</CardTitle>
-        <CardDescription>
-          Key metrics and statistics of your operations.
-        </CardDescription>
+        <CardTitle>{t("card_title")}</CardTitle>
+        <CardDescription>{t("card_subtitle")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -133,7 +127,7 @@ export default function OverviewMetrics() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-sm text-muted-foreground">
-                      {stat.label}
+                      {t("stats." + stat.label.split(" ").join("_"))}
                     </p>
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${stat.color}`}
@@ -160,7 +154,7 @@ export default function OverviewMetrics() {
                     ) : (
                       <Minus className="w-3 h-3 mr-1" />
                     )}
-                    {stat.change}
+                    {t("stats." + stat.change.split(" ").join("_"))}
                   </p>
                 </div>
               );
