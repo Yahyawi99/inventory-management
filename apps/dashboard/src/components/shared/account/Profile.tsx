@@ -1,6 +1,6 @@
 import { User as TUser } from "@/types/users";
 import { formatDate } from "@/utils/dateHelpers";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Avatar,
   AvatarFallback,
@@ -13,6 +13,7 @@ import { CheckCircle, Mail, MapPin, Phone, Shield, User } from "lucide-react";
 
 export default function Profile({ userData }: { userData: TUser }) {
   const t = useTranslations("my_account_page.profile_card");
+  const locale = useLocale();
 
   return (
     <Card className="overflow-hidden pt-0">
@@ -30,20 +31,26 @@ export default function Profile({ userData }: { userData: TUser }) {
                 : "?"}
             </AvatarFallback>
           </Avatar>
+
           <div className="mt-4 sm:mt-12 flex-1 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-              <div>
+              <div
+                className={`flex flex-col items-start ${locale === "ar" && "mr-2"}`}
+              >
                 <h2 className="text-xl sm:text-2xl font-bold text-foreground pl-1">
                   {userData?.name || "Unknown User"}
                 </h2>
+
                 <Badge variant="secondary" className="mt-2">
                   {userData?.memberRole || "Member"}
                 </Badge>
-                <p className="text-xs sm:text-sm text-muted-foreground/50 mt-2">
+
+                <p className="w-fit text-xs sm:text-sm text-muted-foreground/50 mt-2">
                   {t("member_since")}{" "}
                   {formatDate(userData?.memberSince as string)}
                 </p>
               </div>
+
               <div className="mt-3 sm:mt-0 sm:text-right space-y-2">
                 {userData?.emailVerified && (
                   <Badge

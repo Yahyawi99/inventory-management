@@ -874,7 +874,7 @@
     },
     "profile_card": {
       "verified": "موثق",
-      "member_since": "عضو منذ {{date}}",
+      "member_since": "عضو منذ",
       "fields": {
         "email": "البريد الإلكتروني",
         "address": "العنوان",

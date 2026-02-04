@@ -876,7 +876,7 @@
     },
     "profile_card": {
       "verified": "Verified",
-      "member_since": "Member since {{date}}",
+      "member_since": "Member since",
       "fields": {
         "email": "Email",
         "address": "Address",
