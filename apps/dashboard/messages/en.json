@@ -833,17 +833,29 @@
       "recent_members": {
         "title": "Recent Team Members",
         "subtitle": "Last active and recently joined team members.",
-        "action_manage": "Manage Members",
-        "empty_state": "No Recent Members Found!"
+        "joined": "Joined",
+        "messages": {
+          "error_1": "Failed to fetch recent members!",
+          "error_2": "Failed to Load recent team members",
+          "loading": "Loading recent team members...",
+          "empty_state": "No Recent Members Found!"
+        }
       },
       "pending_invitations": {
-        "title": "Pending Invitations ({{count}})",
+        "title": "Pending Invitations",
         "subtitle": "Invites sent awaiting acceptance.",
-        "expires": "Expires: {{date}}",
-        "actions": {
-          "resend": "Resend",
-          "cancel": "Cancel"
+        "expires": "Expires",
+        "messages": {
+          "error-1": "Failed to Load pending invitations",
+          "loading": "Loading pending invitations..."
         }
+      },
+
+      "actions": {
+        "try": "Try again",
+        "resend": "Resend",
+        "cancel": "Cancel",
+        "manage": "Manage Members"
       }
     }
   }

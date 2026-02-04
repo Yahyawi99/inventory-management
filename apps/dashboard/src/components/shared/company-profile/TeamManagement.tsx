@@ -65,7 +65,7 @@ export default function TeamManagement() {
       setError(
         error instanceof Error
           ? error.message
-          : "Failed to fetch recent members!",
+          : t("recent_members.messages.error-1"),
       );
     } finally {
       setIsFetching(false);
@@ -96,7 +96,7 @@ export default function TeamManagement() {
       setInvitationError(
         error instanceof Error
           ? error.message
-          : "Failed to fetch recent members!",
+          : t("recent_members.messages.error-1"),
       );
     } finally {
       setIsLoading(false);
@@ -138,16 +138,16 @@ export default function TeamManagement() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Recent Team Members</CardTitle>
+                <CardTitle>{t("recent_members.title")}</CardTitle>
                 <CardDescription>
-                  Last active and recently joined team members.
+                  {t("recent_members.subtitle")}
                 </CardDescription>
               </div>
 
               <Link href="/en/account/premissions">
                 <Button variant="outline" size="sm">
                   <Users className="w-4 h-4 mr-2" />
-                  Manage Members
+                  {t("actions.manage")}
                 </Button>
               </Link>
             </div>
@@ -185,7 +185,8 @@ export default function TeamManagement() {
                         </Badge>
 
                         <p className="text-xs text-muted-foreground hidden sm:block">
-                          Joined: {formatDate(member.createdAt)}
+                          {t("recent_members.joined")}:{" "}
+                          {formatDate(member.createdAt)}
                         </p>
                         <Button variant="ghost" size="sm">
                           <ChevronRight className="w-4 h-4 text-muted-foreground" />
@@ -196,7 +197,7 @@ export default function TeamManagement() {
                 })
               ) : (
                 <p className="text-muted-foreground text-[16px] text-center mt-3">
-                  No Recent Members Found!
+                  {t("recent_members.messages.empty_state")}
                 </p>
               )}
             </div>
@@ -207,17 +208,17 @@ export default function TeamManagement() {
       {error && (
         <Card className="mb-2 text-[14px] shadow-md shadow-accent">
           <CardHeader>
-            <CardTitle>Recent Team Members</CardTitle>
+            <CardTitle>{t("recent_members.title")}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-8">
             <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
             <p className="text-muted-foreground font-medium mb-2">
-              Failed to Load recent team members
+              {t("recent_members.messages.error-2")}
             </p>
             <p className="text-muted-foreground text-sm mb-4">{error}</p>
             <Button onClick={() => fetchRecentUsers()} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
-              Try Again
+              {t("actions.try")}
             </Button>
           </CardContent>
         </Card>
@@ -226,12 +227,12 @@ export default function TeamManagement() {
       {isFetching && (
         <Card className="mb-2 text-[14px] shadow-md shadow-accent">
           <CardHeader>
-            <CardTitle>Recent Team Members</CardTitle>
+            <CardTitle>{t("recent_members.title")}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <RefreshCw className="w-8 h-8 text-muted-foreground animate-spin mb-4" />
             <p className="text-muted-foreground">
-              Loading recent team members...
+              {t("recent_members.messages.loading")}
             </p>
           </CardContent>
         </Card>
@@ -242,12 +243,14 @@ export default function TeamManagement() {
         <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
           <CardHeader className="border-amber-300">
             <CardTitle className="text-amber-800">
-              Pending Invitations
+              {t("pending_invitations.title")}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-8">
             <RefreshCw className="w-8 h-8 text-amber-300 animate-spin mb-4" />
-            <p className="text-amber-300">Loading pending invitations...</p>
+            <p className="text-amber-300">
+              {t("pending_invitations.messages.loading")}
+            </p>
           </CardContent>
         </Card>
       )}
@@ -256,18 +259,18 @@ export default function TeamManagement() {
         <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
           <CardHeader className="border-amber-300">
             <CardTitle className="text-amber-800">
-              Pending Invitations
+              {t("pending_invitations.title")}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-8">
             <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
             <p className="text-amber-500 font-medium mb-2">
-              Failed to Load pending invitations
+              {t("pending_invitations.messages.error-1")}
             </p>
             <p className="text-amber-500 text-sm mb-2">{error}</p>
             <Button onClick={() => fetchInvitations()} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
-              Try Again
+              {t("actions.try")}
             </Button>
           </CardContent>
         </Card>
@@ -280,10 +283,10 @@ export default function TeamManagement() {
           <Card className="border-amber-300 bg-amber-50 shadow-md shadow-accent">
             <CardHeader className="border-amber-300">
               <CardTitle className="text-amber-800">
-                Pending Invitations ({pendingInvitations?.length})
+                {t("pending_invitations.title")} ({pendingInvitations?.length})
               </CardTitle>
               <CardDescription className="text-amber-700">
-                Invites sent awaiting acceptance.
+                {t("pending_invitations.subtitle")}
               </CardDescription>
             </CardHeader>
 
@@ -303,7 +306,8 @@ export default function TeamManagement() {
                           {invitation.email}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Expires: {formatDate(invitation.expiresAt)}
+                          {t("pending_invitations.expires")}:{" "}
+                          {formatDate(invitation.expiresAt)}
                         </p>
                       </div>
                     </div>
@@ -319,7 +323,7 @@ export default function TeamManagement() {
                         size="sm"
                         className="md:flex text-black"
                       >
-                        Resend
+                        {t("actions.resend")}
                       </Button>
                       <Button
                         onClick={() => cancelInvitation(invitation.id)}
@@ -327,7 +331,7 @@ export default function TeamManagement() {
                         size="sm"
                         className="text-red-600 hover:bg-transparent dark:hover:bg-transparent hover:text-red-600/50 dark:hover:text-red-600/50"
                       >
-                        Cancel
+                        {t("actions.cancel")}
                       </Button>
                     </div>
                   </div>
