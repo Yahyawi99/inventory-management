@@ -1,5 +1,6 @@
 import { User as TUser } from "@/types/users";
 import { formatDate } from "@/utils/dateHelpers";
+import { useTranslations } from "next-intl";
 import {
   Avatar,
   AvatarFallback,
@@ -11,6 +12,8 @@ import {
 import { CheckCircle, Mail, MapPin, Phone, Shield, User } from "lucide-react";
 
 export default function Profile({ userData }: { userData: TUser }) {
+  const t = useTranslations("my_account_page.profile_card");
+
   return (
     <Card className="overflow-hidden pt-0">
       <div className="relative h-24 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800"></div>
@@ -37,7 +40,8 @@ export default function Profile({ userData }: { userData: TUser }) {
                   {userData?.memberRole || "Member"}
                 </Badge>
                 <p className="text-xs sm:text-sm text-muted-foreground/50 mt-2">
-                  Member since {formatDate(userData?.memberSince as string)}
+                  {t("member_since")}{" "}
+                  {formatDate(userData?.memberSince as string)}
                 </p>
               </div>
               <div className="mt-3 sm:mt-0 sm:text-right space-y-2">
@@ -46,7 +50,7 @@ export default function Profile({ userData }: { userData: TUser }) {
                     variant="outline"
                     className="bg-blue-50 text-blue-700 border-blue-200"
                   >
-                    <CheckCircle className="w-3 h-3 mr-1" /> Verified
+                    <CheckCircle className="w-3 h-3 mr-1" /> {t("verified")}
                   </Badge>
                 )}
               </div>
@@ -59,7 +63,9 @@ export default function Profile({ userData }: { userData: TUser }) {
             <div className="flex width-[100%] items-start space-x-3">
               <Mail className="w-5 h-5 text-muted-foreground flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground/75">Email</p>
+                <p className="text-sm text-muted-foreground/75">
+                  {t("fields.email")}
+                </p>
                 <p
                   className={`text-[14px] py-1 px-2 bg-gray-50 dark:bg-border ${
                     userData.email ||
@@ -75,7 +81,7 @@ export default function Profile({ userData }: { userData: TUser }) {
               <Phone className="w-5 h-5 text-muted-foreground flex-shrink-0" />
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground">
-                  Organization Phone
+                  {t("fields.phone")}
                 </p>
                 <p
                   className={`text-[14px] py-1 px-2 bg-gray-50 dark:bg-border ${
@@ -91,7 +97,9 @@ export default function Profile({ userData }: { userData: TUser }) {
             <div className="flex items-start space-x-3">
               <User className="w-5 h-5 text-muted-foreground flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground">User ID</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("fields.id")}
+                </p>
                 <p
                   className={`text-[12px] py-1 px-2 bg-gray-50 dark:bg-border ${
                     userData?.id ||
@@ -108,7 +116,9 @@ export default function Profile({ userData }: { userData: TUser }) {
             <div className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-muted-foreground flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground">Address</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("fields.address")}
+                </p>
 
                 <p
                   className={`text-[14px] py-1 px-2 bg-gray-50 dark:bg-border ${
@@ -124,13 +134,17 @@ export default function Profile({ userData }: { userData: TUser }) {
             <div className="flex items-start space-x-3">
               <Shield className="w-5 h-5 text-muted-foreground flex-shrink-0" />
               <div>
-                <p className="text-sm text-muted-foreground">Two-Factor Auth</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("fields.two_factor")}
+                </p>
                 <Badge
                   variant={
                     userData?.twoFactorEnabled ? "default" : "destructive"
                   }
                 >
-                  {userData?.twoFactorEnabled ? "Enabled" : "Disabled"}
+                  {userData?.twoFactorEnabled
+                    ? t("status.enabled")
+                    : t("status.disabled")}
                 </Badge>
               </div>
             </div>

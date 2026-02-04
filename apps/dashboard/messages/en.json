@@ -882,7 +882,7 @@
         "address": "Address",
         "phone": "Organization Phone",
         "two_factor": "Two-Factor Auth",
-        "user_id": "User ID"
+        "id": "User ID"
       },
       "status": {
         "disabled": "Disabled",
