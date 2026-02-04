@@ -757,5 +757,86 @@
       "delete": "Yes, delete invoice",
       "deleting": "Deleting..."
     }
+  },
+  "company_profile_page": {
+    "header": {
+      "title": "Company Profile",
+      "subtitle": "Manage your organization information and settings"
+    },
+    "tabs": {
+      "tab-1": "Info",
+      "tab-2": "Overview",
+      "tab-3": "Team"
+    },
+    "sidebar": {
+      "title": "Quick Actions",
+      "subtitle": "Common organization tasks",
+      "actions": {
+        "invite_member": "Invite Team Member",
+        "add_products": "Add Products",
+        "manage_orders": "Manage Orders",
+        "generate_reports": "Generate Reports"
+      }
+    },
+    "tab-1": {
+      "card_title": "Organization Details",
+      "actions": {
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "update_logo": "Upload Logo",
+        "try": "Try again"
+      },
+      "fields": {
+        "id": "ID",
+        "name": "Name",
+        "slug": "Slug",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address"
+      },
+      "footer": {
+        "created_at": "Created: {{date}}",
+        "updated_at": "Updated: {{date}}"
+      },
+      "messages": {
+        "error_1": "Failed to save changes",
+        "error_2": "Failed to load changes",
+        "error_3": "No Organization Found",
+        "error_4": "Organization data is not available",
+        "loading": "Loading organization details..."
+      }
+    },
+    "tab-2": {
+      "card_title": "Organization Overview",
+      "card_subtitle": "Key metrics and statistics of your operations.",
+      "stats": {
+        "team_members": "Team Members",
+        "products": "Products",
+        "active_orders": "Active Orders",
+        "suppliers": "Suppliers",
+        "stock_locations": "Stock Locations",
+        "customers": "Customers",
+        "no_change": "No change this week",
+        "no_change_warehouses": "No change warehouses"
+      }
+    },
+    "tab-3": {
+      "recent_members": {
+        "title": "Recent Team Members",
+        "subtitle": "Last active and recently joined team members.",
+        "action_manage": "Manage Members",
+        "empty_state": "No Recent Members Found!"
+      },
+      "pending_invitations": {
+        "title": "Pending Invitations ({{count}})",
+        "subtitle": "Invites sent awaiting acceptance.",
+        "expires": "Expires: {{date}}",
+        "actions": {
+          "resend": "Resend",
+          "cancel": "Cancel"
+        }
+      }
+    }
   }
 }

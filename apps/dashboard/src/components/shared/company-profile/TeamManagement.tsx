@@ -9,6 +9,7 @@ import { getRoleBadgeVariant } from "@/utils/organization";
 import { formatDate } from "@/utils/dateHelpers";
 import { Invitation, Member } from "@/types/organization";
 import { authClient } from "@/lib/auth-client";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -34,6 +35,8 @@ export default function TeamManagement() {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const t = useTranslations("company_profile_page.tab-3");
+
   const [pendingInvitations, setPendingInvitations] = useState<
     Invitation[] | null
   >(null);
@@ -52,7 +55,7 @@ export default function TeamManagement() {
 
       if (!response.ok) {
         throw new Error(
-          "Something went wrong while trying to fetch recent members!"
+          "Something went wrong while trying to fetch recent members!",
         );
       }
 
@@ -62,7 +65,7 @@ export default function TeamManagement() {
       setError(
         error instanceof Error
           ? error.message
-          : "Failed to fetch recent members!"
+          : "Failed to fetch recent members!",
       );
     } finally {
       setIsFetching(false);
@@ -79,7 +82,7 @@ export default function TeamManagement() {
         {
           onSuccess: (ctx) => {
             const invitations = ctx.data.filter(
-              (invitation: Invitation) => invitation.status === "pending"
+              (invitation: Invitation) => invitation.status === "pending",
             );
 
             setPendingInvitations(invitations);
@@ -87,13 +90,13 @@ export default function TeamManagement() {
           onError: (ctx) => {
             setInvitationError(ctx.error.message);
           },
-        }
+        },
       );
     } catch (error) {
       setInvitationError(
         error instanceof Error
           ? error.message
-          : "Failed to fetch recent members!"
+          : "Failed to fetch recent members!",
       );
     } finally {
       setIsLoading(false);

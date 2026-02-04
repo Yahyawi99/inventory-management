@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { getInitials } from "@/utils/shared";
 import { formatDate } from "@/utils/dateHelpers";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -34,18 +35,6 @@ import {
 } from "lucide-react";
 import { Organization } from "@/types/organization";
 
-const initialOrgData = {
-  id: "org_123456",
-  name: "LogiTech Solutions",
-  slug: "logitech-solutions",
-  logo: null,
-  email: "info@logitech-solutions.com",
-  phone: "+1 (555) 789-0123",
-  address: "1234 Industrial Blvd, Denver, CO 80202",
-  createdAt: "2023-01-15T09:00:00Z",
-  updatedAt: "2024-12-01T10:30:00Z",
-};
-
 export default function OrganizationInfo() {
   const [isEditing, setIsEditing] = useState(false);
   const [orgData, setOrgData] = useState<Organization | null>(null);
@@ -53,6 +42,8 @@ export default function OrganizationInfo() {
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  const t = useTranslations("company_profile_page.tab-1");
 
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
@@ -75,7 +66,7 @@ export default function OrganizationInfo() {
       setError(
         error instanceof Error
           ? error.message
-          : "Failed to load organization data"
+          : "Failed to load organization data",
       );
     } finally {
       setIsFetching(false);
@@ -129,7 +120,7 @@ export default function OrganizationInfo() {
     } catch (error) {
       console.error("Failed to save organization data:", error);
       setSaveError(
-        error instanceof Error ? error.message : "Failed to save changes"
+        error instanceof Error ? error.message : "Failed to save changes",
       );
     } finally {
       setIsLoading(false);
@@ -145,13 +136,11 @@ export default function OrganizationInfo() {
     return (
       <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Organization Details</CardTitle>
+          <CardTitle>{t("card_title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <RefreshCw className="w-8 h-8 text-muted-foreground animate-spin mb-4" />
-          <p className="text-muted-foreground">
-            Loading organization details...
-          </p>
+          <p className="text-muted-foreground">{t("messages.loading")}</p>
         </CardContent>
       </Card>
     );
@@ -162,17 +151,17 @@ export default function OrganizationInfo() {
     return (
       <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Organization Details</CardTitle>
+          <CardTitle>{t("card_title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
           <p className="text-muted-foreground font-medium mb-2">
-            Failed to Load Organization
+            {t("messages.error-2")}
           </p>
           <p className="text-muted-foreground text-sm mb-4">{error}</p>
           <Button onClick={handleRetry} variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
-            Try Again
+            {t("actions.try")}
           </Button>
         </CardContent>
       </Card>
@@ -184,15 +173,15 @@ export default function OrganizationInfo() {
     return (
       <Card className="mb-2 text-[14px] shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Organization Details</CardTitle>
+          <CardTitle>{t("card_title")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
           <p className="text-muted-foreground font-medium mb-2">
-            No Organization Found
+            {t("messages.error-3")}
           </p>
           <p className="text-muted-foreground text-sm">
-            Organization data is not available
+            {t("messages.error-4")}
           </p>
         </CardContent>
       </Card>
@@ -202,14 +191,14 @@ export default function OrganizationInfo() {
   return (
     <Card className="mb-2 text-[14px] shadow-md shadow-accent">
       <CardHeader className="flex justify-between">
-        <CardTitle>Organization Details</CardTitle>
+        <CardTitle>{t("card_title")}</CardTitle>
         {!isEditing ? (
           <Button
             className="bg-sidebar hover:bg-sidebar hover:opacity-75"
             onClick={() => setIsEditing(true)}
           >
             <Edit className="w-4 h-4 mr-2 " />
-            Edit
+            {t("actions.edit")}
           </Button>
         ) : (
           <div className="flex space-x-2">
@@ -223,7 +212,7 @@ export default function OrganizationInfo() {
               disabled={isLoading}
             >
               <X className="w-4 h-4 mr-2" />
-              Cancel
+              {t("actions.cancel")}
             </Button>
             <Button
               className="bg-sidebar hover:bg-sidebar hover:opacity-75"
@@ -235,7 +224,7 @@ export default function OrganizationInfo() {
               ) : (
                 <Check className="w-4 h-4 mr-2" />
               )}
-              Save
+              {t("actions.save")}
             </Button>
           </div>
         )}
@@ -248,7 +237,7 @@ export default function OrganizationInfo() {
             <AlertCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-sm font-medium text-red-800">
-                Failed to save changes
+                {t("messages.error")}
               </p>
               <p className="text-sm text-red-600">{saveError}</p>
             </div>
@@ -271,12 +260,14 @@ export default function OrganizationInfo() {
           <div>
             <h2 className=" font-semibold">{orgData?.name}</h2>
             <p className="text-muted-foreground">@{orgData && orgData.slug}</p>
-            <Badge variant="outline">ID: {orgData?.id}</Badge>
+            <Badge variant="outline">
+              {t("fields.id")}: {orgData?.id}
+            </Badge>
           </div>
           {isEditing && (
             <Button variant="outline" size="sm" disabled={isLoading}>
               <Upload className="w-4 h-4 mr-2" />
-              Upload Logo
+              {t("actions.update_logo")}
             </Button>
           )}
         </div>
@@ -284,7 +275,7 @@ export default function OrganizationInfo() {
         {/* Name + Slug */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label>Name</Label>
+            <Label>{t("fields.name")}</Label>
             {isEditing ? (
               <Input
                 value={orgData?.name}
@@ -302,7 +293,7 @@ export default function OrganizationInfo() {
             )}
           </div>
           <div>
-            <Label>Slug</Label>
+            <Label>{t("fields.slug")}</Label>
             {isEditing ? (
               <Input
                 value={orgData?.slug || ""}
@@ -324,7 +315,7 @@ export default function OrganizationInfo() {
         {/* Email + Phone */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label>Email</Label>
+            <Label>{t("fields.email")}</Label>
             {isEditing ? (
               <Input
                 value={orgData?.email || ""}
@@ -343,7 +334,7 @@ export default function OrganizationInfo() {
             )}
           </div>
           <div>
-            <Label>Phone</Label>
+            <Label>{t("fields.phone")}</Label>
             {isEditing ? (
               <Input
                 value={orgData?.phone || ""}
@@ -365,7 +356,7 @@ export default function OrganizationInfo() {
 
         {/* Address */}
         <div>
-          <Label>Address</Label>
+          <Label>{t("fields.address")}</Label>
           {isEditing ? (
             <Textarea
               value={orgData?.address || ""}
@@ -388,11 +379,11 @@ export default function OrganizationInfo() {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center text-muted-foreground">
             <Calendar className="w-4 h-4 mr-2" />
-            Created: {formatDate(orgData?.createdAt as Date)}
+            {t("footer.created_at")}: {formatDate(orgData?.createdAt as Date)}
           </div>
           <div className="flex items-center text-muted-foreground">
             <Clock className="w-4 h-4 mr-2" />
-            Updated: {formatDate(orgData?.updatedAt as Date)}
+            {t("footer.updated_at")}: {formatDate(orgData?.updatedAt as Date)}
           </div>
         </div>
       </CardContent>

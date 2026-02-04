@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { FormattedStat, OrganizationOverview } from "@/types/organization";
 import { formatOrganizationStats } from "@/utils/organization";
+import { useTranslations } from "next-intl";
 import {
   Button,
   Card,
@@ -25,6 +26,8 @@ export default function OverviewMetrics() {
   const [orgStats, setOrgStats] = useState<FormattedStat[] | null>(null);
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const t = useTranslations("company_profile_page.tab-2");
 
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
@@ -51,7 +54,7 @@ export default function OverviewMetrics() {
       setError(
         error instanceof Error
           ? error.message
-          : "Failed to load organization stats"
+          : "Failed to load organization stats",
       );
     } finally {
       setIsFetching(false);
@@ -146,8 +149,8 @@ export default function OverviewMetrics() {
                       stat.changeType === "increase"
                         ? "text-green-600"
                         : stat.changeType === "decrease"
-                        ? "text-red-600"
-                        : "text-muted-foreground"
+                          ? "text-red-600"
+                          : "text-muted-foreground"
                     }`}
                   >
                     {stat.changeType === "increase" ? (
