@@ -904,5 +904,50 @@
       "label-3": "إجمالي المشتريات التي تمت",
       "label-4": "عناصر المخزون المحدثة"
     }
+  },
+  "my_activity_page": {
+    "header": {
+      "title": "نشاطي",
+      "subtitle": "إجراءاتك الأخيرة في نظام إدارة المخزون"
+    },
+    "activity_list": {
+      "entities": {
+        "Product": "منتج",
+        "Category": "فئة",
+        "Invoice": "فاتورة",
+        "Order": "طلب",
+        "Supplier": "مورد",
+        "Customer": "عميل"
+      },
+      "types": {
+        "stock_update": "تم تحديث عنصر المخزون{code}: {name}",
+        "purchase_order": "تم إنشاء طلب شراء{code} لـ {name}",
+        "sales_order": "تمت معالجة طلب بيع{code} لـ {name}",
+        "category_create": "تمت إضافة فئة جديدة للمنتج: {name}",
+        "category_update": "تم تحديث فئة المنتج: {name}",
+        "product_create": "تمت إضافة منتج جديد{code}: {name}",
+        "product_update": "تم تحديث معلومات المنتج{code}: {name}",
+        "supplier_create": "تمت إضافة مورد جديد: {name}",
+        "supplier_update": "تم تحديث معلومات المورد: {name}",
+        "customer_create": "تمت إضافة عميل جديد: {name}",
+        "invoice_create": "تم إنشاء فاتورة{code} لـ {name}"
+      }
+    },
+    "time": {
+      "now": "الآن",
+      "minutes": "{value, plural, one {قبل دقيقة واحدة} other {قبل # دقائق}}",
+      "hours": "{value, plural, one {قبل ساعة واحدة} other {قبل # ساعات}}",
+      "days": "{value, plural, one {قبل يوم واحد} other {قبل # أيام}}"
+    },
+    "actions": {
+      "try_again": "أعد المحاولة",
+      "load_more": "تحميل المزيد"
+    },
+    "messages": {
+      "error-1": "فشل في جلب أنشطة المستخدم.",
+      "error-2": "حدث خطأ غير متوقع أثناء جلب الأنشطة.",
+      "loading": "جاري تحميل الأنشطة...",
+      "empty_state": "لا توجد أنشطة حديثة."
+    }
   }
 }

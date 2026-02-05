@@ -906,5 +906,50 @@
       "label-3": "Achats Totaux Effectués",
       "label-4": "Articles en Stock Mis à Jour"
     }
+  },
+  "my_activity_page": {
+    "header": {
+      "title": "Mon Activité",
+      "subtitle": "Vos actions récentes dans le système de gestion des stocks"
+    },
+    "activity_list": {
+      "entities": {
+        "Product": "Produit",
+        "Category": "Catégorie",
+        "Invoice": "Facture",
+        "Order": "Commande",
+        "Supplier": "Fournisseur",
+        "Customer": "Client"
+      },
+      "types": {
+        "stock_update": "Mise à jour de l'article en stock{code} : {name}",
+        "purchase_order": "Commande d'achat{code} créée pour {name}",
+        "sales_order": "Commande de vente{code} traitée pour {name}",
+        "category_create": "Nouvelle catégorie de produit ajoutée : {name}",
+        "category_update": "Catégorie de produit mise à jour : {name}",
+        "product_create": "Nouveau produit ajouté{code} : {name}",
+        "product_update": "Informations produit mises à jour{code} : {name}",
+        "supplier_create": "Nouveau fournisseur ajouté : {name}",
+        "supplier_update": "Informations fournisseur mises à jour : {name}",
+        "customer_create": "Nouveau client ajouté : {name}",
+        "invoice_create": "Facture générée{code} pour {name}"
+      }
+    },
+    "time": {
+      "now": "À l'instant",
+      "minutes": "{value, plural, one {il y a # minute} other {il y a # minutes}}",
+      "hours": "{value, plural, one {il y a # heure} other {il y a # heures}}",
+      "days": "{value, plural, one {il y a # jour} other {il y a # jours}}"
+    },
+    "actions": {
+      "try_again": "Réessayer",
+      "load_more": "Charger plus"
+    },
+    "messages": {
+      "error-1": "Échec de la récupération des activités de l'utilisateur.",
+      "error-2": "Une erreur inattendue s'est produite lors de la récupération des activités.",
+      "loading": "Chargement des activités...",
+      "empty_state": "Aucune activité récente trouvée."
+    }
   }
 }
