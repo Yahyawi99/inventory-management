@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Activity as TActivity } from "@/types/users";
@@ -33,6 +34,8 @@ export default function RecentActivity() {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
+  const t = useTranslations("my_activity_page");
+
   const [userActivity, setUserActivity] = useState<TActivity[]>([]);
   const [isFetchingUserActivity, setIsFetchingUserActivity] =
     useState<boolean>(true);
@@ -58,9 +61,7 @@ export default function RecentActivity() {
         });
 
         if (!response.ok) {
-          throw new Error(
-            response.statusText || "Failed to fetch user activities."
-          );
+          throw new Error(response.statusText || t("messages.error-1"));
         }
 
         const { activities }: { activities: TActivity[] } =
@@ -69,10 +70,7 @@ export default function RecentActivity() {
         setUserActivity(activities);
       } catch (err: any) {
         console.error("Error fetching activities:", err);
-        setError(
-          err.message ||
-            "An unexpected error occurred while fetching activities."
-        );
+        setError(err.message || t("messages.error-2"));
       } finally {
         setIsFetchingUserActivity(false);
       }
@@ -149,7 +147,7 @@ export default function RecentActivity() {
             {isFetchingUserActivity && (
               <div className="flex items-center justify-center py-10 text-muted-foreground">
                 <Loader2 className="w-6 h-6 animate-spin mr-2" />
-                Loading activities...
+                {t("messages.loading")}
               </div>
             )}
 
@@ -171,15 +169,18 @@ export default function RecentActivity() {
 
                 <div className="flex-1 min-w-0 mt-2 sm:mt-0">
                   <p className="text-sm text-foreground break-words">
-                    {activity.action}
+                    {t(`activity_list.types.${activity.type}`, {
+                      name: activity.name,
+                      code: activity.code ? ` (${activity.code})` : "", // parentheses only if code exists
+                    })}
                   </p>
                   <div className="flex flex-wrap items-center mt-1 space-x-2">
                     <div className="flex items-center text-xs text-muted-foreground">
                       <Clock className="w-3 h-3 text-muted-foreground mr-1" />
-                      {formatTimeAgo(activity.time)}
+                      {formatTimeAgo(activity.time, t)}
                     </div>
                     <Badge variant="outline" className="text-xs mt-1 sm:mt-0">
-                      {activity.entity}
+                      {t("activity_list.entities." + activity.entity)}
                     </Badge>
                   </div>
                 </div>
@@ -195,7 +196,7 @@ export default function RecentActivity() {
             onClick={loadMore}
             className="flex items-center space-x-1 px-4 py-2 bg-sidebar hover:bg-transparent text-white font-semibold rounded-md shadow cursor-pointer border-2 border-transparent hover:border-sidebar hover:text-sidebar"
           >
-            Load More
+            {t("actions.load_more")}
           </Button>
         )}
       </div>

@@ -18,7 +18,8 @@ const formatCurrency = (value: number | null | undefined): string => {
 };
 
 interface Activity {
-  action: string;
+  code?: string;
+  name: string;
   time: Date;
   type: string;
   entity: string;
@@ -39,7 +40,7 @@ interface SubmitData {
 export const UserRepository = {
   async findMany(
     orgId: string,
-    { page, pageSize }: { page: number; pageSize: number }
+    { page, pageSize }: { page: number; pageSize: number },
   ) {
     const whereClause: P.MemberWhereInput = {
       organizationId: orgId,
@@ -200,7 +201,8 @@ export const UserRepository = {
 
       stockUpdates.forEach((item) => {
         activities.push({
-          action: `Updated stock quantity for Product ${item.product.sku} in ${item.stock.name}`,
+          code: item.product.sku,
+          name: item.stock.name,
           time: item.updatedAt,
           type: "stock_update",
           entity: "StockItem",
@@ -222,7 +224,8 @@ export const UserRepository = {
       purchaseOrders.forEach((order) => {
         const orderNumber = `PO-${order.id.slice(-8)}`;
         activities.push({
-          action: `Created new purchase order ${orderNumber} for ${order.supplier?.name}`,
+          code: orderNumber,
+          name: order.supplier?.name || "",
           time: order.createdAt,
           type: "purchase_order",
           entity: "Order",
@@ -244,7 +247,8 @@ export const UserRepository = {
       salesOrders.forEach((order) => {
         const orderNumber = `SO-${order.id.slice(-8)}`;
         activities.push({
-          action: `Processed sales order ${orderNumber} for ${order.customer?.name}`,
+          code: orderNumber,
+          name: order.customer?.name || "",
           time: order.createdAt,
           type: "sales_order",
           entity: "Order",
@@ -262,7 +266,7 @@ export const UserRepository = {
 
       newCategories.forEach((category) => {
         activities.push({
-          action: `Added new product category: ${category.name}`,
+          name: category.name,
           time: category.createdAt,
           type: "category_create",
           entity: "Category",
@@ -281,7 +285,7 @@ export const UserRepository = {
 
       updatedCategories.forEach((category) => {
         activities.push({
-          action: `Updated product category: ${category.name}`,
+          name: category.name,
           time: category.updatedAt,
           type: "category_update",
           entity: "Category",
@@ -300,7 +304,8 @@ export const UserRepository = {
 
       newProducts.forEach((product) => {
         activities.push({
-          action: `Added new product: ${product.name} (${product.sku})`,
+          code: product.sku,
+          name: product.name,
           time: product.createdAt,
           type: "product_create",
           entity: "Product",
@@ -320,7 +325,8 @@ export const UserRepository = {
 
       updatedProducts.forEach((product) => {
         activities.push({
-          action: `Updated product information for ${product.name} (${product.sku})`,
+          code: product.sku,
+          name: product.name,
           time: product.updatedAt,
           type: "product_update",
           entity: "Product",
@@ -338,7 +344,7 @@ export const UserRepository = {
 
       newSuppliers.forEach((supplier) => {
         activities.push({
-          action: `Added new supplier: ${supplier.name}`,
+          name: supplier.name,
           time: supplier.createdAt,
           type: "supplier_create",
           entity: "Supplier",
@@ -357,7 +363,7 @@ export const UserRepository = {
 
       updatedSuppliers.forEach((supplier) => {
         activities.push({
-          action: `Updated supplier contact information for ${supplier.name}`,
+          name: supplier.name,
           time: supplier.updatedAt,
           type: "supplier_update",
           entity: "Supplier",
@@ -375,7 +381,7 @@ export const UserRepository = {
 
       newCustomers.forEach((customer) => {
         activities.push({
-          action: `Added new customer: ${customer.name}`,
+          name: customer.name,
           time: customer.createdAt,
           type: "customer_create",
           entity: "Customer",
@@ -398,7 +404,8 @@ export const UserRepository = {
 
       newInvoices.forEach((invoice) => {
         activities.push({
-          action: `Generated invoice ${invoice.invoiceNumber} for ${invoice.order.customer?.name}`,
+          code: invoice.invoiceNumber,
+          name: invoice.order.customer?.name || "",
           time: invoice.createdAt,
           type: "invoice_create",
           entity: "Invoice",
@@ -407,7 +414,7 @@ export const UserRepository = {
 
       // Sort all activities
       const sortedActivities = activities.sort(
-        (a, b) => Number(new Date(b.time)) - Number(new Date(a.time))
+        (a, b) => Number(new Date(b.time)) - Number(new Date(a.time)),
       );
 
       return sortedActivities;
@@ -442,7 +449,7 @@ export const UserRepository = {
   async update(
     orgId: string,
     memberId: string,
-    data: SubmitData
+    data: SubmitData,
   ): Promise<User | null> {
     const { role, image, emailVerified, banned, banReason } = data;
 

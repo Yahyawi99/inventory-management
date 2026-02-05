@@ -53,7 +53,8 @@ export type UserRoles =
   | "intern";
 
 export interface Activity {
-  action: string;
+  code?: string;
+  name: string;
   time: Date;
   type: string;
   entity: string;

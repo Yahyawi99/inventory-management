@@ -906,5 +906,50 @@
       "label-3": "Total Purchases Made",
       "label-4": "Stock Items Updated"
     }
+  },
+  "my_activity_page": {
+    "header": {
+      "title": "My Activity",
+      "subtitle": "Your recent actions in the inventory management system"
+    },
+    "activity_list": {
+      "entities": {
+        "Product": "Product",
+        "Category": "Category",
+        "Invoice": "Invoice",
+        "Order": "Order",
+        "Supplier": "Supplier",
+        "Customer": "Customer"
+      },
+      "types": {
+        "stock_update": "Updated stock item{code}: {name}",
+        "purchase_order": "Created purchase order{code} for {name}",
+        "sales_order": "Processed sales order{code} for {name}",
+        "category_create": "Added new product category: {name}",
+        "category_update": "Updated product category: {name}",
+        "product_create": "Added new product{code}: {name}",
+        "product_update": "Updated product information{code}: {name}",
+        "supplier_create": "Added new supplier: {name}",
+        "supplier_update": "Updated supplier information: {name}",
+        "customer_create": "Added new customer: {name}",
+        "invoice_create": "Generated invoice{code} for {name}"
+      }
+    },
+    "time": {
+      "now": "Just now",
+      "minutes": "{value, plural, one {# minute ago} other {# minutes ago}}",
+      "hours": "{value, plural, one {# hour ago} other {# hours ago}}",
+      "days": "{value, plural, one {# day ago} other {# days ago}}"
+    },
+    "actions": {
+      "try_again": "Try again",
+      "load_more": "Load More"
+    },
+    "messages": {
+      "error-1": "Failed to fetch user activities.",
+      "error-2": "An unexpected error occurred while fetching activities.",
+      "loading": "Loading activities...",
+      "empty_state": "No recent activities found."
+    }
   }
 }

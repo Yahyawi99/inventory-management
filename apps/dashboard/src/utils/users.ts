@@ -1,3 +1,4 @@
+import { Translator } from "app-core/src/types";
 import { Monitor, Smartphone, SmartphoneIcon, Tablet } from "lucide-react";
 
 export const getRoleBadgeColor = (role: string): string => {
@@ -22,7 +23,7 @@ export const getRoleBadgeColor = (role: string): string => {
 };
 
 // Utility function to format time ago
-export const formatTimeAgo = (timestamp: Date) => {
+export const formatTimeAgo = (timestamp: Date, t: Translator) => {
   const now = new Date();
   const diff = Number(now) - Number(new Date(timestamp));
 
@@ -30,10 +31,16 @@ export const formatTimeAgo = (timestamp: Date) => {
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (minutes < 1) return "Just now";
-  if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
-  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
-  return `${days} day${days === 1 ? "" : "s"} ago`;
+  if (minutes < 1) return t("time.now");
+  if (minutes < 60) return t("time.minutes", { value: minutes });
+  if (hours < 24)
+    return t("time.hours", {
+      value: hours,
+    });
+
+  return t("time.days", {
+    value: days,
+  });
 };
 
 // Last time active
