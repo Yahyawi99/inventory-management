@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
 import { UserSettings } from "@/types/users";
 import {
@@ -35,6 +36,8 @@ export default function ProfileSection({
 }: ProfileSectionProps) {
   const oldEmail = useRef("");
 
+  const t = useTranslations("personal_settings_page.profile_section");
+
   useEffect(() => {
     oldEmail.current = user.email;
   }, [isFetchingUser]);
@@ -61,12 +64,16 @@ export default function ProfileSection({
 
     if (!ACCEPTED_TYPES.includes(file.type)) {
       setIsSuccess(false);
-      setMessage("Invalid file type. Please use JPG, PNG, or GIF.");
+      setMessage(t("messages.upload.error_invalid_file"));
       return;
     }
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
       setIsSuccess(false);
-      setMessage(`File size exceeds the ${MAX_SIZE_MB}MB limit.`);
+      setMessage(
+        t("messages.upload.error_size_limit", {
+          maxSize: MAX_SIZE_MB,
+        }),
+      );
       return;
     }
 
@@ -82,7 +89,7 @@ export default function ProfileSection({
       });
 
       if (!response.ok) {
-        throw new Error("Upload failed. Please try again.");
+        throw new Error(t("messages.upload.error_failed"));
       }
 
       const {
@@ -92,13 +99,13 @@ export default function ProfileSection({
       setUser({ ...user, image: secure_url });
 
       setIsSuccess(true);
-      setMessage("Profile picture changed. Click 'Save Changes' to keep it.");
+      setMessage(t("messages.upload.success_image_changed"));
       setTimeout(() => {
         setMessage("");
       }, 3000);
     } catch (error: any) {
       setIsSuccess(false);
-      setMessage(error.message || "Upload failed!");
+      setMessage(error.message || t("messages.upload.error_generic"));
     } finally {
       setIsUploading(false);
 
@@ -114,7 +121,7 @@ export default function ProfileSection({
 
     setUser({ ...user, image: null });
     setIsSuccess(true);
-    setMessage("Profile picture removed. Click 'Save Changes' to confirm.");
+    setMessage(t("messages.remove_image.success_removed"));
     setTimeout(() => {
       setMessage("");
     }, 3000);
@@ -124,7 +131,7 @@ export default function ProfileSection({
   const updateUser = async () => {
     if (!user.name || !user.email) {
       setIsSuccess(false);
-      setMessage("Please provide a valid name and email!");
+      setMessage(t("messages.update.error_validation"));
       return;
     }
 
@@ -145,16 +152,16 @@ export default function ProfileSection({
           });
         } catch (error) {
           setIsSuccess(false);
-          setMessage("Failed to update your email!");
+          setMessage(t("messages.update.error_email_failed"));
           return;
         }
       }
 
       setIsSuccess(true);
-      setMessage("Profile updated successfully!");
+      setMessage(t("messages.update.success_updated"));
     } catch (error: any) {
       setIsSuccess(false);
-      setMessage(error.message || "Failed to update user profile");
+      setMessage(error.message || t("messages.update.error_generic"));
     } finally {
       setIsLoading(false);
     }
@@ -171,10 +178,10 @@ export default function ProfileSection({
       });
 
       setIsSuccess(true);
-      setMessage("verification link sent successfully!");
+      setMessage(t("messages.verification.success_sent"));
     } catch (error) {
       setIsSuccess(false);
-      setMessage("Failed to send the verification link!");
+      setMessage(t("messages.verification.error_failed"));
       return;
     } finally {
       setIsVerifyLoading(false);
@@ -185,10 +192,8 @@ export default function ProfileSection({
     <div className="space-y-6">
       <Card className="shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-          <CardDescription>
-            Update your personal profile information
-          </CardDescription>
+          <CardTitle>{t("card_title")}</CardTitle>
+          <CardDescription>{t("card_subtitle")}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -225,7 +230,7 @@ export default function ProfileSection({
                 ) : (
                   <Camera className="mr-2 h-4 w-4" />
                 )}
-                {isUploading ? "Uploading..." : "Change Photo"}
+                {isUploading ? t("photo.uploading") : t("photo.change")}
               </Button>
 
               <Button
@@ -235,10 +240,10 @@ export default function ProfileSection({
                 onClick={handleRemoveImage}
                 disabled={isUploading}
               >
-                Remove
+                {t("photo.remove")}
               </Button>
               <p className="text-sm text-gray-500">
-                JPG, PNG or GIF. Max size {MAX_SIZE_MB}MB.
+                {t("photo.hint", { value: 2 })}
               </p>
             </div>
           </div>
@@ -247,18 +252,18 @@ export default function ProfileSection({
           <div className="space-y-4">
             {/* ... (rest of the form for name and email is unchanged) ... */}
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name">{t("fields.full_name")}</Label>
               <Input
                 id="name"
                 value={user.name}
                 onChange={(e) => {
                   setUser({ ...user, name: e.currentTarget.value });
                 }}
-                placeholder="Your FullName"
+                placeholder="Yassine"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">{t("fields.email")}</Label>
               <div className="relative">
                 <Input
                   id="email"
@@ -277,13 +282,13 @@ export default function ProfileSection({
               {user.emailVerified ? (
                 <p className="flex items-center text-sm text-green-600">
                   <Check className="mr-1 h-4 w-4" />
-                  Email verified
+                  {t("messages.email_verified")}
                 </p>
               ) : (
                 <div className="flex items-center justify-between">
                   <p className="flex items-center text-sm text-amber-600">
                     <AlertTriangle className="mr-1 h-4 w-4" />
-                    Email not verified
+                    {t("messages.email_not_verified")}
                   </p>
                   <Button
                     variant="outline"
@@ -291,7 +296,9 @@ export default function ProfileSection({
                     onClick={sendVerificationLink}
                     disabled={isVerifyLoading}
                   >
-                    {isVerifyLoading ? "Sending..." : "Send Verification"}
+                    {isVerifyLoading
+                      ? t("messages.sending")
+                      : t("actions.verify")}
                   </Button>
                 </div>
               )}
@@ -315,7 +322,7 @@ export default function ProfileSection({
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Save Changes
+            {t("actions.save")}
           </Button>
         </CardContent>
       </Card>

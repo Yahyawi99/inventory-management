@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { UserSettings, User } from "@/types/users";
 import { useAuth } from "@/context/AuthContext";
 import SettingsNavigation from "@/components/shared/account/settings/SettingsNavigation";
@@ -13,6 +14,8 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
+
+  const t = useTranslations("personal_settings_page");
 
   const [activeTab, setActiveTab] = useState("profile");
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +43,7 @@ export default function Page() {
         const response = await fetch("/api/user/profile");
 
         if (!response.ok) {
-          throw new Error(response.statusText || "Failed to fetch user.");
+          throw new Error(response.statusText || t("messages.error-1"));
         }
 
         const { user }: { user: User } = await response.json();
@@ -54,9 +57,7 @@ export default function Page() {
         setIsTwoFactorEnabled(user.twoFactorEnabled);
       } catch (err: any) {
         console.error("Error fetching user:", err);
-        setError(
-          err.message || "An unexpected error occurred while fetching user."
-        );
+        setError(err.message || t("messages.error-2"));
       } finally {
         setIsFetchingUser(false);
       }
@@ -66,13 +67,6 @@ export default function Page() {
       fetchUserData();
     }
   }, [isAuthenticated, isAuthLoading, router]);
-
-  // const handleSave = async (section: string) => {
-  //   setIsLoading(true);
-  //   await new Promise((resolve) => setTimeout(resolve, 1000));
-  //   setIsLoading(false);
-  //   console.log(`Saving ${section} settings`);
-  // };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -106,11 +100,9 @@ export default function Page() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">
-            Personal Settings
+            {t("header.title")}
           </h1>
-          <p className="text-muted-foreground mt-2">
-            Manage your personal account preferences and settings
-          </p>
+          <p className="text-muted-foreground mt-2">{t("header.subtitle")}</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">

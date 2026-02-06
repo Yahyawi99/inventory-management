@@ -951,5 +951,166 @@
       "loading": "Loading activities...",
       "empty_state": "No recent activities found."
     }
+  },
+  "personal_settings_page": {
+    "header": {
+      "title": "Personal Settings",
+      "subtitle": "Manage your personal account preferences and settings"
+    },
+    "tabs": {
+      "profile": {
+        "title": "Profile",
+        "subtitle": "Personal information"
+      },
+      "security": {
+        "title": "Security",
+        "subtitle": "Password & authentication"
+      },
+      "preferences": {
+        "title": "Preferences",
+        "subtitle": "Display & behavior"
+      },
+      "data": {
+        "title": "Data & Privacy",
+        "subtitle": "Data management"
+      }
+    },
+    "profile_section": {
+      "card_title": "Personal Information",
+      "card_subtitle": "Update your personal profile information",
+      "photo": {
+        "change": "Change Photo",
+        "remove": "Remove",
+        "hint": "JPG, PNG or GIF. Max size {value}MB.",
+        "uploading": "Uploading..."
+      },
+      "fields": {
+        "full_name": "Full Name",
+        "email": "Email Address"
+      },
+      "actions": {
+        "save": "Save Changes",
+        "verify": "Send Verification"
+      },
+      "messages": {
+        "upload": {
+          "error_invalid_type": "Invalid file type. Please use JPG, PNG, or GIF.",
+          "error_size_limit": "File size exceeds the {maxSize}MB limit.",
+          "error_failed": "Upload failed. Please try again.",
+          "error_generic": "Upload failed!",
+          "success_image_changed": "Profile picture changed. Click 'Save Changes' to keep it."
+        },
+        "remove_image": {
+          "success_removed": "Profile picture removed. Click 'Save Changes' to confirm."
+        },
+        "update": {
+          "error_validation": "Please provide a valid name and email!",
+          "error_email_failed": "Failed to update your email!",
+          "error_generic": "Failed to update user profile",
+          "success_updated": "Profile updated successfully!"
+        },
+        "verification": {
+          "error_failed": "Failed to send the verification link!",
+          "success_sent": "verification link sent successfully!"
+        },
+        "email_verified": "Email verified",
+        "email_not_verified": "Email not verified",
+        "sending": "Sending..."
+      }
+    },
+    "security_section": {
+      "password_card": {
+        "title": "Change Password",
+        "subtitle": "Update your password to keep your account secure",
+        "fields": {
+          "current": "Current Password",
+          "new": "New Password",
+          "confirm": "Confirm New Password"
+        },
+        "requirements": {
+          "title": "Password Requirements:",
+          "item_1": "At least 8 characters long",
+          "item_2": "Contains uppercase and lowercase letters",
+          "item_3": "Contains at least one number",
+          "item_4": "Contains at least one special character"
+        },
+        "action": "Update Password"
+      },
+      "sessions_card": {
+        "title": "Active Login Sessions",
+        "subtitle": "Manage and revoke sessions where your account is currently logged in.",
+        "current_label": "Current Session",
+        "authenticated": "Authenticated",
+        "ip_label": "IP Address:",
+        "ip_redacted": "IP Redacted / Unknown",
+        "action_sign_out_others": "Sign Out All Other Sessions ({{count}})",
+        "empty_state": "No other active sessions detected."
+      }
+    },
+    "preferences_section": {
+      "display_card": {
+        "title": "Display Preferences",
+        "subtitle": "Customize how the interface looks and behaves for you",
+        "fields": {
+          "theme": "Theme",
+          "language": "Language",
+          "date_format": "Date Format"
+        }
+      },
+      "interface_card": {
+        "title": "Interface Preferences",
+        "fields": {
+          "items_per_page": "Items Per Page"
+        }
+      },
+      "action": "Save Preferences"
+    },
+    "data_privacy_section": {
+      "export_card": {
+        "title": "Data Export & Backup",
+        "subtitle": "Download your personal data and account information",
+        "export": {
+          "title": "Export Account Data",
+          "subtitle": "Download all your personal data and settings",
+          "action": "Export Data"
+        },
+        "import": {
+          "title": "Import Settings",
+          "subtitle": "Restore settings from a previous export",
+          "action": "Import Settings"
+        }
+      },
+      "privacy_card": {
+        "title": "Privacy Controls",
+        "subtitle": "Manage your privacy and data sharing preferences",
+        "fields": {
+          "activity_tracking": {
+            "title": "Activity Tracking",
+            "subtitle": "Allow tracking of your activity for analytics"
+          },
+          "usage_statistics": {
+            "title": "Usage Statistics",
+            "subtitle": "Share anonymous usage data to help improve the product"
+          },
+          "marketing": {
+            "title": "Marketing Communications",
+            "subtitle": "Receive product updates and marketing emails"
+          }
+        }
+      },
+      "delete_card": {
+        "title": "Delete Account",
+        "subtitle": "Permanently delete your account and all associated data",
+        "warning": "This will permanently remove your account and access. All historical data, such as orders and reports, will be retained.",
+        "action": "Delete My Account"
+      }
+    },
+    "messages": {
+      "error-1": "Failed to fetch user.",
+      "error-2": "An unexpected error occurred while fetching user",
+      "success_update": "Settings updated successfully",
+      "error_update": "Failed to update settings",
+      "loading": "Loading settings..."
+    }
   }
 }
