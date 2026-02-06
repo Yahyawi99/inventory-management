@@ -95,12 +95,7 @@ export default function PreferencesSection({
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="en">
-                    <div className="flex items-center">
-                      <Globe className="w-4 h-4 mr-2" />
-                      {t("display_card.en")}
-                    </div>
-                  </SelectItem>
+                  <SelectItem value="en">{t("display_card.en")}</SelectItem>
                   <SelectItem value="fr">{t("display_card.fr")}</SelectItem>
                   <SelectItem value="ar">{t("display_card.ar")}</SelectItem>
                 </SelectContent>
@@ -134,7 +129,7 @@ export default function PreferencesSection({
           <Separator />
 
           <div>
-            <h4 className="font-medium text-gray-900 mb-4">
+            <h4 className="font-medium text-foreground mb-4">
               {t("interface_card.title")}
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

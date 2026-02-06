@@ -59,10 +59,10 @@ export default function SettingsNavigation({
                 >
                   <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div className="min-w-0">
-                    <p className="font-medium text-sm">
+                    <p className="w-fit font-medium text-sm">
                       {t(`${tab.id}.title`)}
                     </p>
-                    <p className="text-xs text-muted-foreground/50 mt-0.5">
+                    <p className="w-fit text-xs text-muted-foreground/50 mt-0.5">
                       {t(`${tab.id}.subtitle`)}
                     </p>
                   </div>
