@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import {
   Badge,
   Button,
@@ -34,13 +34,15 @@ export default function SecuritySection() {
 
   const router = useRouter();
 
+  const t = useTranslations("personal_settings_page.security_section");
+
   const updatePassword = async () => {
     if (!data.currentPassword || !data.newPassword || !data.confirmPassword) {
-      setMessage("Please provide valid password values!!");
+      setMessage(t("messages.password.error_required"));
       return;
     }
     if (data.newPassword !== data.confirmPassword) {
-      setMessage("Please provide matched password!!");
+      setMessage(t("messages.password.error_mismatch"));
       return;
     }
 
@@ -58,17 +60,17 @@ export default function SecuritySection() {
             setIsSuccess(false);
           },
           onSuccess: async (ctx) => {
-            setMessage("Password updated successfully! redirecting...");
+            setMessage(t("messages.password.success_updated"));
             setIsSuccess(true);
 
             await authClient.signOut();
             router.push("/auth/sign-in");
           },
-        }
+        },
       );
     } catch (error: any) {
       setIsSuccess(false);
-      setIsSuccess(error.message || "Failed to update the password!");
+      setIsSuccess(error.message || t("messages.password.error_generic"));
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +97,7 @@ export default function SecuritySection() {
           device,
           Icon,
           lastActive,
-          ip: session.ipAddress || "IP Redacted / Unknown",
+          ip: session.ipAddress || t("messages.sessions.ip_fallback"),
         };
       });
 
@@ -111,7 +113,7 @@ export default function SecuritySection() {
       setCurrentSession(currentSession.data);
     } catch (error) {
       setIsSuccess(false);
-      setMessage("Can't fetch User Sessions");
+      setMessage(t("messages.sessions.error_fetch_generic"));
     }
   };
 
@@ -124,15 +126,15 @@ export default function SecuritySection() {
       {/* Password Section */}
       <Card className="shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Change Password</CardTitle>
-          <CardDescription>
-            Update your password to keep your account secure
-          </CardDescription>
+          <CardTitle>{t("password_card.title")}</CardTitle>
+          <CardDescription>{t("password_card.subtitle")}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
+            <Label htmlFor="current-password">
+              {t("password_card.fields.current")}
+            </Label>
             <div className="relative">
               <Input
                 id="current-password"
@@ -161,7 +163,9 @@ export default function SecuritySection() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
+            <Label htmlFor="new-password">
+              {t("password_card.fields.new")}
+            </Label>
             <Input
               id="new-password"
               type="password"
@@ -176,7 +180,9 @@ export default function SecuritySection() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
+            <Label htmlFor="confirm-password">
+              {t("password_card.fields.confirm")}
+            </Label>
             <Input
               id="confirm-password"
               type="password"
@@ -193,13 +199,13 @@ export default function SecuritySection() {
           {/* Password Requirements */}
           <div className="p-3 bg-background rounded-lg">
             <p className="text-sm font-medium text-foreground mb-2">
-              Password Requirements:
+              {t("password_card.requirements.title")}
             </p>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• At least 8 characters long</li>
-              <li>• Contains uppercase and lowercase letters</li>
-              <li>• Contains at least one number</li>
-              <li>• Contains at least one special character</li>
+              <li>• {t("password_card.requirements.item_1")}</li>
+              <li>• {t("password_card.requirements.item_2")}</li>
+              <li>• {t("password_card.requirements.item_3")}</li>
+              <li>• {t("password_card.requirements.item_4")}</li>
             </ul>
           </div>
 
@@ -213,7 +219,7 @@ export default function SecuritySection() {
             ) : (
               <Lock className="w-4 h-4 mr-2" />
             )}
-            Update Password
+            {t("password_card.action")}
           </Button>
 
           {message && (
@@ -233,11 +239,8 @@ export default function SecuritySection() {
       {/* Active Sessions */}
       <Card>
         <CardHeader>
-          <CardTitle>Active Login Sessions</CardTitle>
-          <CardDescription>
-            Manage and revoke sessions where your account is currently logged
-            in.
-          </CardDescription>
+          <CardTitle>{t("sessions_card.title")}</CardTitle>
+          <CardDescription>{t("sessions_card.subtitle")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -279,7 +282,7 @@ export default function SecuritySection() {
                               className="bg-card text-muted-foreground dark:text-white"
                               variant="default"
                             >
-                              Current Session
+                              {t("sessions_card.current_label")}
                             </Badge>
                           )}
                         </div>
@@ -297,7 +300,7 @@ export default function SecuritySection() {
                           </span>
                         </p>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          IP Address: {session.ip}
+                          {t("sessions_card.ip_label")}: {session.ip}
                         </p>
                       </div>
                     </div>
@@ -311,12 +314,12 @@ export default function SecuritySection() {
                           className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
                         >
                           <LogOut className="w-4 h-4 mr-1.5" />
-                          Revoke
+                          {t("sessions_card.revoke")}
                         </Button>
                       ) : (
                         <p className="text-sm font-medium text-green-700 italic">
                           <span className="hidden sm:inline">
-                            Authenticated
+                            {t("sessions_card.authenticated")}
                           </span>
                         </p>
                       )}
@@ -338,12 +341,13 @@ export default function SecuritySection() {
               }`}
             >
               <LogOut className="w-5 h-5 mr-3" />
-              Sign Out All Other Sessions (
-              {(userSessions && userSessions.length - 1) || 0})
+              {t("sessions_card.action_sign_out_others", {
+                count: (userSessions && userSessions.length - 1) || 0,
+              })}
             </Button>
             {!(userSessions && userSessions.length > 1) && (
               <p className="text-center text-xs text-gray-500 mt-2">
-                No other active sessions detected.
+                {t("sessions_card.empty_state")}
               </p>
             )}
           </div>

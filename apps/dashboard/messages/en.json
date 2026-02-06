@@ -1042,9 +1042,21 @@
         "current_label": "Current Session",
         "authenticated": "Authenticated",
         "ip_label": "IP Address:",
-        "ip_redacted": "IP Redacted / Unknown",
-        "action_sign_out_others": "Sign Out All Other Sessions ({{count}})",
+        "revoke": "Revoke",
+        "action_sign_out_others": "Sign Out All Other Sessions ({count})",
         "empty_state": "No other active sessions detected."
+      },
+      "messages": {
+        "password": {
+          "error_required": "Please provide valid password values!!",
+          "error_mismatch": "Please provide matched password!!",
+          "error_generic": "Failed to update the password!",
+          "success_updated": "Password updated successfully! redirecting..."
+        },
+        "sessions": {
+          "error_fetch_generic": "Can't fetch User Sessions",
+          "ip_fallback": "IP Redacted / Unknown"
+        }
       }
     },
     "preferences_section": {
