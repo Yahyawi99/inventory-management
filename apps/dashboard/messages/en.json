@@ -1066,8 +1066,14 @@
         "fields": {
           "theme": "Theme",
           "language": "Language",
-          "date_format": "Date Format"
-        }
+          "date": "Date Format"
+        },
+        "en": "English",
+        "fr": "French",
+        "ar": "Arabic",
+        "light": "Light",
+        "dark": "Dark",
+        "sys": "System"
       },
       "interface_card": {
         "title": "Interface Preferences",

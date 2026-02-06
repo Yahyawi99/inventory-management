@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { useTheme } from "@/context";
 import {
   Button,
@@ -25,10 +26,13 @@ interface PreferencesSectionProps {
 export default function PreferencesSection({
   isLoading,
 }: PreferencesSectionProps) {
+  const t = useTranslations("personal_settings_page.preferences_section");
+  const locale = useLocale();
+
   const { theme, setTheme } = useTheme();
   const [preferences, setPreferences] = useState({
     theme,
-    language: "en",
+    language: locale,
     dateFormat: "MM/dd/yyyy",
     currency: "USD",
     itemsPerPage: "25",
@@ -38,15 +42,13 @@ export default function PreferencesSection({
     <div className="space-y-6">
       <Card className="shadow-md shadow-accent">
         <CardHeader>
-          <CardTitle>Display Preferences</CardTitle>
-          <CardDescription>
-            Customize how the interface looks and behaves for you
-          </CardDescription>
+          <CardTitle>{t("display_card.title")}</CardTitle>
+          <CardDescription>{t("display_card.subtitle")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="theme">Theme</Label>
+              <Label htmlFor="theme">{t("display_card.fields.theme")}</Label>
               <Select
                 value={preferences.theme}
                 onValueChange={(value) => {
@@ -61,26 +63,28 @@ export default function PreferencesSection({
                   <SelectItem value="light">
                     <div className="flex items-center">
                       <Sun className="w-4 h-4 mr-2" />
-                      Light
+                      {t("display_card.light")}
                     </div>
                   </SelectItem>
                   <SelectItem value="dark">
                     <div className="flex items-center">
                       <Moon className="w-4 h-4 mr-2" />
-                      Dark
+                      {t("display_card.dark")}
                     </div>
                   </SelectItem>
                   <SelectItem value="system">
                     <div className="flex items-center">
                       <Monitor className="w-4 h-4 mr-2" />
-                      System
+                      {t("display_card.sys")}
                     </div>
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
+              <Label htmlFor="language">
+                {t("display_card.fields.language")}
+              </Label>
               <Select
                 value={preferences.language}
                 onValueChange={(value) =>
@@ -94,13 +98,11 @@ export default function PreferencesSection({
                   <SelectItem value="en">
                     <div className="flex items-center">
                       <Globe className="w-4 h-4 mr-2" />
-                      English (US)
+                      {t("display_card.en")}
                     </div>
                   </SelectItem>
-                  <SelectItem value="en-gb">English (UK)</SelectItem>
-                  <SelectItem value="es">Spanish</SelectItem>
-                  <SelectItem value="fr">French</SelectItem>
-                  <SelectItem value="de">German</SelectItem>
+                  <SelectItem value="fr">{t("display_card.fr")}</SelectItem>
+                  <SelectItem value="ar">{t("display_card.ar")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -108,7 +110,9 @@ export default function PreferencesSection({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="date-format">Date Format</Label>
+              <Label htmlFor="date-format">
+                {t("display_card.fields.date")}
+              </Label>
               <Select
                 value={preferences.dateFormat}
                 onValueChange={(value) =>
@@ -131,11 +135,13 @@ export default function PreferencesSection({
 
           <div>
             <h4 className="font-medium text-gray-900 mb-4">
-              Interface Preferences
+              {t("interface_card.title")}
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="items-per-page">Items Per Page</Label>
+                <Label htmlFor="items-per-page">
+                  {t("interface_card.fields.items_per_page")}
+                </Label>
                 <Select
                   value={preferences.itemsPerPage}
                   onValueChange={(value) =>
@@ -146,10 +152,10 @@ export default function PreferencesSection({
                     <SelectValue placeholder="Select items per page" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="10">10 items</SelectItem>
-                    <SelectItem value="25">25 items</SelectItem>
-                    <SelectItem value="50">50 items</SelectItem>
-                    <SelectItem value="100">100 items</SelectItem>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="25">25</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                    <SelectItem value="100">100</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -165,7 +171,7 @@ export default function PreferencesSection({
             ) : (
               <Save className="w-4 h-4 mr-2" />
             )}
-            Save Preferences
+            {t("action")}
           </Button>
         </CardContent>
       </Card>

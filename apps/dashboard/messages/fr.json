@@ -951,5 +951,184 @@
       "loading": "Chargement des activités...",
       "empty_state": "Aucune activité récente trouvée."
     }
+  },
+  "personal_settings_page": {
+    "header": {
+      "title": "Paramètres personnels",
+      "subtitle": "Gérez les préférences et les paramètres de votre compte"
+    },
+    "tabs": {
+      "profile": {
+        "title": "Profil",
+        "subtitle": "Informations personnelles"
+      },
+      "security": {
+        "title": "Sécurité",
+        "subtitle": "Mot de passe et authentification"
+      },
+      "preferences": {
+        "title": "Préférences",
+        "subtitle": "Affichage et comportement"
+      },
+      "data": {
+        "title": "Données et confidentialité",
+        "subtitle": "Gestion des données"
+      }
+    },
+    "profile_section": {
+      "card_title": "Informations personnelles",
+      "card_subtitle": "Mettez à jour les informations de votre profil",
+      "photo": {
+        "change": "Changer la photo",
+        "remove": "Supprimer",
+        "hint": "JPG, PNG ou GIF. Taille max {value} Mo.",
+        "uploading": "Téléchargement..."
+      },
+      "fields": {
+        "full_name": "Nom complet",
+        "email": "Adresse e-mail"
+      },
+      "actions": {
+        "save": "Enregistrer les modifications",
+        "verify": "Envoyer la vérification"
+      },
+      "messages": {
+        "upload": {
+          "error_invalid_type": "Type de fichier invalide. Veuillez utiliser JPG, PNG ou GIF.",
+          "error_size_limit": "La taille du fichier dépasse la limite de {maxSize} Mo.",
+          "error_failed": "Échec du téléchargement. Veuillez réessayer.",
+          "error_generic": "Téléchargement échoué !",
+          "success_image_changed": "Photo de profil modifiée. Cliquez sur 'Enregistrer' pour confirmer."
+        },
+        "remove_image": {
+          "success_removed": "Photo de profil supprimée. Cliquez sur 'Enregistrer' pour confirmer."
+        },
+        "update": {
+          "error_validation": "Veuillez fournir un nom et un e-mail valides !",
+          "error_email_failed": "Échec de la mise à jour de l'e-mail !",
+          "error_generic": "Échec de la mise à jour du profil",
+          "success_updated": "Profil mis à jour avec succès !"
+        },
+        "verification": {
+          "error_failed": "Échec de l'envoi du lien de vérification !",
+          "success_sent": "Lien de vérification envoyé avec succès !"
+        },
+        "email_verified": "E-mail vérifié",
+        "email_not_verified": "E-mail non vérifié",
+        "sending": "Envoi..."
+      }
+    },
+    "security_section": {
+      "password_card": {
+        "title": "Changer le mot de passe",
+        "subtitle": "Mettez à jour votre mot de passe pour sécuriser votre compte",
+        "fields": {
+          "current": "Mot de passe actuel",
+          "new": "Nouveau mot de passe",
+          "confirm": "Confirmer le nouveau mot de passe"
+        },
+        "requirements": {
+          "title": "Exigences du mot de passe :",
+          "item_1": "Au moins 8 caractères",
+          "item_2": "Lettres majuscules et minuscules",
+          "item_3": "Au moins un chiffre",
+          "item_4": "Au moins un caractère spécial"
+        },
+        "action": "Mettre à jour le mot de passe"
+      },
+      "sessions_card": {
+        "title": "Sessions de connexion actives",
+        "subtitle": "Gérez et révoquez les sessions où votre compte est actuellement connecté.",
+        "current_label": "Session actuelle",
+        "authenticated": "Authentifié",
+        "ip_label": "Adresse IP :",
+        "revoke": "Révoquer",
+        "action_sign_out_others": "Déconnecter toutes les autres sessions ({count})",
+        "empty_state": "Aucune autre session active détectée."
+      },
+      "messages": {
+        "password": {
+          "error_required": "Veuillez fournir des valeurs de mot de passe valides !!",
+          "error_mismatch": "Les mots de passe ne correspondent pas !!",
+          "error_generic": "Échec de la mise à jour du mot de passe !",
+          "success_updated": "Mot de passe mis à jour avec succès ! Redirection..."
+        },
+        "sessions": {
+          "error_fetch_generic": "Impossible de récupérer les sessions utilisateur",
+          "ip_fallback": "IP masquée / Inconnue"
+        }
+      }
+    },
+    "preferences_section": {
+      "display_card": {
+        "title": "Préférences d'affichage",
+        "subtitle": "Personnalisez l'apparence de l'interface",
+        "fields": {
+          "theme": "Thème",
+          "language": "Langue",
+          "date": "Format de date"
+        },
+        "en": "Anglais",
+        "fr": "Français",
+        "ar": "Arabe",
+        "light": "Clair",
+        "dark": "Sombre",
+        "sys": "Système"
+      },
+      "interface_card": {
+        "title": "Préférences d'interface",
+        "fields": {
+          "items_per_page": "Éléments par page"
+        }
+      },
+      "action": "Enregistrer les préférences"
+    },
+    "data_privacy_section": {
+      "export_card": {
+        "title": "Exportation et sauvegarde",
+        "subtitle": "Téléchargez vos données personnelles et informations de compte",
+        "export": {
+          "title": "Exporter les données du compte",
+          "subtitle": "Téléchargez toutes vos données et paramètres",
+          "action": "Exporter les données"
+        },
+        "import": {
+          "title": "Importer les paramètres",
+          "subtitle": "Restaurer les paramètres d'un export précédent",
+          "action": "Importer les paramètres"
+        }
+      },
+      "privacy_card": {
+        "title": "Contrôles de confidentialité",
+        "subtitle": "Gérez vos préférences de partage de données",
+        "fields": {
+          "activity_tracking": {
+            "title": "Suivi de l'activité",
+            "subtitle": "Autoriser le suivi à des fins d'analyse"
+          },
+          "usage_statistics": {
+            "title": "Statistiques d'utilisation",
+            "subtitle": "Partager des données anonymes pour améliorer le produit"
+          },
+          "marketing": {
+            "title": "Communications marketing",
+            "subtitle": "Recevoir les mises à jour et e-mails marketing"
+          }
+        }
+      },
+      "delete_card": {
+        "title": "Supprimer le compte",
+        "subtitle": "Supprimer définitivement votre compte et toutes les données associées",
+        "warning": "Ceci supprimera définitivement votre accès. Les données historiques (commandes, rapports) seront conservées.",
+        "action": "Supprimer mon compte"
+      }
+    },
+    "messages": {
+      "error-1": "Échec de la récupération de l'utilisateur.",
+      "error-2": "Une erreur inattendue est survenue lors de la récupération",
+      "success_update": "Paramètres mis à jour avec succès",
+      "error_update": "Échec de la mise à jour des paramètres",
+      "loading": "Chargement des paramètres..."
+    }
   }
 }
