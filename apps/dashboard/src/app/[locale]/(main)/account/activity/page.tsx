@@ -1,4 +1,4 @@
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import RecentActivity from "@/components/shared/account/activity";
 import { Activity } from "lucide-react";
 

@@ -14,6 +14,7 @@ import { AlertTriangle, Download, Trash2, Upload } from "lucide-react";
 
 export default function DataPrivacySection() {
   const t = useTranslations("personal_settings_page.data_privacy_section");
+
   return (
     <div className="space-y-6">
       <Card>
