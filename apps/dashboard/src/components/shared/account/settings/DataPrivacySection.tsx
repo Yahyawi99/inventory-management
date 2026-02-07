@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import {
   Button,
   Card,
@@ -12,38 +13,41 @@ import {
 import { AlertTriangle, Download, Trash2, Upload } from "lucide-react";
 
 export default function DataPrivacySection() {
+  const t = useTranslations("personal_settings_page.data_privacy_section");
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Data Export & Backup</CardTitle>
-          <CardDescription>
-            Download your personal data and account information
-          </CardDescription>
+          <CardTitle>{t("export_card.title")}</CardTitle>
+          <CardDescription>{t("export_card.subtitle")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between p-4 border rounded-lg">
             <div>
-              <p className="font-medium text-gray-900">Export Account Data</p>
+              <p className="font-medium text-foreground">
+                {t("export_card.export.title")}
+              </p>
               <p className="text-sm text-gray-500">
-                Download all your personal data and settings
+                {t("export_card.export.subtitle")}
               </p>
             </div>
             <Button variant="outline">
               <Download className="w-4 h-4 mr-2" />
-              Export Data
+              {t("export_card.export.action")}
             </Button>
           </div>
           <div className="flex items-center justify-between p-4 border rounded-lg">
             <div>
-              <p className="font-medium text-gray-900">Import Settings</p>
+              <p className="font-medium text-foreground">
+                {t("export_card.import.title")}
+              </p>
               <p className="text-sm text-gray-500">
-                Restore settings from a previous export
+                {t("export_card.import.subtitle")}
               </p>
             </div>
             <Button variant="outline">
               <Upload className="w-4 h-4 mr-2" />
-              Import Settings
+              {t("export_card.import.action")}
             </Button>
           </div>
         </CardContent>
@@ -51,26 +55,28 @@ export default function DataPrivacySection() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Privacy Controls</CardTitle>
-          <CardDescription>
-            Manage your privacy and data sharing preferences
-          </CardDescription>
+          <CardTitle>{t("privacy_card.title")}</CardTitle>
+          <CardDescription>{t("privacy_card.subtitle")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">Activity Tracking</p>
+              <p className="font-medium text-foreground">
+                {t("privacy_card.fields.activity_tracking.title")}
+              </p>
               <p className="text-sm text-gray-500">
-                Allow tracking of your activity for analytics
+                {t("privacy_card.fields.activity_tracking.subtitle")}
               </p>
             </div>
             <Switch defaultChecked={true} />
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">Usage Statistics</p>
+              <p className="font-medium text-foreground">
+                {t("privacy_card.fields.usage_statistics.title")}
+              </p>
               <p className="text-sm text-gray-500">
-                Share anonymous usage data to help improve the product
+                {t("privacy_card.fields.usage_statistics.subtitle")}
               </p>
             </div>
             <Switch defaultChecked={false} />
@@ -78,11 +84,11 @@ export default function DataPrivacySection() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">
-                Marketing Communications
+              <p className="font-medium text-foreground">
+                {t("privacy_card.fields.marketing.title")}
               </p>
               <p className="text-sm text-gray-500">
-                Receive product updates and marketing emails
+                {t("privacy_card.fields.marketing.subtitle")}
               </p>
             </div>
             <Switch defaultChecked={true} />
@@ -94,25 +100,20 @@ export default function DataPrivacySection() {
         <CardHeader>
           <CardTitle className="text-red-700 flex items-center">
             <AlertTriangle className="w-5 h-5 mr-2" />
-            Delete Account
+            {t("delete_card.title")}
           </CardTitle>
-          <CardDescription>
-            Permanently delete your account and all associated data
-          </CardDescription>
+          <CardDescription>{t("delete_card.subtitle")}</CardDescription>
         </CardHeader>
 
         <CardContent>
           <Alert>
             <AlertTriangle className="h-4 w-4" />
-            <AlertDescription>
-              This will permanently remove your account and access. All
-              historical data, such as orders and reports, will be retained.
-            </AlertDescription>
+            <AlertDescription>{t("delete_card.warning")}</AlertDescription>
           </Alert>
           <div className="mt-4">
             <Button variant="destructive">
               <Trash2 className="w-4 h-4 mr-2" />
-              Delete My Account
+              {t("delete_card.action")}
             </Button>
           </div>
         </CardContent>
