@@ -37,7 +37,7 @@ export default function UsersCard({ children }: UsersCardProps) {
   const fetchTableUsers = useCallback(async () => {
     if (!user || !user.activeOrganizationId) {
       setIsFetchingTableUsers(false);
-      setError("User or organization ID not available for table.");
+      setError(t("messages.missingContext"));
       return;
     }
 
@@ -47,9 +47,7 @@ export default function UsersCard({ children }: UsersCardProps) {
       const response = await fetch("/api/user");
 
       if (response.status !== 200) {
-        throw new Error(
-          response.statusText || "Failed to fetch table orders from API.",
-        );
+        throw new Error(response.statusText || t("messages.fetchFailed"));
       }
 
       const data = await response.json();
@@ -57,11 +55,8 @@ export default function UsersCard({ children }: UsersCardProps) {
       setTableUsers(data.users);
       setPagination({ ...pagination, totalPages: data.totalPages });
     } catch (err: any) {
-      console.error("Error fetching table orders:", err);
-      setError(
-        err.message ||
-          "An unexpected error occurred while fetching table orders.",
-      );
+      console.error("Error fetching users:", err);
+      setError(err.message || t("messages.unexpectedError"));
     } finally {
       setIsFetchingTableUsers(false);
     }

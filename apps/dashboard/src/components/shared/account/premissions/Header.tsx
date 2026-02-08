@@ -6,12 +6,9 @@ import {
   Alert,
   AlertDescription,
   Button,
-  Checkbox,
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -56,9 +53,7 @@ export default function Header() {
       if (result.error) {
         setMessage(`Error: ${result.error.message}`);
       } else {
-        setMessage(
-          "Invitation sent successfully! The user will receive an email to create their account.",
-        );
+        setMessage(t("messages.success"));
         setFormData({ email: "", role: "member" });
       }
     } catch (error) {
@@ -120,7 +115,7 @@ export default function Header() {
                     console.log(label);
                     return (
                       <SelectItem key={value} value={value}>
-                        {t(`roles.${label}`)}
+                        {t(`roles.${label.toLocaleLowerCase()}`)}
                       </SelectItem>
                     );
                   })}

@@ -34,7 +34,8 @@ export const getTableColumns = (
       key: "name",
       header: (
         <div className="flex justify-center items-center space-x-2">
-          <UserIcon className="h-4 w-4" /> <span>Name</span>
+          <UserIcon className="h-4 w-4" />
+          <span>{t("users.table.name")}</span>
         </div>
       ),
       render: (user: User) => (
@@ -45,11 +46,13 @@ export const getTableColumns = (
       headClass: "px-4 py-3 text-gray-700 font-medium",
       cellClass: "font-medium text-gray-800 break-words",
     },
+
     {
       key: "email",
       header: (
         <div className="flex justify-center items-center space-x-2">
-          <Mail className="h-4 w-4" /> <span>Email</span>
+          <Mail className="h-4 w-4" />
+          <span>{t("users.table.email")}</span>
         </div>
       ),
       render: (user: User) => (
@@ -60,48 +63,53 @@ export const getTableColumns = (
       headClass: "px-4 py-3 text-gray-700 font-medium",
       cellClass: "text-gray-600 break-words",
     },
+
     {
       key: "role",
       header: (
         <div className="flex justify-center items-center space-x-2">
-          <Briefcase className="h-4 w-4" /> <span>Role</span>
+          <Briefcase className="h-4 w-4" />
+          <span>{t("users.table.role")}</span>
         </div>
       ),
       render: (user: User) => (
         <div
           className={`rounded-full ${getRoleBadgeColor(
             user.memberRole,
-          )} flex items-center justify-center space-x-2 py-1`}
+          )} flex items-center justify-center py-1`}
         >
-          <p>{user.memberRole}</p>
+          <p>{t(`roles.${user.memberRole.toLowerCase()}`)}</p>
         </div>
       ),
       headClass: "px-4 py-3 text-gray-700 font-medium",
       cellClass: "text-center",
     },
+
     {
       key: "status",
       header: (
         <div className="flex justify-center items-center space-x-2">
-          <CheckCircle className="h-4 w-4" /> <span>Status</span>
+          <CheckCircle className="h-4 w-4" />
+          <span>{t("users.table.status")}</span>
         </div>
       ),
       render: (user: User) => (
         <div
           className={`rounded-full ${getRoleBadgeColor(
             user.status,
-          )} flex items-center justify-center space-x-2 py-1`}
+          )} flex items-center justify-center py-1`}
         >
-          <Badge></Badge>
-          <p>{user.status}</p>
+          <Badge />
+          <p>{t(`record_form.status_options.${user.status.toLowerCase()}`)}</p>
         </div>
       ),
       headClass: "px-4 py-3 text-gray-700 font-medium text-center",
       cellClass: "text-center",
     },
+
     {
       key: "actions",
-      header: "Action",
+      header: <span className="text-center">{t("users.table.action")}</span>,
       render: (user: User) => (
         <RecordActions<SubmitData>
           record={user}
@@ -120,69 +128,72 @@ export const getUserFormConfig = async (
   t: Translator,
 ): Promise<FormConfig<SubmitData>> => {
   return {
-    title: t("user_form.title_edit"),
-    description: t("user_form.description_edit"),
-    entityName: t("user_form.entity_name"),
+    title: t("record_form.title_edit"),
+    description: t("record_form.description_edit"),
+    entityName: t("record_form.entity_name"),
 
     fields: [
       {
         name: "name",
-        label: t("user_form.fields.name"),
+        label: t("record_form.fields.name"),
         type: "text",
         required: true,
-        placeholder: t("user_form.placeholders.name"),
+        placeholder: t("record_form.placeholders.name"),
         gridArea: "1",
       },
       {
         name: "email",
-        label: t("user_form.fields.email"),
+        label: t("record_form.fields.email"),
         type: "email",
         required: true,
-        placeholder: t("user_form.placeholders.email"),
+        placeholder: t("record_form.placeholders.email"),
         gridArea: "1",
       },
       {
         name: "memberRole",
-        label: t("user_form.fields.member_role"),
+        label: t("record_form.fields.member_role"),
         type: "select",
         required: true,
         options: [
-          { id: "admin", name: t("user_form.roles.admin") },
-          { id: "analyst", name: t("user_form.roles.analyst") },
-          { id: "manager", name: t("user_form.roles.manager") },
-          { id: "member", name: t("user_form.roles.member") },
-          { id: "contributor", name: t("user_form.roles.contributor") },
-          { id: "employee", name: t("user_form.roles.employee") },
-          { id: "viewer", name: t("user_form.roles.viewer") },
-          { id: "intern", name: t("user_form.roles.intern") },
+          { id: "admin", name: t("record_form.roles.admin") },
+          { id: "analyst", name: t("record_form.roles.analyst") },
+          { id: "manager", name: t("record_form.roles.manager") },
+          { id: "member", name: t("record_form.roles.member") },
+          { id: "contributor", name: t("record_form.roles.contributor") },
+          { id: "employee", name: t("record_form.roles.employee") },
+          { id: "viewer", name: t("record_form.roles.viewer") },
+          { id: "intern", name: t("record_form.roles.intern") },
         ],
         gridArea: "1/2",
         defaultValue: "employee",
       },
       {
         name: "status",
-        label: t("user_form.fields.status"),
+        label: t("record_form.fields.status"),
         type: "select",
         required: true,
         defaultValue: "Active",
         options: [
-          { id: "Active", name: t("user_form.status_options.active") },
-          { id: "Suspended", name: t("user_form.status_options.suspended") },
-          { id: "Terminated", name: t("user_form.status_options.terminated") },
+          { id: "Active", name: t("record_form.status_options.active") },
+          { id: "Suspended", name: t("record_form.status_options.suspended") },
+          {
+            id: "Terminated",
+            name: t("record_form.status_options.terminated"),
+          },
         ],
         gridArea: "1/2",
       },
       {
         name: "image",
-        label: t("user_form.fields.image"),
+        label: t("record_form.fields.image"),
         type: "text",
         required: false,
-        placeholder: t("user_form.placeholders.image"),
+        placeholder: t("record_form.placeholders.image"),
         gridArea: "1",
       },
       {
         name: "emailVerified",
-        label: t("user_form.fields.email_verified"),
+        label: t("record_form.fields.email_verified"),
         type: "checkbox",
         required: false,
         defaultValue: false,
@@ -190,7 +201,7 @@ export const getUserFormConfig = async (
       },
       {
         name: "banned",
-        label: t("user_form.fields.banned"),
+        label: t("record_form.fields.banned"),
         type: "checkbox",
         required: false,
         defaultValue: false,
@@ -198,10 +209,10 @@ export const getUserFormConfig = async (
       },
       {
         name: "banReason",
-        label: t("user_form.fields.ban_reason"),
+        label: t("record_form.fields.ban_reason"),
         type: "textarea",
         required: false,
-        placeholder: t("user_form.placeholders.ban_reason"),
+        placeholder: t("record_form.placeholders.ban_reason"),
         gridArea: "1/2",
         rows: 2,
         dependsOn: {
@@ -218,14 +229,14 @@ export const getUserFormConfig = async (
       if (!data.name || !data.email || !data.role || !data.status) {
         return {
           ok: false,
-          message: t("user_form.messages.required_error"),
+          message: t("record_form.messages.required_error"),
         };
       }
 
       if (!id) {
         return {
           ok: false,
-          message: t("user_form.messages.id_required"),
+          message: t("record_form.messages.id_required"),
         };
       }
 
@@ -243,7 +254,7 @@ export const getUserFormConfig = async (
 
         return {
           ok: true,
-          message: t("user_form.messages.update_success"),
+          message: t("record_form.messages.update_success"),
         };
       } catch (error) {
         return {
@@ -251,7 +262,7 @@ export const getUserFormConfig = async (
           message:
             error instanceof Error
               ? error.message
-              : t("user_form.messages.update_error"),
+              : t("record_form.messages.update_error"),
         };
       }
     },
@@ -262,7 +273,7 @@ export const getUserFormConfig = async (
       if (!recordId) {
         return {
           ok: false,
-          message: t("user_form.messages.id_required"),
+          message: t("record_form.messages.id_required"),
         };
       }
 
@@ -279,12 +290,12 @@ export const getUserFormConfig = async (
 
         return {
           ok: true,
-          message: t("user_form.messages.delete_success"),
+          message: t("record_form.messages.delete_success"),
         };
       } catch {
         return {
           ok: false,
-          message: t("user_form.messages.delete_error"),
+          message: t("record_form.messages.delete_error"),
         };
       }
     },

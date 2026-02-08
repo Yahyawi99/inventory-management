@@ -1166,17 +1166,16 @@
       "sending": "Sending Invitation..."
     },
     "roles": {
-      "Admin": "Admin",
-      "Member": "Member",
-      "Manager": "Manager",
-      "Analyst": "Analyst",
-      "Contributor": "Contributor",
-      "Employee": "Employee",
-      "Intern": "Intern"
+      "admin": "Admin",
+      "member": "Member",
+      "manager": "Manager",
+      "analyst": "Analyst",
+      "contributor": "Contributor",
+      "employee": "Employee",
+      "intern": "Intern"
     },
     "messages": {
       "success": "Invitation sent successfully! The user will receive an email to create their account.",
-      "errorPrefix": "Error:",
       "missingContext": "User or organization ID not available for table.",
       "fetchFailed": "Failed to fetch table users from API.",
       "unexpectedError": "An unexpected error occurred while fetching table users.",
