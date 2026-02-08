@@ -1130,5 +1130,116 @@
       "error_update": "Échec de la mise à jour des paramètres",
       "loading": "Chargement des paramètres..."
     }
+  },
+  "users_roles_page": {
+    "users": {
+      "title": "Membres de l’équipe ({count})",
+      "addUser": "Ajouter un utilisateur",
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "table": {
+        "name": "Nom",
+        "email": "E-mail",
+        "role": "Rôle",
+        "status": "Statut",
+        "action": "Action"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "pending": "En attente"
+      },
+      "pagination": {
+        "previous": "Précédent",
+        "next": "Suivant"
+      }
+    },
+    "addUserModal": {
+      "title": "Ajouter un nouvel utilisateur",
+      "description": "Renseignez les informations du nouveau membre de l’équipe.",
+      "emailLabel": "Adresse e-mail",
+      "roleLabel": "Rôle",
+      "send": "Envoyer l’invitation",
+      "cancel": "Annuler",
+      "sending": "Envoi de l’invitation..."
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "member": "Membre",
+      "manager": "Manager",
+      "analyst": "Analyste",
+      "contributor": "Contributeur",
+      "employee": "Employé",
+      "intern": "Stagiaire"
+    },
+    "messages": {
+      "success": "Invitation envoyée avec succès ! L’utilisateur recevra un e-mail pour créer son compte.",
+      "missingContext": "Utilisateur ou organisation non disponible pour le tableau.",
+      "fetchFailed": "Échec du chargement des utilisateurs depuis l’API.",
+      "unexpectedError": "Une erreur inattendue s’est produite lors du chargement des utilisateurs.",
+      "unknownError": "Une erreur est survenue. Veuillez réessayer.",
+      "no_record": "Aucun enregistrement trouvé pour cette organisation."
+    },
+    "record_form": {
+      "title_edit": "Mettre à jour l’utilisateur",
+      "description_edit": "Modifier les informations et les autorisations de l’utilisateur.",
+      "entity_name": "Utilisateur",
+      "roles": {
+        "admin": "Administrateur",
+        "analyst": "Analyste",
+        "manager": "Manager",
+        "member": "Membre",
+        "contributor": "Contributeur",
+        "employee": "Employé",
+        "viewer": "Lecteur",
+        "intern": "Stagiaire"
+      },
+      "status_options": {
+        "active": "Actif",
+        "suspended": "Suspendu",
+        "terminated": "Résilié"
+      },
+      "fields": {
+        "name": "Nom complet",
+        "email": "Adresse e-mail",
+        "member_role": "Rôle de l’utilisateur",
+        "status": "Statut du compte",
+        "image": "URL de l’image de profil",
+        "email_verified": "E-mail vérifié",
+        "banned": "Bannir l’utilisateur",
+        "ban_reason": "Motif du bannissement"
+      },
+      "placeholders": {
+        "name": "Jean Dupont",
+        "email": "jean.dupont@example.com",
+        "image": "https://example.com/avatar.jpg",
+        "ban_reason": "Raison du bannissement de cet utilisateur"
+      },
+      "actions": {
+        "save_changes": "Enregistrer les modifications",
+        "saving": "Enregistrement...",
+        "delete": "Supprimer l’utilisateur",
+        "deleting": "Suppression...",
+        "cancel": "Annuler"
+      },
+      "messages": {
+        "required_error": "Veuillez remplir tous les champs obligatoires !",
+        "id_required": "L’identifiant de l’utilisateur est requis !",
+        "update_success": "Utilisateur mis à jour avec succès.",
+        "update_error": "Échec de la mise à jour de l’utilisateur.",
+        "delete_success": "Utilisateur supprimé avec succès.",
+        "delete_error": "Échec de la suppression de l’utilisateur.",
+        "generic_error": "Une erreur inattendue s’est produite. Veuillez réessayer."
+      }
+    },
+    "record_delete": {
+      "title": "Supprimer l’utilisateur",
+      "desc": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "delete": "Oui, supprimer l’utilisateur",
+      "deleting": "Suppression..."
+    }
   }
 }

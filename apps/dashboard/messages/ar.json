@@ -1128,5 +1128,116 @@
       "error_update": "فشل تحديث الإعدادات",
       "loading": "جاري تحميل الإعدادات..."
     }
+  },
+  "users_roles_page": {
+    "users": {
+      "title": "أعضاء الفريق ({count})",
+      "addUser": "إضافة مستخدم",
+      "actions": {
+        "edit": "تعديل",
+        "delete": "حذف"
+      },
+      "table": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "role": "الدور",
+        "status": "الحالة",
+        "action": "إجراء"
+      },
+      "status": {
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "pending": "قيد الانتظار"
+      },
+      "pagination": {
+        "previous": "السابق",
+        "next": "التالي"
+      }
+    },
+    "addUserModal": {
+      "title": "إضافة مستخدم جديد",
+      "description": "املأ معلومات عضو الفريق الجديد.",
+      "emailLabel": "عنوان البريد الإلكتروني",
+      "roleLabel": "الدور",
+      "send": "إرسال الدعوة",
+      "cancel": "إلغاء",
+      "sending": "جاري إرسال الدعوة..."
+    },
+    "roles": {
+      "admin": "مشرف",
+      "member": "عضو",
+      "manager": "مدير",
+      "analyst": "محلل",
+      "contributor": "مساهم",
+      "employee": "موظف",
+      "intern": "متدرب"
+    },
+    "messages": {
+      "success": "تم إرسال الدعوة بنجاح! سيتلقى المستخدم رسالة لإنشاء حسابه.",
+      "missingContext": "المستخدم أو معرف المؤسسة غير متوفر لعرض الجدول.",
+      "fetchFailed": "فشل في جلب المستخدمين من الواجهة البرمجية.",
+      "unexpectedError": "حدث خطأ غير متوقع أثناء جلب المستخدمين.",
+      "unknownError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      "no_record": "لا توجد سجلات لهذه المؤسسة."
+    },
+    "record_form": {
+      "title_edit": "تحديث المستخدم",
+      "description_edit": "تعديل معلومات المستخدم والصلاحيات.",
+      "entity_name": "مستخدم",
+      "roles": {
+        "admin": "مشرف",
+        "analyst": "محلل",
+        "manager": "مدير",
+        "member": "عضو",
+        "contributor": "مساهم",
+        "employee": "موظف",
+        "viewer": "مشاهد",
+        "intern": "متدرب"
+      },
+      "status_options": {
+        "active": "نشط",
+        "suspended": "موقوف",
+        "terminated": "منتهي"
+      },
+      "fields": {
+        "name": "الاسم الكامل",
+        "email": "عنوان البريد الإلكتروني",
+        "member_role": "دور المستخدم",
+        "status": "حالة الحساب",
+        "image": "رابط صورة الملف الشخصي",
+        "email_verified": "تم التحقق من البريد الإلكتروني",
+        "banned": "حظر المستخدم",
+        "ban_reason": "سبب الحظر"
+      },
+      "placeholders": {
+        "name": "محمد أحمد",
+        "email": "mohamed.ahmed@example.com",
+        "image": "https://example.com/avatar.jpg",
+        "ban_reason": "سبب حظر هذا المستخدم"
+      },
+      "actions": {
+        "save_changes": "حفظ التغييرات",
+        "saving": "جاري الحفظ...",
+        "delete": "حذف المستخدم",
+        "deleting": "جاري الحذف...",
+        "cancel": "إلغاء"
+      },
+      "messages": {
+        "required_error": "يرجى ملء جميع الحقول المطلوبة!",
+        "id_required": "معرّف المستخدم مطلوب!",
+        "update_success": "تم تحديث المستخدم بنجاح.",
+        "update_error": "فشل في تحديث المستخدم.",
+        "delete_success": "تم حذف المستخدم بنجاح.",
+        "delete_error": "فشل في حذف المستخدم.",
+        "generic_error": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "record_delete": {
+      "title": "حذف المستخدم",
+      "desc": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء.",
+      "cancel": "إلغاء",
+      "delete": "نعم، احذف المستخدم",
+      "deleting": "جاري الحذف..."
+    }
   }
 }
