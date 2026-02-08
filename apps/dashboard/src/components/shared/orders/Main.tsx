@@ -202,7 +202,7 @@ export default function OrdersPage({ type }: OrdersPageProps) {
     );
   };
 
-  // FormConfic data
+  // FormConfig data
   useEffect(() => {
     if (user?.activeOrganizationId)
       getOrderFormConfig(t, user?.activeOrganizationId as string, type).then(

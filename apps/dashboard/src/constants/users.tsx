@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { getRoleBadgeColor } from "@/utils/users";
 import { SubmitData, User } from "@/types/users";
-import { Column, FormConfig } from "app-core/src/types";
+import { Column, FormConfig, Translator } from "app-core/src/types";
 
 export const roles = [
   { value: "admin", label: "Admin" },
@@ -25,267 +25,270 @@ export const roles = [
 ];
 
 // Table
-export const tableColumns: Column<User>[] = [
-  {
-    key: "name",
-    header: (
-      <div className="flex justify-center items-center space-x-2">
-        <UserIcon className="h-4 w-4" /> <span>Name</span>
-      </div>
-    ),
-    render: (user: User) => (
-      <span className="flex justify-center font-medium text-foreground">
-        {user.name}
-      </span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium",
-    cellClass: "font-medium text-gray-800 break-words",
-  },
-  {
-    key: "email",
-    header: (
-      <div className="flex justify-center items-center space-x-2">
-        <Mail className="h-4 w-4" /> <span>Email</span>
-      </div>
-    ),
-    render: (user: User) => (
-      <span className="flex justify-center text-muted-foreground break-words">
-        {user.email}
-      </span>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium",
-    cellClass: "text-gray-600 break-words",
-  },
-  {
-    key: "role",
-    header: (
-      <div className="flex justify-center items-center space-x-2">
-        <Briefcase className="h-4 w-4" /> <span>Role</span>
-      </div>
-    ),
-    render: (user: User) => (
-      <div
-        className={`rounded-full ${getRoleBadgeColor(
-          user.memberRole
-        )} flex items-center justify-center space-x-2 py-1`}
-      >
-        <p>{user.memberRole}</p>
-      </div>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium",
-    cellClass: "text-center",
-  },
-  {
-    key: "status",
-    header: (
-      <div className="flex justify-center items-center space-x-2">
-        <CheckCircle className="h-4 w-4" /> <span>Status</span>
-      </div>
-    ),
-    render: (user: User) => (
-      <div
-        className={`rounded-full ${getRoleBadgeColor(
-          user.status
-        )} flex items-center justify-center space-x-2 py-1`}
-      >
-        <Badge></Badge>
-        <p>{user.status}</p>
-      </div>
-    ),
-    headClass: "px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center",
-  },
-  {
-    key: "actions",
-    header: "Action",
-    render: (user: User) => (
-      <RecordActions<SubmitData> record={user} formConfig={UserFormConfig} />
-    ),
-    headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
-    cellClass: "text-center px-4 py-3",
-  },
-];
+export const getTableColumns = (
+  t: Translator,
+  formConfig: FormConfig<SubmitData>,
+): Column<User>[] => {
+  return [
+    {
+      key: "name",
+      header: (
+        <div className="flex justify-center items-center space-x-2">
+          <UserIcon className="h-4 w-4" /> <span>Name</span>
+        </div>
+      ),
+      render: (user: User) => (
+        <span className="flex justify-center font-medium text-foreground">
+          {user.name}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium",
+      cellClass: "font-medium text-gray-800 break-words",
+    },
+    {
+      key: "email",
+      header: (
+        <div className="flex justify-center items-center space-x-2">
+          <Mail className="h-4 w-4" /> <span>Email</span>
+        </div>
+      ),
+      render: (user: User) => (
+        <span className="flex justify-center text-muted-foreground break-words">
+          {user.email}
+        </span>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium",
+      cellClass: "text-gray-600 break-words",
+    },
+    {
+      key: "role",
+      header: (
+        <div className="flex justify-center items-center space-x-2">
+          <Briefcase className="h-4 w-4" /> <span>Role</span>
+        </div>
+      ),
+      render: (user: User) => (
+        <div
+          className={`rounded-full ${getRoleBadgeColor(
+            user.memberRole,
+          )} flex items-center justify-center space-x-2 py-1`}
+        >
+          <p>{user.memberRole}</p>
+        </div>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium",
+      cellClass: "text-center",
+    },
+    {
+      key: "status",
+      header: (
+        <div className="flex justify-center items-center space-x-2">
+          <CheckCircle className="h-4 w-4" /> <span>Status</span>
+        </div>
+      ),
+      render: (user: User) => (
+        <div
+          className={`rounded-full ${getRoleBadgeColor(
+            user.status,
+          )} flex items-center justify-center space-x-2 py-1`}
+        >
+          <Badge></Badge>
+          <p>{user.status}</p>
+        </div>
+      ),
+      headClass: "px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center",
+    },
+    {
+      key: "actions",
+      header: "Action",
+      render: (user: User) => (
+        <RecordActions<SubmitData>
+          record={user}
+          formConfig={formConfig}
+          page="users_roles_page"
+        />
+      ),
+      headClass: "w-[100px] px-4 py-3 text-gray-700 font-medium text-center",
+      cellClass: "text-center px-4 py-3",
+    },
+  ];
+};
 
 // Form config
-export const UserFormConfig: FormConfig<SubmitData> = {
-  title: "Update User",
-  description: "Modify user information and permissions.",
-  entityName: "User",
-  fields: [
-    {
-      name: "name",
-      label: "Full Name",
-      type: "text",
-      required: true,
-      placeholder: "John Doe",
-      gridArea: "1",
-    },
-    {
-      name: "email",
-      label: "Email Address",
-      type: "email",
-      required: true,
-      placeholder: "john.doe@example.com",
-      gridArea: "1",
-    },
-    {
-      name: "memberRole",
-      label: "User Role",
-      type: "select",
-      required: true,
-      options: [
-        { id: "admin", name: "Administrator" },
-        { id: "analyst", name: "Analyst" },
-        { id: "manager", name: "Manager" },
-        { id: "member", name: "Member" },
-        { id: "contributor", name: "Contributor" },
-        { id: "employee", name: "Employee" },
-        { id: "viewer", name: "Viewer" },
-        { id: "intern", name: "Intern" },
-      ],
-      gridArea: "1/2",
-      defaultValue: "EMPLOYEE",
-    },
-    {
-      name: "status",
-      label: "Account Status",
-      type: "select",
-      required: true,
-      defaultValue: "Active",
-      options: [
-        { id: "Active", name: "Active" },
-        { id: "Suspended", name: "Suspended" },
-        { id: "Terminated", name: "Terminated" },
-      ],
-      gridArea: "1/2",
-    },
-    {
-      name: "image",
-      label: "Profile Image URL",
-      type: "text",
-      required: false,
-      placeholder: "https://example.com/avatar.jpg",
-      gridArea: "1",
-    },
-    {
-      name: "emailVerified",
-      label: "Email Verified",
-      type: "checkbox",
-      required: false,
-      defaultValue: false,
-      gridArea: "1/2",
-    },
+export const getUserFormConfig = async (
+  t: Translator,
+): Promise<FormConfig<SubmitData>> => {
+  return {
+    title: t("user_form.title_edit"),
+    description: t("user_form.description_edit"),
+    entityName: t("user_form.entity_name"),
 
-    {
-      name: "banned",
-      label: "Ban User",
-      type: "checkbox",
-      required: false,
-      defaultValue: false,
-      gridArea: "1/2",
-    },
-    {
-      name: "banReason",
-      label: "Ban Reason",
-      type: "textarea",
-      required: false,
-      placeholder: "Reason for banning this user",
-      gridArea: "1/2",
-      rows: 2,
-      dependsOn: {
-        field: "banned",
-        value: true,
+    fields: [
+      {
+        name: "name",
+        label: t("user_form.fields.name"),
+        type: "text",
+        required: true,
+        placeholder: t("user_form.placeholders.name"),
+        gridArea: "1",
       },
+      {
+        name: "email",
+        label: t("user_form.fields.email"),
+        type: "email",
+        required: true,
+        placeholder: t("user_form.placeholders.email"),
+        gridArea: "1",
+      },
+      {
+        name: "memberRole",
+        label: t("user_form.fields.member_role"),
+        type: "select",
+        required: true,
+        options: [
+          { id: "admin", name: t("user_form.roles.admin") },
+          { id: "analyst", name: t("user_form.roles.analyst") },
+          { id: "manager", name: t("user_form.roles.manager") },
+          { id: "member", name: t("user_form.roles.member") },
+          { id: "contributor", name: t("user_form.roles.contributor") },
+          { id: "employee", name: t("user_form.roles.employee") },
+          { id: "viewer", name: t("user_form.roles.viewer") },
+          { id: "intern", name: t("user_form.roles.intern") },
+        ],
+        gridArea: "1/2",
+        defaultValue: "employee",
+      },
+      {
+        name: "status",
+        label: t("user_form.fields.status"),
+        type: "select",
+        required: true,
+        defaultValue: "Active",
+        options: [
+          { id: "Active", name: t("user_form.status_options.active") },
+          { id: "Suspended", name: t("user_form.status_options.suspended") },
+          { id: "Terminated", name: t("user_form.status_options.terminated") },
+        ],
+        gridArea: "1/2",
+      },
+      {
+        name: "image",
+        label: t("user_form.fields.image"),
+        type: "text",
+        required: false,
+        placeholder: t("user_form.placeholders.image"),
+        gridArea: "1",
+      },
+      {
+        name: "emailVerified",
+        label: t("user_form.fields.email_verified"),
+        type: "checkbox",
+        required: false,
+        defaultValue: false,
+        gridArea: "1/2",
+      },
+      {
+        name: "banned",
+        label: t("user_form.fields.banned"),
+        type: "checkbox",
+        required: false,
+        defaultValue: false,
+        gridArea: "1/2",
+      },
+      {
+        name: "banReason",
+        label: t("user_form.fields.ban_reason"),
+        type: "textarea",
+        required: false,
+        placeholder: t("user_form.placeholders.ban_reason"),
+        gridArea: "1/2",
+        rows: 2,
+        dependsOn: {
+          field: "banned",
+          value: true,
+        },
+      },
+    ],
+
+    onUpdate: async (
+      id: string,
+      data: SubmitData,
+    ): Promise<{ ok: boolean; message: string }> => {
+      if (!data.name || !data.email || !data.role || !data.status) {
+        return {
+          ok: false,
+          message: t("user_form.messages.required_error"),
+        };
+      }
+
+      if (!id) {
+        return {
+          ok: false,
+          message: t("user_form.messages.id_required"),
+        };
+      }
+
+      try {
+        const response = await fetch(`/api/user/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          const { error } = await response.json();
+          return { ok: false, message: error };
+        }
+
+        return {
+          ok: true,
+          message: t("user_form.messages.update_success"),
+        };
+      } catch (error) {
+        return {
+          ok: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : t("user_form.messages.update_error"),
+        };
+      }
     },
-  ],
-  onUpdate: async (
-    id: string,
-    data: SubmitData
-  ): Promise<{ ok: boolean; message: string }> => {
-    if (
-      !data.name ||
-      !data.email ||
-      !data.role ||
-      !data.status ||
-      !data.image
-    ) {
-      return { ok: false, message: "PLease, fill out all required fields!" };
-    }
 
-    if (!id) {
-      return { ok: false, message: "User id is required!" };
-    }
-
-    try {
-      const response = await fetch(`/api/user/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-        }),
-      });
-
-      if (!response.ok) {
-        const { error } = await response.json();
+    onDelete: async (
+      recordId: string,
+    ): Promise<{ ok: boolean; message: string }> => {
+      if (!recordId) {
         return {
           ok: false,
-          message: error,
+          message: t("user_form.messages.id_required"),
         };
       }
 
-      return {
-        ok: true,
-        message: "User updated successfully.",
-      };
-    } catch (error) {
-      console.log("Failed to update User");
-      return {
-        ok: false,
-        message:
-          error instanceof Error ? error.message : "Failed to update User",
-      };
-    }
-  },
-  onDelete: async (
-    recordId: string
-  ): Promise<{ ok: boolean; message: string }> => {
-    if (!recordId) {
-      return {
-        ok: false,
-        message: "User id is required!",
-      };
-    }
+      try {
+        const response = await fetch(`/api/user/${recordId}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        });
 
-    try {
-      const response = await fetch(`/api/user/${recordId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const { error } = await response.json();
+        if (!response.ok) {
+          const { error } = await response.json();
+          return { ok: false, message: error };
+        }
 
         return {
+          ok: true,
+          message: t("user_form.messages.delete_success"),
+        };
+      } catch {
+        return {
           ok: false,
-          message: error,
+          message: t("user_form.messages.delete_error"),
         };
       }
-
-      return {
-        ok: true,
-        message: "User deleted successfully.",
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        message: "Failed to delete user!",
-      };
-    }
-  },
+    },
+  };
 };
 
 // Account stats

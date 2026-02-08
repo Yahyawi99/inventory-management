@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import {
   Card,
@@ -8,10 +9,9 @@ import {
   DataTable,
   TableView,
 } from "app-core/src/components";
-import { tableColumns } from "@/constants/users";
-import { Pagination } from "app-core/src/types";
-import DeleteModal from "./DeleteModal";
-import { User } from "@/types/users";
+import { getTableColumns, getUserFormConfig } from "@/constants/users";
+import { FormConfig, Pagination } from "app-core/src/types";
+import { SubmitData, User } from "@/types/users";
 
 interface UsersCardProps {
   children?: React.ReactNode;
@@ -20,7 +20,11 @@ interface UsersCardProps {
 export default function UsersCard({ children }: UsersCardProps) {
   const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
+  const t = useTranslations("users_roles_page");
+
   const [tableUsers, setTableUsers] = useState<User[]>([]);
+  const [userFormConfig, setUserFormConfig] =
+    useState<FormConfig<SubmitData>>();
   const [isFetchingTableUsers, setIsFetchingTableUsers] = useState(false);
 
   const [pagination, setPagination] = useState<Pagination>({
@@ -44,7 +48,7 @@ export default function UsersCard({ children }: UsersCardProps) {
 
       if (response.status !== 200) {
         throw new Error(
-          response.statusText || "Failed to fetch table orders from API."
+          response.statusText || "Failed to fetch table orders from API.",
         );
       }
 
@@ -56,7 +60,7 @@ export default function UsersCard({ children }: UsersCardProps) {
       console.error("Error fetching table orders:", err);
       setError(
         err.message ||
-          "An unexpected error occurred while fetching table orders."
+          "An unexpected error occurred while fetching table orders.",
       );
     } finally {
       setIsFetchingTableUsers(false);
@@ -68,6 +72,12 @@ export default function UsersCard({ children }: UsersCardProps) {
       fetchTableUsers();
     }
   }, [isAuthLoading, fetchTableUsers]);
+
+  // FormConfig data
+  useEffect(() => {
+    if (user?.activeOrganizationId)
+      getUserFormConfig(t).then(setUserFormConfig);
+  }, [user]);
 
   return (
     <>
@@ -85,7 +95,12 @@ export default function UsersCard({ children }: UsersCardProps) {
               totalPages={pagination?.totalPages ? pagination.totalPages : 0}
               setPagination={setPagination}
             >
-              <DataTable<User> data={tableUsers} columns={tableColumns} />
+              {userFormConfig && (
+                <DataTable<User>
+                  data={tableUsers}
+                  columns={getTableColumns(t, userFormConfig)}
+                />
+              )}
             </TableView>
           </CardContent>
         </Card>
@@ -99,7 +114,12 @@ export default function UsersCard({ children }: UsersCardProps) {
             totalPages={pagination?.totalPages ? pagination.totalPages : 0}
             setPagination={setPagination}
           >
-            <DataTable<User> data={tableUsers} columns={tableColumns} />
+            {userFormConfig && (
+              <DataTable<User>
+                data={tableUsers}
+                columns={getTableColumns(t, userFormConfig)}
+              />
+            )}
           </TableView>
         </>
       )}
