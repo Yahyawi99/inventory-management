@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { roles } from "@/constants/users";
 import {
   Alert,
@@ -27,6 +28,8 @@ import { authClient } from "@/lib/auth-client";
 import { UserRoles } from "@/types/users";
 
 export default function Header() {
+  const t = useTranslations("users_roles_page");
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -54,7 +57,7 @@ export default function Header() {
         setMessage(`Error: ${result.error.message}`);
       } else {
         setMessage(
-          "Invitation sent successfully! The user will receive an email to create their account."
+          "Invitation sent successfully! The user will receive an email to create their account.",
         );
         setFormData({ email: "", role: "member" });
       }
@@ -64,32 +67,35 @@ export default function Header() {
       setLoading(false);
     }
   };
+
   return (
     <div className="flex justify-between items-center mb-6">
       <h3 className="text-xl font-semibold text-foreground">
-        Team Members (7)
+        {t("users.title", {
+          count: 7,
+        })}
       </h3>
 
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
         <DialogTrigger asChild>
           <Button className="flex items-center space-x-1 px-4 py-2 bg-sidebar hover:bg-transparent text-white font-semibold rounded-md shadow cursor-pointer border-2 border-transparent hover:border-sidebar hover:text-sidebar">
-            <Plus className="h-4 w-4 mr-1" /> Add User
+            <Plus className="h-4 w-4 mr-1" /> {t("users.addUser")}
           </Button>
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[450px] rounded-2xl p-6">
           <DialogHeader className="mb-4">
             <DialogTitle className="text-2xl font-bold">
-              Add New User
+              {t("addUserModal.title")}
             </DialogTitle>
             <DialogDescription>
-              Fill in the details for the new team member.
+              {t("addUserModal.description")}
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-6 max-w-md">
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address *</Label>
+              <Label htmlFor="email">{t("addUserModal.emailLabel")}</Label>
               <Input
                 type="email"
                 id="email"
@@ -101,7 +107,7 @@ export default function Header() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="role">Role *</Label>
+              <Label htmlFor="role">{t("addUserModal.roleLabel")}</Label>
               <Select
                 value={formData.role}
                 onValueChange={(value) => handleSelectChange("role", value)}
@@ -110,11 +116,14 @@ export default function Header() {
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
                 <SelectContent>
-                  {roles.map(({ value, label }) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
+                  {roles.map(({ value, label }) => {
+                    console.log(label);
+                    return (
+                      <SelectItem key={value} value={value}>
+                        {t(`roles.${label}`)}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
@@ -124,7 +133,7 @@ export default function Header() {
               className="w-full bg-sidebar border-2 border-sidebar hover:bg-transparent hover:text-sidebar"
               disabled={loading}
             >
-              {loading ? "Sending Invitation..." : "Send Invitation"}
+              {loading ? t("addUserModal.sending") : t("addUserModal.send")}
             </Button>
           </form>
 

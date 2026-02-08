@@ -1130,5 +1130,56 @@
       "error_update": "Failed to update settings",
       "loading": "Loading settings..."
     }
+  },
+  "users_roles_page": {
+    "users": {
+      "title": "Team Members ({count})",
+      "addUser": "Add User",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "action": "Action"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "pending": "Pending"
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
+    "addUserModal": {
+      "title": "Add New User",
+      "description": "Fill in the details for the new team member.",
+      "emailLabel": "Email Address",
+      "roleLabel": "Role",
+      "send": "Send Invitation",
+      "cancel": "Cancel",
+      "sending": "Sending Invitation..."
+    },
+    "roles": {
+      "Admin": "Admin",
+      "Member": "Member",
+      "Manager": "Manager",
+      "Analyst": "Analyst",
+      "Contributor": "Contributor",
+      "Employee": "Employee",
+      "Intern": "Intern"
+    },
+    "messages": {
+      "invite": {
+        "success": "Invitation sent successfully! The user will receive an email to create their account.",
+        "errorPrefix": "Error:",
+        "unknownError": "Something went wrong. Please try again."
+      }
+    }
   }
 }
