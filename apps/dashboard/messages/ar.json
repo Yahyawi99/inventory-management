@@ -1239,5 +1239,74 @@
       "delete": "نعم، احذف المستخدم",
       "deleting": "جاري الحذف..."
     }
+  },
+  "notification_page": {
+    "header": {
+      "title": "مركز الإشعارات"
+    },
+    "tabs": {
+      "all": "الكل",
+      "unread": "غير المقروءة",
+      "archived": "المؤرشفة"
+    },
+    "actions": {
+      "mark_all_read": "تحديد الكل كمقروء",
+      "clear_all": "مسح الكل",
+      "settings": "إعدادات الإشعارات"
+    },
+    "empty_state": {
+      "title": "أنت على اطلاع!",
+      "description": "لا توجد لديك أي إشعارات جديدة حالياً."
+    },
+    "notification_item": {
+      "entities": {
+        "Product": "منتج",
+        "Order": "طلب",
+        "Invoice": "فاتورة",
+        "User": "مستخدم",
+        "Document": "مستند",
+        "System": "النظام",
+        "Application": "التطبيق"
+      },
+      "types": {
+        "order_created": {
+          "title": "تم استلام طلب جديد",
+          "message": "تم إنشاء الطلب {code}."
+        },
+        "document_uploaded": {
+          "title": "تم رفع مستند",
+          "message": "تم رفع {name} بنجاح."
+        },
+        "low_stock": {
+          "title": "تنبيه انخفاض المخزون",
+          "message": "المنتج {name} أوشك على النفاد."
+        },
+        "out_of_stock": {
+          "title": "نفاد المخزون",
+          "message": "المنتج {name} غير متوفر حالياً."
+        },
+        "user_registered": {
+          "title": "مستخدم جديد",
+          "message": "انضم {name} إلى المنصة."
+        },
+        "system_maintenance": {
+          "title": "صيانة النظام",
+          "message": "تم الانتهاء من الصيانة المجدولة."
+        },
+        "bug_fix": {
+          "title": "إصلاح خلل حرج",
+          "message": "تم إصلاح مشكلة حرجة في النظام."
+        },
+        "security_alert": {
+          "title": "تنبيه أمني",
+          "message": "تم رصد تسجيل دخول من جهاز أو موقع جديد."
+        },
+        "generic_info": {
+          "title": "معلومة",
+          "message": "يتوفر تحديث جديد."
+        }
+      }
+    },
+    "unread": "غير المقروءة"
   }
 }

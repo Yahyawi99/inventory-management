@@ -1241,5 +1241,74 @@
       "delete": "Oui, supprimer l’utilisateur",
       "deleting": "Suppression..."
     }
+  },
+  "notification_page": {
+    "header": {
+      "title": "Centre de notifications"
+    },
+    "tabs": {
+      "all": "Toutes",
+      "unread": "Non lues",
+      "archived": "Archivées"
+    },
+    "actions": {
+      "mark_all_read": "Marquer tout comme lu",
+      "clear_all": "Tout effacer",
+      "settings": "Paramètres des notifications"
+    },
+    "empty_state": {
+      "title": "Tout est à jour !",
+      "description": "Vous n’avez aucune nouvelle notification pour le moment."
+    },
+    "notification_item": {
+      "entities": {
+        "Product": "Produit",
+        "Order": "Commande",
+        "Invoice": "Facture",
+        "User": "Utilisateur",
+        "Document": "Document",
+        "System": "Système",
+        "Application": "Application"
+      },
+      "types": {
+        "order_created": {
+          "title": "Nouvelle commande reçue",
+          "message": "La commande {code} a été passée."
+        },
+        "document_uploaded": {
+          "title": "Document téléversé",
+          "message": "{name} a été téléversé avec succès."
+        },
+        "low_stock": {
+          "title": "Alerte de stock faible",
+          "message": "Le produit {name} est presque en rupture de stock."
+        },
+        "out_of_stock": {
+          "title": "Rupture de stock",
+          "message": "Le produit {name} est maintenant en rupture de stock."
+        },
+        "user_registered": {
+          "title": "Nouvel utilisateur inscrit",
+          "message": "{name} a rejoint la plateforme."
+        },
+        "system_maintenance": {
+          "title": "Maintenance du système",
+          "message": "La maintenance programmée a été effectuée."
+        },
+        "bug_fix": {
+          "title": "Correction critique",
+          "message": "Un problème critique du système a été corrigé."
+        },
+        "security_alert": {
+          "title": "Alerte de sécurité",
+          "message": "Une connexion a été détectée depuis un nouvel appareil ou emplacement."
+        },
+        "generic_info": {
+          "title": "Information",
+          "message": "Une nouvelle mise à jour est disponible."
+        }
+      }
+    },
+    "unread": "Non lues"
   }
 }

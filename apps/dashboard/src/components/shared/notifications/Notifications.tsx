@@ -70,7 +70,7 @@ const initialNotifications = [
   },
   {
     id: 6,
-    type: "bug_fix_applied",
+    type: "bug_fix",
     entity: "System",
     data: {},
     level: "success",
