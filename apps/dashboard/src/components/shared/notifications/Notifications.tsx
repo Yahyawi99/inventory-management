@@ -14,7 +14,6 @@ import {
 } from "app-core/src/components";
 import NotificationItem from "./NotificationItem";
 
-// dummy data
 const initialNotifications = [
   {
     id: 1,
@@ -22,7 +21,6 @@ const initialNotifications = [
     entity: "Order",
     data: {
       code: "#1004",
-      name: "Jane Doe",
     },
     level: "success",
     timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
@@ -45,7 +43,6 @@ const initialNotifications = [
     entity: "Product",
     data: {
       name: "X-20",
-      count: 3,
     },
     level: "warning",
     timestamp: new Date(Date.now() - 28 * 3600 * 1000).toISOString(),
@@ -73,12 +70,9 @@ const initialNotifications = [
   },
   {
     id: 6,
-    type: "bug_fix",
+    type: "bug_fix_applied",
     entity: "System",
-    data: {
-      version: "4.1.2",
-      issue: "login issue",
-    },
+    data: {},
     level: "success",
     timestamp: new Date(Date.now() - 120 * 3600 * 1000).toISOString(),
     read: true,

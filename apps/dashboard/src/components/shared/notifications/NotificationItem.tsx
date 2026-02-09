@@ -34,14 +34,17 @@ export default function NotificationItem({
             isRead ? "font-normal" : "font-medium text-foreground"
           }`}
         >
-          {notification.title}
+          {t(`types.${notification.type}.title`)}
         </div>
         <p
           className={`text-xs mt-1 ${
             isRead ? "text-muted-foreground" : "text-muted-foreground"
           }`}
         >
-          {notification.message}
+          {t(`types.${notification.type}.message`, {
+            name: notification.data.name || "",
+            code: notification.data.code || "",
+          })}
         </p>
         <div className="flex items-center mt-1 text-xs text-muted-foreground/50">
           <Clock className="w-3 h-3 mr-1" />

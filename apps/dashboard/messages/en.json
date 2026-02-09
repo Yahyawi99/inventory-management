@@ -1273,7 +1273,7 @@
       "types": {
         "order_created": {
           "title": "New Order Received",
-          "message": "Order {code} placed by {name}."
+          "message": "Order {code} has been placed."
         },
         "document_uploaded": {
           "title": "Document Uploaded",
@@ -1281,7 +1281,7 @@
         },
         "low_stock": {
           "title": "Inventory Low Alert",
-          "message": "Product {name} is below reorder level ({count} left)."
+          "message": "Product {name} is running low in stock."
         },
         "out_of_stock": {
           "title": "Out of Stock",
@@ -1295,17 +1295,17 @@
           "title": "System Maintenance",
           "message": "Scheduled maintenance has been completed."
         },
-        "bug_fix_applied": {
+        "bug_fix": {
           "title": "Critical Bug Fix",
-          "message": "Patch {version} applied to resolve {issue}."
+          "message": "A critical system issue has been fixed."
         },
         "security_alert": {
           "title": "Security Alert",
           "message": "A login was detected from a new device or location."
         },
         "generic_info": {
-          "title": "{title}",
-          "message": "{message}"
+          "title": "Information",
+          "message": "There is a new update available."
         }
       }
     },
