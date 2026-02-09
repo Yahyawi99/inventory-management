@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { Bell, CheckCircle, MailOpen } from "lucide-react";
 import {
   Badge,
@@ -13,63 +14,85 @@ import {
 } from "app-core/src/components";
 import NotificationItem from "./NotificationItem";
 
+// dummy data
 const initialNotifications = [
   {
     id: 1,
-    title: "New Order Received",
-    message: "Order #1004 placed by Jane Doe.",
-    type: "success",
+    type: "order_created",
+    entity: "Order",
+    data: {
+      code: "#1004",
+      name: "Jane Doe",
+    },
+    level: "success",
     timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
     read: false,
   },
   {
     id: 2,
-    title: "Document Uploaded",
-    message: "The Quarterly Report 2024 has been finalized.",
-    type: "info",
+    type: "document_uploaded",
+    entity: "Document",
+    data: {
+      name: "Quarterly Report 2024",
+    },
+    level: "info",
     timestamp: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
     read: false,
   },
   {
     id: 3,
-    title: "Inventory Low Alert",
-    message: "Product X-20 is below reorder level.",
-    type: "warning",
+    type: "low_stock",
+    entity: "Product",
+    data: {
+      name: "X-20",
+      count: 3,
+    },
+    level: "warning",
     timestamp: new Date(Date.now() - 28 * 3600 * 1000).toISOString(),
     read: false,
   },
   {
     id: 4,
-    title: "New User Registered",
-    message: "Welcome Sarah Connor to the platform.",
-    type: "success",
+    type: "user_registered",
+    entity: "User",
+    data: {
+      name: "Sarah Connor",
+    },
+    level: "success",
     timestamp: new Date(Date.now() - 36 * 3600 * 1000).toISOString(),
     read: true,
   },
   {
     id: 5,
-    title: "System Maintenance",
-    message: "Scheduled maintenance is complete.",
-    type: "info",
+    type: "system_maintenance",
+    entity: "System",
+    data: {},
+    level: "info",
     timestamp: new Date(Date.now() - 72 * 3600 * 1000).toISOString(),
     read: true,
   },
   {
     id: 6,
-    title: "Critical Bug Fix",
-    message: "Patch 4.1.2 applied to resolve login issue.",
-    type: "success",
+    type: "bug_fix",
+    entity: "System",
+    data: {
+      version: "4.1.2",
+      issue: "login issue",
+    },
+    level: "success",
     timestamp: new Date(Date.now() - 120 * 3600 * 1000).toISOString(),
     read: true,
   },
 ];
 
 export default function Main() {
+  const t = useTranslations("notification_page");
+
   const [notifications, setNotifications] = useState(initialNotifications);
 
   const handleToggleRead = (id: any) => {
     setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n))
+      prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n)),
     );
   };
 
@@ -93,7 +116,7 @@ export default function Main() {
 
     notifications
       .sort(
-        (a, b) => Number(new Date(b.timestamp)) - Number(new Date(a.timestamp))
+        (a, b) => Number(new Date(b.timestamp)) - Number(new Date(a.timestamp)),
       ) // Sort descending by time
       .forEach((n: any) => {
         const date = new Date(n.timestamp);
@@ -133,10 +156,10 @@ export default function Main() {
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="flex items-center space-x-3">
           <Bell className="w-6 h-6 text-primary" />
-          <CardTitle>Notification Center</CardTitle>
+          <CardTitle>{t("header.title")}</CardTitle>
           {unreadCount > 0 && (
             <Badge variant="destructive" className="ml-2">
-              {unreadCount} Unread
+              {unreadCount} {t("unread")}
             </Badge>
           )}
         </div>
@@ -147,7 +170,7 @@ export default function Main() {
           size="sm"
         >
           <MailOpen className="w-4 h-4 mr-2" />
-          Mark All as Read
+          {t("actions.mark_all_read")}
         </Button>
       </CardHeader>
 
@@ -156,8 +179,8 @@ export default function Main() {
           {notifications.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground">
               <CheckCircle className="w-10 h-10 mx-auto mb-4" />
-              <p className="font-semibold text-lg">You are all caught up!</p>
-              <p className="text-sm">No new notifications in your inbox.</p>
+              <p className="font-semibold text-lg">{t("empty_state.title")}</p>
+              <p className="text-sm">{t("empty_state.description")}</p>
             </div>
           ) : (
             <div>

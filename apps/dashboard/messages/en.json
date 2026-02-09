@@ -1241,5 +1241,74 @@
       "delete": "Yes, delete user",
       "deleting": "Deleting..."
     }
+  },
+  "notification_page": {
+    "header": {
+      "title": "Notification Center"
+    },
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "archived": "Archived"
+    },
+    "actions": {
+      "mark_all_read": "Mark all as read",
+      "clear_all": "Clear all",
+      "settings": "Notification Settings"
+    },
+    "empty_state": {
+      "title": "All caught up!",
+      "description": "You don't have any new notifications at the moment."
+    },
+    "notification_item": {
+      "entities": {
+        "Product": "Product",
+        "Order": "Order",
+        "Invoice": "Invoice",
+        "User": "User",
+        "Document": "Document",
+        "System": "System",
+        "Application": "Application"
+      },
+      "types": {
+        "order_created": {
+          "title": "New Order Received",
+          "message": "Order {code} placed by {name}."
+        },
+        "document_uploaded": {
+          "title": "Document Uploaded",
+          "message": "{name} has been uploaded successfully."
+        },
+        "low_stock": {
+          "title": "Inventory Low Alert",
+          "message": "Product {name} is below reorder level ({count} left)."
+        },
+        "out_of_stock": {
+          "title": "Out of Stock",
+          "message": "Product {name} is now out of stock."
+        },
+        "user_registered": {
+          "title": "New User Registered",
+          "message": "{name} has joined the platform."
+        },
+        "system_maintenance": {
+          "title": "System Maintenance",
+          "message": "Scheduled maintenance has been completed."
+        },
+        "bug_fix_applied": {
+          "title": "Critical Bug Fix",
+          "message": "Patch {version} applied to resolve {issue}."
+        },
+        "security_alert": {
+          "title": "Security Alert",
+          "message": "A login was detected from a new device or location."
+        },
+        "generic_info": {
+          "title": "{title}",
+          "message": "{message}"
+        }
+      }
+    },
+    "unread": "Unread"
   }
 }

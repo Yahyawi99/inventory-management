@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { formatTime, getIconAndColor } from "@/utils/notifications";
 import { Button } from "app-core/src/components";
 import { Clock, X } from "lucide-react";
@@ -9,6 +10,7 @@ export default function NotificationItem({
 }: any) {
   const { icon: Icon, color, badge } = getIconAndColor(notification.type);
   const isRead = notification.read;
+  const t = useTranslations("notification_page.notification_item");
 
   return (
     <div
